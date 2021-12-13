@@ -1,11 +1,95 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function OrderbookLayout({ children }) {
 	return (
-		<section className="App">
-			<nav>navigation</nav>
+		<section id="app">
+			<nav id="orderbook-nav">
+				<div id="orderbook-logo">
+					<span>Orderbook</span>
+				</div>
+				<div id="nav-menu">
+					<ul id="nav-menu-list">
+						<li className="nav-menu-item">
+							<Link to="/">Home</Link>
+						</li>
+						<li className="nav-menu-item">
+							<Link to="/">Bids</Link>
+						</li>
+						<li className="nav-menu-item">
+							<Link to="/">How it works</Link>
+						</li>
+						<li className="nav-menu-item">
+							<Link to="/">About Us</Link>
+						</li>
+						<li className="nav-menu-item">
+							<Link to="/">Contact Us</Link>
+						</li>
+						<li className="nav-menu-item" id="login">
+							<Link to="/">Login</Link>
+						</li>
+						<li className="nav-menu-item" id="register-cta">
+							<Link to="/">Register</Link>
+						</li>
+					</ul>
+				</div>
+			</nav>
 			{children}
-			<footer>Footer</footer>
+			<footer id="orderbook-footer">
+				<div id="orderbook-about-us">
+					<h4 id="logo">Orderbook</h4>
+					<p id="about-us">
+						Dui faucibus in ornare quam viverra orci sagittis.
+						Habitasse platea dictumst vestibulum rhoncus est
+						pellentesque elit ullamcorper. In nulla posuere
+						sollicitudin aliquam ultrices sagittis orci a.
+					</p>
+				</div>
+				<div id="orderbook-footer-links">
+					<div className="links-container">
+						<h4>Company</h4>
+						<Link to="/" className="links">
+							About us
+						</Link>
+						<Link to="/" className="links">
+							Services
+						</Link>
+						<Link to="/" className="links">
+							Careers
+						</Link>
+						<Link to="/" className="links">
+							Latest news
+						</Link>
+						<Link to="/" className="links">
+							Team
+						</Link>
+					</div>
+					<div className="links-container">
+						<h4>Support</h4>
+						<Link to="/" className="links">
+							FAQs
+						</Link>
+						<Link to="/" className="links">
+							How it works
+						</Link>
+						<Link to="/" className="links">
+							Privacy policy
+						</Link>
+						<Link to="/" className="links">
+							Terms & conditions
+						</Link>
+						<Link to="/" className="links">
+							Contact us
+						</Link>
+					</div>
+					<div className="links-container" id="site-links">
+						<h4>Site Links</h4>
+						<Link to="/" className="links">
+							Live requests
+						</Link>
+					</div>
+				</div>
+			</footer>
 		</section>
 	);
 }
