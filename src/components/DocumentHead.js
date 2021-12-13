@@ -27,8 +27,8 @@ function DocumentHead(props) {
 					crossorigin: "anonymous",
 				},
 				{
-					rel: "styTlesheet",
-					href: "https://fonts.googleapis.com/css2?family=Arvo&family=Lato:wght@300&display=swap",
+					rel: "stylesheet",
+					href: "https://fonts.googleapis.com/css2?family=Arvo&family=Lato:wght@400&display=swap",
 				},
 			].concat(links)}
 		/>
