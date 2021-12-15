@@ -1,0 +1,187 @@
+/*
+* SMALL SCREENS
+*/
+#app {
+	
+}
+
+/*
+* LARGE SCREENS
+*/
+#app {
+	#orderbook-header {
+		max-width: 100%;
+		height: 70vh;
+		display: flex;
+		padding: 40px 20px;
+		background-repeat: no-repeat;
+		background-position: top left;
+		background-size: cover;
+
+		#orderbook-intro {
+			margin-top: 5%;
+
+			h1 {
+				font-family: $header-font;
+				font-size: 40px;
+				font-weight: 900;
+				max-width: 450px;
+			}
+
+			p {
+				font-family: $body-font;
+				font-size: 18px;
+				margin-bottom: 40px;
+				max-width: 400px;
+			}
+
+			.intro-cta {
+				background-color: $primary-dark;
+			}
+		}
+	}
+
+	#orderbook-rows {
+		display: flex;
+		padding: 30px;
+
+		.container {
+			width: 33.3%;
+			padding: 30px;
+			display: flex;
+
+			&.border-right {
+				border-right: 1.5px solid $black;
+			}
+
+			.gray-marker {
+				background-color: lightgray;
+				width: 45px;
+				height: 45px;
+				border-radius: 22.5px;
+			}
+
+			.row-details {
+				width: 80%;
+    			padding-left: 20px;
+
+				h3 {
+					font-family: $header-font;
+					margin-bottom: 0px;
+					margin-block-end: 0px;
+				}
+				p {
+					font-family: $body-font;
+				}
+			}
+		}
+	}
+
+	#orderbook-bids {
+		display: flex;
+		height: 70vh;
+
+		.container {
+			
+
+			&#bid-intro {
+				background: $primary-dark;
+				padding: 40px;
+				width: 50%;
+
+				h2 {
+					color: $white;
+					font-size: 40px;
+					font-weight: 900;
+				}
+
+				p {
+					max-width: 350px;
+					color: $white;
+					margin-bottom: 40px;
+				}
+
+				.bid-cta {
+					color: $white;
+					background: inherit;
+					border: 1.5px solid $white;
+				}
+			}
+
+			&#bid-banner {
+				width: 50%;
+				height: 100%;
+				/*background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;*/
+			}
+		}
+	}
+
+	#orderbook-request {
+		// padding: 40px !important;
+
+		#request-intro-container {
+			display: flex;
+
+			#request-banner {
+				width: 50%;
+			}
+
+			#request-intro {
+				padding: 40px;
+
+				h2 {
+					font-size: 40px;
+					padding-right: 40px;
+				}
+
+				p {max-width: 350px; margin-bottom: 40px}
+
+				.request-cta {
+					background: $primary-dark;
+					a {
+						font-size: 15.5px;
+					}
+				}
+			}
+		}
+
+		#orderbook-steps {
+			background: #0f0f0f;
+			height: 400px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0px 40px;
+
+			.request-step {
+				width: 25%;
+				padding: 10px;
+
+				.white-marker {
+					width: 45px;
+					height: 45px;
+					border-radius: 22.5px;
+					background: $white;
+					text-align: center;
+					font-size: 30px;
+					font-weight: bolder;
+					display: flex;
+					align-items:center;
+					justify-content: center;
+				}
+
+				h4, p {color: $white}
+
+				h4 {
+					font-size: 20px;
+				}
+
+				p {
+					font-size: 14.5px;
+				}
+			}
+		}
+	}
+}
