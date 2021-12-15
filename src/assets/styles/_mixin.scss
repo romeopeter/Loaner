@@ -1,0 +1,51 @@
+/*
+  Viewport for Large, medium and small screens.
+  Break-points (578px, 768px, 992px, 1200px) are set in _variale.scss partial.
+  Use breakpoint in CSS media query.
+*/
+
+@mixin respond-below($breakpoint) {
+  @if (map-has-key($breakpoints, $breakpoint)) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+
+    @media (max-width: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @warn 'Inavlid breakpoint: #{$breakpoint}';
+  }
+}
+
+@mixin respsond-between($breakpoint1, $breakpoint2) {
+  @if (
+    map-has-key($breakpoints, $breakpoint1) and
+      map-has-key($breakpoints, $breakpoint2)
+  ) {
+    $breakpoint-value1: map-get($breakpoints, $breakpoint1);
+    $breakpoint-value2: map-has-key($breakpoints, $breakpoint2);
+
+    @media (min-width: $breakpoint-value1) and (max-width: $breakpoint-value2) {
+      @content;
+    }
+  } @else {
+    @if (map-has-key($breakpoints, $breakpoint1) == false) {
+      @warn 'Invalid breakpoint: #{$breakpoint1}.';
+    }
+
+    @if (map-has-key($breakpoints, $break-point2) == false) {
+      @warn 'Invalid breakpoint: #{$breakpoint2}.';
+    }
+  }
+}
+
+@mixin respond-above($breakpoint) {
+  @if (map-has-key($breakpoints, $breakpoint)) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+
+    @media (min-width: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @warn 'Inavlid breakpoint: #{$breakpoint}.';
+  }
+}
