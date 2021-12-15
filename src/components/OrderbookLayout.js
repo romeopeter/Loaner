@@ -1,15 +1,25 @@
-import React from "react";
+import React, {useEffect, createRef} from "react";
 import { Link } from "react-router-dom";
 
 export default function OrderbookLayout({ children }) {
+
+
+	let navMenuRef = createRef();
+	
+	
+	const respondsiveNav = () => {
+		navMenuRef.current.classList.toggle("responsive-nav-menu");
+	}
+
 	return (
 		<section id="app">
 			<nav id="orderbook-nav">
 				<div id="orderbook-logo">
 					<span>Orderbook</span>
 				</div>
+				<div id="burger-toggle" className="icon" onClick={() => respondsiveNav()}>&#9776;</div>
 				<div id="nav-menu">
-					<ul id="nav-menu-list">
+					<ul id="nav-menu-list" className="" ref={navMenuRef}>
 						<li className="nav-menu-item">
 							<Link to="/">Home</Link>
 						</li>
