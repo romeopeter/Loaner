@@ -1,8 +1,100 @@
 /*
 * SMALL SCREENS
 */
-#app {
-	
+@include respond-below(sm) {
+	#orderbook-header {
+		background-position: center !important;
+		display: flex;
+    	justify-content: center;
+    	align-items: center;
+
+		#orderbook-intro {
+			display: flex;
+		    flex-direction: column !important;
+		    align-items: center !important;
+		    padding: 30px !important;
+
+		    h1,p {
+		    	text-align: center;
+		    }
+
+			h1 {
+				font-size: 30px !important;
+			}
+		}
+	}
+
+	#orderbook-rows {
+		flex-direction: column !important;
+		align-items: center !important;
+
+		.container {
+			width: 100% !important;
+
+			&.border-right:after {
+				display: none !important;
+			}
+
+			h3 {
+				margin-block-start: 0px !important;
+			}
+		}
+	}
+
+	#orderbook-bids {
+		#bid-intro {
+			display: flex;
+    		flex-direction: column;
+    		align-items: center;
+			height: auto;
+
+			h2, p {
+				text-align: center;
+			}
+
+			h2 {
+				font-size: 25px !important;
+				text-align: center;
+			}
+		}
+		#bid-banner {
+			display: none !important;
+		}
+	}
+
+	#orderbook-request {
+		#request-intro-container {
+			#request-banner {
+				display: none !important;
+			}
+
+			#request-intro {
+				display: flex;
+    			flex-direction: column;
+    			align-items: center;
+				height: auto;
+
+				h2, p {
+					text-align: center;
+				}
+
+				h2 {
+					font-size: 25px !important;
+					text-align: center;
+				}
+			}
+		}
+
+		#orderbook-steps {
+			flex-direction: column !important;
+			height: auto !important;
+			padding: 40px !important;
+
+			.request-step {
+				width: 100% !important;
+			}
+		}
+	}
 }
 
 /*
@@ -11,28 +103,27 @@
 #app {
 	#orderbook-header {
 		max-width: 100%;
-		height: 70vh;
-		display: flex;
-		padding: 40px 20px;
+		min-height: 75vh;
 		background-repeat: no-repeat;
 		background-position: top left;
 		background-size: cover;
 
 		#orderbook-intro {
-			margin-top: 5%;
+			padding: 6em 0 0 5em;
 
 			h1 {
 				font-family: $header-font;
 				font-size: 40px;
 				font-weight: 900;
 				max-width: 450px;
+				margin-block-start: 0px;
 			}
 
 			p {
 				font-family: $body-font;
-				font-size: 18px;
+				font-size: 20px;
 				margin-bottom: 40px;
-				max-width: 400px;
+				max-width: 450px;
 			}
 
 			.intro-cta {
@@ -47,11 +138,14 @@
 
 		.container {
 			width: 33.3%;
-			padding: 30px;
+			padding: 30px 0px 30px 30px;
 			display: flex;
 
-			&.border-right {
-				border-right: 1.5px solid $black;
+			&.border-right:after {
+				content: "";
+				width: 0.4px;
+				background: $black;
+				margin-left: 50px;
 			}
 
 			.gray-marker {
@@ -63,15 +157,15 @@
 
 			.row-details {
 				width: 80%;
-    			padding-left: 20px;
+				padding-left: 20px;
 
 				h3 {
-					font-family: $header-font;
 					margin-bottom: 0px;
-					margin-block-end: 0px;
+					margin-block-start: 0px;
+					font-size: 23px;
 				}
 				p {
-					font-family: $body-font;
+					font-size: 18px;
 				}
 			}
 		}
@@ -79,11 +173,8 @@
 
 	#orderbook-bids {
 		display: flex;
-		height: 70vh;
 
 		.container {
-			
-
 			&#bid-intro {
 				background: $primary-dark;
 				padding: 40px;
@@ -110,17 +201,11 @@
 
 			&#bid-banner {
 				width: 50%;
-				height: 100%;
-				/*background-repeat: no-repeat;
-				background-position: center;
-				background-size: cover;*/
 			}
 		}
 	}
 
 	#orderbook-request {
-		// padding: 40px !important;
-
 		#request-intro-container {
 			display: flex;
 
@@ -136,7 +221,10 @@
 					padding-right: 40px;
 				}
 
-				p {max-width: 350px; margin-bottom: 40px}
+				p {
+					max-width: 350px;
+					margin-bottom: 40px;
+				}
 
 				.request-cta {
 					background: $primary-dark;
@@ -168,11 +256,14 @@
 					font-size: 30px;
 					font-weight: bolder;
 					display: flex;
-					align-items:center;
+					align-items: center;
 					justify-content: center;
 				}
 
-				h4, p {color: $white}
+				h4,
+				p {
+					color: $white;
+				}
 
 				h4 {
 					font-size: 20px;
