@@ -24,10 +24,10 @@ export default function OrderbookLayout({ children }) {
 							<Link to="/">Home</Link>
 						</li>
 						<li className="nav-menu-item">
-							<Link to="/">Bids</Link>
+							<Link to="/">How it works</Link>
 						</li>
 						<li className="nav-menu-item">
-							<Link to="/">How it works</Link>
+							<Link to="/">FAQs</Link>
 						</li>
 						<li className="nav-menu-item">
 							<Link to="/">About Us</Link>
