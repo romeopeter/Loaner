@@ -37,6 +37,7 @@
 
 			#orderbook-logo {
 				margin-bottom: 10px;
+				width: inherit !important;
 			}
 
 			#nav-menu {
@@ -47,7 +48,7 @@
 						display: flex !important;
 						width: 100% !important;
 						flex-direction: column !important;
-						height: 90vh !important;
+						height: 85vh !important;
 						.nav-menu-item {
 							margin-right: 0px;
 						}
@@ -124,7 +125,7 @@
 		align-items: center;
 		background-color: $black !important;
 		height: 130px;
-		padding: 20px 40px;
+		padding: 20px 0px 20px 40px;
 
 		#burger-toggle {
 			color: $white;
@@ -138,7 +139,7 @@
 			width: 40%;
 			color: $white;
 			font-family: $header-font;
-			font-size: 36px;
+			font-size: 40px;
 			font-weight: bold;
 		}
 
@@ -176,6 +177,8 @@
 					width: 120px;
 					height: 20px;
 					padding: 20px;
+					margin: 0px;
+
 					a {
 						color: $black !important;
 						font-weight: 900;
@@ -196,7 +199,6 @@
 		padding: 40px 40px;
 
 		#orderbook-about-us {
-			width: 40%;
 			#logo {
 				font-family: $header-font;
 				font-size: 35px;
@@ -207,8 +209,7 @@
 				font-family: $body-font;
 				color: $white;
 				line-height: 1.5;
-				width: 400px;
-				max-width: 350px;
+				max-width: 500px;
 			}
 		}
 
