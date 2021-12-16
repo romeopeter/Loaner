@@ -37,7 +37,7 @@ export default function LandingPage() {
 				<section id="orderbook-rows">
 					<div className="container border-right">
 						<div className="gray-marker">
-							<div id="thumb" style={setBgImage(thumbsUp)}></div>
+							
 						</div>
 						<div className="row-details">
 							<h3>orderbook your go</h3>
@@ -49,7 +49,7 @@ export default function LandingPage() {
 					</div>
 					<div className="container border-right">
 						<div className="gray-marker">
-							<div id="thumb" style={setBgImage(thumbsUp)}></div>
+							
 						</div>
 						<div className="row-details">
 							<h3>orderbook your go</h3>
@@ -61,7 +61,7 @@ export default function LandingPage() {
 					</div>
 					<div className="container">
 						<div className="gray-marker">
-							<div id="thumb" style={setBgImage(thumbsUp)}></div>
+							
 						</div>
 						<div className="row-details">
 							<h3>orderbook your go</h3>
