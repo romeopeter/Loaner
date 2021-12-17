@@ -11,6 +11,12 @@
 			flex-direction: column !important;
 			height: auto !important;
 
+			#orderbook-about-us {
+				#about-us {
+					font-size: 17px !important;
+				}
+			}
+
 			#orderbook-footer-links {
 				justify-content: space-between !important;
 			}
@@ -53,66 +59,6 @@
 							margin-right: 0px;
 						}
 					}
-				}
-			}
-		}
-
-		#orderbook-header {
-			#orderbook-intro {
-				h1 {
-					font-size: 30px !important;
-				}
-			}
-		}
-
-		#orderbook-rows {
-			flex-direction: column !important;
-			align-items: center !important;
-
-			.container {
-				width: 100% !important;
-				border: none !important;
-
-				h3 {
-					margin-block-start: 0px !important;
-				}
-			}
-		}
-
-		#orderbook-bids {
-			#bid-intro {
-				width: 100% !important;
-				height: auto;
-				h2 {
-					font-size: 25px !important;
-				}
-			}
-			#bid-banner {
-				display: none !important;
-			}
-		}
-
-		#orderbook-request {
-			#request-intro-container {
-				#request-banner {
-					display: none !important;
-				}
-
-				#request-intro {
-					width: 100%;
-					h2 {
-					font-size: 25px !important;
-				}
-				}
-			}
-
-			#orderbook-steps {
-				flex-direction: column !important;
-				height: auto !important;
-				padding: 40px !important;
-
-				.request-step {
-					width: 100% !important;
 				}
 			}
 		}
@@ -205,11 +151,14 @@
 				font-weight: bold;
 				color: $white;
 			}
+
 			#about-us {
 				font-family: $body-font;
 				color: $white;
 				line-height: 1.5;
 				max-width: 500px;
+				margin: 10px 0px;
+				font-size: 16.5px;
 			}
 		}
 
