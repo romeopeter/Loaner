@@ -1,9 +1,12 @@
+// tailwind.config.js
 module.exports = {
-  content: [
-    "./src/**/*.{html,js,jsx}",
-  ],
+  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
   },
-  plugins: [],
+  variants: {
+    extend: {},
+  },
+  plugins: [require('@tailwindcss/aspect-ratio')],
 }
