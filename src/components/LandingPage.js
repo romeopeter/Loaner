@@ -2,19 +2,16 @@ import React from "react";
 import OrderbookLayout from "./OrderbookLayout";
 import DocumentHead from "./DocumentHead";
 import Button from "./Button";
+import setBgImage from '../utils/setBgImage';
 import headerBanner from "../assets/images/headerBanner.png";
 import tabletLady from "../assets/images/tabletLady.png";
 import requestBanner from "../assets/images/requestBanner.jpg";
-import thumbsUp from "../assets/images/thumbsUp.png";
 
 export default function LandingPage() {
-	const setBgImage = (name) => {
-		return { backgroundImage: `url(${name})` };
-	};
 
 	return (
 		<>
-			<DocumentHead title="Orderbook | Home" />
+			<DocumentHead title="Home" />
 			<OrderbookLayout>
 				<header id="orderbook-header" style={setBgImage(headerBanner)}>
 					<div className="grid grid-cols-1 gap-x-6">
