@@ -17,7 +17,7 @@ function DocumentHead(props) {
 	return (
 		<Helmet
 			htmlAttribute={{ lang }}
-			title={title}
+			title={`Orderbook | ${title}`}
 			meta={[].concat(meta)}
 			link={[
 				{ rel: "preconnect", href: "https://fonts.googleapis.com" },
