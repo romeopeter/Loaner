@@ -36,7 +36,7 @@ export default function OrderbookLayout({ children }) {
 							<Link to="/">Contact Us</Link>
 						</li>
 						<li className="nav-menu-item" id="login">
-							<Link to="/">Login</Link>
+							<Link to="/login">Login</Link>
 						</li>
 						<li className="nav-menu-item" id="register-cta">
 							<Link to="/">Register</Link>
