@@ -1,4 +1,4 @@
-import React, {useEffect, createRef} from "react";
+import React, {createRef} from "react";
 import { Link } from "react-router-dom";
 
 export default function OrderbookLayout({ children }) {
@@ -15,7 +15,7 @@ export default function OrderbookLayout({ children }) {
 		<section id="app">
 			<nav id="orderbook-nav">
 				<div id="orderbook-logo">
-					<span>Orderbook</span>
+					<span>Orderbook Online</span>
 				</div>
 				<div id="burger-toggle" className="icon" onClick={() => respondsiveNav()}>&#9776;</div>
 				<div id="nav-menu">
