@@ -3,6 +3,7 @@
 	body {
   		margin: 0;
   		padding: 0;
+  		overflow-x: hidden;
 	}
 }
 
@@ -12,4 +13,5 @@
 @import "_button.scss";
 @import "_orderbook-layout.scss";
 @import "_landing-page.scss";
-@import "_login.scss"
+@import "_login.scss";
+@import "_register.scss"
