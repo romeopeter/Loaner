@@ -2,15 +2,29 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Button(props) {
-	const { type, title, link, buttonClass } = props;
+	const { type, title, link, buttonClass, buttonDisabled } = props;
 
-	return (
-		<button
-			type={type ? type : ""}
-			id="default-orderbook-button"
-			className={buttonClass}
-		>
-			<Link to={link}>{title}</Link>
-		</button>
-	);
+	if (link) {
+		return (
+			<button
+				type={type ? type : "button"}
+				id="default-orderbook-button"
+				className={buttonClass}
+				disabled={buttonDisabled}
+			>
+				<Link to={link}>{title}</Link>
+			</button>
+		);
+	} else {
+		return (
+			<button
+				type={type ? type : "button"}
+				id="default-orderbook-button"
+				className={buttonClass}
+				disabled={buttonDisabled}
+			>
+				{title}
+			</button>
+		);
+	}
 }
