@@ -64,6 +64,14 @@
 		}
 	}
 
+	@media (max-width: 1150px) {
+		#orderbook-nav {
+			#orderbook-logo span {
+				font-size: 30px !important;
+			}
+		}
+	}
+
 	/*###### LANDSCAPE & LARGE SCREENS ######*/
 
 	#orderbook-nav {
