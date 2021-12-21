@@ -1,0 +1,31 @@
+/** 
+* 
+* Styles here are specific to Login component. 
+* check _general.scss partial for general authentication pages styles
+* */
+
+#app {
+    #orderbook-form {
+        form {
+            #registration-steps {
+                position: relative;
+                #first-step-fields {
+                    position: absolute;
+                    width: 100%;
+                }
+                #final-step-fields {
+                    position: inherit;
+                    left: 700px;
+                }
+
+                .form-slide-button {
+                    cursor: pointer;
+                }
+            }
+
+            #register-button {
+
+            }
+        }
+    }
+}
