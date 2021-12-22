@@ -21,7 +21,7 @@ export default function Register() {
 		password: "",
 		confirmPassword: "",
 		isChecked: false,
-		finalFormIsSlidedIn: false
+		finalFormIsSlidedIn: false,
 	});
 
 	// Form steps slide through
@@ -34,10 +34,10 @@ export default function Register() {
 		setForm((state) => {
 			return {
 				...state,
-				finalFormIsSlidedIn: true
-			}
-		})
-	}
+				finalFormIsSlidedIn: true,
+			};
+		});
+	};
 
 	let slideFinalFormOut = () => {
 		finalFormStepRef.current.style.left = "700px";
@@ -46,11 +46,10 @@ export default function Register() {
 		setForm((state) => {
 			return {
 				...state,
-				finalFormIsSlidedIn: false
-			}
-		})
-	}
-	
+				finalFormIsSlidedIn: false,
+			};
+		});
+	};
 
 	return (
 		<>
@@ -104,7 +103,7 @@ export default function Register() {
 										</p>
 									</div>
 
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+									<div className="grid grid-cols-1 gap-5">
 										<div
 											id="registration-steps"
 											className="col-span-12"
@@ -112,7 +111,7 @@ export default function Register() {
 											{/*Registration -- First step*/}
 											<div
 												id="first-step-fields"
-												className="col-span-12 grid gap-4"
+												className="col-span-12 grid grid-cols-1 gap-4"
 											>
 												<div className="col-span-12">
 													<select
@@ -150,28 +149,31 @@ export default function Register() {
 													</select>
 												</div>
 
-												{/*Fix grid*/}
-												<div className="sm:col-span-6">
-													<input
-														type="text"
-														name="first-name"
-														id="first-name"
-														autoComplete="first-name"
-														placeholder="First name"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													/>
-												</div>
+												<div className="col-span-12 grid grid-cols-2 gap-4">
 
-												{/*fix grid*/}
-												<div className="sm:col-span-6">
-													<input
-														type="text"
-														name="last-name"
-														id="last-name"
-														autoComplete="last-name"
-														placeholder="Last name"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													/>
+													{/*Fix grid*/}
+													<div className="col-span-1">
+														<input
+															type="text"
+															name="first-name"
+															id="first-name"
+															autoComplete="first-name"
+															placeholder="First name"
+															className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+														/>
+													</div>
+
+													{/*fix grid*/}
+													<div className="col-span-1">
+														<input
+															type="text"
+															name="last-name"
+															id="last-name"
+															autoComplete="last-name"
+															placeholder="Last name"
+															className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+														/>
+													</div>
 												</div>
 
 												<div className="col-span-12">
@@ -187,8 +189,18 @@ export default function Register() {
 												</div>
 
 												<div className="col-span-12 text-right">
-													<span id="next-field-button" className={`form-slide-button ${form.finalFormIsSlidedIn?"hidden":""}`} onClick={() => slideFinalFormIn()}>
-														Next
+													<span
+														id="next-field-button"
+														className={`form-slide-button ${
+															form.finalFormIsSlidedIn
+																? "hidden"
+																: ""
+														}`}
+														onClick={() =>
+															slideFinalFormIn()
+														}
+													>
+														Next{" "}<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 													</span>
 												</div>
 											</div>
@@ -214,12 +226,20 @@ export default function Register() {
 
 												<div className="col-span-12">
 													<input
-														type="date"
+														type="text"
 														id="data-of-birth"
 														name="date-of-birth"
 														autoComplete="date-of-birth"
-														placeholder="Date of birth"
+														placeholder="Date of birth (MM/DD/YYYY)"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+														onFocus={(e) =>
+															(e.target.type =
+																"date")
+														}
+														onBlur={(e) =>
+															(e.target.type =
+																"text")
+														}
 													/>
 												</div>
 
@@ -247,8 +267,14 @@ export default function Register() {
 												</div>
 
 												<div className="col-span-12 text-left">
-													<span id="previous-field-button" className="form-slide-button" onClick={() => slideFinalFormOut()}>
-														Previous
+													<span
+														id="previous-field-button"
+														className="form-slide-button"
+														onClick={() =>
+															slideFinalFormOut()
+														}
+													>
+														<i class="fa fa-long-arrow-left" aria-hidden="true"></i>{" "}Previous
 													</span>
 												</div>
 											</div>
@@ -286,7 +312,11 @@ export default function Register() {
 												type="submit"
 												title="Sign up"
 												buttonClass="register-button auth-button"
-												buttonDisabled={form.buttonIsDisabled?true:""}
+												buttonDisabled={
+													form.buttonIsDisabled
+														? true
+														: ""
+												}
 											/>
 										</div>
 
