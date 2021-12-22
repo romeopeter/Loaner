@@ -104,7 +104,7 @@ export default function LandingPage() {
 						</div>
 						{/*Renders image*/}
 						<img
-							className="w-full h-full object-center object-cover lg:w-full lg:h-full"
+							className="object-cover h-full"
 							id="bid-banner"
 							alt="Lady with a tablet"
 							src={tabletLady}
@@ -115,7 +115,7 @@ export default function LandingPage() {
 					<div id="request-intro-container">
 						<div className="grid sm:grid-cols-1 md:grid-cols-2">
 							<img
-								className="w-full h-full object-center object-cover lg:w-full lg:h-full"
+								className="object-cover h-full"
 								src={requestBanner}
 								alt=""
 								id="request-banner"
