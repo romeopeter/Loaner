@@ -4,28 +4,30 @@
 * check _general.scss partial for general authentication pages styles
 * */
 
-#app {
-    #orderbook-form {
-        form {
-            #registration-steps {
-                position: relative;
-                #first-step-fields {
-                    position: absolute;
-                    width: 100%;
-                }
-                #final-step-fields {
-                    position: inherit;
-                    left: 700px;
-                }
 
-                .form-slide-button {
-                    cursor: pointer;
-                }
+#orderbook-form {
+    // height: 100vh;
+
+    form {
+        #registration-steps {
+            position: relative;
+            #first-step-fields {
+                position: absolute;
+                width: 100%;
+            }
+            #final-step-fields {
+                position: inherit;
+                left: 700px;
+                visibility: hidden;
             }
 
-            #register-button {
-
+            .form-slide-button {
+                cursor: pointer;
             }
+        }
+
+        #register-button {
+
         }
     }
 }

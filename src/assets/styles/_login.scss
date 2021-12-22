@@ -4,27 +4,17 @@
 * check _general.scss partial for general authentication pages styles
 * */
 
-#app {
-	// ##### SMALL SCREEN #####
+
+// ##### SMALL SCREEN #####
 	@include respond-below(xs) {
 		#orderbook-login {
-			height: 80vh !important;
+			// height: 80vh !important;
 		}
 	}
-
-	@include respond-below(md) {
-		#orderbook-login {
-			#login-intro {
-				h1 {
-					font-size: 30px !important;
-				}
-			}
-		}
-	}
-
+	
 	@include respond-above(md) {
 		#orderbook-login {
-			height: 100vh;
+			// height: 100vh;
 
 			#orderbook-form {
 				form {
@@ -56,4 +46,3 @@
 			}
 		}
 	}
-}
