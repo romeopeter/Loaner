@@ -84,7 +84,7 @@ export default function Login() {
 												name="password"
 												id="password"
 												autoComplete="password"
-												placeholder="password"
+												placeholder="Password"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												required
 											/>

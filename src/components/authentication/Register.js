@@ -120,10 +120,7 @@ export default function Register() {
 														autoComplete="title"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													>
-														<option
-															value=""
-															selected
-														>
+														<option value="">
 															Please choose
 														</option>
 
@@ -150,7 +147,6 @@ export default function Register() {
 												</div>
 
 												<div className="col-span-12 grid grid-cols-2 gap-4">
-
 													{/*Fix grid*/}
 													<div className="col-span-1">
 														<input
@@ -200,7 +196,11 @@ export default function Register() {
 															slideFinalFormIn()
 														}
 													>
-														Next{" "}<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+														Next{" "}
+														<i
+															className="fa fa-long-arrow-right"
+															aria-hidden="true"
+														></i>
 													</span>
 												</div>
 											</div>
@@ -249,21 +249,35 @@ export default function Register() {
 														id="organization"
 														name="organization"
 														autoComplete="organization"
-														placeholder="organization/company"
+														placeholder="Organization/Company"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													/>
 												</div>
 
-												<div className="col-span-12">
-													<input
-														type="password"
-														id="password"
-														name="password"
-														autoComplete="password"
-														placeholder="Password"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-														required
-													/>
+												<div className="col-span-12 grid grid-cols-2 gap-4">
+													<div className="col-span-1">
+														<input
+															type="password"
+															id="password"
+															name="password"
+															autoComplete="password"
+															placeholder="Password"
+															className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+															required
+														/>
+													</div>
+
+													<div className="col-span-1">
+														<input
+															type="password"
+															id="confirm-password"
+															name="confirm-password"
+															autoComplete="confirm-password"
+															placeholder="Confirm password"
+															className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+															required
+														/>
+													</div>
 												</div>
 
 												<div className="col-span-12 text-left">
@@ -274,7 +288,11 @@ export default function Register() {
 															slideFinalFormOut()
 														}
 													>
-														<i class="fa fa-long-arrow-left" aria-hidden="true"></i>{" "}Previous
+														<i
+															className="fa fa-long-arrow-left"
+															aria-hidden="true"
+														></i>{" "}
+														Previous
 													</span>
 												</div>
 											</div>
