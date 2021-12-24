@@ -1,8 +1,12 @@
 import React, { useState, createRef } from "react";
-import { Link } from "react-router-dom";
-import OrderbookLayout from "../OrderbookLayout";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { signUpAction } from "../../redux/authSlice";
+
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
+
 import phoneLady from "../../assets/images/phoneLady.jpg";
 import setBgImage from "../../utils/setBgImage";
 
@@ -12,20 +16,26 @@ export default function Register() {
 	const [form, setForm] = useState({
 		title: "",
 		firstName: "",
-		LastName: "",
+		lastName: "",
 		emailAddress: "",
-		buttonIsDisabled: true,
 		phoneNumber: "",
 		dateOfBirth: "",
 		organization: "",
 		password: "",
 		confirmPassword: "",
-		isChecked: false,
 		finalFormIsSlidedIn: false,
+		buttonIsDisabled: true,
+		termsAndConditionsIsChecked: false,
 	});
 
 	// Form steps slide through
 	let finalFormStepRef = createRef();
+
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const isRegistered = useSelector(
+		(state) => state.auth.authSuccess.isRegistered
+	);
 
 	let slideFinalFormIn = () => {
 		finalFormStepRef.current.style.left = "0px";
@@ -36,6 +46,7 @@ export default function Register() {
 			return {
 				...state,
 				finalFormIsSlidedIn: true,
+				buttonIsDisabled: false,
 			};
 		});
 	};
@@ -49,8 +60,53 @@ export default function Register() {
 			return {
 				...state,
 				finalFormIsSlidedIn: false,
+				buttonIsDisabled: true,
 			};
 		});
+	};
+
+	const handleChange = (e) => {
+		const target = e.target;
+		const name = target.name;
+		const value =
+			target.type === "checkbox" ? target.checked : target.value;
+
+		setForm((state) => {
+			return {
+				[name]: value,
+			};
+		});
+	};
+
+	// Input from form state
+	const {
+		emailAddress,
+		title,
+		dateOfBirth,
+		firstName,
+		lastName,
+		password,
+		confirmPassword,
+	} = form;
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		// Redux hook dispatches sign-up action (Register requst)
+		dispatch(
+			signUpAction({
+				emailAddress,
+				title,
+				dateOfBirth,
+				firstName,
+				lastName,
+				password,
+				confirmPassword,
+			})
+		);
+
+		// Redirect user to login page when registered
+		if (isRegistered) navigate("/login");
 	};
 
 	return (
@@ -83,22 +139,25 @@ export default function Register() {
 							<p>
 								Lorem ipsum dolor sit amet, consectetur
 								adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua.
-								Ut enim ad minim veniam, quis nostrud
-								exercitation.
+								incididunt ut labore et dolore magna aliqua. Ut
+								enim ad minim veniam, quis nostrud exercitation.
 							</p>
 						</div>
 						<div id="overlay"></div>
 					</div>
 
 					<div id="orderbook-form">
-						<form className="h-full">
+						<form className="h-full" onSubmit={handleSubmit}>
 							<div className="pt-20 pb-10 px-12">
-								<h1 id="orderbook-home" className="text-center mb-10 leading-6 md:hidden">
-									<Link to="/" className="text-gray-400">Orderbook Online</Link>
+								<h1
+									id="orderbook-home"
+									className="text-center mb-10 leading-6 md:hidden"
+								>
+									<Link to="/" className="text-gray-400">
+										Orderbook Online
+									</Link>
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
-
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Nice to meet you,
 									</h2>
@@ -124,8 +183,12 @@ export default function Register() {
 													name="title"
 													autoComplete="title"
 													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={form.value}
+													onChange={(e) =>
+														handleChange(e)
+													}
 												>
-													<option value="">
+													<option defaultValue="Please choose">
 														Please choose
 													</option>
 
@@ -152,27 +215,33 @@ export default function Register() {
 											</div>
 
 											<div className="col-span-12 grid grid-cols-2 gap-4">
-												{/*Fix grid*/}
 												<div className="col-span-1">
 													<input
 														type="text"
-														name="first-name"
+														name="firstName"
+														value={form.firstName}
 														id="first-name"
 														autoComplete="first-name"
 														placeholder="First name"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+														onChange={(e) =>
+															handleChange(e)
+														}
 													/>
 												</div>
 
-												{/*fix grid*/}
 												<div className="col-span-1">
 													<input
 														type="text"
-														name="last-name"
+														name="lastName"
+														value={form.lastName}
 														id="last-name"
 														autoComplete="last-name"
 														placeholder="Last name"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+														onChange={(e) =>
+															handleChange(e)
+														}
 													/>
 												</div>
 											</div>
@@ -180,12 +249,16 @@ export default function Register() {
 											<div className="col-span-12">
 												<input
 													type="text"
-													name="email-address"
+													name="emailAddress"
+													value={form.emailAddress}
 													id="email-address"
 													autoComplete="email"
 													placeholder="Email address"
 													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													required
+													onChange={(e) =>
+														handleChange(e)
+													}
 												/>
 											</div>
 
@@ -219,13 +292,17 @@ export default function Register() {
 											<div className="col-span-12">
 												<input
 													type="tel"
-													name="phone-number"
+													name="phoneNumber"
 													id="phone-number"
+													value={form.phoneNumber}
 													pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
 													autoComplete="phone-number"
 													placeholder="Phone number"
 													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													required
+													onChange={(e) =>
+														handleChange(e)
+													}
 												/>
 											</div>
 
@@ -233,17 +310,19 @@ export default function Register() {
 												<input
 													type="text"
 													id="data-of-birth"
-													name="date-of-birth"
+													name="dateOfBirth"
+													value={form.dateOfBirth}
 													autoComplete="date-of-birth"
 													placeholder="Date of birth (MM/DD/YYYY)"
 													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													onFocus={(e) =>
-														(e.target.type =
-															"date")
+														(e.target.type = "date")
 													}
 													onBlur={(e) =>
-														(e.target.type =
-															"text")
+														(e.target.type = "text")
+													}
+													onChange={(e) =>
+														handleChange(e)
 													}
 												/>
 											</div>
@@ -253,9 +332,13 @@ export default function Register() {
 													type="text"
 													id="organization"
 													name="organization"
+													value={form.organization}
 													autoComplete="organization"
 													placeholder="Organization/Company"
 													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													onChange={(e) =>
+														handleChange(e)
+													}
 												/>
 											</div>
 
@@ -265,10 +348,14 @@ export default function Register() {
 														type="password"
 														id="password"
 														name="password"
+														value={form.password}
 														autoComplete="password"
 														placeholder="Password"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 														required
+														onChange={(e) =>
+															handleChange(e)
+														}
 													/>
 												</div>
 
@@ -276,11 +363,17 @@ export default function Register() {
 													<input
 														type="password"
 														id="confirm-password"
-														name="confirm-password"
+														name="confirmPassword"
+														value={
+															form.confirmPassword
+														}
 														autoComplete="confirm-password"
 														placeholder="Confirm password"
 														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 														required
+														onChange={(e) =>
+															handleChange(e)
+														}
 													/>
 												</div>
 											</div>
@@ -308,10 +401,13 @@ export default function Register() {
 											<div className="flex items-center h-5">
 												<input
 													id="terms-and-conditions"
-													name="terms-and-conditions"
+													name="termsAndConditionsIsChecked"
 													type="checkbox"
 													className="focus:ring-white h-4 w-4 text-indigo-600 border-black rounded"
 													required
+													onChange={(e) =>
+														handleChange(e)
+													}
 												/>
 											</div>
 											<div className="ml-3 text-sm">
@@ -319,12 +415,11 @@ export default function Register() {
 													htmlFor="terms-and-conditions"
 													className="font-medium text-black"
 												>
-													By signing up, you agree
-													to
+													By signing up, you agree to
 												</label>{" "}
 												<Link to="/">
-													Orderbook’s Terms of Use
-													& Privacy Policy
+													Orderbook’s Terms of Use &
+													Privacy Policy
 												</Link>
 											</div>
 										</div>
@@ -336,7 +431,7 @@ export default function Register() {
 											title="Sign up"
 											buttonClass="register-button auth-button"
 											buttonDisabled={
-												form.buttonIsDisabled
+												!form.termsAndConditionsIsChecked
 													? true
 													: ""
 											}
