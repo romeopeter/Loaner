@@ -11,7 +11,7 @@ if (authToken) {
 }
 
 // Authentication request
-const signUpFunc = (data) => {
+const signUpRequest = (data) => {
 	return axios
 		.post(`${serverURL}/api/v1/registration/sign_up/`, data)
 		.then((response) => response.data)
@@ -20,7 +20,7 @@ const signUpFunc = (data) => {
 		});
 };
 
-const signInFunc = (data) => {
+const signInRequest = (data) => {
 	return axios
 		.post(`${serverURL}/api/v1/registration/sign_in/`, data)
 		.then((response) => response.data)
@@ -29,7 +29,7 @@ const signInFunc = (data) => {
 		});
 };
 
-const signOutFunc = () => {
+const signOutRequest = () => {
 	return axios
 		.post(`${serverURL}/api/v1/registration/sign_out/`)
 		.then((response) => response.data)
@@ -38,4 +38,4 @@ const signOutFunc = () => {
 		});
 };
 
-export {signUpFunc, signInFunc, signOutFunc};
+export {signUpRequest, signInRequest, signOutRequest};
