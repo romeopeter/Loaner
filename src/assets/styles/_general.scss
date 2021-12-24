@@ -138,6 +138,11 @@
 				    color: white;
 				    font-weight: bold;
 				    font-size: larger;
+
+				    &:disabled {
+				    	cursor: not-allowed;
+				    	background: lightgray;
+				    }
 				}
 
 				.account-signal {
