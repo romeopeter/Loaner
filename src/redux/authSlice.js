@@ -4,37 +4,50 @@
  *
  * **/
 import { createSlice } from "@reduxjs/toolkit";
-import { signUpFunc, signInFunc, signOutFunc } from "./creators";
+import { signUpRequest, signInRequest, signOutRequest } from "./creators";
 
 const initialState = {
-	email: "",
-	title: "",
-	dateOfBirth: "",
-	firstName: "",
-	lastName: "",
-	password: "",
-	confirmPassword: "",
-	role: "",
+	authSuccess: {
+		email: "",
+		title: "",
+		dateOfBirth: "",
+		firstName: "",
+		lastName: "",
+		password: "",
+		confirmPassword: "",
+		role: "",
+		isRegistered: false
+	},
+	authError: {
+		signInError: "",
+		signUpError: "",
+	},
 };
 
 export const authSlice = createSlice({
 	name: "auth",
 	initialState: initialState,
 	reducers: {
-		signUp: (state, action) => {
-			const signUpResponse = signUpFunc(action.payload);
-			state.auth = signUpResponse;
+		signUpAction: (state, action) => {
+			const AuthState = state.auth
+			const signUpResponse = signUpRequest(action.payload);
+			console.log(signUpResponse);
+			// Handle errors and update state
+			// AuthState.authSuccess = signUpResponse;
+			// AuthState.authSuccess.isRegistered = true;
 		},
-		signIn: (state, action) => {
-			const signInResponse = signInFunc(action.payload);
-			state.auth = signInResponse;
+		signInAction: (state, action) => {
+			const signInResponse = signInRequest(action.payload);
+			// Handle errors and update state
+			state.auth.authSucces = signInResponse;
 		},
-		signOut: (state, action) => {
-			const signOutResponse = signOutFunc();
-			state.auth = signOutResponse;
+		signOutAction: (state, action) => {
+			const signOutResponse = signOutRequest();
+			// Handle errors and update state
+			state.auth.authSucces = signOutResponse;
 		},
 	},
 });
 
-export const { signUp, signIn, signOut } = authSlice.actions;
+export const { signUpAction, signInAction, signOutAction } = authSlice.actions;
 export default authSlice.reducer;
