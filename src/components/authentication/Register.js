@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { signUpAsync } from "../../redux/authSlice";
-import useAuth from "./useAuth";
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
