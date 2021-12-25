@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useLocation } from "react-redux";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import useAuth from "./useAuth";
-import { signInAction } from "../../redux/authSlice";
+import { signInAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
@@ -20,7 +20,9 @@ export default function Login() {
 		isChecked: false,
 	});
 
-	const { signIn } = useAuth();
+	const store = useSelector(state => state.auth.authSuccess)
+	const isLoggedIn = useSelector(state => state.auth.authSuccess.isLoggedIn)
+	const { authed, signIn } = useAuth();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const {state} = useLocation();
@@ -37,8 +39,6 @@ export default function Login() {
 				[name]: value,
 			};
 		});
-
-		console.log(form);
 	};
 
 	// Input from form state
@@ -47,13 +47,21 @@ export default function Login() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Callback is Redux hook dispatching sign-in action (Login requst)
-		const cb = dispatch(signInAction({ emailAddress, password }));
+		// Redux hook dispatching sign-in action (Login requst)
+		dispatch(signInAsync({ email:emailAddress, password }));
 
 		// signIn is useAuth hook's method for signing user in and redirecting to dashboard
-		signIn(cb).then(() => {
-			navigate(state?.path || "/dashboard");
-		});
+
+		if (isLoggedIn) {
+			const accessToken = store.tokens.access;
+			localStorage.setItem("AUTH_TOKEN", accessToken);
+
+			// Redirect user to dashboard
+			if (signIn()) {
+				navigate(state?.path || "/dashboard");
+			}
+			
+		}
 	};
 
 	return (
@@ -115,7 +123,7 @@ export default function Login() {
 									<div className="col-span-6 sm:col-span-4">
 										<input
 											type="text"
-											name="email-address"
+											name="emailAddress"
 											id="email-address"
 											autoComplete="email"
 											placeholder="Email"
