@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const serverURL = "https://order-book-online.herokuapp.com/swagger_ui/";
+const serverURL = "https://order-book-online.herokuapp.com";
 
 // Default Axios config
 const axiosHeaders = axios.defaults.headers;
@@ -15,18 +15,14 @@ const signUpRequest = (data) => {
 	return axios
 		.post(`${serverURL}/api/v1/registration/sign_up/`, data)
 		.then((response) => response.data)
-		.catch((error) => {
-			console.log(error);
-		});
+		.catch((error) => error);
 };
 
 const signInRequest = (data) => {
 	return axios
 		.post(`${serverURL}/api/v1/registration/sign_in/`, data)
 		.then((response) => response.data)
-		.catch((error) => {
-			console.log(error);
-		});
+		.catch((error) => error);
 };
 
 const signOutRequest = () => {
