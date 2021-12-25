@@ -9,6 +9,14 @@ export default function useAuth() {
 
 	return {
 		authed,
+		signOut(cb) {
+			if (cb) {
+				return new Promise(res => {
+					setAuthed(false)
+					res()	
+				})
+			};
+		},
 		signIn(cb) {
 			if (cb) {
 				return new Promise(res => {
@@ -17,13 +25,5 @@ export default function useAuth() {
 				})
 			};
 		},
-		signOut(cb) {
-			if (cb) {
-				return new Promise(res => {
-					setAuthed(false)
-					res()	
-				})
-			};
-		}
 	}
 }
