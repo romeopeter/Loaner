@@ -2,7 +2,8 @@ import React, { useState, createRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { signUpAction } from "../../redux/authSlice";
+import { signUpAsync } from "../../redux/authSlice";
+import useAuth from "./useAuth";
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
@@ -31,8 +32,9 @@ export default function Register() {
 	// Form steps slide through
 	let finalFormStepRef = createRef();
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const isRegistered = useSelector(
 		(state) => state.auth.authSuccess.isRegistered
 	);
@@ -73,6 +75,7 @@ export default function Register() {
 
 		setForm((state) => {
 			return {
+				...state,
 				[name]: value,
 			};
 		});
@@ -85,25 +88,27 @@ export default function Register() {
 		dateOfBirth,
 		firstName,
 		lastName,
+		organization,
 		password,
 		confirmPassword,
 	} = form;
 
+	const data = {
+		email: emailAddress,
+		title,
+		date_of_birth: dateOfBirth,
+		first_name: firstName,
+		last_name: lastName,
+		organization,
+		password,
+		confirm_password: confirmPassword,
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Redux hook dispatches sign-up action (Register requst)
-		dispatch(
-			signUpAction({
-				emailAddress,
-				title,
-				dateOfBirth,
-				firstName,
-				lastName,
-				password,
-				confirmPassword,
-			})
-		);
+		// Redux async call
+		dispatch(signUpAsync(data));
 
 		// Redirect user to login page when registered
 		if (isRegistered) navigate("/login");
