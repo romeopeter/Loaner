@@ -1,49 +1,59 @@
-import React, {createRef} from "react";
+import React, { createRef } from "react";
 import { Link } from "react-router-dom";
+import useAuth from "./authentication/useAuth";
 
-export default function OrderbookLayout({ children }) {
-
+export default function OrderbookLayout({ children, pageNav }) {
+	const { auth } = useAuth();
 
 	let navMenuRef = createRef();
-	
-	
+
 	const respondsiveNav = () => {
 		navMenuRef.current.classList.toggle("responsive-nav-menu");
-	}
+	};
 
 	return (
 		<section id="app">
-			<nav id="orderbook-nav">
-				<div id="orderbook-logo">
-					<span>Orderbook Online</span>
-				</div>
-				<div id="burger-toggle" className="icon" onClick={() => respondsiveNav()}>&#9776;</div>
-				<div id="nav-menu">
-					<ul id="nav-menu-list" className="" ref={navMenuRef}>
-						<li className="nav-menu-item">
-							<Link to="/">Home</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">How it works</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">FAQs</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">About Us</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Contact Us</Link>
-						</li>
-						<li className="nav-menu-item" id="login">
-							<Link to="/login">Login</Link>
-						</li>
-						<li className="nav-menu-item" id="register-cta">
-							<Link to="/register">Register</Link>
-						</li>
-					</ul>
-				</div>
-			</nav>
+			{pageNav ? (
+				pageNav
+			) : (
+				<nav id="orderbook-nav">
+					<div id="orderbook-logo">
+						<span>Orderbook Online</span>
+					</div>
+					<div
+						id="burger-toggle"
+						className="icon"
+						onClick={() => respondsiveNav()}
+					>
+						&#9776;
+					</div>
+					<div id="nav-menu">
+						<ul id="nav-menu-list" className="" ref={navMenuRef}>
+							<li className="nav-menu-item">
+								<Link to="/">Home</Link>
+							</li>
+							<li className="nav-menu-item">
+								<Link to="/">How it works</Link>
+							</li>
+							<li className="nav-menu-item">
+								<Link to="/">FAQs</Link>
+							</li>
+							<li className="nav-menu-item">
+								<Link to="/">About Us</Link>
+							</li>
+							<li className="nav-menu-item">
+								<Link to="/">Contact Us</Link>
+							</li>
+							<li className="nav-menu-item" id="login">
+								<Link to="/login">Login</Link>
+							</li>
+							<li className="nav-menu-item" id="register-cta">
+								<Link to="/register">Register</Link>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			)}
 			{children}
 			<footer id="orderbook-footer">
 				<div id="orderbook-about-us">
