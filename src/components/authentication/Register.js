@@ -267,23 +267,18 @@ export default function Register() {
 											</div>
 
 											<div className="col-span-12 text-right">
-												<span
+												<Button
 													id="next-field-button"
-													className={`form-slide-button ${
+													title="Next"
+													buttonClass={`form-slide-button text-white bg-gray-400 rounded ${
 														form.finalFormIsSlidedIn
 															? "hidden"
 															: ""
 													}`}
-													onClick={() =>
-														slideFinalFormIn()
+													slide={
+														slideFinalFormIn
 													}
-												>
-													Next{" "}
-													<i
-														className="fa fa-long-arrow-right"
-														aria-hidden="true"
-													></i>
-												</span>
+												/>
 											</div>
 										</div>
 
@@ -383,19 +378,14 @@ export default function Register() {
 											</div>
 
 											<div className="col-span-12 text-left">
-												<span
+												<Button
+													title="Previous"
 													id="previous-field-button"
-													className="form-slide-button"
-													onClick={() =>
-														slideFinalFormOut()
+													buttonClass="form-slide-button text-white bg-gray-400 rounded"
+													slide={
+														slideFinalFormOut
 													}
-												>
-													<i
-														className="fa fa-long-arrow-left"
-														aria-hidden="true"
-													></i>{" "}
-													Previous
-												</span>
+												/>	
 											</div>
 										</div>
 									</div>
