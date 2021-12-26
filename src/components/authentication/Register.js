@@ -163,10 +163,10 @@ export default function Register() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
-										Nice to meet you,
+										Nice to meet you.
 									</h2>
 									<p className="mt-1 text-sm text-gray-600">
-										create an account to start using
+										Create an account to start using
 										Orderbook
 									</p>
 								</div>
