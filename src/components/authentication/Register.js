@@ -38,6 +38,10 @@ export default function Register() {
 		(state) => state.auth.authSuccess.isRegistered
 	);
 
+	const signUpError = useSelector(
+		(state) => state.auth.authError.signUpError
+	);
+
 	let slideFinalFormIn = () => {
 		finalFormStepRef.current.style.left = "0px";
 		finalFormStepRef.current.style.visibility = "visible";
@@ -264,6 +268,9 @@ export default function Register() {
 														handleChange(e)
 													}
 												/>
+												<span className="text-red-400 mb-2 hidden">
+													kndkfndfk
+												</span>
 											</div>
 
 											<div className="col-span-12 text-right">
@@ -275,9 +282,7 @@ export default function Register() {
 															? "hidden"
 															: ""
 													}`}
-													slide={
-														slideFinalFormIn
-													}
+													slide={slideFinalFormIn}
 												/>
 											</div>
 										</div>
@@ -375,6 +380,11 @@ export default function Register() {
 														}
 													/>
 												</div>
+												
+													<span className={`text-red-400 ${form.confirmPassword !== form.password ? 'visible':'hidden'}`}>
+														Password mismatch.
+													</span>
+												
 											</div>
 
 											<div className="col-span-12 text-left">
@@ -382,10 +392,8 @@ export default function Register() {
 													title="Previous"
 													id="previous-field-button"
 													buttonClass="form-slide-button text-white bg-gray-400 rounded"
-													slide={
-														slideFinalFormOut
-													}
-												/>	
+													slide={slideFinalFormOut}
+												/>
 											</div>
 										</div>
 									</div>
