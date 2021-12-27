@@ -126,10 +126,9 @@ export default function Form({ formState }) {
 						required
 						onChange={(e) => handleChange(e)}
 					/>
-					<span className="text-red-400 mb-2 hidden">kndkfndfk</span>
 				</div>
 
-				<div className="col-span-12 text-right">
+				<div className="col-span-12 text-right hidden">
 					<Button
 						id="next-field-button"
 						title="Next"
