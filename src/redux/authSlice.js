@@ -39,10 +39,9 @@ export const authSlice = createSlice({
 				user: payload.user
 			};
 		},
-		signOutAction: (state) => {
+		signOutAction: (state, action) => {
 			signOutRequest();
-
-			// Should set message after sign out
+			return
 		},
 	},
 });
@@ -80,4 +79,8 @@ export const signInAsync = (data) => (dispatch) => {
 
 		dispatch(signInAction(response));
 	});
+};
+
+export const signOutAsync = () => (dispatch) => {
+	dispatch(signOutAction());
 };
