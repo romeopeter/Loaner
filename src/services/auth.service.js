@@ -34,6 +34,7 @@ const signInRequest = (data) => {
 
 const signOutRequest = () => {
 	localStorage.removeItem("AUTH_TOKEN");
+	localStorage.removeItem("IS_LOGGED_IN");
 };
 
 export {signUpRequest, signInRequest, signOutRequest};
