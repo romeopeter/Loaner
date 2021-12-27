@@ -1,7 +1,8 @@
-import React, { useState, createRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import Form from "./Form";
 import { signUpAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
@@ -23,51 +24,31 @@ export default function Register() {
 		organization: "",
 		password: "",
 		confirmPassword: "",
-		finalFormIsSlidedIn: false,
-		buttonIsDisabled: true,
-		termsAndConditionsIsChecked: false,
 	});
-
-	// Form steps slide through
-	let finalFormStepRef = createRef();
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const isRegistered = useSelector(
-		(state) => state.auth.authSuccess.isRegistered
-	);
+	const { message } = useSelector((state) => state.message);
 
-	const signUpError = useSelector(
-		(state) => state.auth.authError.signUpError
-	);
-
-	let slideFinalFormIn = () => {
-		finalFormStepRef.current.style.left = "0px";
-		finalFormStepRef.current.style.visibility = "visible";
-		finalFormStepRef.current.style.transition = "all 200ms ease-in";
-
-		setForm((state) => {
-			return {
-				...state,
-				finalFormIsSlidedIn: true,
-				buttonIsDisabled: false,
-			};
-		});
+	const required = (value) => {
+		if (!value) {
+			return (
+				<span className="text-red-400" role="alert">
+					This field is required!
+				</span>
+			);
+		}
 	};
 
-	let slideFinalFormOut = () => {
-		finalFormStepRef.current.style.left = "700px";
-		finalFormStepRef.current.style.visibility = "hidden";
-		finalFormStepRef.current.style.transition = "all 200ms ease-in";
-
-		setForm((state) => {
-			return {
-				...state,
-				finalFormIsSlidedIn: false,
-				buttonIsDisabled: true,
-			};
-		});
+	const verifyPassword = (value) => {
+		if (value.length < 3 || value.length > 20) {
+			return (
+				<span className="text-red-400">
+					The username must be between 3 and 20 characters.
+				</span>
+			);
+		}
 	};
 
 	const handleChange = (e) => {
@@ -96,26 +77,30 @@ export default function Register() {
 		confirmPassword,
 	} = form;
 
-	const data = {
-		email: emailAddress,
-		title,
-		date_of_birth: dateOfBirth,
-		first_name: firstName,
-		last_name: lastName,
-		organization,
-		password,
-		confirm_password: confirmPassword,
-	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		// Redux async call
-		dispatch(signUpAsync(data));
-
-		// Redirect user to login page when registered
-		if (isRegistered) navigate("/login");
+		dispatch(
+			signUpAsync({
+				email: emailAddress,
+				title,
+				date_of_birth: dateOfBirth,
+				first_name: firstName,
+				last_name: lastName,
+				organization,
+				password,
+				confirm_password: confirmPassword,
+			})
+		).then(() => {
+			// Navigat to login
+			navigate("/dashboard");
+		});
 	};
+
+	{
+		message && console.log(message);
+	}
 
 	return (
 		<>
@@ -180,222 +165,7 @@ export default function Register() {
 										id="registration-steps"
 										className="col-span-12"
 									>
-										{/*Registration -- First step*/}
-										<div
-											id="first-step-fields"
-											className="col-span-12 grid grid-cols-1 gap-4"
-										>
-											<div className="col-span-12">
-												<select
-													id="title"
-													name="title"
-													autoComplete="title"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													value={form.value}
-													onChange={(e) =>
-														handleChange(e)
-													}
-												>
-													<option defaultValue="Please choose">
-														Please choose
-													</option>
-
-													<option value="Mr">
-														Mr
-													</option>
-													<option value="Miss">
-														Miss
-													</option>
-													<option value="Mrs">
-														Mrs
-													</option>
-													<option value="Ms">
-														Ms
-													</option>
-
-													<option value="Dr">
-														Dr
-													</option>
-													<option value="Other">
-														Other
-													</option>
-												</select>
-											</div>
-
-											<div className="col-span-12 grid grid-cols-2 gap-4">
-												<div className="col-span-1">
-													<input
-														type="text"
-														name="firstName"
-														value={form.firstName}
-														id="first-name"
-														autoComplete="first-name"
-														placeholder="First name"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-														onChange={(e) =>
-															handleChange(e)
-														}
-													/>
-												</div>
-
-												<div className="col-span-1">
-													<input
-														type="text"
-														name="lastName"
-														value={form.lastName}
-														id="last-name"
-														autoComplete="last-name"
-														placeholder="Last name"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-														onChange={(e) =>
-															handleChange(e)
-														}
-													/>
-												</div>
-											</div>
-
-											<div className="col-span-12">
-												<input
-													type="text"
-													name="emailAddress"
-													value={form.emailAddress}
-													id="email-address"
-													autoComplete="email"
-													placeholder="Email address"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													required
-													onChange={(e) =>
-														handleChange(e)
-													}
-												/>
-												<span className="text-red-400 mb-2 hidden">
-													kndkfndfk
-												</span>
-											</div>
-
-											<div className="col-span-12 text-right">
-												<Button
-													id="next-field-button"
-													title="Next"
-													buttonClass={`form-slide-button text-white bg-gray-400 rounded ${
-														form.finalFormIsSlidedIn
-															? "hidden"
-															: ""
-													}`}
-													slide={slideFinalFormIn}
-												/>
-											</div>
-										</div>
-
-										{/*Registration -- Final step*/}
-										<div
-											id="final-step-fields"
-											className="grid gap-4"
-											ref={finalFormStepRef}
-										>
-											<div className="col-span-12">
-												<input
-													type="tel"
-													name="phoneNumber"
-													id="phone-number"
-													value={form.phoneNumber}
-													pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
-													autoComplete="phone-number"
-													placeholder="Phone number"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													required
-													onChange={(e) =>
-														handleChange(e)
-													}
-												/>
-											</div>
-
-											<div className="col-span-12">
-												<input
-													type="text"
-													id="data-of-birth"
-													name="dateOfBirth"
-													value={form.dateOfBirth}
-													autoComplete="date-of-birth"
-													placeholder="Date of birth (MM/DD/YYYY)"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													onFocus={(e) =>
-														(e.target.type = "date")
-													}
-													onBlur={(e) =>
-														(e.target.type = "text")
-													}
-													onChange={(e) =>
-														handleChange(e)
-													}
-												/>
-											</div>
-
-											<div className="col-span-12">
-												<input
-													type="text"
-													id="organization"
-													name="organization"
-													value={form.organization}
-													autoComplete="organization"
-													placeholder="Organization/Company"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													onChange={(e) =>
-														handleChange(e)
-													}
-												/>
-											</div>
-
-											<div className="col-span-12 grid grid-cols-2 gap-4">
-												<div className="col-span-1">
-													<input
-														type="password"
-														id="password"
-														name="password"
-														value={form.password}
-														autoComplete="password"
-														placeholder="Password"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-														required
-														onChange={(e) =>
-															handleChange(e)
-														}
-													/>
-												</div>
-
-												<div className="col-span-1">
-													<input
-														type="password"
-														id="confirm-password"
-														name="confirmPassword"
-														value={
-															form.confirmPassword
-														}
-														autoComplete="confirm-password"
-														placeholder="Confirm password"
-														className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-														required
-														onChange={(e) =>
-															handleChange(e)
-														}
-													/>
-												</div>
-												
-													<span className={`text-red-400 ${form.confirmPassword !== form.password ? 'visible':'hidden'}`}>
-														Password mismatch.
-													</span>
-												
-											</div>
-
-											<div className="col-span-12 text-left">
-												<Button
-													title="Previous"
-													id="previous-field-button"
-													buttonClass="form-slide-button text-white bg-gray-400 rounded"
-													slide={slideFinalFormOut}
-												/>
-											</div>
-										</div>
+										<Form formState={{ form, setForm }} />
 									</div>
 
 									<div className="col-span-12">
