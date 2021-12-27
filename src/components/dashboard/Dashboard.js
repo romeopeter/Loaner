@@ -1,6 +1,7 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import {signOutAsync} from "../../redux/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 import OrderbookLayout from "../OrderbookLayout";
 import DocumentHead from "../DocumentHead";
@@ -12,10 +13,19 @@ import headerBanner from "../../assets/images/headerBanner.png"
 export default function Dashboard() {
 	const pageName = "Dashboard";
 
+	const dispatch = useDispatch();
 	const { user: currentUser } = useSelector((state) => state.auth.user);
 
 	if (!currentUser) {
 		<Navigate repalce to="login" />
+	}
+
+	const navigate = useNavigate()
+	const handleSignOut = () => {
+		dispatch(signOutAsync())
+
+		// Navigates to /login 
+		navigate("/login")
 	}
 
 	const pageNav = (
@@ -48,8 +58,8 @@ export default function Dashboard() {
 						<li className="nav-menu-item">
 							<Link to="/register">Terms of Use</Link>
 						</li>
-						<li className="nav-menu-item">
-							<Link to="/register" className="text-bold">Log out</Link>
+						<li className="nav-menu-item text-white font-bold" style={{cursor: "pointer"}} onClick={() => handleSignOut()}>
+							Log out
 						</li>
 					</ul>
 					{/*<div id="profile" className="">
