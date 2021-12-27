@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import useAuth from "./useAuth";
 import { signInAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
@@ -13,19 +12,32 @@ import phoneLady from "../../assets/images/phoneLady.jpg";
 
 export default function Login() {
 	const pageName = "Login";
+	const navigate = useNavigate();
+	const { state } = useLocation();
 
 	const [form, setForm] = useState({
 		emailAddress: "",
 		password: "",
 		isChecked: false,
+		isLoading: false,
 	});
 
-	const store = useSelector(state => state.auth.authSuccess)
-	const isLoggedIn = useSelector(state => state.auth.authSuccess.isLoggedIn)
-	const { authed, signIn } = useAuth();
-	const navigate = useNavigate();
+	// Check login state
+	// const { isLoggedIn } = useSelector((state) => state.auth);
+	const { message } = useSelector((state) => state.message);
+
+	// Dipstach Redux actions
 	const dispatch = useDispatch();
-	const {state} = useLocation();
+
+	const required = (value) => {
+		if (!value) {
+			return (
+				<span className="text-red-400" role="alert">
+					This field is required!
+				</span>
+			);
+		}
+	};
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -47,22 +59,35 @@ export default function Login() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Redux hook dispatching sign-in action (Login requst)
-		dispatch(signInAsync({ email:emailAddress, password }));
+		setForm((state) => {
+			return {
+				...state,
+				isLoading: true,
+			};
+		});
 
-		// signIn is useAuth hook's method for signing user in and redirecting to dashboard
+		const isLoggedIn = JSON.parse(localStorage.getItem("IS_LOGGED_IN"));
 
-		if (isLoggedIn) {
-			const accessToken = store.tokens.access;
-			localStorage.setItem("AUTH_TOKEN", accessToken);
+		if (form.isChecked) {
+			// Redux hook dispatching sign-in action (Login requst)
+			dispatch(signInAsync({ email: emailAddress, password })).then(
+				() => {
 
-			// Redirect user to dashboard
-			if (signIn()) {
-				navigate(state?.path || "/dashboard");
+					// Set login state
+					localStorage.setItem("IS_LOGGED_IN", true);
+
+					navigate(state?.path || "/dashboard");
+				}
+			);
+		} else {
+			if (isLoggedIn) {
+
+				<Navigate replace to="/dashboard" />;
 			}
-			
 		}
 	};
+
+	{message &&  console.log(message)}
 
 	return (
 		<>
@@ -98,10 +123,7 @@ export default function Login() {
 					</div>
 
 					<div id="orderbook-form">
-						<form
-							className="h-full"
-							onSubmit={handleSubmit}
-						>
+						<form className="h-full" onSubmit={(e) => handleSubmit(e)}>
 							<div className="pt-20 pb-10 px-12">
 								<h1
 									id="orderbook-home"
@@ -151,7 +173,7 @@ export default function Login() {
 											<div className="flex items-center h-5">
 												<input
 													type="checkbox"
-													name="persist-login"
+													name="isChecked"
 													id="persist-login"
 													className="focus:ring-white h-4 w-4 text-indigo-600 border-black rounded"
 													required
