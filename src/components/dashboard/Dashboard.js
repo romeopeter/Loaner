@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import OrderbookLayout from "../OrderbookLayout";
 import DocumentHead from "../DocumentHead";
@@ -10,6 +11,12 @@ import headerBanner from "../../assets/images/headerBanner.png"
 
 export default function Dashboard() {
 	const pageName = "Dashboard";
+
+	const { user: currentUser } = useSelector((state) => state.auth.user);
+
+	if (!currentUser) {
+		<Navigate repalce to="login" />
+	}
 
 	const pageNav = (
 		<div id="dashboard-nav">
@@ -41,6 +48,9 @@ export default function Dashboard() {
 						<li className="nav-menu-item">
 							<Link to="/register">Terms of Use</Link>
 						</li>
+						<li className="nav-menu-item">
+							<Link to="/register" className="text-bold">Log out</Link>
+						</li>
 					</ul>
 					{/*<div id="profile" className="">
 						<div id="profile-image">
@@ -68,7 +78,7 @@ export default function Dashboard() {
 						</div>
 					</div>
 					<div id="welcome" style={setBgImage(headerBanner)}>
-						<h1>Hello, Romeo</h1>
+						<h1>Hello, {currentUser.first_name}</h1>
 						<h3>Welcome to your dashboard</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing 
 						elit, sed do eiusmod tempor incididunt ut labore et 
