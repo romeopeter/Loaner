@@ -1,9 +1,7 @@
 import React, { createRef } from "react";
 import { Link } from "react-router-dom";
-import useAuth from "./authentication/useAuth";
 
 export default function OrderbookLayout({ children, pageNav }) {
-	const { auth } = useAuth();
 
 	let navMenuRef = createRef();
 
