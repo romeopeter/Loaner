@@ -1,3 +1,78 @@
+/*#### SMALL SCREENS #####*/
+@include respond-below(md) {
+	#orderbook-dashboard-intro {
+		display: flex;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		padding: 0 !important;
+
+		h1,h3,p {
+			text-align: center;
+		}
+
+		h3 {
+			font-size: 25px !important;
+			margin: 10px 0px;
+		}
+
+		p{
+			padding: 10px !important;
+			font-size: 18.5px !important;
+		}
+	}
+
+	#user-quick-action {
+
+		.actions {
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
+				}
+			}
+		}
+	}
+
+	#account-overview {
+		#account {
+			max-width: 100% !important;
+			width: 100% !important;
+
+			p{
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+@include respond-below(sm) {
+	#user-quick-action {
+		height: 300px !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		padding: 0 30px !important;
+		
+		.actions {
+			border: none !important;
+			padding-right: 0 !important;
+
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
+				}
+			}
+		}
+	}
+}
+
+
+/*##### LARGE SCREEN #####*/
 #dashboard-nav {
 }
 
@@ -12,7 +87,7 @@
     		margin-right: 20px;
     	}
 	}
-	#welcome {
+	#orderbook-dashboard-intro {
 		height: 450px;
 		width: 100%;
 		background-repeat: no-repeat;
@@ -44,6 +119,155 @@
 			width: 200px;
 			padding: 3px;
 			font-family: $body-font;
+		}
+	}
+
+	#user-quick-action {
+		height: 100px;
+
+		.actions {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-right: 40px;
+
+			h2 {
+				font-size: 20px;
+
+				.fa-thumbs-o-up {
+					width: 45px;
+				    height: 45px;
+				    border-radius: 22.5px;
+				    background: lightgray;
+				    color: white;
+				    text-align: center;
+				    vertical-align: middle;
+				    padding: 10px 0px;
+				    margin-right: 8px;
+				}
+			}
+		}
+	}
+
+	#account-overview {
+		background: #555555;
+		color: $white;
+		padding: 5px;
+
+		#overview-title {
+			font-size: 25px;
+		}
+
+		#account {
+		    max-width: 500px;
+		    width: 550px;
+		    height: 100px;
+
+		    p {
+		    	.count {
+		    		height: 50px;
+		    		width: 50px;
+		    		background: $white;
+		    		color: $black;
+		    		border-radius: 25px;
+		    		padding: 5px;
+		    	}
+		    }
+		}
+	}
+
+	#offers {
+		height: auto;
+
+		#offer-header {
+			color: $white;
+
+			h3 {
+				font-size: 30px;
+			}
+
+			#sort-by {
+				label {
+					font-family: $body-font;
+					font-size: 15px;
+				}
+
+				#sort-offer {
+					color: $black;
+					width: 150px;
+				}
+			}
+		}
+
+		#the-offers {
+			.offer {
+				display: flex;
+				flex-direction: column;
+				color: $white;
+				width: 100%;
+
+				.offer-title {
+					display: flex;
+
+					.offer-image {
+						width: 50%;
+						display: block;
+					}
+
+					.title {
+						width: 50%;
+						background: white;
+						color: $black;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						padding: 5px 20px;
+						font-size: 15px;
+						font-weight: bold;
+					}
+				}
+
+				.offer-description {
+					font-size: 13px;
+					padding-top: 15px;
+					padding-bottom: 20px;
+				}
+				.offer-button {
+					display: flex;
+
+					button {
+						width: 50%;
+						height: 40px;
+						background: hotpink;
+						font-size: 15px;
+						font-weight: bold;
+						font-family: $body-font;
+
+						&.bg-grey {
+							background: #555555 !important;
+						}
+						&.bg-white {
+							background: $white;
+							color: $black;
+						}
+
+						&.last-button {
+							width: 100%;
+							background: $white;
+							color: $black;
+						}
+					}
+
+					& > button {
+						margin-right: 15px;
+					}
+				}
+			}
+
+			#view-more {
+				color: $black;
+				margin-top: 15px;
+			}
 		}
 	}
 }
