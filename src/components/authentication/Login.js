@@ -176,7 +176,6 @@ export default function Login() {
 													name="isChecked"
 													id="persist-login"
 													className="focus:ring-white h-4 w-4 text-indigo-600 border-black rounded"
-													required
 													onChange={(e) =>
 														handleChange(e)
 													}
@@ -187,7 +186,7 @@ export default function Login() {
 													htmlFor="persist-login"
 													className="font-medium text-black"
 												>
-													keep me logged in
+													Keep me logged in
 												</label>
 											</div>
 										</div>
