@@ -128,11 +128,11 @@ export default function Form({ formState }) {
 					/>
 				</div>
 
-				<div className="col-span-12 text-right hidden">
+				<div className="col-span-12 text-right">
 					<Button
 						id="next-field-button"
 						title="Next"
-						buttonClass={`form-slide-button text-white bg-gray-400 rounded ${
+						buttonClass={`form-slide-button text-white bg-gray-400 rounded mt-2 ${
 							form.finalFormIsSlidedIn ? "hidden" : ""
 						}`}
 						slide={slideFinalFormIn}
