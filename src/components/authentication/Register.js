@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Form from "./Form";
+
+import {setClientMessage} from "../../redux/messageSlice";
 import { signUpAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
+import Form from "./Form";
 
 import phoneLady from "../../assets/images/phoneLady.jpg";
 import setBgImage from "../../utils/setBgImage";
@@ -28,28 +30,6 @@ export default function Register() {
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	const { message } = useSelector((state) => state.message);
-
-	const required = (value) => {
-		if (!value) {
-			return (
-				<span className="text-red-400" role="alert">
-					This field is required!
-				</span>
-			);
-		}
-	};
-
-	const verifyPassword = (value) => {
-		if (value.length < 3 || value.length > 20) {
-			return (
-				<span className="text-red-400">
-					The username must be between 3 and 20 characters.
-				</span>
-			);
-		}
-	};
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -80,6 +60,12 @@ export default function Register() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
+		if (form.confirmPassword !== form.password) {
+			// Dispatch action
+			dispatch(setClientMessage({field: "password", "message": "Password mismatch!"}))
+			return
+		}
+
 		// Redux async call
 		dispatch(
 			signUpAsync({
@@ -96,11 +82,8 @@ export default function Register() {
 			// Navigat to login
 			navigate("/dashboard");
 		});
+		
 	};
-
-	{
-		message && console.log(message);
-	}
 
 	return (
 		<>
