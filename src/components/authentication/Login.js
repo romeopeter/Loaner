@@ -29,16 +29,6 @@ export default function Login() {
 	// Dipstach Redux actions
 	const dispatch = useDispatch();
 
-	const required = (value) => {
-		if (!value) {
-			return (
-				<span className="text-red-400" role="alert">
-					This field is required!
-				</span>
-			);
-		}
-	};
-
 	const handleChange = (e) => {
 		const target = e.target;
 		const name = target.name;
@@ -167,6 +157,12 @@ export default function Login() {
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
+
+									{/*{passwordMessage !== "" ? (
+										<Alert variant="outlined" severity="error">
+							        		{passwordMessage}
+							      		</Alert>
+							      	): ""}*/}
 
 									<div className="col-span-6 sm:col-span-4">
 										<div className="flex items-start">
