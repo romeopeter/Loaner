@@ -1,4 +1,7 @@
 import React, { useState, createRef } from "react";
+import { useSelector } from "react-redux";
+
+import Alert from '@mui/material/Alert';
 
 import Button from "../Button";
 
@@ -9,24 +12,17 @@ export default function Form({ formState }) {
 		termsAndConditionsIsChecked: false,
 	});
 
+	const [formErrors, setFormErrors] = useState({
+		emailAddress: "",
+		password: "",
+	});
+
+	const { password: passwordMessage } = useSelector((state) => state.message.client);
+
 	const { form, setForm } = formState;
 
 	// Form steps slide through
 	let finalFormStepRef = createRef();
-
-	const handleChange = (e) => {
-		const target = e.target;
-		const name = target.name;
-		const value =
-			target.type === "checkbox" ? target.checked : target.value;
-
-		setForm((state) => {
-			return {
-				...state,
-				[name]: value,
-			};
-		});
-	};
 
 	let slideFinalFormIn = () => {
 		finalFormStepRef.current.style.left = "0px";
@@ -52,6 +48,56 @@ export default function Form({ formState }) {
 				...state,
 				finalFormIsSlidedIn: false,
 				buttonIsDisabled: true,
+			};
+		});
+	};
+
+	const validateEmail = (email) => {
+		const emailRE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+		if (!emailRE.test(String(emailRE).toLowerCase())) {
+			setFormErrors(state => ({
+				...state,
+				emailAddress: "Email is invalid"
+			}));
+			return
+		} 
+
+		setFormErrors({ email: "" });
+	};
+
+	const validatePassword: passwordMessage = (password) => {
+		if (password.length < 6) {
+			setFormErrors(state => ({
+				...state,
+				password: "Password must have at least 6 characters"
+			}))
+			return
+		}
+
+		setFormErrors({ password: "" });
+	};
+
+	// OnChange handler
+	const handleChange = (e) => {
+		const target = e.target;
+		const name = target.name;
+
+		const value =
+			target.type === "checkbox" ? target.checked : target.value;
+
+		if (name === "emailAddress") {
+			validateEmail(value);
+		}
+
+		if (name === "password") {
+			validatePassword(value)
+		}
+
+		setForm((state) => {
+			return {
+				...state,
+				[name]: value,
 			};
 		});
 	};
@@ -154,7 +200,7 @@ export default function Form({ formState }) {
 						value={form.phoneNumber}
 						pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
 						autoComplete="phone-number"
-						placeholder="Phone number"
+						placeholder="Phone number (eg: 0701-000-0001)"
 						className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 						required
 						onChange={(e) => handleChange(e)}
@@ -218,15 +264,23 @@ export default function Form({ formState }) {
 						/>
 					</div>
 
-					<span
-						className={`text-red-400 ${
-							form.confirmPassword !== form.password
-								? "visible"
-								: "hidden"
-						}`}
-					>
-						Password mismatch.
-					</span>
+					{/**** Alerts and error notifications ****/}
+
+
+					{/*Password mistmatch*/}
+					{passwordMessage !== "" ? (
+						<Alert variant="outlined" severity="error">
+			        		{passwordMessage}
+			      		</Alert>
+			      	): ""}
+
+					{/*Minume character check*/}
+					{formErrors.password !== "" ? (
+						<Alert variant="outlined" severity="info">
+				        	{formErrors.password}!
+				     	</Alert>
+					):""}
+					
 				</div>
 
 				<div className="col-span-12 text-left">
