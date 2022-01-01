@@ -21,12 +21,14 @@ export default function Register() {
 		firstName: "",
 		lastName: "",
 		emailAddress: "",
-		phoneNumber: "",
 		dateOfBirth: "",
 		organization: "",
 		password: "",
 		confirmPassword: "",
 	});
+
+	// State for react-phone-number plugin used for international phone numbers
+	const [phoneNumber, setPhoneNumber] = useState(undefined);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -45,20 +47,34 @@ export default function Register() {
 		});
 	};
 
-	// Input from form state
-	const {
-		emailAddress,
-		title,
-		dateOfBirth,
-		firstName,
-		lastName,
-		organization,
-		password,
-		confirmPassword,
-	} = form;
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		// Input from form state
+		const {
+			emailAddress,
+			title,
+			dateOfBirth,
+			firstName,
+			lastName,
+			organization,
+			password,
+			confirmPassword,
+		} = form;
+
+		const phone_number = phoneNumber;
+
+		const data = {
+			email: emailAddress,
+			title,
+			date_of_birth: dateOfBirth,
+			first_name: firstName,
+			last_name: lastName,
+			phone_number,
+			organization,
+			password,
+			confirm_password: confirmPassword,
+		}
 
 		if (form.confirmPassword !== form.password) {
 			// Dispatch action
@@ -68,16 +84,7 @@ export default function Register() {
 
 		// Redux async call
 		dispatch(
-			signUpAsync({
-				email: emailAddress,
-				title,
-				date_of_birth: dateOfBirth,
-				first_name: firstName,
-				last_name: lastName,
-				organization,
-				password,
-				confirm_password: confirmPassword,
-			})
+			signUpAsync(data)
 		).then(() => {
 			// Navigat to login
 			navigate("/dashboard");
@@ -148,7 +155,7 @@ export default function Register() {
 										id="registration-steps"
 										className="col-span-12"
 									>
-										<Form formState={{ form, setForm }} />
+										<Form formState={{ form, setForm }} phoneNumberState={{phoneNumber, setPhoneNumber}} />
 									</div>
 
 									<div className="col-span-12">
