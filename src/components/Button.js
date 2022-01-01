@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Button(props) {
 	const { type, title, link, buttonClass, buttonDisabled } = props;
-
-	// Registration component animated form prop
+	const { chidlren } = props;
 	const { slide } = props;
 
 	if (link) {
@@ -25,7 +24,7 @@ export default function Button(props) {
 				disabled={buttonDisabled}
 				onClick={slide && (() => slide())}
 			>
-				{title}
+				{children ? children : title}
 			</button>
 		);
 	}
