@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Button(props) {
 	const { type, title, link, buttonClass, buttonDisabled } = props;
-	const { chidlren } = props;
+	const { children } = props;
 	const { slide } = props;
 
 	if (link) {
