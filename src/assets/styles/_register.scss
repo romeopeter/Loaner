@@ -11,14 +11,29 @@
     form {
         #registration-steps {
             position: relative;
+
             #first-step-fields {
                 position: absolute;
                 width: 100%;
             }
+
             #final-step-fields {
                 position: inherit;
                 left: 700px;
                 visibility: hidden;
+
+                // Custom name from react-phone-number plugin
+                .PhoneInput {
+                    input {
+                        border: none !important;
+                        background: #d1d5db;
+
+                        &:focus {
+                            outline: none !important;
+                            border: none !important;
+                        }
+                    }
+                }
             }
 
             .form-slide-button {
