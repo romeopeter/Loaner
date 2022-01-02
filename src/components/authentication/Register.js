@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-
-import {setClientMessage} from "../../redux/messageSlice";
+import { setClientMessage } from "../../redux/messageSlice";
 import { signUpAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
@@ -25,7 +24,11 @@ export default function Register() {
 		organization: "",
 		password: "",
 		confirmPassword: "",
+		isLoading: false,
 	});
+
+	// Check login state
+	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	// State for react-phone-number plugin used for international phone numbers
 	const [phoneNumber, setPhoneNumber] = useState(undefined);
@@ -49,6 +52,13 @@ export default function Register() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		setForm((state) => {
+			return {
+				...state,
+				isLoading: true,
+			};
+		});
 
 		// Input from form state
 		const {
@@ -74,23 +84,25 @@ export default function Register() {
 			organization,
 			password,
 			confirm_password: confirmPassword,
-		}
+		};
 
 		if (form.confirmPassword !== form.password) {
-			// Dispatch action
-			dispatch(setClientMessage({field: "password", "message": "Password mismatch!"}))
-			return
+			dispatch(
+				setClientMessage({
+					field: "password",
+					message: "Password mismatch!",
+				})
+			);
+			return;
 		}
 
 		// Redux async call
-		dispatch(
-			signUpAsync(data)
-		).then(() => {
-			// Navigat to login
+		dispatch(signUpAsync(data)).then(() => {
 			navigate("/dashboard");
 		});
-		
 	};
+
+	if (isLoggedIn) return (<Navigate to="/dashboard" replace />);
 
 	return (
 		<>
@@ -155,7 +167,13 @@ export default function Register() {
 										id="registration-steps"
 										className="col-span-12"
 									>
-										<Form formState={{ form, setForm }} phoneNumberState={{phoneNumber, setPhoneNumber}} />
+										<Form
+											formState={{ form, setForm }}
+											phoneNumberState={{
+												phoneNumber,
+												setPhoneNumber,
+											}}
+										/>
 									</div>
 
 									<div className="col-span-12">
@@ -190,14 +208,21 @@ export default function Register() {
 									<div className="col-span-12 mt-1">
 										<Button
 											type="submit"
-											title="Sign up"
 											buttonClass="register-button auth-button"
 											buttonDisabled={
 												!form.termsAndConditionsIsChecked
 													? true
 													: ""
 											}
-										/>
+										>
+											Sign up{" "}
+											{form.isLoading ? (
+												<i
+													className="fa fa-spinner fa-pulse fa-3x fa-fw"
+													style={{ fontSize: 20 }}
+												></i>
+											) : null}
+										</Button>
 									</div>
 
 									<div
