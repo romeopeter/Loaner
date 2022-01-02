@@ -24,7 +24,7 @@ const signInRequest = (data) => {
 			if (response.data.tokens.access) {
 
 				// Store access token in browser storage
-				localStorage.setItem("USER",JSON.stringify(response.data))
+				localStorage.setItem("USER", JSON.stringify(response.data))
 			}
 
 			return response.data
@@ -33,8 +33,7 @@ const signInRequest = (data) => {
 };
 
 const signOutRequest = () => {
-	localStorage.removeItem("AUTH_TOKEN");
-	localStorage.removeItem("IS_LOGGED_IN");
+	localStorage.removeItem("USER");
 };
 
 export {signUpRequest, signInRequest, signOutRequest};
