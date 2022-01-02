@@ -11,11 +11,7 @@ import {
 	signOutRequest,
 } from "../services/auth.service.js";
 
-import { setMessage } from "./messageSlice";
-
-
-
-
+import { setServerMessage } from "./messageSlice";
 
 const user = JSON.parse(localStorage.getItem("USER"));
 
@@ -51,29 +47,30 @@ export default authSlice.reducer;
 
 export const signUpAsync = (data) => (dispatch) => {
 	return signUpRequest(data).then((response) => {
+
 		// Check if error stack object exist
 		if ("stack" in response) {
 			const message = response.message;
 
-			dispatch(setMessage(message));
+			dispatch(setServerMessage(message));
 
 			return
 		}
 
-		if (response.status = 201) {
-			dispatch(setMessage("User account created"));
+		if (response.status === 201) {
+			dispatch(setServerMessage("Account created"));
 		}
 	});
 };
 
 export const signInAsync = (data) => (dispatch) => {
 	return signInRequest(data).then((response) => {
-		
+
 		// Check if error stack object exist
 		if ("stack" in response) {
 			const message = response.message;
 
-			dispatch(setMessage(message));
+			dispatch(setServerMessage(message));
 			return
 		}
 
