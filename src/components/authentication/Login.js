@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signInAsync } from "../../redux/authSlice";
 
+import Alert from '@mui/material/Alert';
+
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
 
@@ -23,8 +25,8 @@ export default function Login() {
 	});
 
 	// Check login state
-	// const { isLoggedIn } = useSelector((state) => state.auth);
-	const { message } = useSelector((state) => state.message);
+	const { isLoggedIn } = useSelector((state) => state.auth);
+	const { message } = useSelector((state) => state.message.server);
 
 	// Dipstach Redux actions
 	const dispatch = useDispatch();
@@ -56,28 +58,13 @@ export default function Login() {
 			};
 		});
 
-		const isLoggedIn = JSON.parse(localStorage.getItem("IS_LOGGED_IN"));
-
-		if (form.isChecked) {
-			// Redux hook dispatching sign-in action (Login requst)
-			dispatch(signInAsync({ email: emailAddress, password })).then(
-				() => {
-
-					// Set login state
-					localStorage.setItem("IS_LOGGED_IN", true);
-
-					navigate(state?.path || "/dashboard");
-				}
-			);
-		} else {
-			if (isLoggedIn) {
-
-				<Navigate replace to="/dashboard" />;
-			}
-		}
+		// Redux hook dispatches sign-in action (Login requst)
+		dispatch(signInAsync({ email: emailAddress, password })).then(() => {
+			navigate(state?.path || "/dashboard");
+		});
 	};
 
-	{message &&  console.log(message)}
+	if (isLoggedIn) return (<Navigate to="/dashboard" replace />);
 
 	return (
 		<>
@@ -113,7 +100,10 @@ export default function Login() {
 					</div>
 
 					<div id="orderbook-form">
-						<form className="h-full" onSubmit={(e) => handleSubmit(e)}>
+						<form
+							className="h-full"
+							onSubmit={(e) => handleSubmit(e)}
+						>
 							<div className="pt-20 pb-10 px-12">
 								<h1
 									id="orderbook-home"
@@ -158,11 +148,13 @@ export default function Login() {
 										/>
 									</div>
 
-									{/*{passwordMessage !== "" ? (
-										<Alert variant="outlined" severity="error">
-							        		{passwordMessage}
-							      		</Alert>
-							      	): ""}*/}
+									<div className="col-span-6 sm:col-span-4">
+										{message === "Request failed with status code 401" ? (
+											<Alert variant="outlined" severity="error">
+								        		{"No account found with the given credentials."}
+								      		</Alert>
+							      		): ""}
+									</div>
 
 									<div className="col-span-6 sm:col-span-4">
 										<div className="flex items-start">
@@ -201,9 +193,13 @@ export default function Login() {
 									<div className="col-span-6 sm:col-span-4 mt-1">
 										<Button
 											type="submit"
-											title="Login"
 											buttonClass="login-button auth-button"
-										/>
+										>
+											Login{" "}
+											{form.isLoading ? (
+												<i className="fa fa-spinner fa-pulse fa-3x fa-fw" style={{fontSize: 20}}></i>
+											) : null}
+										</Button>
 									</div>
 
 									<div
