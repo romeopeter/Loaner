@@ -16,22 +16,24 @@ import UBALogo from "../../assets/images/UBALogo.png";
 export default function Dashboard() {
 	const pageName = "Dashboard";
 
+	const navigate = useNavigate();
+
 	const dispatch = useDispatch();
-	const { user: currentUser } = useSelector((state) => state.auth.user);
+	const authUser = useSelector((state) => state.auth.user);
+
+	const { user: currentUser } = authUser;
 
 	if (!currentUser) {
-		<Navigate repalce to="login" />;
+		return <Navigate replace to="login" />;
 	}
 
-	const navigate = useNavigate();
+
 	const handleSignOut = () => {
 		dispatch(signOutAsync());
-
-		// Navigates to /login
 		navigate("/login");
 	};
 
-	// navigation
+	/*Dashboard navigation*/
 	let navMenuRef = createRef();
 
 	const respondsiveNav = () => {
