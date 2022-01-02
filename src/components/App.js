@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import LandingPage from "./LandingPage";
 import Login from "./authentication/Login";
 import Register from "./authentication/Register";
-import Dashboard from "./dashboard/Dashboard";
+import ClientDashboard from "./dashboard/ClientDashboard";
 import RequireAuth from "./authentication/RequireAuth";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         path="/dashboard"
         element={
           <RequireAuth>
-            <Dashboard />
+            <ClientDashboard />
           </RequireAuth>
         }
       />
