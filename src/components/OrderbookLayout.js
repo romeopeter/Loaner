@@ -1,7 +1,9 @@
 import React, { createRef } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function OrderbookLayout({ children, pageNav }) {
+	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	let navMenuRef = createRef();
 
@@ -16,7 +18,7 @@ export default function OrderbookLayout({ children, pageNav }) {
 			) : (
 				<nav id="orderbook-nav">
 					<div id="orderbook-logo">
-						<span>Orderbook Online</span>
+						<Link to="/"><span>Orderbook Online</span></Link>
 					</div>
 					<div
 						id="burger-toggle"
@@ -42,12 +44,19 @@ export default function OrderbookLayout({ children, pageNav }) {
 							<li className="nav-menu-item">
 								<Link to="/">Contact Us</Link>
 							</li>
-							<li className="nav-menu-item" id="login">
-								<Link to="/login">Login</Link>
-							</li>
-							<li className="nav-menu-item" id="register-cta">
-								<Link to="/register">Register</Link>
-							</li>
+							{!isLoggedIn && (
+								<>
+									<li className="nav-menu-item" id="login">
+										<Link to="/login">Login</Link>
+									</li>
+									<li
+										className="nav-menu-item"
+										id="register-cta"
+									>
+										<Link to="/register">Register</Link>
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				</nav>
