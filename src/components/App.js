@@ -5,7 +5,7 @@ import Login from "./authentication/Login";
 import RequireAuth from "./authentication/RequireAuth";
 import Register from "./authentication/Register";
 import ClientDashboard from "./dashboard/ClientDashboard";
-import NewLoan from "./dashboard/NewLoan";
+import LoanRequest from "./dashboard/LoanRequest";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
       />
       <Route path="/new-loan" element={
         <RequireAuth>
-          <NewLoan />
+          <LoanRequest />
         </RequireAuth>
       } />
     </Routes>
