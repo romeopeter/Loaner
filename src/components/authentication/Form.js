@@ -1,25 +1,25 @@
 import React, { useState, createRef } from "react";
 import { useSelector } from "react-redux";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+
 
 import Alert from '@mui/material/Alert';
 
 import Button from "../Button";
 
-export default function Form({ formState }) {
+export default function Form( props ) {
 	const [state, setState] = useState({
 		finalFormIsSlidedIn: false,
 		buttonIsDisabled: true,
 		termsAndConditionsIsChecked: false,
 	});
 
-	const [formErrors, setFormErrors] = useState({
-		emailAddress: "",
-		password: "",
-	});
+	const { form, setForm } = props.formState;
+	const {phoneNumber, setPhoneNumber} = props.phoneNumberState
+	const {formErrors, setFormErrors} = props.setFormErrorState
 
 	const { password: passwordMessage } = useSelector((state) => state.message.client);
-
-	const { form, setForm } = formState;
 
 	// Form steps slide through
 	let finalFormStepRef = createRef();
@@ -66,7 +66,8 @@ export default function Form({ formState }) {
 		setFormErrors({ email: "" });
 	};
 
-	const validatePassword: passwordMessage = (password) => {
+	// Phone number validation
+	const validatePassword = (password) => {
 		if (password.length < 6) {
 			setFormErrors(state => ({
 				...state,
@@ -189,22 +190,21 @@ export default function Form({ formState }) {
 			{/*Registration -- Final step*/}
 			<div
 				id="final-step-fields"
-				className="grid gap-4"
+				className="grid gap-4 bg-white"
 				ref={finalFormStepRef}
 			>
 				<div className="col-span-12">
-					<input
-						type="tel"
-						name="phoneNumber"
-						id="phone-number"
-						value={form.phoneNumber}
-						pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}"
-						autoComplete="phone-number"
-						placeholder="Phone number (eg: 0701-000-0001)"
-						className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-						required
-						onChange={(e) => handleChange(e)}
-					/>
+					<div className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 p-2">
+						<PhoneInput
+							international
+							defaultCountry="NG"
+							value={phoneNumber}
+							autoComplete="phone-number"
+							placeholder="Enter phone number"
+							onChange={setPhoneNumber}
+							required
+						/>
+					</div>
 				</div>
 
 				<div className="col-span-12">
@@ -263,25 +263,30 @@ export default function Form({ formState }) {
 							onChange={(e) => handleChange(e)}
 						/>
 					</div>
+				</div>
 
-					{/**** Alerts and error notifications ****/}
+				{/**** Start Alerts and error notifications ****/}
 
-
+				<div className="col-span-12">
 					{/*Password mistmatch*/}
 					{passwordMessage !== "" ? (
+						
 						<Alert variant="outlined" severity="error">
-			        		{passwordMessage}
-			      		</Alert>
+		        			{passwordMessage}
+		      		    </Alert>	
 			      	): ""}
+		      	</div>
 
+				<div className="col-span-12">
 					{/*Minume character check*/}
 					{formErrors.password !== "" ? (
 						<Alert variant="outlined" severity="info">
-				        	{formErrors.password}!
-				     	</Alert>
+			        		{formErrors.password}!
+			     	    </Alert>
 					):""}
-					
 				</div>
+
+				{/**** End Alerts and error notifications ****/}
 
 				<div className="col-span-12 text-left">
 					<Button
