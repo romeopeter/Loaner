@@ -2,7 +2,7 @@ import React, { createRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function OrderbookLayout({ children, pageNav }) {
+export default function OrderbookLayout({ children, PageNav }) {
 	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	let navMenuRef = createRef();
@@ -13,8 +13,8 @@ export default function OrderbookLayout({ children, pageNav }) {
 
 	return (
 		<section id="app">
-			{pageNav ? (
-				pageNav
+			{PageNav ? (
+				<PageNav />
 			) : (
 				<nav id="orderbook-nav">
 					<div id="orderbook-logo">
