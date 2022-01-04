@@ -24,8 +24,8 @@ export default function Login() {
 		isLoading: false,
 	});
 
-	// Check login state
 	const { isLoggedIn } = useSelector((state) => state.auth);
+
 	const { message } = useSelector((state) => state.message.server);
 
 	// Dipstach Redux actions
