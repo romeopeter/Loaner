@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Alert from '@mui/material/Alert';
 
 import { setClientMessage } from "../../redux/messageSlice";
 import { signUpAsync } from "../../redux/authSlice";
@@ -25,6 +26,12 @@ export default function Register() {
 		password: "",
 		confirmPassword: "",
 		isLoading: false,
+	});
+
+	const [formErrors, setFormErrors] = useState({
+		emailAddress: "",
+		password: "",
+		emptyFields: "",
 	});
 
 	// Check login state
@@ -74,6 +81,7 @@ export default function Register() {
 
 		const phone_number = phoneNumber;
 
+
 		const data = {
 			email: emailAddress,
 			title,
@@ -85,6 +93,14 @@ export default function Register() {
 			password,
 			confirm_password: confirmPassword,
 		};
+
+		for (let props in data) {
+			if (data[props] === "" || data[props] === null) {
+				setForm((state) => ({...state,isLoading: false}));
+				setFormErrors((state) => ({...state, emptyFields: "Please fill in the fields"}));
+				return
+			} 
+		}
 
 		if (form.confirmPassword !== form.password) {
 			dispatch(
@@ -173,8 +189,19 @@ export default function Register() {
 												phoneNumber,
 												setPhoneNumber,
 											}}
+											setFormErrorState={{formErrors, setFormErrors}}
 										/>
 									</div>
+
+									{/*Empty fields error*/}
+									<div className="col-span-12">
+										{formErrors.emptyFields !== "" ? (
+											
+											<Alert variant="outlined" severity="error">
+							        			{formErrors.emptyFields}
+							      		    </Alert>	
+								      	): ""}
+							      	</div>
 
 									<div className="col-span-12">
 										<div className="flex items-start">
