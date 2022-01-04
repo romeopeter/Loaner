@@ -24,6 +24,13 @@ export default function Login() {
 		isLoading: false,
 	});
 
+
+	const [formErrors, setFormErrors] = useState({
+		emailAddress: "",
+		password: "",
+		emptyFields: "",
+	});
+
 	const { isLoggedIn } = useSelector((state) => state.auth);
 
 	const { message } = useSelector((state) => state.message.server);
@@ -58,8 +65,18 @@ export default function Login() {
 			};
 		});
 
+		const data = { email: emailAddress, password };
+
+		for (let props in data) {
+			if (data[props] === "" || data[props] === null) {
+				setForm((state) => ({...state, isLoading: false}));
+				setFormErrors((state) => ({...state, emptyFields: "Please fill in the fields"}));
+				return
+			} 
+		}
+
 		// Redux hook dispatches sign-in action (Login requst)
-		dispatch(signInAsync({ email: emailAddress, password })).then(() => {
+		dispatch(signInAsync(data)).then(() => {
 			navigate(state?.path || "/dashboard");
 		});
 	};
@@ -130,7 +147,7 @@ export default function Login() {
 											autoComplete="email"
 											placeholder="Email"
 											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-											required
+											// required
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
@@ -143,7 +160,7 @@ export default function Login() {
 											autoComplete="password"
 											placeholder="Password"
 											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-											required
+											// required
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
@@ -155,6 +172,16 @@ export default function Login() {
 								      		</Alert>
 							      		): ""}
 									</div>
+
+									{/*Empty fields error*/}
+									<div className="col-span-6 sm:col-span-4">
+										{formErrors.emptyFields !== "" ? (
+											
+											<Alert variant="outlined" severity="error">
+							        			{formErrors.emptyFields}
+							      		    </Alert>	
+								      	): ""}
+							      	</div>
 
 									<div className="col-span-6 sm:col-span-4">
 										<div className="flex items-start">
