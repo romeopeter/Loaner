@@ -32,8 +32,8 @@ const signInRequest = (data) => {
 		.catch((error) => error);
 };
 
-const signOutRequest = () => {
+/*const signOutRequest = () => {
 	localStorage.removeItem("USER");
-};
+};*/
 
 export {signUpRequest, signInRequest, signOutRequest};
