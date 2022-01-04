@@ -36,4 +36,4 @@ const signInRequest = (data) => {
 	localStorage.removeItem("USER");
 };*/
 
-export {signUpRequest, signInRequest, signOutRequest};
+export {signUpRequest, signInRequest};
