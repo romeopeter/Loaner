@@ -78,6 +78,9 @@ export default function Login() {
 		// Redux hook dispatches sign-in action (Login requst)
 		dispatch(signInAsync(data)).then(() => {
 			navigate(state?.path || "/dashboard");
+
+			// Reload to update Redux state
+			window.location.reload()
 		});
 	};
 
@@ -147,7 +150,7 @@ export default function Login() {
 											autoComplete="email"
 											placeholder="Email"
 											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-											// required
+											required
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
@@ -160,7 +163,7 @@ export default function Login() {
 											autoComplete="password"
 											placeholder="Password"
 											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-											// required
+											required
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
