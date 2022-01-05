@@ -36,8 +36,7 @@ export const authSlice = createSlice({
 			};
 		},
 		signOutAction: (state, action) => {
-			signOutRequest();
-			return
+			return localStorage.removeItem("USER");
 		},
 	},
 });
