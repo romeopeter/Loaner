@@ -1,5 +1,8 @@
 import React, { createRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+
+import { signOutAsync } from "../../redux/authSlice";
 
 import profileLady from "../../assets/images/profileLady.png";
 import UBALogo from "../../assets/images/UBALogo.png";
@@ -11,6 +14,16 @@ export default function NavMenu() {
 	const respondsiveNav = () => {
 		navMenuRef.current.classList.toggle("responsive-nav-menu");
 	};
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate()
+
+	const handleSignOut = () => {
+		// Reload page after loging out
+		dispatch(signOutAsync())
+
+		navigate("/");
+	}
 
 	return (
 		<div id="dashboard-nav">
@@ -41,7 +54,7 @@ export default function NavMenu() {
 							></i>
 							<div
 								id="deals-dropdown"
-								className="shadow-md hidden"
+								className="shadow-md hidden rounded"
 							>
 								<Link to="">Current deals</Link>
 								<Link to="/">Archive deals</Link>
@@ -76,11 +89,14 @@ export default function NavMenu() {
 							<Link to="/register">Terms of Use</Link>
 						</li>
 						<li
+							id="user-profile-menu-item"
 							className="nav-menu-item text-white font-bold"
 							style={{ cursor: "pointer" }}
 						>
-							<div id="profile" className="">
-								<div id="profile-image">
+							<hr className="md:hidden" id="horizontal-divider" />
+
+							<div id="profile-container" className="">
+								<div id="profile">
 									<img
 										src={profileLady}
 										id="profile-photo"
@@ -91,10 +107,21 @@ export default function NavMenu() {
 										class="fa fa-caret-down text-white"
 										aria-hidden="true"
 									></i>
+									<div id="profile-menu-nav" className="bg-white shadow-md rounded">
+										<div id="profile" className="menu-nav-container">
+											<Link to="/user/client/profile">Profile</Link>
+											<Link to="/user/client/edit-profile">Edit Profile</Link>
+										</div>
+										<hr className="hidden md:block" />
+										<div id="account" className="menu-nav-container">
+											<Link to="/user/client/account-settings">Account Settings</Link>
+											<span onClick={() => handleSignOut()}>Sign out</span>
+										</div>
+									</div>
 								</div>
 								<img
 									src={UBALogo}
-									alt=""
+									id="bank-photo"
 									className="round-lg"
 								/>{" "}
 							</div>
