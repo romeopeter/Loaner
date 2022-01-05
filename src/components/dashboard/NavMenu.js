@@ -19,10 +19,12 @@ export default function NavMenu() {
 	const navigate = useNavigate()
 
 	const handleSignOut = () => {
-		// Reload page after loging out
 		dispatch(signOutAsync())
 
 		navigate("/");
+
+		// Reload page after loging out
+		window.location.reload()
 	}
 
 	return (
