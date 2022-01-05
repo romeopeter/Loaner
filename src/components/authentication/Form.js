@@ -119,8 +119,8 @@ export default function Form( props ) {
 						value={form.value}
 						onChange={(e) => handleChange(e)}
 					>
-						<option defaultValue="Please choose">
-							Please choose
+						<option defaultValue="Select title">
+							Select title
 						</option>
 
 						<option value="Mr">Mr</option>
