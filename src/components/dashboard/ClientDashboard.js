@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import OrderbookLayout from "../OrderbookLayout";
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
+import NavMenu from "./NavMenu";
 
 import setBgImage from "../../utils/setBgImage";
 import headerBanner from "../../assets/images/headerBanner.png";
 import offerImage from "../../assets/images/offerImage.png";
-import profileLady from "../../assets/images/profileLady.png";
-import UBALogo from "../../assets/images/UBALogo.png";
 
 export default function Dashboard() {
 	const pageName = "Dashboard";
@@ -33,93 +32,10 @@ export default function Dashboard() {
 		navigate("/login");
 	};
 
-	/*Dashboard navigation*/
-	let navMenuRef = createRef();
-
-	const respondsiveNav = () => {
-		navMenuRef.current.classList.toggle("responsive-nav-menu");
-	};
-
-	const pageNav = (
-		<div id="dashboard-nav">
-			<nav id="orderbook-nav">
-				<div id="orderbook-logo" className="">
-					<span>Orderbook Online</span>
-				</div>
-				<div id="burger-toggle" className="icon" onClick={() => respondsiveNav()}>
-					&#9776;
-				</div>
-				<div id="nav-menu">
-					<ul id="nav-menu-list" className="" ref={navMenuRef}>
-						<li id="deals" className="nav-menu-item" style={{color: "white", cursor:"pointer"}}>
-							Deals{" "}
-							<i
-								className="fa fa-caret-down"
-								aria-hidden="true"
-							></i>
-							<div id="deals-dropdown" className="shadow-md hidden">
-								<Link to="">Current deals</Link>
-								<Link to="/">Archive deals</Link>
-								<Link to="/">Create deal - single tranche</Link>
-								<Link to="/">
-									Create deal - multiple tranche
-								</Link>
-							</div>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">
-								Analysis{" "}
-								<i
-									class="fa fa-caret-down"
-									aria-hidden="true"
-								></i>
-							</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Admin</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Recent</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Help</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Privacy</Link>
-						</li>
-						<li className="nav-menu-item">
-							<Link to="/register">Terms of Use</Link>
-						</li>
-						<li
-							className="nav-menu-item text-white font-bold"
-							style={{ cursor: "pointer" }}
-							onClick={() => handleSignOut()}
-						>
-							<div id="profile" className="">
-								<div id="profile-image">
-									<img src={profileLady} id="profile-photo" alt="" className="round-lg" />{" "}
-									<i
-										class="fa fa-caret-down text-white"
-										aria-hidden="true"
-									></i>
-								</div>
-								<img src={UBALogo} alt="" className="round-lg" />{" "}
-							</div>
-
-						</li>
-					{/*	<li className="nav-menu-item">
-							
-						</li>*/}
-					</ul>
-				</div>
-			</nav>
-		</div>
-	);
-
 	return (
 		<>
 			<DocumentHead title={pageName} />
-			<OrderbookLayout pageNav={pageNav}>
+			<OrderbookLayout PageNav={NavMenu}>
 				<section id="dashboard-intro-container">
 					<div
 						id="loan-invest-dropdown"
@@ -127,12 +43,12 @@ export default function Dashboard() {
 					>
 						<div id="loan" className="dropdown-container">
 							Load{" "}
-							<i class="fa fa-caret-down" aria-hidden="true"></i>
+							<i className="fa fa-caret-down" aria-hidden="true"></i>
 							<div id="load-dropdown"></div>
 						</div>
 						<div id="investor" className="dropdown-container">
 							Investor{" "}
-							<i class="fa fa-caret-down" aria-hidden="true"></i>
+							<i className="fa fa-caret-down" aria-hidden="true"></i>
 							<div id="investor-dropdown"></div>
 						</div>
 					</div>
