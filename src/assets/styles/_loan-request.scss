@@ -1,3 +1,19 @@
+// MOBILE SCREENS
+@include respond-below(sm) {
+	#loan-request-container {
+		display: block !important;
+		padding: 25px !important;
+
+		#request-loan-form {
+			width: 100% !important;
+		}
+		#loan-summary {
+			display: none !important;
+		}
+	}
+}
+
+// LAPTOP/DESKTOP SCREENS
 #orderbook-loan-request {
 	// background: hotpink;
 
@@ -16,7 +32,7 @@
 		}
 
 		#request-loan-form {
-			margin-right: 5em;
+				margin-right: 5em;
 
 				#loan-summary-form {
 
