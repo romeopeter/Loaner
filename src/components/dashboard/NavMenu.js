@@ -70,7 +70,7 @@ export default function NavMenu() {
 							<Link to="/">
 								Analysis{" "}
 								<i
-									class="fa fa-caret-down"
+									className="fa fa-caret-down"
 									aria-hidden="true"
 								></i>
 							</Link>
@@ -106,7 +106,7 @@ export default function NavMenu() {
 										className="round-lg"
 									/>{" "}
 									<i
-										class="fa fa-caret-down text-white"
+										className="fa fa-caret-down text-white"
 										aria-hidden="true"
 									></i>
 									<div id="profile-menu-nav" className="bg-white shadow-md rounded">
