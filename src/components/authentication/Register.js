@@ -67,7 +67,7 @@ export default function Register() {
 			};
 		});
 
-		// Input from form state
+		// Form state controlled inputes
 		const {
 			emailAddress,
 			title,
