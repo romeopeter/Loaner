@@ -2,9 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Button(props) {
-	const { type, title, link, buttonClass, buttonDisabled } = props;
-	const { children } = props;
-	const { slide } = props;
+	const { type, title, link, buttonClass, buttonDisabled, handleClick, children } =
+		props;
 
 	if (link) {
 		return (
@@ -22,7 +21,7 @@ export default function Button(props) {
 				type={type ? type : "button"}
 				className={`default-orderbook-button ${buttonClass}`}
 				disabled={buttonDisabled}
-				onClick={slide && (() => slide())}
+				onClick={handleClick && (() => handleClick())}
 			>
 				{children ? children : title}
 			</button>
