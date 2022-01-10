@@ -66,6 +66,7 @@
 
 								p {
 									font-weight: 400;
+									font-size: 15px;
 								}
 							}
 
@@ -79,6 +80,11 @@
 
 								&::placeholder {
 									color: $black;
+								}
+
+								// Par-value field
+								&#par-value::placeholder {
+									color: whitesmoke !important;
 								}
 							}
 
