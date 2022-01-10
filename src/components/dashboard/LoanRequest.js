@@ -15,7 +15,7 @@ export default function NewLoan() {
 				<section id="orderbook-loan-request">
 					<div
 						id="loan-invest-dropdown"
-						class="bg-white px-16 py-5 shadow-md flex justify-start"
+						className="bg-white px-16 py-5 shadow-md flex justify-start"
 					>
 						<div id="loan" className="dropdown-container mr-5">
 							Load{" "}
