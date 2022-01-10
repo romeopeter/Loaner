@@ -182,7 +182,7 @@ export default function Form( props ) {
 						buttonClass={`form-slide-button text-white bg-gray-400 rounded mt-2 ${
 							form.finalFormIsSlidedIn ? "hidden" : ""
 						}`}
-						slide={slideFinalFormIn}
+						handleClick={slideFinalFormIn}
 					/>
 				</div>
 			</div>
