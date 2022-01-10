@@ -3,7 +3,7 @@ import Button from "../Button";
 
 export default function RequestForm({ requestFormState, showSummary }) {
 	const { formState, setFormState } = requestFormState;
-	const { setSummaryState } = showSummary;
+	const { setSummaryState, handleModal } = showSummary;
 
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
@@ -297,7 +297,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<Button
 									title="Next"
 									buttonClass="bg-white rounded"
-									slide={handleSecondFormSlideIn}
+									handleClick={handleSecondFormSlideIn}
 								/>
 							</div>
 						</div>
@@ -573,13 +573,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							<Button
 								title="Previous"
 								buttonClass="bg-white rounded previous"
-								slide={handleSecondFormSlideOut}
+								handleClick={handleSecondFormSlideOut}
 							/>
 
 							<Button
 								title="Next"
 								buttonClass="bg-white rounded next"
-								slide={handleLastFormSlideIn}
+								handleClick={handleLastFormSlideIn}
 							/>
 						</div>
 					</div>
@@ -761,7 +761,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<Button
 									title="Previous"
 									buttonClass="bg-white rounded"
-									slide={handleLastFormSlideOut}
+									handleClick={handleLastFormSlideOut}
 								/>
 							</div>
 						</div>
@@ -773,6 +773,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					type="submit"
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
+					handleClick={handleModal}
 				/>
 			</form>
 		</>
