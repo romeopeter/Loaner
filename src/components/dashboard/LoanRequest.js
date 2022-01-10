@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
 import NavMenu from "./NavMenu";
 import RequestForm from "./RequestForm";
 import OrderbookLayout from "../OrderbookLayout";
@@ -7,6 +7,59 @@ import Button from "../Button";
 
 export default function NewLoan() {
 	const pageName = "Loan request";
+
+	const [formState, setFormState] = useState({
+		generalTerms: {
+			dealType: "",
+			issuer: "",
+			guarantor: "",
+			dealName: "",
+			projectName: "",
+			dealOwner: "",
+			dealTeam: "",
+		},
+		status: "",
+		trancheName: "",
+		trancheSize: {
+			currency: "NGN",
+			value: "",
+			parValue: 1000,
+			minSubscription: "",
+		},
+		pricing: {
+			dayCount: "",
+			offerType: {
+				name: "",
+				bookBuild: "",
+			},
+		},
+		timing: {
+			offerStart: "",
+			offerEnd: "",
+			allotmentDate: "",
+			settlementDate: "",
+			maturityDate: "",
+		},
+		useOfProceeds: "",
+		taxConsideration: "",
+		eligibleInvestors: "",
+		rating: {
+			name: "",
+			scale: "",
+		},
+	});
+
+	const [summaryState, setSummaryState] = useState(false);
+
+	const { user } = JSON.parse(localStorage.getItem("USER"));
+
+	const userFullName = `${user.first_name} ${user.last_name}`;
+
+	const requestContainerRef = createRef();
+
+	const handleModal = () => {
+		requestContainerRef.current.classList.toggle("modal");
+	};
 
 	return (
 		<>
@@ -34,19 +87,26 @@ export default function NewLoan() {
 							<div id="investor-dropdown"></div>
 						</div>
 					</div>
-					<div id="loan-request-container" className="">
+					<div
+						id="loan-request-container"
+						className=""
+						ref={requestContainerRef}
+					>
 						<div
 							id="request-loan-form"
 							className="loan-request-flex-item"
 						>
-							<RequestForm />
+							<RequestForm
+								requestFormState={{ formState, setFormState }}
+								showSummary={{ setSummaryState, handleModal }}
+							/>
 						</div>
 						<div
 							id="loan-summary"
-							className="bg-white loan-request-flex-item"
+							className="bg-white loan-request-flex-item modal-content"
 						>
-							{false ? (
-								<div id="summary-intro" className="mt-20 ml-40">
+							{!summaryState ? (
+								<div id="summary-intro" className="mt-20 ml-20">
 									<h2 className="text-2xl font-bold mb-5">
 										Loan offer Summary
 									</h2>
@@ -56,42 +116,70 @@ export default function NewLoan() {
 								</div>
 							) : (
 								<div id="summary-table" className="mt-20 mx-10">
-									<h2 className="text-2xl font-bold mb-5">
+									<span
+										class="sm:hidden modal-close"
+										onClick={() =>
+											requestContainerRef.current.classList.remove(
+												"modal"
+											)
+										}
+									>
+										&times;
+									</span>
+									<h2 className="text-md text-center sm:text-left sm:text-2xl font-bold mb-5">
 										Loan offer Summary
 									</h2>
-									<table className="table-auto w-full h-auto">
+									<table className="table-fixed w-full h-auto">
 										<thead>
 											<tr>
 												<th></th>
-											    <th></th>
-											    <th></th>
+												<th></th>
+												<th></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
 												<td>
 													<small>Name</small>
-													<span>Olaminde Attah</span>
+													<span>
+														{userFullName &&
+															userFullName}
+													</span>
 												</td>
 											</tr>
 											<tr>
 												<td>
 													<small>Type of offer</small>
 													<span>
-														Commercial paper
+														{formState.generalTerms
+															.dealType !== "" &&
+															formState
+																.generalTerms
+																.dealType}
 													</span>
 												</td>
 											</tr>
 											<tr>
 												<td>
 													<small>Loan amount</small>
-													<span>NGN 5 billion</span>
+													<span>
+														{formState.trancheSize
+															.minSubscription !==
+															"" &&
+															formState
+																.trancheSize
+																.minSubscription}
+													</span>
 												</td>
 											</tr>
 											<tr>
 												<td>
 													<small>Tranche</small>
-													<span>Tranche 1</span>
+													<span>
+														{formState.trancheName !==
+															"" &&
+															formState.trancheName}
+													</span>
 												</td>
 											</tr>
 											<tr>
@@ -103,23 +191,47 @@ export default function NewLoan() {
 											<tr>
 												<td>
 													<small>Size</small>
-													<span>NGN 5 billion</span>
+													<span>
+														{formState.trancheSize
+															.minSubscription !==
+															"" &&
+															formState
+																.trancheSize
+																.minSubscription}
+													</span>
 												</td>
 											</tr>
 											<tr id="summary-dates-row">
 												<td className="border-r border-black">
 													<small>Offer opens</small>
-													<span>15/01/2022</span>
+													<span>
+														{formState.timing
+															.offerStart !==
+															"" &&
+															formState.timing
+																.offerStart}
+													</span>
 												</td>
 												<td className="border-r border-black">
 													<small>Offer closes</small>
-													<span>25/01/2022</span>
+													<span>
+														{formState.timing
+															.offerEnd !== "" &&
+															formState.timing
+																.offerEnd}
+													</span>
 												</td>
 												<td>
 													<small>
 														Settlement date
 													</small>
-													<span>10/02/2022</span>
+													<span>
+														{formState.timing
+															.settlementDate !==
+															"" &&
+															formState.timing
+																.settlementDate}
+													</span>
 												</td>
 											</tr>
 										</tbody>
