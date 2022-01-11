@@ -1,11 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
 import LandingPage from "./LandingPage";
+
 import Login from "./authentication/Login";
 import RequireAuth from "./authentication/RequireAuth";
 import Register from "./authentication/Register";
-import ClientDashboard from "./dashboard/ClientDashboard";
-import LoanRequest from "./dashboard/LoanRequest";
+
+import ClientDashboard from "./dashboard/client/ClientDashboard";
+import LoanRequest from "./dashboard/client/LoanRequest";
 
 function App() {
   return (
@@ -14,14 +16,14 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/dashboard"
+        path="/client/dashboard"
         element={
           <RequireAuth>
             <ClientDashboard />
           </RequireAuth>
         }
       />
-      <Route path="/new-loan" element={
+      <Route path="/client/new-loan" element={
         <RequireAuth>
           <LoanRequest />
         </RequireAuth>
