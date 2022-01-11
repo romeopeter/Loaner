@@ -278,7 +278,7 @@ export default function Form( props ) {
 		      	</div>
 
 				<div className="col-span-12">
-					{/*Minume character check*/}
+					{/*Minimum character check*/}
 					{formErrors.password !== "" ? (
 						<Alert variant="outlined" severity="info">
 			        		{formErrors.password}!
