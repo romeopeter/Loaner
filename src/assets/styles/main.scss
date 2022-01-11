@@ -11,12 +11,15 @@ html {
 
 @import "_variables.scss";
 @import "_mixin.scss";
+
 @import "_general.scss";
-@import "_button.scss";
 @import "_orderbook-layout.scss";
 @import "_landing-page.scss";
+@import "_button.scss";
+
 @import "_login.scss";
 @import "_register.scss";
-@import "_dashboard.scss";
-@import "_loan-request.scss";
+
+@import "_client-dashboard.scss";
+@import "_client-loan-request.scss";
 
