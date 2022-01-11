@@ -8,6 +8,7 @@ import Register from "./authentication/Register";
 
 import ClientDashboard from "./dashboard/client/ClientDashboard";
 import LoanRequest from "./dashboard/client/LoanRequest";
+import Offers from "./dashboard/client/Offers";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
       <Route
         path="/client/dashboard"
         element={
@@ -26,6 +28,11 @@ function App() {
       <Route path="/client/new-loan" element={
         <RequireAuth>
           <LoanRequest />
+        </RequireAuth>
+      } />
+      <Route path="/client/offers" element={
+        <RequireAuth>
+          <Offers />
         </RequireAuth>
       } />
     </Routes>
