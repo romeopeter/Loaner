@@ -46,7 +46,7 @@ export default function NavMenu() {
 					<ul id="nav-menu-list" className="" ref={navMenuRef}>
 						<li
 							id="deals"
-							className="nav-menu-item"
+							className="nav-menu-item dropdown"
 							style={{ color: "white", cursor: "pointer" }}
 						>
 							Deals{" "}
@@ -56,7 +56,7 @@ export default function NavMenu() {
 							></i>
 							<div
 								id="deals-dropdown"
-								className="shadow-md hidden rounded"
+								className="shadow-md rounded"
 							>
 								<Link to="">Current deals</Link>
 								<Link to="/">Archive deals</Link>
@@ -66,23 +66,55 @@ export default function NavMenu() {
 								</Link>
 							</div>
 						</li>
-						<li className="nav-menu-item">
-							<Link to="/">
-								Analysis{" "}
-								<i
-									className="fa fa-caret-down"
-									aria-hidden="true"
-								></i>
-							</Link>
+						<li id="analysis-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
+							Analysis{" "}
+							<i
+								className="fa fa-caret-down"
+								aria-hidden="true"
+							></i>
+							<div
+								id="deals-dropdown"
+								className="shadow-md rounded"
+							>
+								<Link to="">Saved report</Link>
+								<Link to="/">Create report</Link>
+								<Link to="/">Search</Link>
+							</div>
 						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Admin</Link>
+						<li id="admin-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
+							Admin{" "}
+							<i
+								className="fa fa-caret-down"
+								aria-hidden="true"
+							></i>
+							<div
+								id="deals-dropdown"
+								className="shadow-md rounded"
+							>
+								<Link to="">Companies</Link>
+								<Link to="/">Currencies</Link>
+								<Link to="/">Deal/Tranche</Link>
+								<Link to="/">
+									Personal Settings
+								</Link>
+							</div>
 						</li>
 						<li className="nav-menu-item">
 							<Link to="/">Recent</Link>
 						</li>
-						<li className="nav-menu-item">
-							<Link to="/">Help</Link>
+						<li id="help-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
+							Help {" "}
+							<i
+								className="fa fa-caret-down"
+								aria-hidden="true"
+							></i>
+							<div
+								id="deals-dropdown"
+								className="shadow-md rounded"
+							>
+								<Link to="">FAQ</Link>
+								<Link to="/">Contact us</Link>
+							</div>
 						</li>
 						<li className="nav-menu-item">
 							<Link to="/">Privacy</Link>
@@ -92,13 +124,13 @@ export default function NavMenu() {
 						</li>
 						<li
 							id="user-profile-menu-item"
-							className="nav-menu-item text-white font-bold"
+							className="nav-menu-item text-white font-bold dropdown"
 							style={{ cursor: "pointer" }}
 						>
 							<hr className="md:hidden" id="horizontal-divider" />
 
 							<div id="profile-container" className="">
-								<div id="profile">
+								<div id="profile-dropdown">
 									<img
 										src={profileLady}
 										id="profile-photo"
