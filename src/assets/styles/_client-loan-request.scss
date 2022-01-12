@@ -118,9 +118,13 @@
 									color: $black;
 								}
 
-								// Par-value field
-								&#par-value::placeholder {
+								// Issuer, par-value field
+								&#issuer, &#par-value::placeholder {
 									color: whitesmoke !important;
+								}
+
+								&#par-value {
+									background: #888;
 								}
 							}
 
