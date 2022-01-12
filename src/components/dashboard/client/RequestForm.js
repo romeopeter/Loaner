@@ -1,17 +1,17 @@
 import React, { useState, createRef } from "react";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 import Button from "../../Button";
 
 export default function RequestForm({ requestFormState, showSummary }) {
 	const { formState, setFormState } = requestFormState;
-	const { setSummaryState, handleModal } = showSummary;
+	const { summaryState, setSummaryState, handleModal } = showSummary;
 
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
 		secondSlideIn: false,
 		lastSideIn: false,
-		isValidated: true,		
+		isValidated: true,
 		emptyFields: "",
 	});
 
@@ -61,6 +61,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			});
 		}
 	};
+
 	const handleLastFormSlideOut = () => {
 		lastSlideSlideRef.current.classList.remove("slide-out");
 		setState((state) => {
@@ -87,69 +88,36 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					},
 				};
 			});
-		} else {
-			setFormState((state) => {
-				return {
-					...state,
-					[name]: value,
-				};
-			});
 		}
+
+		setFormState((state) => {
+			return {
+				...state,
+				[name]: value,
+			};
+		});
 	};
 
-	const handleSubmit = (e) => {
+	const handleValidation = (e) => {
 		e.preventDefault();
+
+		for (let props in formState.generalTerms) {
+			if (
+				formState.generalTerms[props] === "" ||
+				formState.generalTerms[props] === null
+			) {
+				setState((state) => ({ ...state, isValidated: false }));
+				setState((state) => ({
+					...state,
+					emptyFields: "Please fill in the fields",
+				}));
+
+				return;
+			}
+		}
 
 		// Trigger for showing tables in LoanRequest component
 		setSummaryState(true);
-
-		for (let props in formState.generalTerms) {
-			if (formState.generalTerms[props] === "" || formState.generalTerms[props] === null) {
-				setState((state) => ({...state, isValidated: false}));
-				setSummaryState(false);
-				setState((state) => ({...state, emptyFields: "Please fill in the fields"}));
-				return
-			} 
-		}
-
-		const data = {
-			deal_type: formState.generalTerms.dealType,
-			issuer: formState.generalTerms.issuer,
-			guarantor: formState.generalTerms.guarantor,
-			deal_name: formState.generalTerms.dealName,
-			project_name: formState.generalTerms.projectName,
-			deal_owner: formState.generalTerms.dealOwner,
-			deal_team: formState.generalTerms.dealTeam,
-			status: formState.status,
-			tranche_name: formState.trancheName,
-			tranche_size: {
-				currency: formState.trancheSize.currency,
-				value: formState.trancheSize.value,
-				per_value: formState.trancheSize.parValue,
-				min_subscription: formState.trancheSize.minSubscription,
-			},
-			pricing: {
-				day_count: formState.pricing.dayCount,
-				offer_type: {
-					name: formState.pricing.offerType.name,
-					book_build: formState.pricing.offerType.bookBuild,
-				},
-			},
-			timing: {
-				offer_start: formState.timing.offerStart,
-				offer_end: formState.timing.offerEnd,
-				allotment_date: formState.timing.allotmentDate,
-				settlement_date: formState.timing.settlementDate,
-				maturity_date: formState.timing.maturityDate,
-			},
-			use_of_proceeds: formState.useOfProceeds,
-			tax_consideration: formState.taxConsideration,
-			eligible_investors: formState.eligibleInvestors,
-			rating: {
-				name: formState.rating.name,
-				scale: formState.rating.scale,
-			},
-		};
 	};
 
 	return (
@@ -157,7 +125,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			<form
 				id="loan-summary-form"
 				className="h-full pb-5"
-				onSubmit={handleSubmit}
+				onSubmit={handleValidation}
 			>
 				<div id="loan-request-steps">
 					{/*loan request -- 1st step*/}
@@ -176,7 +144,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									name="dealType"
 									id="dealType"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.dealType}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -197,10 +165,12 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									name="issuer"
 									id="issuer"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									disabled={true}
+									style={{ cursor: "not-allowed" }}
+									/*value={formState.generalTerms.issuer}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
-									}
+									}*/
 									// required
 								>
 									<option defaultValue="Client/issue">
@@ -216,7 +186,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="guarantor"
 									placeholder="Guarantor"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.guarantor}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -230,7 +200,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealName"
 									placeholder="Deal name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.dealName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -244,7 +214,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="projectName"
 									placeholder="Project name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.projectName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -259,7 +229,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealOwner"
 									placeholder="Deal owner"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.dealOwner}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -274,7 +244,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealTeam"
 									placeholder="Deal team"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.value}
+									value={formState.generalTerms.dealTeam}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -387,7 +357,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="face-value">
 											Face value
 										</option>
-										<option defaultValue="discount-value">
+										<option value="discount-value">
 											Discount value
 										</option>
 									</select>
@@ -767,14 +737,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					type="submit"
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
-					handleClick={state.isValidated ? handleModal:undefined}
+					handleClick={summaryState ? handleModal : undefined}
 				/>
 
 				{state.emptyFields !== "" ? (
-					<Alert severity="error">
-		        		{state.emptyFields}!
-		     	    </Alert>
-				):""}
+					<div className="mt-5">
+						<Alert severity="error" variant="filled">
+							{state.emptyFields}!
+						</Alert>
+					</div>
+				) : ("")}
 			</form>
 		</>
 	);
