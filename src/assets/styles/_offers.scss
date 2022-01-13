@@ -1,0 +1,114 @@
+#orderbook-offers {
+	@include respond-below(sm) {
+		padding: 3em;
+
+		#header {
+			margin-bottom: 1em !important;
+		}
+	}
+
+	background: $grey;
+	padding: 6em;
+
+	#offers {
+		height: auto;
+
+		#header {
+			font-size: 30px;
+			color: $white;
+			font-weight: bold;
+			margin-bottom: 3em;
+		}
+
+		#the-offers {
+			.offer {
+				display: flex;
+				flex-direction: column;
+				color: $white;
+				width: 100%;
+
+				.offer-title {
+					display: flex;
+
+					.offer-image {
+						width: 50%;
+						display: block;
+					}
+
+					.title {
+						width: 50%;
+						background: white;
+						color: $black;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						padding: 5px 20px;
+						font-size: 17px;
+						font-weight: 700;
+						text-decoration:underline;
+					}
+				}
+
+				.offer-description {
+					font-size: 13px;
+					padding-top: 15px;
+					padding-bottom: 20px;
+				}
+				.offer-button {
+					display: flex;
+
+					button {
+						width: 50%;
+						height: 40px;
+						// background: hotpink;
+						font-size: 15px;
+						font-weight: bold;
+						font-family: $body-font;
+
+						&.bg-grey {
+							background: #c4c4c4 !important;
+							color: $black;
+						}
+						&.bg-white {
+							background: $white;
+							color: $black;
+						}
+					}
+
+					& > button {
+						margin-right: 15px;
+					}
+				}
+			}
+		}
+	}
+
+	#paginate-offers {
+		padding: 20px;
+		margin-top: 30px;
+
+		.pagination {
+			display: flex;
+			justify-content: flex-end;
+
+			li {
+				// margin: 0 10px;
+				color: $white;
+				font-family: $body-font;
+				font-size: 17px;
+				font-weight: bold;
+				height: 45px;
+				width: 45px;
+				border-radius: 22.5px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+
+				&.selected {
+					background: $white;
+					color: $black;
+				}
+			}
+		}
+	}
+}
