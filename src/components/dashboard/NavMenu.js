@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, {createRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {useDispatch} from "react-redux";
 
@@ -8,6 +8,7 @@ import profileLady from "../../assets/images/profileLady.png";
 import UBALogo from "../../assets/images/UBALogo.png";
 
 export default function NavMenu() {
+	const [showDropdown, setshowDropdown] = useState(false)
 	/*Dashboard navigation*/
 	let navMenuRef = createRef();
 
@@ -49,12 +50,14 @@ export default function NavMenu() {
 							className="nav-menu-item dropdown"
 							style={{ color: "white", cursor: "pointer" }}
 						>
-							Deals{" "}
-							<i
-								className="fa fa-caret-down"
-								aria-hidden="true"
-							></i>
-							<div
+							<div>
+								Deals{" "}
+								<i
+									className="fa fa-caret-down"
+									aria-hidden="true"
+								></i>
+							</div>
+							{showDropdown ? (<div
 								id="deals-dropdown"
 								className="shadow-md rounded"
 							>
@@ -64,16 +67,18 @@ export default function NavMenu() {
 								<Link to="/">
 									Create deal - multiple tranche
 								</Link>
-							</div>
+							</div>): undefined}
 						</li>
 						<li id="analysis-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
-							Analysis{" "}
-							<i
+							<div>
+								Analysis{" "}
+								<i
 								className="fa fa-caret-down"
 								aria-hidden="true"
-							></i>
+								></i>
+							</div>
 							<div
-								id="deals-dropdown"
+								id="analysis-dropdown"
 								className="shadow-md rounded"
 							>
 								<Link to="">Saved report</Link>
@@ -81,14 +86,16 @@ export default function NavMenu() {
 								<Link to="/">Search</Link>
 							</div>
 						</li>
-						<li id="admin-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
-							Admin{" "}
-							<i
+						<li id="admin" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
+							<div>
+								Admin{" "}
+								<i
 								className="fa fa-caret-down"
 								aria-hidden="true"
-							></i>
+								></i>
+							</div>
 							<div
-								id="deals-dropdown"
+								id="admin-dropdown"
 								className="shadow-md rounded"
 							>
 								<Link to="">Companies</Link>
@@ -102,14 +109,16 @@ export default function NavMenu() {
 						<li className="nav-menu-item">
 							<Link to="/">Recent</Link>
 						</li>
-						<li id="help-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
-							Help {" "}
-							<i
+						<li id="help" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
+							<div>
+								Help {" "}
+								<i
 								className="fa fa-caret-down"
 								aria-hidden="true"
-							></i>
+								></i>
+							</div>
 							<div
-								id="deals-dropdown"
+								id="help-dropdown"
 								className="shadow-md rounded"
 							>
 								<Link to="">FAQ</Link>
