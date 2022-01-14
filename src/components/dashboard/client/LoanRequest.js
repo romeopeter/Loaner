@@ -1,8 +1,10 @@
 import React, { useState, createRef } from "react";
-import NavMenu from "../NavMenu";
-import RequestForm from "./RequestForm";
+import {useSelector, useDispatch} from "react-redux";
+
 import OrderbookLayout from "../../OrderbookLayout";
+import RequestForm from "./RequestForm";
 import DocumentHead from "../../DocumentHead";
+import NavMenu from "../NavMenu";
 import Button from "../../Button";
 
 export default function LoanRequest() {
@@ -11,7 +13,7 @@ export default function LoanRequest() {
 	const [formState, setFormState] = useState({
 		generalTerms: {
 			dealType: "",
-			issuer: "",
+			// issuer: "",
 			guarantor: "",
 			dealName: "",
 			projectName: "",
@@ -61,6 +63,49 @@ export default function LoanRequest() {
 		requestContainerRef.current.classList.toggle("modal");
 	};
 
+	const handleSubmit = () => {
+		const data = {
+			deal_type: formState.generalTerms.dealType,
+			// issuer: formState.generalTerms.issuer,
+			guarantor: formState.generalTerms.guarantor,
+			deal_name: formState.generalTerms.dealName,
+			project_name: formState.generalTerms.projectName,
+			deal_owner: formState.generalTerms.dealOwner,
+			deal_team: formState.generalTerms.dealTeam,
+			status: formState.status,
+			tranche_name: formState.trancheName,
+			tranche_size: {
+				currency: formState.trancheSize.currency,
+				value: formState.trancheSize.value,
+				per_value: formState.trancheSize.parValue,
+				min_subscription: formState.trancheSize.minSubscription,
+			},
+			pricing: {
+				day_count: formState.pricing.dayCount,
+				offer_type: {
+					name: formState.pricing.offerType.name,
+					book_build: formState.pricing.offerType.bookBuild,
+				},
+			},
+			timing: {
+				offer_start: formState.timing.offerStart,
+				offer_end: formState.timing.offerEnd,
+				allotment_date: formState.timing.allotmentDate,
+				settlement_date: formState.timing.settlementDate,
+				maturity_date: formState.timing.maturityDate,
+			},
+			use_of_proceeds: formState.useOfProceeds,
+			tax_consideration: formState.taxConsideration,
+			eligible_investors: formState.eligibleInvestors,
+			rating: {
+				name: formState.rating.name,
+				scale: formState.rating.scale,
+			},
+		};
+
+		console.log(data);
+	}
+
 	return (
 		<>
 			<DocumentHead title={pageName} />
@@ -71,7 +116,7 @@ export default function LoanRequest() {
 						className="bg-white px-16 py-10 shadow-md flex justify-start"
 					>
 						<div id="loan" className="dropdown-container mr-5">
-							Load{" "}
+							Loan{" "}
 							<i
 								className="fa fa-caret-down"
 								aria-hidden="true"
@@ -98,7 +143,7 @@ export default function LoanRequest() {
 						>
 							<RequestForm
 								requestFormState={{ formState, setFormState }}
-								showSummary={{ setSummaryState, handleModal }}
+								showSummary={{ summaryState, setSummaryState, handleModal }}
 							/>
 						</div>
 						<div
@@ -257,6 +302,7 @@ export default function LoanRequest() {
 											type="button"
 											title="Publish"
 											buttonClass="w-full bg-green-600 rounded"
+											handleClick={() => handleSubmit()}
 										/>
 									</div>
 								</div>
