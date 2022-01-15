@@ -4,13 +4,13 @@ const API_URL = "https://order-book-online.herokuapp.com";
 
 // Default Axios config
 const axiosHeaders = axios.defaults.headers;
-const authToken = localStorage.getItem("AUTH_TOKEN");
+const {tokens} = JSON.parse(localStorage.getItem("USER"));
 axiosHeaders.post['Content-Type'] = "application/json";
-if (authToken) {
-	axiosHeaders.common['Authorization'] = `Token ${authToken}`
+
+if (tokens.access !== undefined) {
+	axiosHeaders.common['Authorization'] = `Token ${tokens.access}`
 }
 
-// Authentication request
 const signUpRequest = (data) => {
 	return axios
 		.post(`${API_URL}/api/v1/registration/sign_up/`, data)
@@ -36,4 +36,8 @@ const signInRequest = (data) => {
 	localStorage.removeItem("USER");
 };*/
 
-export {signUpRequest, signInRequest};
+const submitLoanRequest = (data) => {
+	console.log(data);
+}
+
+export {signUpRequest, signInRequest, submitLoanRequest};
