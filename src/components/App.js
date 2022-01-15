@@ -12,6 +12,8 @@ import Offers from "./dashboard/client/Offers";
 import ShowOffer from "./dashboard/client/ShowOffer";
 import EditOffer from "./dashboard/client/EditOffer";
 
+import InvestorDashboard from "./dashboard/investor/InvestorDashboard";
+
 function App() {
   return (
     <Routes>
@@ -46,6 +48,13 @@ function App() {
       <Route path="/client/offers/offer/edit" element={
         <RequireAuth>
           <EditOffer />
+        </RequireAuth>
+      } />
+
+      {/*Investor Dashboard*/}
+      <Route path="/investor/dashboard" element={
+        <RequireAuth>
+          <InvestorDashboard />
         </RequireAuth>
       } />
     </Routes>
