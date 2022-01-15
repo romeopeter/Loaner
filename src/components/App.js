@@ -9,6 +9,8 @@ import Register from "./authentication/Register";
 import ClientDashboard from "./dashboard/client/ClientDashboard";
 import LoanRequest from "./dashboard/client/LoanRequest";
 import Offers from "./dashboard/client/Offers";
+import ShowOffer from "./dashboard/client/ShowOffer";
+import EditOffer from "./dashboard/client/EditOffer";
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      {/*Client dashboard*/}
       <Route
         path="/client/dashboard"
         element={
@@ -33,6 +36,16 @@ function App() {
       <Route path="/client/offers" element={
         <RequireAuth>
           <Offers />
+        </RequireAuth>
+      } />
+      <Route path="/client/offers/offer" element={
+        <RequireAuth>
+          <ShowOffer />
+        </RequireAuth>
+      } />
+      <Route path="/client/offers/offer/edit" element={
+        <RequireAuth>
+          <EditOffer />
         </RequireAuth>
       } />
     </Routes>
