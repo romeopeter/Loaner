@@ -73,6 +73,24 @@
 		width: 100% !important;
 
 		#nav-menu-list {
+
+			.dropdown {
+
+				#deals-dropdown,
+				#analysis-dropdown,
+				#admin-dropdown,
+				#help-dropdown {
+					visibility: visible !important;
+					background: none !important;
+					position: static !important;
+					top: 0 !important;
+
+					&::after {
+						display: none !important;
+					}
+				}
+			}
+
 			#user-profile-menu-item {
 				width: 100% !important;
 
@@ -83,7 +101,7 @@
 
 				#profile-container {
 
-					#profile {
+					#profile-dropdown {
 						width: 100% !important;
 
 						#profile-photo {
@@ -160,33 +178,57 @@
 				.nav-menu-item {
 					margin-right: 0 !important;
 
-					&#deals {
+					&.dropdown {
+						position: relative;
+					
+						#deals-dropdown,
+						#analysis-dropdown,
+						#admin-dropdown,
+						#help-dropdown {
+							visibility: hidden;
+							position: absolute;
+							background: $white !important;
+							top: 115%;
+							z-index: 1;
+							padding: 0px 0px 15px 0px;
+							width: 250px;
 
-						&:hover #deals-dropdown {
-						display: block;
-						position: absolute;
-						background: $white !important;
-						top: 62px;
-						padding: 0px 0px 40px 0px;
-						width: 300px;
+							a {
+								color: $black;
+								padding: 8px 8px 8px 15px;
+								margin-top: 10px;
 
-						a {
-							color: $black;
-							padding: 8px 8px 8px 15px;
-							margin-top: 10px;
+								&:hover {
+									background: lightgray;
+								}
+							}
 
-							&:hover {
-								background: lightgray;
+							&::after {
+								content: "";
+								position: absolute;
+								bottom: 100%;
+								left: 13%;
+								margin-left: -5px;
+								border-width: 5px;
+							  	border-style: solid;
+							  	border-color: transparent transparent $white transparent;
 							}
 						}
+
+						&:hover #deals-dropdown,
+						&:hover #analysis-dropdown,
+						&:hover #admin-dropdown,
+						&:hover #help-dropdown {
+							visibility: visible;
 						}
 					}
+			
 
 					#profile-container {
 						display: flex;
 						justify-content: space-between;
 
-						#profile {
+						#profile-dropdown {
 							position: relative;
 							display: inline-block;
 
