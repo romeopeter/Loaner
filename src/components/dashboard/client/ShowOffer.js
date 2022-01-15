@@ -9,7 +9,7 @@ import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 
 export default function ShowOffer() {
-	const pageName = "show-offer";
+	const pageName = "Offer";
 
 	return (
 		<>
