@@ -1,0 +1,166 @@
+#orderbook-show-offer {
+	@include respond-below(sm) {
+		padding: 0 !important;
+
+		#offer {
+			#header {
+				/* text-align: center; */
+			    /* padding: 2em; */
+			    margin-bottom: 2em !important;
+			    padding: 1em 0 0 1em !important;
+			}
+		}
+	}
+
+	@include respond-below(md) {
+		#the-offer {
+			.grid {
+				#offer-description {
+					padding: 20px !important;
+				}
+
+				#loan-summary {
+					overflow-x: scroll !important;
+				}
+			}
+		}
+	}
+
+	background: $grey;
+	padding: 6em;
+
+	#offer {
+		#header {
+			font-size: 30px;
+			color: $white;
+			font-weight: bold;
+			margin-bottom: 3em;
+		}
+
+		#the-offer {
+			background: $white;
+
+			#go-back {
+				background: lightgray;
+				height: 50px;
+				width: 50px;
+				margin-bottom: 50px;
+				text-align: center;
+
+				a {
+					font-size: 24px;
+					font-weight: bold;
+					text-align: center;
+				}
+			}
+
+			.grid {
+				// display: none;
+
+				#offer-header {
+					padding: 0 35px;
+					img {
+					}
+
+					h3 {
+						text-decoration: underline;
+						font-weight: bold;
+						margin-top: 10px;
+					}
+
+					#schedule-payment {
+						p {
+							font-weight: 400;
+							font-size: 15px;
+							margin: 5px 0;
+						}
+
+						.grid {
+							div {
+								background: lightgray;
+								text-align: center;
+								padding: 8px;
+								font-weight: bold;
+							}
+						}
+
+						#address {
+							margin-top: 20px;
+
+							address {
+								font-family: $body-font;
+								font-style: normal;
+
+								p {
+									font-weight: bold;
+
+									span {
+										margin-right: 10px;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#offer-description {
+					font-size: 17px;
+					padding: 0 30px 5px 0;
+				}
+				#loan-summary {
+					padding: 0 30px 20px 0;
+
+					table {
+						tbody {
+							tr {
+								border-top: 1px solid $black;
+
+								td {
+									padding-top: 20px;
+									padding-bottom: 15px;
+									padding-right: 10px;
+
+									small {
+										display: block;
+										font-weight: bold;
+										margin-bottom: 10px;
+									}
+									span {
+										font-size: 20px;
+										font-weight: bold;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#offer-button {
+					button {
+						width: 200px;
+						height: 40px;
+
+						&.edit-draft {
+							border: 3px solid $black !important;
+
+							a {
+								color: $black !important;
+							}
+						}
+
+						&.save-edit {
+							background: lightgrey;
+							color: $black !important;
+							margin: 0 15px;
+						}
+
+						&.next {
+							background: #008060;
+							color: $white !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
