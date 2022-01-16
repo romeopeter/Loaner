@@ -56,20 +56,29 @@
 		}
 	}
 
-	#account-overview {
-		#account {
-			max-width: 100% !important;
+	#notifications-container {
+		width: 90%;
+
+		#notifications {
 			width: 100% !important;
 
-			p {
-				font-size: 14px;
+			.notification {
+				div {
+					a {
+						font-size: 16px !important;
+					}
+
+					small {
+						font-size: 13px !important;
+					}
+				}
 			}
 		}
 	}
 }
 
 @include respond-below(sm) {
-	#nav-menu {
+	/*#nav-menu {
 		width: 100% !important;
 
 		#nav-menu-list {
@@ -141,7 +150,7 @@
 				}
 			}
 		}
-	}
+	}*/
 
 	#user-quick-action {
 		height: 300px !important;
@@ -163,152 +172,28 @@
 			}
 		}
 	}
-}
 
-/*##### LARGE SCREEN #####*/
-#dashboard-nav {
-	#orderbook-nav {
-		height: auto !important;
+	#notifications-container {
+		width: 100% !important;
 
-		#nav-menu {
-			width: 80%;
-			#nav-menu-list {
-				width: 100% !important;
+		#notifications {
+			.notification {
+				display: block !important;
 
-				.nav-menu-item {
-					margin-right: 0 !important;
-
-					&.dropdown {
-						position: relative;
-					
-						#deals-dropdown,
-						#analysis-dropdown,
-						#admin-dropdown,
-						#help-dropdown {
-							visibility: hidden;
-							position: absolute;
-							background: $white !important;
-							top: 115%;
-							z-index: 1;
-							padding: 0px 0px 15px 0px;
-							width: 250px;
-
-							a {
-								color: $black;
-								padding: 8px 8px 8px 15px;
-								margin-top: 10px;
-
-								&:hover {
-									background: lightgray;
-								}
-							}
-
-							&::after {
-								content: "";
-								position: absolute;
-								bottom: 100%;
-								left: 13%;
-								margin-left: -5px;
-								border-width: 5px;
-							  	border-style: solid;
-							  	border-color: transparent transparent $white transparent;
-							}
-						}
-
-						&:hover #deals-dropdown,
-						&:hover #analysis-dropdown,
-						&:hover #admin-dropdown,
-						&:hover #help-dropdown {
-							visibility: visible;
-						}
-					}
-			
-
-					#profile-container {
-						display: flex;
-						justify-content: space-between;
-
-						#profile-dropdown {
-							position: relative;
-							display: inline-block;
-
-							#profile-photo {
-								display: inline-block;
-								width: 50px;
-								height: 50px;
-								border-top: 3px dashed $white;
-								border-right: 3px dashed $white;
-								border-radius: 25px;
-							}
-
-							#profile-menu-nav {
-								position: absolute;
-								top: 115%;
-								right: -15px;
-								z-index: 1;
-								width: 200px;
-								visibility: hidden;
-								padding: 30px 20px;
-
-								.menu-nav-container {
-									color: $black;
-									font-family: $body-font;
-									font-size: 17px;
-									width: 100%;
-
-									a {
-										padding: 10px;
-										color: $black;
-
-										&:hover {
-											background: lightgray;
-										}
-									}
-								}
-
-								#account {
-									span {
-										display: block;
-										padding: 10px;
-										&:hover {
-											background: lightgray;
-										}
-									}
-								}
-
-								&::after {
-									content: "";
-									position: absolute;
-									bottom: 100%;
-									left: 75%;
-									margin-left: -5px;
-									border-width: 5px;
-								  	border-style: solid;
-								  	border-color: transparent transparent $white transparent;
-								}
-							}
-
-
-							&:hover #profile-menu-nav {
-								visibility: visible !important;
-							}
-
-							margin-right: 7px;
-						}
-
-						img {
-							width: 45px;
-							height: 45px;
-							display: block;
-						}
-					}
+				.badge {
+					width: 40px !important;
+					height: 40px !important;
+					border-radius: 20px !important;
+					font-size: 25px !important;
 				}
 			}
 		}
 	}
 }
 
-#dashboard-intro-container {
+/*##### LARGE SCREEN #####*/
+
+#orderbook-investor-dashboard {
 	#orderbook-dashboard-intro {
 		height: 450px;
 		width: 100%;
@@ -371,125 +256,57 @@
 		}
 	}
 
-	#account-overview {
-		background: #555555;
-		color: $white;
-		padding: 5px;
+	#notifications-container {
+		background: $grey;
 
-		#overview-title {
-			font-size: 25px;
+		#notifications,
+		#blank-space {
+			height: auto;
 		}
 
-		#account {
-			max-width: 500px;
-			width: 550px;
-			height: 100px;
+		#notifications {
+			width: 60%;
 
-			p {
-				.count {
-					height: 50px;
-					width: 50px;
-					background: $white;
-					color: $black;
-					border-radius: 25px;
-					padding: 5px;
-				}
-			}
-		}
-	}
-
-	#offers {
-		height: auto;
-
-		#offer-header {
-			color: $white;
-
-			h3 {
-				font-size: 30px;
-			}
-
-			#sort-by {
-				label {
-					font-family: $body-font;
-					font-size: 15px;
-				}
-
-				#sort-offer {
-					color: $black;
-					width: 150px;
-				}
-			}
-		}
-
-		#the-offers {
-			.offer {
+			.notification {
+				border-top: 1px solid $white;
+				padding: 25px 0;
+				padding-left: 25px;
 				display: flex;
-				flex-direction: column;
-				color: $white;
-				width: 100%;
 
-				.offer-title {
-					display: flex;
+				.badge {
+					display: inline-block;
+					height: 55px;
+					width: 55px;
+					border-radius: 27.5px;
+					background: $white;
+					font-family: $header-font;
+					font-size: 30px;
+					font-weight: bold;
+					text-align: center;
+					color: $black;
+					// width: 9%;
+					margin-right: 20px;
+				}
 
-					.offer-image {
-						width: 50%;
+				div {
+					color: $white;
+
+					a {
+						font-weight: bold;
+						font-size: 18px;
+						text-align: left;
+					}
+
+					small {
+						font-size: 20px;
 						display: block;
 					}
-
-					.title {
-						width: 50%;
-						background: white;
-						color: $black;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						padding: 5px 20px;
-						font-size: 15px;
-						font-weight: bold;
-					}
-				}
-
-				.offer-description {
-					font-size: 13px;
-					padding-top: 15px;
-					padding-bottom: 20px;
-				}
-				.offer-button {
-					display: flex;
-
-					button {
-						width: 50%;
-						height: 40px;
-						background: hotpink;
-						font-size: 15px;
-						font-weight: bold;
-						font-family: $body-font;
-
-						&.bg-grey {
-							background: #555555 !important;
-						}
-						&.bg-white {
-							background: $white;
-							color: $black;
-						}
-
-						&.last-button {
-							width: 100%;
-							background: $white;
-							color: $black;
-						}
-					}
-
-					& > button {
-						margin-right: 15px;
-					}
 				}
 			}
+		}
 
-			#view-more {
-				color: $black;
-				margin-top: 15px;
-			}
+		#blank-space {
+			width: 40%;
 		}
 	}
 }
