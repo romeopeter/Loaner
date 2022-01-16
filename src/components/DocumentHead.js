@@ -32,8 +32,8 @@ function DocumentHead(props) {
 				},
 				{
 					rel: "stylesheet",
-					href: "href=https://fonts.googleapis.com/css2?family=Allura&family=Arvo&family=Lato:wght@300&display=swap"
-				}
+					href: "https://fonts.googleapis.com/css2?family=Allura&display=swap"
+				},
 				{
 					rel: "stylesheet",
 					href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
