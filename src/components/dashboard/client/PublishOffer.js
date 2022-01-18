@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -11,10 +11,16 @@ import offerImage from "../../../assets/images/offerImage.png";
 export default function PublishOffer() {
 	const pageName = "Publish offer";
 
-	const handleSubmit = (e) => {
-		e.preventDefault()
+	const modalContainerRef = createRef();
 
-		console.log("submit trigger")
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		console.log("submit trigger");
+	};
+
+	const handlePublish = () => {
+		modalContainerRef.current.classList.add("accept-modal");
 	}
 
 	return (
@@ -52,10 +58,16 @@ export default function PublishOffer() {
 										></i>
 									</Link>
 								</div>
-								<form id="form" className="px-5" onSubmit={(e) => handleSubmit(e)}>
+								<form
+									id="form"
+									className="px-5"
+									onSubmit={(e) => handleSubmit(e)}
+								>
 									<div className="grid grid-cols-12 gap-4">
 										<div className="col-span-12">
-											<h3 className="text-2xl font-bold">Select investors</h3>
+											<h3 className="text-2xl font-bold">
+												Select investors
+											</h3>
 										</div>
 
 										<div className="col-span-12 sm:col-span-6">
@@ -64,11 +76,20 @@ export default function PublishOffer() {
 												id="select-category"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 border-none p-5 mb-5 form-field"
 											>
-												<option defaultValue="Select category">Select category</option>
+												<option defaultValue="Select category">
+													Select category
+												</option>
 											</select>
 											<div className="checkboxes">
-												<input type="checkbox" name="categoryCheckbox" className="mr-2 rounded" />
-												<label htmlFor="category-checkbox">Do you want to save and send as now open</label>
+												<input
+													type="checkbox"
+													name="categoryCheckbox"
+													className="mr-2 rounded"
+												/>
+												<label htmlFor="category-checkbox">
+													Do you want to save and send
+													as now open
+												</label>
 											</div>
 										</div>
 										<div className="col-span-12 sm:col-span-6">
@@ -77,11 +98,20 @@ export default function PublishOffer() {
 												id="select-investor"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 border-none p-5 mb-5 form-field"
 											>
-												<option defaultValue="Select investor">Select investor</option>
+												<option defaultValue="Select investor">
+													Select investor
+												</option>
 											</select>
 											<div className="checkboxes">
-												<input type="checkbox" name="investorCheckbox" className="mr-2 rounded" />
-												<label htmlFor="investor-checkbox">Do you want to save and send as coming soon</label>
+												<input
+													type="checkbox"
+													name="investorCheckbox"
+													className="mr-2 rounded"
+												/>
+												<label htmlFor="investor-checkbox">
+													Do you want to save and send
+													as coming soon
+												</label>
 											</div>
 										</div>
 										<div
@@ -92,11 +122,34 @@ export default function PublishOffer() {
 												title="Save edit"
 												type="submit"
 												buttonClass="edit-draft bg-green-600"
+												handleClick={handlePublish}
 											/>
 										</div>
 									</div>
 								</form>
 							</div>
+						</div>
+					</div>
+
+					{/*Modal*/}
+					<div
+						id="offer-modal"
+						className="h-60"
+						ref={modalContainerRef}
+					>
+						<div
+							id="modal-content"
+							className="flex flex-col justify-center items-center"
+						>
+							<h4 className="font-bold text-lg">
+								Congratulations!
+							</h4>
+							<p className="py-5">Your loan has been published</p>
+							<Button
+								title="Go home"
+								link="/client/offers"
+								buttonClass="bg-green-500"
+							/>
 						</div>
 					</div>
 				</div>
