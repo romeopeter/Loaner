@@ -34,7 +34,7 @@
 
 		h3 {
 			font-size: 25px !important;
-			margin: 10px 0px;
+			margin: 10px 0px !important;
 		}
 
 		p {
@@ -78,80 +78,6 @@
 }
 
 @include respond-below(sm) {
-	/*#nav-menu {
-		width: 100% !important;
-
-		#nav-menu-list {
-
-			.dropdown {
-
-				#deals-dropdown,
-				#analysis-dropdown,
-				#admin-dropdown,
-				#help-dropdown {
-					visibility: visible !important;
-					background: none !important;
-					position: static !important;
-					top: 0 !important;
-
-					&::after {
-						display: none !important;
-					}
-				}
-			}
-
-			#user-profile-menu-item {
-				width: 100% !important;
-
-				#horizontal-divider {
-					border-top: 1px solid lightgrey;
-					margin: 15px 70px;;
-				}
-
-				#profile-container {
-
-					#profile-dropdown {
-						width: 100% !important;
-
-						#profile-photo {
-							margin-left: 10px;
-						}
-
-						#profile-menu-nav {
-							background: black;
-							position: static !important;
-							width: inherit !important;
-							visibility: visible !important;
-							margin-top: 15px;
-
-							.menu-nav-container {
-								color: $white !important;
-
-								a {
-									color: $white !important;
-
-									&:hover {
-										background: none !important;
-									}
-								}
-
-								span:hover {
-									background: none !important;
-								}
-							}
-
-							&::after {
-								display: none !important;
-							}
-						}
-					}
-
-					#bank-photo {display: none !important;}
-				}
-			}
-		}
-	}*/
-
 	#user-quick-action {
 		height: 300px !important;
 		flex-direction: column !important;
@@ -188,6 +114,10 @@
 				}
 			}
 		}
+	}
+
+	#offer-status {
+		overflow-x: scroll !important;
 	}
 }
 
@@ -256,6 +186,7 @@
 		}
 	}
 
+	/* InvestorDashboard 1 -- InvestorDashboard.js */
 	#notifications-container {
 		background: $grey;
 
@@ -284,7 +215,6 @@
 					font-weight: bold;
 					text-align: center;
 					color: $black;
-					// width: 9%;
 					margin-right: 20px;
 				}
 
@@ -307,6 +237,79 @@
 
 		#blank-space {
 			width: 40%;
+		}
+	}
+
+	/* InvestorDashboard 1 -- InvestorDashboard2.js */
+	#offer-status {
+		background: #e5e5e5;
+
+		#title {
+			h3 {
+				margin-left: 75px;
+				font-weight: bold;
+			}
+
+			border-bottom: 1px solid $grey;
+		}
+
+		table {
+			overflow-x: auto;
+
+			thead {
+				tr {
+					th {
+						padding: 0.5rem;
+					}
+				}
+			}
+
+			tbody {
+				tr {
+					td {
+						padding: 0.5rem;
+						text-align: center;
+						width: 200px;
+						border-top: 1px solid $grey;
+						border-bottom: 1px solid $grey;
+
+						button {
+							height: 37px !important;
+						}
+
+						&.offer-status-name {
+							text-align: left;
+						}
+					}
+				}
+			}
+		}
+
+		#paginate-offer-status {
+			padding: 20px;
+
+		.pagination {
+			display: flex;
+			justify-content: flex-end;
+
+			li {
+				color: $black;
+				font-family: $body-font;
+				font-size: 17px;
+				font-weight: bold;
+				height: 45px;
+				width: 45px;
+				border-radius: 22.5px;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+
+				&.selected {
+					background: $black;
+					color: $white;
+				}
+			}
+		}
 		}
 	}
 }
