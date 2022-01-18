@@ -21,7 +21,7 @@ export default function InvestorDashboard() {
 						id="loan-invest-dropdown"
 						class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
 					>
-						<Link to="/" id="home" className="dropdown-container mr-5">
+						<Link to="/investor/dashboard" id="home" className="dropdown-container mr-5">
 							Home
 						</Link>
 						<Link to="/" id="offers" className="dropdown-container">
