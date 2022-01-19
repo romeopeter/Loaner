@@ -11,7 +11,7 @@
 			}
 		}
 
-		.accept-modal {
+		.accept-modal, .reject-modal {
 			#modal-content {
 				width: 80% !important;
 			}
@@ -152,7 +152,7 @@
 	#offer-modal {
 		display: none;
 
-		&.accept-modal {
+		&.accept-modal, &.reject-modal {
 			display: block;
 			position: fixed;
 			z-index: 1;
