@@ -106,7 +106,7 @@
 
 #orderbook-investor-bids {
 
-	#bids {
+	#bids,#declined-bids {
 		background: $grey;
 
 	
@@ -154,6 +154,10 @@
 
 							&:hover {
 								color: $black;
+							}
+
+							&.declined-button {
+								color: rgba(255, 0, 0, 0.7);
 							}
 						}
 
