@@ -1,0 +1,214 @@
+/*#### SMALL SCREENS #####*/
+@include respond-below(md) {
+	#orderbook-investor-bids {
+		display: flex;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		padding: 0 !important;
+
+		h1,
+		h3,
+		p {
+			text-align: center;
+		}
+
+		h3 {
+			font-size: 25px !important;
+			margin: 10px 0px !important;
+		}
+
+		p {
+			padding: 10px !important;
+			font-size: 18.5px !important;
+		}
+	}
+
+	#user-quick-action {
+		.actions {
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
+				}
+			}
+		}
+	}
+
+	#notifications-container {
+		width: 90%;
+
+		#notifications {
+			width: 100% !important;
+
+			.notification {
+				div {
+					a {
+						font-size: 16px !important;
+					}
+
+					small {
+						font-size: 13px !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+@include respond-below(sm) {
+	#user-quick-action {
+		height: 300px !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		padding: 0 30px !important;
+
+		.actions {
+			border: none !important;
+			padding-right: 0 !important;
+
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
+				}
+			}
+		}
+	}
+
+	#notifications-container {
+		width: 100% !important;
+
+		#notifications {
+			.notification {
+				display: block !important;
+
+				.badge {
+					width: 40px !important;
+					height: 40px !important;
+					border-radius: 20px !important;
+					font-size: 25px !important;
+				}
+			}
+		}
+	}
+
+	#offer-status {
+		overflow-x: scroll !important;
+	}
+}
+
+/*##### LARGE SCREEN #####*/
+
+#orderbook-investor-bids {
+
+	#bids {
+		background: $grey;
+
+	
+			#header {
+				margin-left: 75px;
+				font-weight: bold;
+				color: $white;
+				font-size: 35px;
+				padding: 30px 0;
+			}
+
+			
+		
+		table {
+
+			overflow-x: auto;
+
+			thead {
+				tr {
+					th {
+						padding: 0.5rem;
+					}
+				}
+			}
+
+			tbody {
+				tr {
+					td {
+						padding: 1rem;
+						text-align: center;
+						border-top: 1px solid $grey;
+						border-right: 1px solid $grey;
+						border-bottom: 1px solid $grey;
+
+						p {
+							font-size: 17px;
+						    text-align: left;
+						    max-width: 650px;
+						    width: 650px;
+						    display: inline-block;
+						}
+
+						button {
+							height: 37px !important;
+
+							&:hover {
+								color: $black;
+							}
+						}
+
+						&.offer-status-name {
+							text-align: left;
+						}
+
+						&.bid-name {
+							img {
+								display: inline-block;
+								margin: 0 10px;
+    							height: 40px;
+    							width: 40px;
+    							border-radius: 20px;
+							}
+
+							span {
+								text-decoration: underline;
+								font-weight: bold;
+							}
+						}
+					}
+
+					&:hover {
+						background: #e5e5e5;
+					}
+				}
+			}
+		}
+
+		#paginate-bids {
+			padding: 20px;
+
+			.pagination {
+				display: flex;
+				justify-content: flex-end;
+
+				li {
+					color: $black;
+					font-family: $body-font;
+					font-size: 17px;
+					font-weight: bold;
+					height: 45px;
+					width: 45px;
+					border-radius: 22.5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+
+					&.selected {
+						background: $black;
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+}
