@@ -53,7 +53,7 @@ export default function InvestorDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								My offers
+								<Link to="/investor/offers">My offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
@@ -63,7 +63,7 @@ export default function InvestorDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								Successful offers
+								<Link to="/investor/bids">Successful offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
@@ -73,7 +73,7 @@ export default function InvestorDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								Decline offers
+								<Link to="/investor/bids/declined">Decline offers</Link>
 							</h2>
 						</div>
 					</div>
@@ -85,7 +85,7 @@ export default function InvestorDashboard() {
 								<div className="notification notification-1">
 									<div className="badge">A</div>
 									<div>
-										<Link to="/">
+										<Link to="/investor/offers/offer">
 											Rice value chain ( Project Finance ) sent you an offer view more
 											{" "}
 											<i class="fa fa-long-arrow-right" aria-hidden="true"></i>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import {Link} from "react-router-dom";
+
 import ReactPaginate from "react-paginate";
 
 import OrderbookLayout from "../../OrderbookLayout";
@@ -164,25 +166,26 @@ export default function InvestorDeclinedBids() {
 			<OrderbookLayout PageNav={NavMenu}>
 				<div
 					id="loan-invest-dropdown"
-					class="bg-white px-16 py-10 shadow-md flex justify-start"
+					class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
 				>
-					<div id="loan" className="dropdown-container">
-						Loan{" "}
-						<i
-							className="fa fa-caret-down mr-5"
-							aria-hidden="true"
-						></i>
-						<div id="load-dropdown"></div>
-					</div>
-					<div id="investor" className="dropdown-container">
-						Investor{" "}
-						<i className="fa fa-caret-down" aria-hidden="true"></i>
-						<div id="investor-dropdown"></div>
-					</div>
+					<Link
+						to="/investor/dashboard"
+						id="home"
+						className="dropdown-container mr-5"
+					>
+						Home
+					</Link>
+					<Link
+						to="/investor/offers/offer"
+						id="offers"
+						className="dropdown-container"
+					>
+						Offers
+					</Link>
 				</div>
 				<section id="orderbook-investor-bids">
 					<div id="declined-bids">
-						<h3 id="header">Succesful offers</h3>
+						<h3 id="header">Declined offers</h3>
 						<div style={{ overflowX: "auto" }}>
 							<table className="bg-white table-auto w-full">
 								<tbody>
