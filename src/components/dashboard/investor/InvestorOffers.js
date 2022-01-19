@@ -17,7 +17,14 @@ export default function InvestorOffers() {
 	}
 
 	const handleRejectOffer = () => {
-		console.log(modalContainerRef.current.classList.add("reject-modal"));
+		const modalContainer = modalContainerRef.current;
+		modalContainer.classList.add("reject-modal");
+
+		modalContainer.children[0].firstChild.innerText = "Thank you for your response";
+		modalContainer.children[0].firstChild.style.color = "#ef4444";
+
+		modalContainer.children[0].children[1].innerText = "You have rejected the loan offer";		
+
 	}
 
 
@@ -351,7 +358,7 @@ export default function InvestorOffers() {
 						<div id="modal-content" className="flex flex-col justify-center items-center">
 							{/*<span class="close">&times;</span>*/}
 							<h4 className="font-bold text-lg">Congratulations!</h4>
-							<p className="py-5">Your loan has been published</p>
+							<p className="py-5" style={{paddingLeft: "10px"}}>Your loan has been published</p>
 							<Button title="Go home" link="/investor/dashboard" buttonClass="bg-green-500" />
 						</div>
 					</div>
