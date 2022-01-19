@@ -27,7 +27,7 @@ export default function InvestorDashboard2() {
 			name: "Agrix",
 			tranche: "Tranche 3",
 			tenor: "50 days",
-			size: "USE 1 Million",
+			size: "USD 1 Million",
 			status: "Published",
 		},
 		{
@@ -80,7 +80,7 @@ export default function InvestorDashboard2() {
 						>
 							Home
 						</Link>
-						<Link to="/" id="offers" className="dropdown-container">
+						<Link to="/investor/offers/offer" id="offers" className="dropdown-container">
 							Offers
 						</Link>
 					</div>
@@ -110,8 +110,9 @@ export default function InvestorDashboard2() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
-								My offers
+								></i>	
+
+								<Link to="/investor/offers">My offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
@@ -119,8 +120,9 @@ export default function InvestorDashboard2() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
-								Successful offers
+								></i>	
+
+								<Link to="/investor/bids">Successful offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
@@ -128,8 +130,9 @@ export default function InvestorDashboard2() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
-								Decline offers
+								></i>	
+
+								<Link to="/investor/bids/declined">Decline offers</Link>
 							</h2>
 						</div>
 					</div>
