@@ -11,8 +11,13 @@ import LoanRequest from "./dashboard/client/LoanRequest";
 import Offers from "./dashboard/client/Offers";
 import ShowOffer from "./dashboard/client/ShowOffer";
 import EditOffer from "./dashboard/client/EditOffer";
+import PublishOffer from "./dashboard/client/PublishOffer";
 
 import InvestorDashboard from "./dashboard/investor/InvestorDashboard";
+import InvestorDashboard2 from "./dashboard/investor/InvestorDashboard2";
+import InvestorOffers from "./dashboard/investor/InvestorOffers";
+import InvestorBids from "./dashboard/investor/InvestorBids";
+import InvestorDeclinedBids from "./dashboard/investor/InvestorDeclinedBids";
 
 function App() {
   return (
@@ -50,6 +55,12 @@ function App() {
           <EditOffer />
         </RequireAuth>
       } />
+      <Route path="/client/offers/offer/publish" element={
+        <RequireAuth>
+          <PublishOffer />
+        </RequireAuth>
+      } />
+
 
       {/*Investor Dashboard*/}
       <Route path="/investor/dashboard" element={
@@ -57,7 +68,29 @@ function App() {
           <InvestorDashboard />
         </RequireAuth>
       } />
-    </Routes>
+      <Route path="/investor/dashboard/partial" element={
+        <RequireAuth>
+          <InvestorDashboard2 />
+        </RequireAuth>
+      } />
+      <Route path="/investor/offers" element={
+        <RequireAuth>
+          <InvestorOffers />
+        </RequireAuth>
+      } />
+      <Route path="/investor/bids" element={
+        <RequireAuth>
+          <InvestorBids />
+        </RequireAuth>
+      } />
+      <Route path="/investor/bids/declined" element={
+        <RequireAuth>
+          <InvestorDeclinedBids />
+        </RequireAuth>
+      } />
+
+    </Routes
+    >
   );
 }
 
