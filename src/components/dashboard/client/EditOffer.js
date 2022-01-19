@@ -39,7 +39,7 @@ export default function EditOffer() {
 						<div id="the-offer">
 							<div id="go-back">
 								<Link to="/client/offers">
-									<i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+									<i className="fa fa-long-arrow-left" aria-hidden="true"></i>
 								</Link>
 							</div>
 							<div className="grid grid-cols-12 gap-4">
