@@ -11,6 +11,7 @@ if (currentUser?.tokens.access !== undefined) {
 	axiosHeaders.common['Authorization'] = `Token ${currentUser.tokens.access}`
 }
 
+/*Authentication requests*/
 const signUpRequest = (data) => {
 	return axios
 		.post(`${API_URL}/api/v1/registration/sign_up/`, data)
@@ -32,12 +33,20 @@ const signInRequest = (data) => {
 		.catch((error) => error);
 };
 
-/*const signOutRequest = () => {
+const signOutRequest = () => {
 	localStorage.removeItem("USER");
-};*/
+};
 
+/*Authentication requests*/
 const submitLoanRequest = (data) => {
-	console.log(data);
+	const requestURL = "https://order-book-online.herokuapp.com/";
+
+	return axios.post(`${requestURL}/api/v1/loan_request/cp/`, data).then(response => {
+		if(response.status === 200 || response.status === 201) {
+			return response
+		}
+	}).catch(error => error)
 }
+
 
 export {signUpRequest, signInRequest, submitLoanRequest};
