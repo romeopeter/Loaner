@@ -19,6 +19,10 @@ export default function NavMenu() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
 
+	const handleDropdown = (e) => {
+		console.log(e.targer.name);
+	} 
+
 	const handleSignOut = () => {
 		dispatch(signOutAsync())
 
@@ -62,7 +66,7 @@ export default function NavMenu() {
 								className="shadow-md rounded"
 							>
 								<Link to="">Current deals</Link>
-								<Link to="/">Archive deals</Link>
+								<Link to="/">Archived deals</Link>
 								<Link to="/">Create deal - single tranche</Link>
 								<Link to="/">
 									Create deal - multiple tranche
