@@ -34,8 +34,8 @@ export default function LandingPage() {
 					</div>
 				</header>
 				<section id="orderbook-rows">
-					<div class="mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
-						<div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+					<div className="mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
+						<div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
 							<div className="container right-border border-r border-black">
 								<div className="row-details">
 									<h3>
@@ -85,7 +85,7 @@ export default function LandingPage() {
 					</div>
 				</section>
 				<section id="orderbook-bids">
-					<div class="mt-6 grid sm:grid-cols-1 md:grid-cols-2">
+					<div className="mt-6 grid sm:grid-cols-1 md:grid-cols-2">
 						<div className="bid-container" id="bid-intro">
 							<h2>As an investor your money grows for you</h2>
 							<p>
