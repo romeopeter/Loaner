@@ -2,6 +2,26 @@
 	/*######## PORTRAIT & SMALL SCREENS ##########*/
 
 	// Custom breakpoint
+	@media (max-width: 1190px) {
+		#dashboard-nav {
+			#nav-menu {
+				#nav-menu-list {
+					.nav-menu-item {
+						#profile {
+							#profile-image {
+								img {
+								}
+							}
+							img {
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Custom breakpoint
 	@media (max-width: 974px) {
 		#orderbook-nav {
 			flex-direction: column !important;
@@ -32,7 +52,88 @@
 		}
 	}
 
+	@media (max-width: 1150px) {
+		#orderbook-nav {
+			#orderbook-logo span {
+				font-size: 30px !important;
+			}
+		}
+	}
+
 	@include respond-below(sm) {
+		#nav-menu {
+			width: 100% !important;
+
+			#nav-menu-list {
+				.dropdown {
+					#deals-dropdown,
+					#analysis-dropdown,
+					#admin-dropdown,
+					#help-dropdown {
+						visibility: visible !important;
+						background: none !important;
+						position: static !important;
+						top: 0 !important;
+
+						&::after {
+							display: none !important;
+						}
+					}
+				}
+
+				#user-profile-menu-item {
+					width: 100% !important;
+
+					#horizontal-divider {
+						border-top: 1px solid lightgrey;
+						margin: 15px 70px;
+					}
+
+					#profile-container {
+						#profile-dropdown {
+							width: 100% !important;
+
+							#profile-photo {
+								margin-left: 10px;
+							}
+
+							#profile-menu-nav {
+								background: black;
+								position: static !important;
+								width: inherit !important;
+								visibility: visible !important;
+								margin-top: 15px;
+
+								.menu-nav-container {
+									color: $white !important;
+
+									a {
+										color: $white !important;
+
+										&:hover {
+											background: none !important;
+										}
+									}
+
+									span:hover {
+										background: none !important;
+									}
+								}
+
+								&::after {
+									display: none !important;
+								}
+							}
+						}
+
+						#bank-photo {
+							display: none !important;
+						}
+					}
+				}
+			}
+		}
+
 		#orderbook-nav {
 			padding: 20px 25px !important;
 			height: auto !important;
@@ -64,10 +165,34 @@
 		}
 	}
 
-	@media (max-width: 1150px) {
-		#orderbook-nav {
-			#orderbook-logo span {
-				font-size: 30px !important;
+	@include respond-below(sm) {
+		#dashboard-nav {
+			// padding: 20px 25px !important;
+			height: auto !important;
+
+			#burger-toggle {
+				display: block !important;
+			}
+
+			#orderbook-logo {
+				margin-bottom: 10px;
+				width: inherit !important;
+			}
+
+			#nav-menu {
+				#nav-menu-list {
+					display: none !important;
+
+					&.responsive-nav-menu {
+						display: flex !important;
+						width: 100% !important;
+						flex-direction: column !important;
+						height: auto !important;
+						.nav-menu-item {
+							margin: 5px 0px;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -98,7 +223,6 @@
 		}
 
 		#nav-menu {
-			// width: 60%;
 			#nav-menu-list {
 				list-style-type: none !important;
 				margin-block: 0px;
@@ -145,6 +269,147 @@
 		}
 	}
 
+	#orderbook-nav {
+		height: auto !important;
+
+		#nav-menu {
+			width: 80%;
+			#nav-menu-list {
+				width: 100% !important;
+
+				.nav-menu-item {
+					margin-right: 0 !important;
+
+					&.dropdown {
+						position: relative;
+
+						#deals-dropdown,
+						#analysis-dropdown,
+						#admin-dropdown,
+						#help-dropdown {
+							visibility: hidden;
+							position: absolute;
+							background: $white !important;
+							top: 115%;
+							z-index: 1;
+							padding: 0px 0px 15px 0px;
+							width: 250px;
+
+							a {
+								color: $black;
+								padding: 8px 8px 8px 15px;
+								margin-top: 10px;
+
+								&:hover {
+									background: lightgray;
+								}
+							}
+
+							&::after {
+								content: "";
+								position: absolute;
+								bottom: 100%;
+								left: 13%;
+								margin-left: -5px;
+								border-width: 5px;
+								border-style: solid;
+								border-color: transparent transparent $white
+									transparent;
+							}
+						}
+
+						&:hover #deals-dropdown,
+						&:hover #analysis-dropdown,
+						&:hover #admin-dropdown,
+						&:hover #help-dropdown {
+							visibility: visible;
+						}
+					}
+
+					#profile-container {
+						display: flex;
+						justify-content: space-between;
+
+						#profile-dropdown {
+							position: relative;
+							display: inline-block;
+
+							#profile-photo {
+								display: inline-block;
+								width: 50px;
+								height: 50px;
+								border-top: 3px dashed $white;
+								border-right: 3px dashed $white;
+								border-radius: 25px;
+							}
+
+							#profile-menu-nav {
+								position: absolute;
+								top: 115%;
+								right: -15px;
+								z-index: 1;
+								width: 200px;
+								visibility: hidden;
+								padding: 30px 20px;
+
+								.menu-nav-container {
+									color: $black;
+									font-family: $body-font;
+									font-size: 17px;
+									width: 100%;
+
+									a {
+										padding: 10px;
+										color: $black;
+
+										&:hover {
+											background: lightgray;
+										}
+									}
+								}
+
+								#account {
+									span {
+										display: block;
+										padding: 10px;
+										&:hover {
+											background: lightgray;
+										}
+									}
+								}
+
+								&::after {
+									content: "";
+									position: absolute;
+									bottom: 100%;
+									left: 75%;
+									margin-left: -5px;
+									border-width: 5px;
+									border-style: solid;
+									border-color: transparent transparent $white
+										transparent;
+								}
+							}
+
+							&:hover #profile-menu-nav {
+								visibility: visible !important;
+							}
+
+							margin-right: 7px;
+						}
+
+						img {
+							width: 45px;
+							height: 45px;
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// FOOTER
 	#orderbook-footer {
 		background-color: $primary-dark;
 		height: 457px;
