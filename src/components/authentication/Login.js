@@ -77,7 +77,7 @@ export default function Login() {
 
 		// Redux hook dispatches sign-in action (Login requst)
 		dispatch(signInAsync(data)).then(() => {
-			navigate(state?.path || "/dashboard");
+			navigate(state?.path || "/client/dashboard");
 
 			// Reload to update Redux state
 			window.location.reload()
