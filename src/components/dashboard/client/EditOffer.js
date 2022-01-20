@@ -127,12 +127,12 @@ export default function EditOffer() {
 								<div id="loan-edit" className="col-span-12 lg:col-start-5 lg:col-span-8">
 									<form onSubmit={() => console.log("submit trigger")}>
 										<div className="grid grid-cols-12 gap-4 p-4 border-t-2 border-black pt-5">
-											<div className="col-span-3">
+											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="name">Name</label>
 												<input type="text" id="name" name="name" defaultValue="Attah Olamide" className="bg-gray-300 border-none w-full" />
 											</div>
 
-											<div className="col-span-3">
+											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="offer-type">Type of offer</label>
 												<select name="offerType" id="offer-type" className="bg-gray-300 border-none w-full">
 													<option defaultValue="Commercial paper">Commercial paper</option>
@@ -140,38 +140,38 @@ export default function EditOffer() {
 												</select>
 											</div>
 
-											<div className="col-span-3">
+											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="loan-amount">Loan amount</label>
 												<input type="text" id="loan-amount" name="loanAmount" defaultValue="NGN 5 billion" className="bg-gray-300 border-none w-full" />
 											</div>
 
-											<div className="col-span-3">
+											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="tranche">Tranche</label>
 												<input type="text" id="loan-amount" name="tranche" defaultValue="Tranche 1" className="bg-gray-300 border-none w-full" />
 											</div>
 
-											<div className="col-span-3">
+											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="tenor">Tenor</label>
 												<input type="text" id="loan-amount" name="tenor" defaultValue="180 days" className="bg-gray-300 border-none w-full" />
 											</div>
 
 											<div className="col-span-12 grid grid-cols-12 gap-4 border-t-2 border-black pt-5">
-												<div className="col-span-3">
+												<div className="col-span-12 sm:col-span-3">
 													<lable htmlFor="size">Size</lable>
 													<input type="text" name="size" id="size" defaultValue="NGN 5 billion" className="bg-gray-300 border-none w-full" />
 												</div>
 
-												<div className="col-span-3">
+												<div className="col-span-12 sm:col-span-3">
 													<label htmlFor="offer-open">Offer opens</label>
 													<input type="text" id="offer-opens" name="offerOpens" defaultValue="15/01/2022" className="bg-gray-300 border-none w-full" />
 												</div>
 
-												<div className="col-span-3">
+												<div className="col-span-12 sm:col-span-3">
 													<lable htmlFor="offer-closes">Offer closes</lable>
 													<input type="text" id="offer-closes" name="offerCloses" defaultValue="25/01/2022" className="bg-gray-300 border-none w-full" />
 												</div>
 												
-												<div className="col-span-3">
+												<div className="col-span-12 sm:col-span-3">
 													<lable htmlFor="settlement-date">Settlement date</lable>
 													<input type="text" id="settlement-date" name="settlementDate" defaultValue="0/02/2022" className="bg-gray-300 border-none w-full" />
 												</div>
@@ -181,7 +181,7 @@ export default function EditOffer() {
 								</div>
 								<div id="offer-button" className="col-span-12 flex justify-center  lg:justify-end py-10 px-5 sm:pr-10">
 									<Button title="Save edit" type="submit" link="/" buttonClass="edit-draft"/>
-									<Button title="Detailed edit" buttonClass="save-edit"/>
+									<Button title="Detailed edit" link="/client/offers/offer/publish" buttonClass="save-edit"/>
 								</div>
 							</div>
 						</div>

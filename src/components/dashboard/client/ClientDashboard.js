@@ -1,4 +1,4 @@
-import React, {createRef} from "react";
+import React from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { signOutAsync } from "../../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -77,7 +77,7 @@ export default function ClientDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								Create new offer
+								<Link to="/client/offers">Create new offer</Link>
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
@@ -87,7 +87,7 @@ export default function ClientDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								Create new list
+								<Link to="#">Create new list</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
@@ -97,7 +97,7 @@ export default function ClientDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								My offer
+								<Link to="/client/offers">My offers</Link>
 							</h2>
 						</div>
 					</div>
