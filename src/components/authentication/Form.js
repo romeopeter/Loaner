@@ -161,7 +161,24 @@ export default function Form( props ) {
 					</div>
 				</div>
 
-				<div className="col-span-12">
+				<div className="col-span-6">
+					<select
+						type="text"
+						name="role"
+						value={form.role}
+						id="role"
+						className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+						required
+						onChange={(e) => handleChange(e)}
+					>
+						<option defaultValue="">Select role</option>
+						<option defaultValue="">Client</option>
+						<option defaultValue="">Broker</option>
+						<option defaultValue="">Investor</option>
+					</select>
+				</div>
+
+				<div className="col-span-6">
 					<input
 						type="text"
 						name="emailAddress"
@@ -267,8 +284,8 @@ export default function Form( props ) {
 
 				{/**** Start Alerts and error notifications ****/}
 
+				{/*Password mistmatch*/}
 				<div className="col-span-12">
-					{/*Password mistmatch*/}
 					{passwordMessage !== "" ? (
 						
 						<Alert variant="outlined" severity="error">
@@ -293,7 +310,7 @@ export default function Form( props ) {
 						title="Previous"
 						id="previous-field-button"
 						buttonClass="form-slide-button text-white bg-gray-400 rounded"
-						slide={slideFinalFormOut}
+						handleClick={slideFinalFormOut}
 					/>
 				</div>
 			</div>
