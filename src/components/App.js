@@ -68,12 +68,12 @@ function App() {
           <InvestorDashboard />
         </RequireAuth>
       } />
-      <Route path="/investor/dashboard/partial" element={
+      <Route path="/investor/offers" element={
         <RequireAuth>
           <InvestorDashboard2 />
         </RequireAuth>
       } />
-      <Route path="/investor/offers" element={
+      <Route path="/investor/offers/offer" element={
         <RequireAuth>
           <InvestorOffers />
         </RequireAuth>
