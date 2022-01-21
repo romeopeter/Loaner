@@ -29,7 +29,9 @@ export default function ClientDashboard() {
 
 	const handleSignOut = () => {
 		dispatch(signOutAsync());
-		navigate("/login");
+		navigate("/");
+
+		window.location.reload();
 	};
 
 	return (
@@ -77,7 +79,7 @@ export default function ClientDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								<Link to="/client/offers">Create new offer</Link>
+								<Link to="/client/new-loan">Create new offer</Link>
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
