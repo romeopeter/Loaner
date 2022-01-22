@@ -1,5 +1,5 @@
 import React, { useState, createRef } from "react";
-import Alert from "@mui/material/Alert";
+// import Alert from "@mui/material/Alert";
 
 import Button from "../../Button";
 
@@ -740,13 +740,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					handleClick={summaryState ? handleModal : undefined}
 				/>
 
-				{state.emptyFields !== "" ? (
+				{/*{state.emptyFields !== "" ? (
 					<div className="mt-5">
 						<Alert severity="error" variant="filled">
 							{state.emptyFields}!
 						</Alert>
 					</div>
-				) : ("")}
+				) : ("")}*/}
 			</form>
 		</>
 	);
