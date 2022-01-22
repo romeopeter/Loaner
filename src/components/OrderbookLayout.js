@@ -13,7 +13,7 @@ export default function OrderbookLayout({ children, PageNav }) {
 
 	return (
 		<section id="app">
-			{PageNav ? (
+			{PageNav && isLoggedIn ? (
 				<PageNav />
 			) : (
 				<nav id="orderbook-nav">
