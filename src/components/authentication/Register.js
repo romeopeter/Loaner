@@ -21,6 +21,7 @@ export default function Register() {
 		firstName: "",
 		lastName: "",
 		emailAddress: "",
+		role:"",
 		dateOfBirth: "",
 		organization: "",
 		password: "",
@@ -70,6 +71,7 @@ export default function Register() {
 		// Form state controlled inputes
 		const {
 			emailAddress,
+			role,
 			title,
 			dateOfBirth,
 			firstName,
@@ -84,6 +86,7 @@ export default function Register() {
 
 		const data = {
 			email: emailAddress,
+			role,
 			title,
 			date_of_birth: dateOfBirth,
 			first_name: firstName,
@@ -113,12 +116,27 @@ export default function Register() {
 		}
 
 		// Redux async call
-		dispatch(signUpAsync(data)).then(() => {
-			navigate("/dashboard");
+		dispatch(signUpAsync(data)).then((response) => {
+
+			const userType = response.user.groups[0]
+
+			if (userType.name === "Client") {
+				navigate("/client/dashboard");
+			}
+
+			if (userType.name === "Broker") {
+				navigate("/broker/dashboard");
+			}
+
+			if (userType.name === "Investor") {
+				navigate("/investor/dashboard");
+			}
+
+			return
 		});
 	};
 
-	if (isLoggedIn) return (<Navigate to="/dashboard" replace />);
+	if (isLoggedIn) return (<Navigate to="/" replace />);
 
 	return (
 		<>
@@ -194,14 +212,14 @@ export default function Register() {
 									</div>
 
 									{/*Empty fields error*/}
-									<div className="col-span-12">
+									{/*<div className="col-span-12">
 										{formErrors.emptyFields !== "" ? (
 											
 											<Alert variant="outlined" severity="error">
 							        			{formErrors.emptyFields}
 							      		    </Alert>	
 								      	): ""}
-							      	</div>
+							      	</div>*/}
 
 									<div className="col-span-12">
 										<div className="flex items-start">
