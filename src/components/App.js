@@ -24,6 +24,11 @@ import InvestorDeclinedBids from "./dashboard/investor/InvestorDeclinedBids";
 import Profile from "./dashboard/client/ProfileSettings";
 
 import BrokerDashboard from "./dashboard/broker/Dashboard";
+import NewClient from "./dashboard/broker/NewClient";
+import AllClients from "./dashboard/broker/AllClients";
+import NewOffer from "./dashboard/broker/NewOffer";
+import NewOfferTranche from "./dashboard/broker/NewOfferTranche";
+import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
 
 function App() {
   return (
