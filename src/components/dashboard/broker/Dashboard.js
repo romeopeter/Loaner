@@ -1,5 +1,10 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate, Navigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { signOutAsync } from "../../../redux/authSlice";
 
 
 import NavMenu from '../NavMenu';
@@ -25,6 +30,26 @@ import {
     Td,
 } from '@chakra-ui/react';
 const BrokerDashboard = () => {
+
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    const authUser = useSelector((state) => state.auth.user);
+
+    const { user: currentUser } = authUser;
+
+    if (!currentUser) {
+        return <Navigate replace to="login" />;
+    }
+
+    const handleSignOut = () => {
+        dispatch(signOutAsync());
+        navigate("/");
+
+        window.location.reload();
+    };
+
+
     return (
         <>
         <DocumentHead   title="Dashboard" />
@@ -62,9 +87,7 @@ const BrokerDashboard = () => {
                 </div>
                 <div className="grid grid-cols-1 gap-x-6">
                     <div id="orderbook-intro">
-                        <h1 className="mt-0">
-                        Hello, Ola
-                        </h1>
+                        <h1 className="mt-0">Hello, {currentUser.first_name}</h1>
                         <h3>Welcome to your dashboard</h3>
                         <p className="font-md">
                             Lorem ipsum dolor sit amet, consectetur
