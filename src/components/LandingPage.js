@@ -2,6 +2,8 @@ import React from "react";
 import OrderbookLayout from "./OrderbookLayout";
 import DocumentHead from "./DocumentHead";
 import Button from "./Button";
+import NavMenu from "./dashboard/NavMenu";
+
 import setBgImage from '../utils/setBgImage';
 import headerBanner from "../assets/images/headerBanner.png";
 import tabletLady from "../assets/images/tabletLady.png";
@@ -12,7 +14,7 @@ export default function LandingPage() {
 	return (
 		<>
 			<DocumentHead title="Home" />
-			<OrderbookLayout>
+			<OrderbookLayout PageNav={NavMenu}>
 				<header id="orderbook-header" style={setBgImage(headerBanner)}>
 					<div className="grid grid-cols-1 gap-x-6">
 						<div id="orderbook-intro">
