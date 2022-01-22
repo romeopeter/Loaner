@@ -1,11 +1,16 @@
 import React, { useState, createRef } from "react";
-import {useSelector, useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import RequestForm from "./RequestForm";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
+
 import Button from "../../Button";
+
+import { setServerMessage } from "../../../redux/messageSlice";
+
+import { asyncLoanRequest } from "../../../redux/loanSlice";
 
 export default function LoanRequest() {
 	const pageName = "Loan request";
@@ -53,9 +58,14 @@ export default function LoanRequest() {
 
 	const [summaryState, setSummaryState] = useState(false);
 
+	const [isLoading, setIsLoading] = useState(false);
+
 	const { user } = JSON.parse(localStorage.getItem("USER"));
 
 	const userFullName = `${user.first_name} ${user.last_name}`;
+
+	// Disptaches redux action(s)
+	const dispatch = useDispatch();
 
 	const requestContainerRef = createRef();
 
@@ -103,8 +113,25 @@ export default function LoanRequest() {
 			},
 		};
 
-		console.log(data);
-	}
+		dispatch(asyncLoanRequest(data)).then((response) => {
+			setIsLoading(true);
+
+			// Check if error stack object exist
+			if ("stack" in response) {
+				const message = response.message;
+
+				dispatch(setServerMessage(message));
+
+				setIsLoading(false);
+
+				console.log("Loan not created");
+
+				return;
+			}
+
+			console.log("Loan created");
+		});
+	};
 
 	return (
 		<>
@@ -143,7 +170,11 @@ export default function LoanRequest() {
 						>
 							<RequestForm
 								requestFormState={{ formState, setFormState }}
-								showSummary={{ summaryState, setSummaryState, handleModal }}
+								showSummary={{
+									summaryState,
+									setSummaryState,
+									handleModal,
+								}}
 							/>
 						</div>
 						<div
@@ -303,7 +334,15 @@ export default function LoanRequest() {
 											title="Publish"
 											buttonClass="w-full bg-green-600 rounded"
 											handleClick={() => handleSubmit()}
-										/>
+										>
+											Create loan{" "}
+											{isLoading ? (
+												<i
+													className="fa fa-spinner fa-pulse fa-3x fa-fw"
+													style={{ fontSize: 20 }}
+												></i>
+											) : null}
+										</Button>
 									</div>
 								</div>
 							)}
