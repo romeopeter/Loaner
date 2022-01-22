@@ -28,15 +28,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile/>} />
-
-      <Route path="/broker/dashboard" element={<BrokerDashboard/>} />
-      <Route path="/broker/dashboard/new-client" element={<NewClient/>} />
-      <Route path="/broker/dashboard/allclients" element={<AllClients/>} />
-      <Route path="/broker/dashboard/new-offer" element={<NewOffer/>} />
-      <Route path="/broker/dashboard/new-offer-tranche" element={<NewOfferTranche/>} />
-      <Route path="/broker/dashboard/new-offer-timing" element={<NewOfferTiming/>} />
-
-
+      
       <Route
         path="/client/dashboard"
         element={
@@ -53,6 +45,36 @@ function App() {
       <Route path="/client/offers" element={
         <RequireAuth>
           <Offers />
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard" element={
+          <RequireAuth>
+            <BrokerDashboard/>
+          </RequireAuth>
+        } />
+      <Route path="/broker/dashboard/new-client" element={
+        <RequireAuth>
+          <NewClient/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/allclients" element={
+        <RequireAuth>
+          <AllClients/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/new-offer" element={
+        <RequireAuth>
+          <NewOffer/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/new-offer-tranche" element={
+        <RequireAuth>
+          <NewOfferTranche/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/new-offer-timing" element={
+        <RequireAuth>
+          <NewOfferTiming/>
         </RequireAuth>
       } />
     </Routes>
