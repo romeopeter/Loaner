@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 import Button from '../../Button';
 
 import NavMenu from '../NavMenu';
@@ -6,7 +8,7 @@ import NavMenu from '../NavMenu';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 
-import headerBanner from '../../../assets/images/headerBanner.png';
+import headerBanner from '../../../assets/images/broker-header.png';
 import setBgImage from '../../../utils/setBgImage';
 
 import Brokerdata from '../../../data/broker/DummyData';
@@ -80,7 +82,7 @@ const BrokerDashboard = () => {
                         <h2 style={{fontSize: "1.3em", marginLeft:"2%"}} >Quick access</h2>
                         <Flex flexDirection={["column","row"]} mr={["50px"]} >
                             <Flex mr={["10"]}>
-                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Text ml={["2"]}>New Client</Text>
+                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Link to="/broker/dashboard/new-client"><Text ml={["2"]}>New Client</Text></Link>
                             </Flex>
                             <Flex>
                                 <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Text ml={["2"]}>New Order</Text>
@@ -144,7 +146,7 @@ const BrokerDashboard = () => {
                     </Table>
                 </Box>
                 
-
+                {/* scrollable table */}
             </section>
         </OrderbookLayout>
             

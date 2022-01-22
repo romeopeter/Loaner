@@ -11,8 +11,6 @@ import {
 	Image,
 	FormControl,
 	FormLabel,
-	FormErrorMessage,
-	FormHelperText,
 	Input,
 	Heading,
 	Button,

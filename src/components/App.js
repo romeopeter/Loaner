@@ -14,6 +14,11 @@ import Offers from "./dashboard/client/Offers";
 import Profile from "./dashboard/client/ProfileSettings";
 
 import BrokerDashboard from "./dashboard/broker/Dashboard";
+import NewClient from "./dashboard/broker/NewClient";
+import AllClients from "./dashboard/broker/AllClients";
+import NewOffer from "./dashboard/broker/NewOffer";
+import NewOfferTranche from "./dashboard/broker/NewOfferTranche";
+import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
 
 function App() {
   return (
@@ -23,7 +28,13 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile/>} />
-      <Route path="/broker" element={<BrokerDashboard/>} />
+
+      <Route path="/broker/dashboard" element={<BrokerDashboard/>} />
+      <Route path="/broker/dashboard/new-client" element={<NewClient/>} />
+      <Route path="/broker/dashboard/allclients" element={<AllClients/>} />
+      <Route path="/broker/dashboard/new-offer" element={<NewOffer/>} />
+      <Route path="/broker/dashboard/new-offer-tranche" element={<NewOfferTranche/>} />
+      <Route path="/broker/dashboard/new-offer-timing" element={<NewOfferTiming/>} />
 
 
       <Route
