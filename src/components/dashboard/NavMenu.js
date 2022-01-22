@@ -156,7 +156,7 @@ export default function NavMenu() {
 									></i>
 									<div id="profile-menu-nav" className="bg-white shadow-md rounded">
 										<div id="profile" className="menu-nav-container">
-											<Link to="/user/client/profile">Profile</Link>
+											<Link to="/profile">Profile</Link>
 											<Link to="/user/client/edit-profile">Edit Profile</Link>
 										</div>
 										<hr className="hidden md:block" />
