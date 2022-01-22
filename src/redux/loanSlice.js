@@ -4,14 +4,31 @@
  *
  * **/
 
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { loanRequest } from "../services/auth.service.js";
+
+import { setServerMessage } from "./messageSlice";
 
 export const loanSlice = createSlice({
     name: "loan",
     initialState: [],
-    reducers: {}
+    reducers: {
+        createLoan: (state, action) => {
+            return;
+        },
+    }
 });
 
 export default loanSlice.reducer;
+
+export const asyncLoanRequest = (data) => (dispatch) => {
+    return loanRequest(data).then((response) => {
+
+        if(response.status === 200 || response.status === 201) {
+           dispatch(setServerMessage("Your loan has been created"));
+        }
+
+        return response
+    });
+};
