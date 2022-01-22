@@ -3,6 +3,7 @@
  *
  *
  * **/
+
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
@@ -58,6 +59,8 @@ export const signUpAsync = (data) => (dispatch) => {
 
 		if (response.status === 201) {
 			dispatch(setServerMessage("Account created"));
+
+			return response.data
 		}
 	});
 };
@@ -70,10 +73,13 @@ export const signInAsync = (data) => (dispatch) => {
 			const message = response.message;
 
 			dispatch(setServerMessage(message));
-			return
+
+			return	
 		}
 
 		dispatch(signInAction(response));
+
+		return response
 	});
 };
 
