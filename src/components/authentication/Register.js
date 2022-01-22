@@ -118,7 +118,9 @@ export default function Register() {
 		// Redux async call
 		dispatch(signUpAsync(data)).then((response) => {
 
-			const userType = response.user.groups[0]
+			console.log(response);
+
+			const userType = response.groups[0]
 
 			if (userType.name === "Client") {
 				navigate("/client/dashboard");
