@@ -65,6 +65,7 @@ export default function ClientDashboard() {
 						</p>
 						<Button
 							title="Update your profile"
+							link="/profile"
 							buttonClass="update-profile-cta"
 						/>
 					</div>

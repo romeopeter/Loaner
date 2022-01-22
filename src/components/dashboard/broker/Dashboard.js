@@ -97,7 +97,7 @@ const BrokerDashboard = () => {
                         </p>
                         <Button
                             title="Update my profile"
-                            link="#"
+                            link="/profile"
                             buttonClass="intro-cta"
                         />
                     </div>

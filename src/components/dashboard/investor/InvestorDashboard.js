@@ -39,6 +39,7 @@ export default function InvestorDashboard() {
 						</p>
 						<Button
 							title="Update your profile"
+							link="/profile"
 							buttonClass="update-profile-cta"
 						/>
 					</div>
