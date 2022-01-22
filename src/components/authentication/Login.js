@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signInAsync } from "../../redux/authSlice";
 
-import Alert from '@mui/material/Alert';
+// import Alert from '@mui/material/Alert';
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
@@ -191,23 +191,23 @@ export default function Login() {
 										/>
 									</div>
 
-									<div className="col-span-6 sm:col-span-4">
+									{/*<div className="col-span-6 sm:col-span-4">
 										{message === "Request failed with status code 401" ? (
 											<Alert variant="outlined" severity="error">
 								        		{"No account found with the given credentials."}
 								      		</Alert>
 							      		): ""}
-									</div>
+									</div>*/}
 
 									{/*Empty fields error*/}
-									<div className="col-span-6 sm:col-span-4">
+									{/*<div className="col-span-6 sm:col-span-4">
 										{formErrors.emptyFields !== "" ? (
 											
 											<Alert variant="outlined" severity="error">
 							        			{formErrors.emptyFields}
 							      		    </Alert>	
 								      	): ""}
-							      	</div>
+							      	</div>*/}
 
 									<div className="col-span-6 sm:col-span-4">
 										<div className="flex items-start">
