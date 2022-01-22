@@ -77,15 +77,38 @@ export default function Login() {
 		}
 
 		// Redux hook dispatches sign-in action (Login requst)
-		dispatch(signInAsync(data)).then(() => {
-			navigate(state?.path || "/client/dashboard");
+		dispatch(signInAsync(data)).then((response) => {
 
-			// Reload to update Redux state
-			window.location.reload()
+			console.log(response);
+
+			const userType = response.user.groups[0];
+
+			if (userType.name === "Client") {
+				navigate(state?.path || "/client/dashboard");
+
+				// Reload to update Redux state
+				window.location.reload()
+			}
+
+			if (userType.name === "Broker") {
+				navigate(state?.path || "/broker/dashboard");
+
+				// Reload to update Redux state
+				window.location.reload()
+			}
+
+			if (userType.name === "Investor") {
+				navigate(state?.path || "/investor/dashboard");
+
+				// Reload to update Redux state
+				window.location.reload()
+			}
+
+			return
 		});
 	};
 
-	if (isLoggedIn) return (<Navigate to="/dashboard" replace />);
+	if (isLoggedIn) return (<Navigate to="/" replace />);
 
 	return (
 		<>
