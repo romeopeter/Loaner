@@ -40,6 +40,9 @@ export default function Register() {
 	// Check login state
 	const { isLoggedIn } = useSelector((state) => state.auth);
 
+	// Server message
+	const {message: serverMessage} =  useSelector(state => state.message.server);
+
 	// State for react-phone-number plugin used for international phone numbers
 	const [phoneNumber, setPhoneNumber] = useState(undefined);
 
@@ -111,28 +114,38 @@ export default function Register() {
 			} 
 		}
 
-		if (form.confirmPassword !== form.password) {
-			alert.error("Your password does not match!");
+		if (form.password !== "" && form.password.length < 6) {
+			setForm((state) => ({...state,isLoading: false}));
+			alert.show("Password is too short");
+			return
+		}
+
+		if (form.confirmPassword !== "" && form.confirmPassword !== form.password) {
+			setForm((state) => ({...state,isLoading: false}));
+			alert.error("Password does not match!");
 			return
 		}
 
 		// Redux async call
 		dispatch(signUpAsync(data)).then((response) => {
 
-			console.log(response);
+			if ("status" in response && response.status == 201) {
+				const userType = response.data.groups[0];
 
-			const userType = response.data.groups[0];
+				if (userType.name === "Client") {
+					navigate("/client/dashboard");
+				}
 
-			if (userType.name === "Client") {
-				navigate("/client/dashboard");
-			}
+				if (userType.name === "Broker") {
+					navigate("/broker/dashboard");
+				}
 
-			if (userType.name === "Broker") {
-				navigate("/broker/dashboard");
-			}
-
-			if (userType.name === "Investor") {
-				navigate("/investor/dashboard");
+				if (userType.name === "Investor") {
+					navigate("/investor/dashboard");
+				}
+			} else {
+				serverMessage && alert.show(serverMessage);
+				setForm((state) => ({...state,isLoading: false}));
 			}
 		});
 	};
