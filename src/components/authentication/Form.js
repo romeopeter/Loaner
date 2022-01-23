@@ -52,25 +52,7 @@ export default function Form( props ) {
 		});
 	};
 
-	// Phone number validation
-	const validatePassword = (password) => {
-		if (password.length < 6) {
-			alert.show("Password must be at least 6 characters");
-			return
-		}
-
-		setFormError({ password: "" });
-	};
-
-	const confirmPassword = (password) => {
-		if (password.length < 6) {
-			alert.show("Password must have at least 6 characters");
-			return
-		}
-
-		setFormError({ password: "" });
-	};
-
+	
 	// OnChange handler
 	const handleChange = (e) => {
 		const target = e.target;
@@ -78,10 +60,6 @@ export default function Form( props ) {
 
 		const value =
 			target.type === "checkbox" ? target.checked : target.value;
-
-		if (name === "password") {
-			validatePassword(value)
-		}
 
 		setForm((state) => {
 			return {
