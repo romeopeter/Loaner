@@ -7,11 +7,22 @@ import store from "./redux/store";
 import "./assets/styles/index.css";
 import "./assets/styles/main.scss";
 
+import {transitions, positions, Provider as AlertProvider} from "react-alert";
+import AlertTemplate from 'react-alert-template-basic'
+
+const options = {
+  timeout: 5000,
+  position: positions.TOP_LEFT,
+  // offset: '30px',
+};
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <AlertProvider template={AlertTemplate} {...options}>
+          <App />
+        </AlertProvider>
       </Provider>
     </React.StrictMode>
   </BrowserRouter>,
