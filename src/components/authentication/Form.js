@@ -52,23 +52,9 @@ export default function Form( props ) {
 		});
 	};
 
-	const validateEmail = (email) => {
-		const emailRE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-		if (!emailRE.test(String(emailRE).toLowerCase())) {
-			setFormError(state => ({
-				...state,
-				emailAddress: "Email is invalid"
-			}));
-			return
-		} 
-
-		setFormError({ email: "" });
-	};
-
 	// Phone number validation
 	const validatePassword = (password) => {
-		if (password.length < 6) 
+		if (password.length < 6) {
 			alert.show("Password must be at least 6 characters");
 			return
 		}
@@ -92,10 +78,6 @@ export default function Form( props ) {
 
 		const value =
 			target.type === "checkbox" ? target.checked : target.value;
-
-		if (name === "emailAddress") {
-			validateEmail(value);
-		}
 
 		if (name === "password") {
 			validatePassword(value)
@@ -289,20 +271,6 @@ export default function Form( props ) {
 						/>
 					</div>
 				</div>
-
-				{/**** Start Alerts and error notifications ****/}
-
-				{/*Password mistmatch*/}
-				{/*<div className="col-span-12">
-					{formError.passwordMismatch !== "" ? console.log(formError.passwordMismatch): ""}
-		      	</div>*/}
-
-		      	{/*Minimum character check*/}
-				<div className="col-span-12">
-					{formError.password !== "" ? console.log(formError.password):""}
-				</div>
-
-				{/**** End Alerts and error notifications ****/}
 
 				<div className="col-span-12 text-left">
 					<Button
