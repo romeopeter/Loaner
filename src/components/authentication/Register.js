@@ -121,7 +121,7 @@ export default function Register() {
 
 			console.log(response);
 
-			const userType = response.groups[0];
+			const userType = response.data.groups[0];
 
 			if (userType.name === "Client") {
 				navigate("/client/dashboard");
@@ -134,8 +134,6 @@ export default function Register() {
 			if (userType.name === "Investor") {
 				navigate("/investor/dashboard");
 			}
-
-			return
 		});
 	};
 
