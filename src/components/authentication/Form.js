@@ -89,8 +89,6 @@ export default function Form( props ) {
 				[name]: value,
 			};
 		});
-
-		console.log(form);
 	};
 
 	return (
