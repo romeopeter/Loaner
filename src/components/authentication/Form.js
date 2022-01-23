@@ -1,12 +1,11 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-
-
-// import Alert from '@mui/material/Alert';
+import { useAlert } from "react-alert";
 
 import Button from "../Button";
+
+import 'react-phone-number-input/style.css';
 
 export default function Form( props ) {
 	const [state, setState] = useState({
@@ -17,9 +16,10 @@ export default function Form( props ) {
 
 	const { form, setForm } = props.formState;
 	const {phoneNumber, setPhoneNumber} = props.phoneNumberState
-	const {formErrors, setFormErrors} = props.setFormErrorState
+	const {formError, setFormError} = props.setFormErrorState
 
-	const { password: passwordMessage } = useSelector((state) => state.message.client);
+	// Alerts
+	const alert = useAlert()
 
 	// Form steps slide through
 	let finalFormStepRef = createRef();
@@ -56,27 +56,33 @@ export default function Form( props ) {
 		const emailRE = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 		if (!emailRE.test(String(emailRE).toLowerCase())) {
-			setFormErrors(state => ({
+			setFormError(state => ({
 				...state,
 				emailAddress: "Email is invalid"
 			}));
 			return
 		} 
 
-		setFormErrors({ email: "" });
+		setFormError({ email: "" });
 	};
 
 	// Phone number validation
 	const validatePassword = (password) => {
-		if (password.length < 6) {
-			setFormErrors(state => ({
-				...state,
-				password: "Password must have at least 6 characters"
-			}))
+		if (password.length < 6) 
+			alert.show("Password must be at least 6 characters");
 			return
 		}
 
-		setFormErrors({ password: "" });
+		setFormError({ password: "" });
+	};
+
+	const confirmPassword = (password) => {
+		if (password.length < 6) {
+			alert.show("Password must have at least 6 characters");
+			return
+		}
+
+		setFormError({ password: "" });
 	};
 
 	// OnChange handler
@@ -101,6 +107,8 @@ export default function Form( props ) {
 				[name]: value,
 			};
 		});
+
+		console.log(form);
 	};
 
 	return (
@@ -169,7 +177,7 @@ export default function Form( props ) {
 							value={form.role}
 							id="role"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							required
+							// required
 							onChange={(e) => handleChange(e)}
 						>
 							<option defaultValue="">Select role</option>
@@ -188,7 +196,7 @@ export default function Form( props ) {
 							autoComplete="email"
 							placeholder="Email address"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							required
+							// required
 							onChange={(e) => handleChange(e)}
 						/>
 					</div>
@@ -221,7 +229,7 @@ export default function Form( props ) {
 							autoComplete="phone-number"
 							placeholder="Enter phone number"
 							onChange={setPhoneNumber}
-							required
+							// required
 						/>
 					</div>
 				</div>
@@ -261,10 +269,9 @@ export default function Form( props ) {
 							id="password"
 							name="password"
 							value={form.password}
-							autoComplete="password"
 							placeholder="Password"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							required
+							// required
 							onChange={(e) => handleChange(e)}
 						/>
 					</div>
@@ -275,10 +282,9 @@ export default function Form( props ) {
 							id="confirm-password"
 							name="confirmPassword"
 							value={form.confirmPassword}
-							autoComplete="confirm-password"
 							placeholder="Confirm password"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							required
+							// required
 							onChange={(e) => handleChange(e)}
 						/>
 					</div>
@@ -288,23 +294,13 @@ export default function Form( props ) {
 
 				{/*Password mistmatch*/}
 				{/*<div className="col-span-12">
-					{passwordMessage !== "" ? (
-						
-						<Alert variant="outlined" severity="error">
-		        			{passwordMessage}
-		      		    </Alert>	
-			      	): ""}
+					{formError.passwordMismatch !== "" ? console.log(formError.passwordMismatch): ""}
 		      	</div>*/}
 
-
 		      	{/*Minimum character check*/}
-				{/*<div className="col-span-12">
-					{formErrors.password !== "" ? (
-						<Alert variant="outlined" severity="info">
-			        		{formErrors.password}!
-			     	    </Alert>
-					):""}
-				</div>*/}
+				<div className="col-span-12">
+					{formError.password !== "" ? console.log(formError.password):""}
+				</div>
 
 				{/**** End Alerts and error notifications ****/}
 
