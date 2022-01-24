@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-import Button from '../../Button';
 
 import NavMenu from '../NavMenu';
 
@@ -16,6 +15,7 @@ import Brokerdata from '../../../data/broker/DummyData';
 import { 
 	Flex,
 	Box,
+    Button,
 	Text,
     Table,
     Thead,
@@ -72,11 +72,16 @@ const BrokerDashboard = () => {
                             incididunt ut labore et dolore magna aliqua. Ut
                             enim ad minim veniam, quis nostrud exercitation.
                         </p>
-                        <Button
-                            title="Update my profile"
-                            link="#"
-                            buttonClass="intro-cta"
-                        />
+						<Button 
+                        flex={1} 
+                        bg={"#002276"} 
+                        px={["6"]} 
+                        color={"#fff"} 
+                        _hover={{bg:"#002276"}} 
+                        borderRadius={"0"} 
+                        as={Link} 
+                        to="/profile"  >Update my profile</Button>
+                         
                     </div>
                     <Flex color={"#fff"} justifyContent={"space-between"} bg="#555" position={"sticky"} mt={"3.5em"} py={['6']} px={["10"]} flexDirection={["column", "row"]}>
                         <h2 style={{fontSize: "1.3em", marginLeft:"2%"}} >Quick access</h2>
