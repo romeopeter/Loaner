@@ -36,7 +36,7 @@ const BrokerDashboard = () => {
                     className="bg-white px-16 py-10 shadow-md flex justify-start"
                 >
                     <div id="loan" className="dropdown-container mr-5">
-                        Clients{" "}
+                    <Link to="/broker/dashboard/allclients">Clients{" "}</Link>
                         <i
                             className="fa fa-caret-down"
                             aria-hidden="true"
@@ -85,7 +85,7 @@ const BrokerDashboard = () => {
                                 <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Link to="/broker/dashboard/new-client"><Text ml={["2"]}>New Client</Text></Link>
                             </Flex>
                             <Flex>
-                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Text ml={["2"]}>New Order</Text>
+                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Link to="/broker/dashboard/new-offer"><Text ml={["2"]}>New Order</Text></Link>
                             </Flex>
 
                         </Flex>

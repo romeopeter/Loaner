@@ -19,7 +19,9 @@ import AllClients from "./dashboard/broker/AllClients";
 import NewOffer from "./dashboard/broker/NewOffer";
 import NewOfferTranche from "./dashboard/broker/NewOfferTranche";
 import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
-
+import LoanSummary from "./dashboard/broker/LoanSummary";
+import AllLoanRequests from "./dashboard/broker/LoanRequests";
+import LoanOffer from "./dashboard/broker/LoanOffer";
 function App() {
   return (
     <ChakraProvider>
@@ -48,34 +50,49 @@ function App() {
         </RequireAuth>
       } />
       <Route path="/broker/dashboard" element={
-          <RequireAuth>
+          // <RequireAuth>
             <BrokerDashboard/>
-          </RequireAuth>
+          // </RequireAuth>
         } />
       <Route path="/broker/dashboard/new-client" element={
-        <RequireAuth>
+        // <RequireAuth>
           <NewClient/>
-        </RequireAuth>
+        // </RequireAuth>
       } />
       <Route path="/broker/dashboard/allclients" element={
-        <RequireAuth>
+        // <RequireAuth>
           <AllClients/>
-        </RequireAuth>
+        // </RequireAuth>
       } />
       <Route path="/broker/dashboard/new-offer" element={
-        <RequireAuth>
+        // <RequireAuth>
           <NewOffer/>
-        </RequireAuth>
+        // </RequireAuth>
       } />
       <Route path="/broker/dashboard/new-offer-tranche" element={
-        <RequireAuth>
+        // <RequireAuth>
           <NewOfferTranche/>
-        </RequireAuth>
+        // </RequireAuth>
       } />
       <Route path="/broker/dashboard/new-offer-timing" element={
-        <RequireAuth>
+        // <RequireAuth>
           <NewOfferTiming/>
-        </RequireAuth>
+        // </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/new-offer/summary" element={
+        // <RequireAuth>
+          <LoanSummary/>
+        // </RequireAuth>
+      } />
+       <Route path="/broker/dashboard/allloans/" element={
+        // <RequireAuth>
+          <AllLoanRequests/>
+        // </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/loan-offer/" element={
+        // <RequireAuth>
+          <LoanOffer/>
+        // </RequireAuth>
       } />
     </Routes>
     </ChakraProvider>
