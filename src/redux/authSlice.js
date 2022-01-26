@@ -50,31 +50,31 @@ export const signUpAsync = (data) => (dispatch) => {
 
 		// Check if error stack object exist
 		if ("stack" in response) {
-			const message = response.message;
+			const {data, status} = response.response;
+			const message = data.error;
 
 			dispatch(setServerMessage(message));
 
-			return
+			return response
 		}
 
 		if (response.status === 201) {
-			dispatch(setServerMessage("Account created"));
+			dispatch(setServerMessage("Please sign in."));
 
-			return response.data
+			return response
 		}
 	});
 };
 
 export const signInAsync = (data) => (dispatch) => {
 	return signInRequest(data).then((response) => {
-
-		// Check if error stack object exist
+		
+		// Check error
 		if ("stack" in response) {
 			const message = response.message;
+			// console.log(response.response)
 
 			dispatch(setServerMessage(message));
-
-			return	
 		}
 
 		dispatch(signInAction(response));

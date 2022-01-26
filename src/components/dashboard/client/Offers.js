@@ -316,10 +316,12 @@ export default function Offers() {
 										<div className="offer-button">
 											<Button
 												title="Edit draft"
+												link="/client/offers/offer/edit"
 												buttonClass="h-2 p-2 bg-grey"
 											/>
 											<Button
 												title="Publish"
+												link="/client/offers/offer/publish"
 												buttonClass="h-2 p-2 bg-white"
 											/>
 										</div>

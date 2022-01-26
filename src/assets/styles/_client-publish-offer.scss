@@ -1,25 +1,32 @@
 #orderbook-publish-offer {
-	position: relative;
 
+	/*MOBILE SCREENS*/
 	@include respond-below(sm) {
 		padding: 0 !important;
 
 		#offer-publication {
-			#header {
-			    margin-bottom: 2em !important;
-			    padding: 1em 0 0 1em !important;
+
+			#the-offer {
+				height: auto !important;
+				
+				.grid {
+					#offer-button {
+						button {
+							width: 100% !important;
+						}
+					}
+				}
 			}
 		}
 
-		#the-offer {
-			height: auto !important;
+		#offer-button {
+			background: #555555;
 
-			
-			.grid {
-				#offer-button {
-					button {
-						width: 100% !important;
-					}
+			button {
+				width: 100% !important;
+
+				&.push-loan {
+					margin-right: 0 !important;
 				}
 			}
 		}
@@ -32,44 +39,102 @@
 		}
 	}
 
-	background: $grey;
-	padding: 6em 4em;
+	/*LARGE SCREENS*/
+	position: relative;
+	background: $white;
 
 	#offer-publication {
-		#header {
-			font-size: 30px;
-			color: $white;
-			font-weight: bold;
-			margin-bottom: 3em;
+		background: $grey;
+		padding: 6em 3em;
+
+		input[type="checkbox"] {
+			width: 20px;
+			height: 20px;
+
+			&:focus {
+				outline: none !important;
+				border: none !important;
+			}
+		}
+
+		label {
+			font-family: $body-font;
+			font-size: 1.25rem;
+			vertical-align: middle;
 		}
 
 		#the-offer {
 			background: $white;
-			height: 500px;
+			height: auto;
 
-			#go-back {
-				background: lightgray;
-				height: 50px;
-				width: 50px;
-				margin-bottom: 50px;
-				text-align: center;
-
-				a {
-					font-size: 24px;
-					font-weight: bold;
-					text-align: center;
+			#select-category {
+				span {
+					font-family: $header-font;
 				}
-			}
 
-			form {
-				.grid {
+				#categories {
+					.category-checkbox {
+						margin-right: 10px;
+						color: $black !important;
 
-					#offer-button {
-						button {
-							width: 200px;
+						&:checked {
+							color: $black !important;
 						}
 					}
+
+					button.view-more {
+						color: $black;
+						height: auto;
+					}
 				}
+			}
+		}
+
+		#select-investors {
+			background-color: #e2e2e2;
+
+			option {
+				font-size: 20px;
+			}
+
+			/* width */
+			&::-webkit-scrollbar {
+			  width: 10px;
+			}
+
+			/* Track */
+			&::-webkit-scrollbar-track {
+			  background: #f1f1f1;
+			}
+
+			/* Handle */
+			&::-webkit-scrollbar-thumb {
+			  background: #888;
+			}
+
+			/* Handle on hover */
+			&::-webkit-scrollbar-thumb:hover {
+			  background: #555;
+			}
+		}
+
+		#save-as-checkboxes {
+			input[type="checkbox"] {
+				// background: transparent !important;
+
+				&:check, &:focus {
+					
+				}
+			}
+		}
+	}
+
+	#offer-button {
+		button {
+			width: 250px;
+
+			&.default-orderbook-button {
+				height: auto !important;
 			}
 		}
 	}

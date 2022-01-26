@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import Alert from '@mui/material/Alert';
 
 import { setClientMessage } from "../../redux/messageSlice";
 import { signUpAsync } from "../../redux/authSlice";
@@ -9,6 +8,7 @@ import { signUpAsync } from "../../redux/authSlice";
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
 import Form from "./Form";
+import { useAlert } from "react-alert";
 
 import phoneLady from "../../assets/images/phoneLady.jpg";
 import setBgImage from "../../utils/setBgImage";
@@ -29,20 +29,28 @@ export default function Register() {
 		isLoading: false,
 	});
 
-	const [formErrors, setFormErrors] = useState({
+	const [formError, setFormError] = useState({
 		emailAddress: "",
 		password: "",
+		passwordMismatch: "",
+		minPasswordChars: "",
 		emptyFields: "",
 	});
 
 	// Check login state
 	const { isLoggedIn } = useSelector((state) => state.auth);
 
+	// Server message
+	const {message: serverMessage} =  useSelector(state => state.message.server);
+
 	// State for react-phone-number plugin used for international phone numbers
 	const [phoneNumber, setPhoneNumber] = useState(undefined);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	// Alerts
+	const alert = useAlert()
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -83,7 +91,6 @@ export default function Register() {
 
 		const phone_number = phoneNumber;
 
-
 		const data = {
 			email: emailAddress,
 			role,
@@ -100,41 +107,46 @@ export default function Register() {
 		for (let props in data) {
 			if (data[props] === "" || data[props] === null) {
 				setForm((state) => ({...state,isLoading: false}));
-				setFormErrors((state) => ({...state, emptyFields: "Please fill in the fields"}));
-				return
+
+				alert.error("Please fill all fields");
+
+				return;
 			} 
 		}
 
-		if (form.confirmPassword !== form.password) {
-			dispatch(
-				setClientMessage({
-					field: "password",
-					message: "Password mismatch!",
-				})
-			);
-			return;
+		if (form.password !== "" && form.password.length < 6) {
+			setForm((state) => ({...state,isLoading: false}));
+			alert.show("Password is too short");
+			return
+		}
+
+		if (form.confirmPassword !== "" && form.confirmPassword !== form.password) {
+			setForm((state) => ({...state,isLoading: false}));
+			alert.error("Password does not match!");
+			return
 		}
 
 		// Redux async call
 		dispatch(signUpAsync(data)).then((response) => {
 
-			console.log(response);
+			if ("status" in response && response.status == 201) {
+				const userType = response.data.groups[0];
 
-			const userType = response.groups[0]
+				if (userType.name === "Client") {
+					navigate("/client/dashboard");
+				}
 
-			if (userType.name === "Client") {
-				navigate("/client/dashboard");
+				if (userType.name === "Broker") {
+					navigate("/broker/dashboard");
+				}
+
+				if (userType.name === "Investor") {
+					navigate("/investor/dashboard");
+				}
+			} else {
+				serverMessage && alert.show(serverMessage);
+				setForm((state) => ({...state,isLoading: false}));
 			}
-
-			if (userType.name === "Broker") {
-				navigate("/broker/dashboard");
-			}
-
-			if (userType.name === "Investor") {
-				navigate("/investor/dashboard");
-			}
-
-			return
 		});
 	};
 
@@ -209,19 +221,9 @@ export default function Register() {
 												phoneNumber,
 												setPhoneNumber,
 											}}
-											setFormErrorState={{formErrors, setFormErrors}}
+											setFormErrorState={{formError, setFormError}}
 										/>
 									</div>
-
-									{/*Empty fields error*/}
-									{/*<div className="col-span-12">
-										{formErrors.emptyFields !== "" ? (
-											
-											<Alert variant="outlined" severity="error">
-							        			{formErrors.emptyFields}
-							      		    </Alert>	
-								      	): ""}
-							      	</div>*/}
 
 									<div className="col-span-12">
 										<div className="flex items-start">

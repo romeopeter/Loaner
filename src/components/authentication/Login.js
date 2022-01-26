@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signInAsync } from "../../redux/authSlice";
 
-// import Alert from '@mui/material/Alert';
-
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
 
@@ -77,33 +75,27 @@ export default function Login() {
 
 		// Redux hook dispatches sign-in action (Login requst)
 		dispatch(signInAsync(data)).then((response) => {
+			// console.log(response);
 
-			console.log(response);
+			if ("user" in response) {
 
-			const userType = response.user.groups[0];
+				const userType = response.user.groups[0];
 
-			if (userType.name === "Client") {
-				navigate(state?.path || "/client/dashboard");
+				if (userType.name === "Client") {
+					navigate("/client/dashboard");
+					window.location.href = "/client/dashboard";
+				}
 
-				// Reload to update Redux state
-				window.location.reload()
+				if (userType.name === "Brocker") {
+					/*navigate("/broker/dashboard");
+					window.location.href = "/client/dashboard";*/
+				}
+
+				if (userType.name === "Investor") {
+					/*navigate("/investor/dashboard");
+					window.location.href = "/client/dashboard";*/
+				}
 			}
-
-			if (userType.name === "Broker") {
-				navigate(state?.path || "/broker/dashboard");
-
-				// Reload to update Redux state
-				window.location.reload()
-			}
-
-			if (userType.name === "Investor") {
-				navigate(state?.path || "/investor/dashboard");
-
-				// Reload to update Redux state
-				window.location.reload()
-			}
-
-			return
 		});
 	};
 
@@ -190,24 +182,6 @@ export default function Login() {
 											onChange={(e) => handleChange(e)}
 										/>
 									</div>
-
-									{/*<div className="col-span-6 sm:col-span-4">
-										{message === "Request failed with status code 401" ? (
-											<Alert variant="outlined" severity="error">
-								        		{"No account found with the given credentials."}
-								      		</Alert>
-							      		): ""}
-									</div>*/}
-
-									{/*Empty fields error*/}
-									{/*<div className="col-span-6 sm:col-span-4">
-										{formErrors.emptyFields !== "" ? (
-											
-											<Alert variant="outlined" severity="error">
-							        			{formErrors.emptyFields}
-							      		    </Alert>	
-								      	): ""}
-							      	</div>*/}
 
 									<div className="col-span-6 sm:col-span-4">
 										<div className="flex items-start">
