@@ -7,11 +7,9 @@ import { Link } from "react-router-dom";
 import { 
 	Flex,
 	Box,
-	Image,
 	FormControl,
 	FormLabel,
-	FormErrorMessage,
-	FormHelperText,
+    Input,
 	Select,
 	Heading,
 	Button,
@@ -65,25 +63,32 @@ const NewClient = () => {
                                 </Select>
                             </Box>
                             <Box flex={"1"} mx={["0","10"]}>
-                                <FormLabel htmlFor='select'/>
-                                <Select   bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Select type of offer'>
-                                    <option value='option1'>Option 1</option>
-                                    <option value='option2'>Option 2</option>
-                                    <option value='option3'>Option 3</option>
-                                </Select>
+                                <FormLabel htmlFor='first name'/>
+                                <Input  type={"text"} bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='First name' />
+                              
                             </Box>
                             <Box flex={"1"} >
                                 <FormLabel htmlFor='select'/>
-                                <Select  textAlign={"center"} bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Select type of offer'>
-                                    <option value='option1'>Option 1</option>
-                                    <option value='option2'>Option 2</option>
-                                    <option value='option3'>Option 3</option>
-                                </Select>
+                                <Input  type={"text"}  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Last name' />
                             </Box>
                         </Flex>
                         <Flex flexDirection={["column", "row"]} my={[10]}>
                             <Box flex={"1"} >
                                 <FormLabel htmlFor='select'/>
+                                <Input type={"text"}  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Company' />
+                            </Box>
+                            <Box flex={"1"} mx={["0","10"]}>
+                                <FormLabel htmlFor='select'/>
+                                <Input type="email"   bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Email address' />
+                            </Box>
+                            <Box flex={"1"} >
+                                <FormLabel htmlFor='select'/>
+                                <Input type={"password"}   bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Password' />
+                            </Box>
+                        </Flex>
+                        {/* <Flex flexDirection={["column", "row"]} >
+                            <Box flex={"1"} >
+                                <FormLabel htmlFor='select'/>
                                 <Select  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"} placeholder='Select type of offer'>
                                     <option value='option1'>Option 1</option>
                                     <option value='option2'>Option 2</option>
@@ -106,33 +111,7 @@ const NewClient = () => {
                                     <option value='option3'>Option 3</option>
                                 </Select>
                             </Box>
-                        </Flex>
-                        <Flex flexDirection={["column", "row"]} >
-                            <Box flex={"1"} >
-                                <FormLabel htmlFor='select'/>
-                                <Select  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"} placeholder='Select type of offer'>
-                                    <option value='option1'>Option 1</option>
-                                    <option value='option2'>Option 2</option>
-                                    <option value='option3'>Option 3</option>
-                                </Select>
-                            </Box>
-                            <Box flex={"1"} mx={["0","10"]}>
-                                <FormLabel htmlFor='select'/>
-                                <Select   bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Select type of offer'>
-                                    <option value='option1'>Option 1</option>
-                                    <option value='option2'>Option 2</option>
-                                    <option value='option3'>Option 3</option>
-                                </Select>
-                            </Box>
-                            <Box flex={"1"} >
-                                <FormLabel htmlFor='select'/>
-                                <Select  textAlign={"center"} bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"}  placeholder='Select type of offer'>
-                                    <option value='option1'>Option 1</option>
-                                    <option value='option2'>Option 2</option>
-                                    <option value='option3'>Option 3</option>
-                                </Select>
-                            </Box>
-                        </Flex>
+                        </Flex> */}
                     </FormControl>
                 </Flex>
                 <Box minH={["15vh"]} mt={[10]} p={[10]}>

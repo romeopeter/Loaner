@@ -14,18 +14,12 @@ import {
 	Heading,
 	Button,
     ButtonGroup,
-    useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
+    
 } from '@chakra-ui/react';
 
 
 
 const LoanSummary = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
     <DocumentHead title="New Client" />
@@ -170,25 +164,12 @@ const LoanSummary = () => {
 						<Button mt="10" p={["6"]} bg={"#C4C4C4"} color={"#000"} _hover={{bg:"#C4C4C4"}} w="100%" as={Link} to="/broker/dashboard/new-offer/summary">Save as draft</Button>
 						<Button mt="10" p={["6"]} bg={"#002276"} color={"#fff"} _hover={{bg:"#002276"}}  w="100%" as={Link} to="/broker/dashboard/new-offer/summary">Share</Button>
                     </ButtonGroup>
-					<Button mt="6" p={["6"]} bg={"#AAAAAA"} color={"#fff"} _hover={{bg:"#AAAAAA"}}  w="100%" onClick={onOpen}>Publish</Button>
+					<Button mt="6" p={["6"]} bg={"#AAAAAA"} color={"#fff"} _hover={{bg:"#AAAAAA"}}  w="100%" >Publish</Button>
                     </Box>
                     
                   </Box>
               </Flex>
-              <Modal size="sm"isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} isCentered borderRadius={["0px"]}>
-                <ModalOverlay />
-                <ModalContent >
-                <ModalBody width={"70%"} margin={"auto"} pb={[8]}>
-                    <ModalHeader>Congratulations</ModalHeader>
-                    <Text>Your loan has been published</Text>
-                    <Flex justifyContent={"center"} alignItems={"center"}>
-                    <Button mt={[6]} as={Link} to="/broker/dashboard" variant='ghost' bg={"#008060"} color={"#fff"} _hover={{bg:"#008060"}} >Go home</Button>
-                    </Flex>
-                </ModalBody>
-
-          
-                </ModalContent>
-            </Modal>
+             
         </main>
         </OrderbookLayout>
         

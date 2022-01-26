@@ -22,6 +22,7 @@ import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
 import LoanSummary from "./dashboard/broker/LoanSummary";
 import AllLoanRequests from "./dashboard/broker/LoanRequests";
 import LoanOffer from "./dashboard/broker/LoanOffer";
+import SelectInvestor from "./dashboard/broker/SelectInvestor";
 function App() {
   return (
     <ChakraProvider>
@@ -94,7 +95,13 @@ function App() {
           <LoanOffer/>
         // </RequireAuth>
       } />
+      <Route path="/broker/dashboard/loan-offer/select-investor" element={
+        // <RequireAuth>
+          <SelectInvestor/>
+        // </RequireAuth>
+      } />
     </Routes>
+    
     </ChakraProvider>
   );
 }
