@@ -26,7 +26,12 @@ export const asyncLoanRequest = (data) => (dispatch) => {
     return loanRequest(data).then((response) => {
 
         if(response.status === 200 || response.status === 201) {
-           dispatch(setServerMessage("Your loan has been created"));
+           dispatch(setServerMessage("Loan created succesfully"));
+        }
+
+        // Check error
+        if ("stack" in response) {
+            dispatch(setServerMessage(response.message));
         }
 
         return response

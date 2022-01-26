@@ -16,15 +16,13 @@ export default function LoanRequest() {
 	const pageName = "Loan request";
 
 	const [formState, setFormState] = useState({
-		generalTerms: {
-			dealType: "",
-			// issuer: "",
-			guarantor: "",
-			dealName: "",
-			projectName: "",
-			dealOwner: "",
-			dealTeam: "",
-		},
+		dealType: "",
+		// issuer: "",
+		guarantor: "",
+		dealName: "",
+		projectName: "",
+		dealOwner: "",
+		dealTeam: "",
 		status: "",
 		trancheName: "",
 		trancheSize: {
@@ -37,7 +35,10 @@ export default function LoanRequest() {
 			dayCount: "",
 			offerType: {
 				name: "",
-				bookBuild: "",
+				fixedPrice: {
+					discountRate: "",
+					impliedYield: "",
+				}
 			},
 		},
 		timing: {
@@ -74,58 +75,71 @@ export default function LoanRequest() {
 	};
 
 	const handleSubmit = () => {
+		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
+
 		const data = {
-			deal_type: formState.generalTerms.dealType,
-			// issuer: formState.generalTerms.issuer,
-			guarantor: formState.generalTerms.guarantor,
-			deal_name: formState.generalTerms.dealName,
-			project_name: formState.generalTerms.projectName,
-			deal_owner: formState.generalTerms.dealOwner,
-			deal_team: formState.generalTerms.dealTeam,
-			status: formState.status,
-			tranche_name: formState.trancheName,
-			tranche_size: {
-				currency: formState.trancheSize.currency,
-				value: formState.trancheSize.value,
-				per_value: formState.trancheSize.parValue,
-				min_subscription: formState.trancheSize.minSubscription,
-			},
-			pricing: {
-				day_count: formState.pricing.dayCount,
-				offer_type: {
-					name: formState.pricing.offerType.name,
-					book_build: formState.pricing.offerType.bookBuild,
+			deal_type: formState.dealType,
+			guarantor: formState.guarantor,
+			deal_name: formState.dealName,
+			project_name: formState.projectName,
+			deal_owner: formState.dealOwner,
+			deal_team: formState.dealTeam,
+			user_id: currentUser ? currentUser.id : "",
+			tranche_id: {
+				status: formState.status,
+				eligible_investors: formState.eligibleInvestors,
+				size: {
+					minimum_subscription: {
+						currency: formState.trancheSize.currency,
+						amount: formState.trancheSize.minSubscription,
+					},
+					value: {
+						face_value: null,
+						discount_value: null,
+						value: formState.trancheSize.parValue
+					},
+					currency: formState.trancheSize.currency,
+					amount: formState.trancheSize.value
 				},
-			},
-			timing: {
-				offer_start: formState.timing.offerStart,
-				offer_end: formState.timing.offerEnd,
-				allotment_date: formState.timing.allotmentDate,
-				settlement_date: formState.timing.settlementDate,
-				maturity_date: formState.timing.maturityDate,
-			},
-			use_of_proceeds: formState.useOfProceeds,
-			tax_consideration: formState.taxConsideration,
-			eligible_investors: formState.eligibleInvestors,
-			rating: {
-				name: formState.rating.name,
-				scale: formState.rating.scale,
+				timing: {
+					offer_start: formState.timing.offerStart,
+					offer_end: formState.timing.offerEnd,
+					allotment_date: formState.timing.allotmentDate,
+					settlement_date: formState.timing.settlementDate,
+					maturity_date: formState.timing.maturityDate,
+					first_coupon_date: null
+				},
+				ratings: {
+					name: formState.rating.name,
+					scale: formState.rating.scale,
+				},
+				offer_type:  formState.pricing.offerType.name,
+				name: formState.trancheName, // tranche_name
+				use_of_proceeds: formState.useOfProceeds,
+				tax_consideration: formState.taxConsideration,
+				pricing: {
+					day_count: formState.pricing.dayCount,
+					coupon_type: "fixed",
+					benchmark: null,
+					coupon_frequency: null,
+					call_option: null,
+					offer_type: {
+						fixed_price: {
+							discount_rate: Number(formState.pricing.offerType.fixedPrice.discountRate).toFixed(3) ,
+							implied_yield: Number(formState.pricing.offerType.fixedPrice.impliedYield).toFixed(3) 
+						},
+					},
+				},
 			},
 		};
 
 		dispatch(asyncLoanRequest(data)).then((response) => {
 			setIsLoading(true);
 
-			// Check if error stack object exist
+			// Check error.
 			if ("stack" in response) {
-				const message = response.message;
-
-				dispatch(setServerMessage(message));
-
 				setIsLoading(false);
-
 				console.log("Loan not created");
-
 				return;
 			}
 
@@ -184,7 +198,7 @@ export default function LoanRequest() {
 							{!summaryState ? (
 								<div id="summary-intro" className="mt-20 ml-20">
 									<h2 className="text-2xl font-bold mb-5">
-										Loan offer Summary
+										Loan Offer Summary
 									</h2>
 									<p className="font-bold">
 										View your loan summary here.
@@ -227,7 +241,7 @@ export default function LoanRequest() {
 												<td>
 													<small>Type of offer</small>
 													<span>
-														{formState.generalTerms
+														{formState
 															.dealType !== "" &&
 															formState
 																.generalTerms
@@ -321,13 +335,13 @@ export default function LoanRequest() {
 											<Button
 												type="button"
 												title="Save as draft"
-												buttonClass="col-span-1 bg-gray-400 rounded"
+												buttonClass="col-span-2 bg-gray-400 rounded"
 											/>
-											<Button
+											{/*<Button
 												type="button"
 												title="Share"
 												buttonClass="col-span-1 rounded bg-blue-600 rounded share"
-											/>
+											/>*/}
 										</div>
 										<Button
 											type="button"

@@ -22,6 +22,7 @@ const signInRequest = (data) => {
 	return axios
 		.post(`${API_URL}/api/v1/registration/sign_in/`, data)
 		.then((response) => {
+
 			if (response.data.tokens.access) {
 				// Store access token in browser storage
 				localStorage.setItem("USER", JSON.stringify(response.data));
@@ -43,6 +44,15 @@ const loanRequest = (data) => {
 	return axios
 		.post(`${requestURL}/api/v1/loan_request/cp/`, data)
 		.catch((error) => error);
+
+        // Get refresh token
+        const {tokens: {refresh}} = JSON.parse(localStorage.getItem("USER"));
+
+        // Modify header in config
+
+        // Make new request for access token
+
+        // Save token in storage
 };
 
 export { signUpRequest, signInRequest, loanRequest };

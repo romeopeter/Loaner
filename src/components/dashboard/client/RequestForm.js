@@ -1,5 +1,4 @@
 import React, { useState, createRef } from "react";
-// import Alert from "@mui/material/Alert";
 
 import Button from "../../Button";
 
@@ -14,6 +13,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		isValidated: true,
 		emptyFields: "",
 	});
+
+	const [hiddenFieldTrigger, setHiddenFieldTrigger] = useState({
+		dealType: "",
+		offerType: ""
+	})
 
 	const secondSlideRef = createRef();
 	const lastSlideSlideRef = createRef();
@@ -98,6 +102,31 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		});
 	};
 
+	const handleOfferTypeChange = (e) => {
+
+		// Set it in form state
+		setFormState((state) => {
+			return {
+				...state,
+				pricing: {
+					...state.pricing,
+					offerType: {
+						...state.pricing.offerType,
+						name: e.target.value,
+					},
+				},
+			};
+		})
+
+		// set in state to trigger offer type fields to show
+		setHiddenFieldTrigger(state => {
+			return {
+				...state,
+				offerType: e.target.value
+			}
+		});
+	}
+
 	const handleValidation = (e) => {
 		e.preventDefault();
 
@@ -144,7 +173,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									name="dealType"
 									id="dealType"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.dealType}
+									value={formState.dealType}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -153,10 +182,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<option defaultValue="">
 										Select deal type
 									</option>
-									<option value="Commercial paper">
+									<option value="CP">
 										Commercial paper
 									</option>
-									<option value="Bond">Bond</option>
+									<option value="bond">Bond</option>
 								</select>
 							</div>
 
@@ -167,10 +196,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									disabled={true}
 									style={{ cursor: "not-allowed" }}
-									/*value={formState.generalTerms.issuer}
-									onChange={(e) =>
-										handleChange(e, "generalTerms")
-									}*/
 									// required
 								>
 									<option defaultValue="Client/issue">
@@ -186,7 +211,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="guarantor"
 									placeholder="Guarantor"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.guarantor}
+									value={formState.guarantor}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -200,7 +225,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealName"
 									placeholder="Deal name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.dealName}
+									value={formState.dealName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -214,7 +239,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="projectName"
 									placeholder="Project name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.projectName}
+									value={formState.projectName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -229,7 +254,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealOwner"
 									placeholder="Deal owner"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.dealOwner}
+									value={formState.dealOwner}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -244,7 +269,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									id="dealTeam"
 									placeholder="Deal team"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.generalTerms.dealTeam}
+									value={formState.dealTeam}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
@@ -389,31 +414,25 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option defaultValue="">
 											Min subscription
 										</option>
-										<option value="500,000">
+										<option value="500000">
 											NGN 500,000
 										</option>
-										<option value="10,000,000">
+										<option value="10000000">
 											NGN 10,000,000
 										</option>
-										<option value="25,000,000">
+										<option value="25000000">
 											NGN 25,000,000
 										</option>
-										<option value="other">Other</option>
-
-										<option value="line">
-											____________________________________________
-										</option>
-
-										<option value="100,000">
+										<option value="100000">
 											USD 100,000
 										</option>
-										<option value="200,000">
+										<option value="200000">
 											USD 200,000
 										</option>
-										<option value="500,000">
+										<option value="500000">
 											USD 500,000
 										</option>
-										<option value="1,000,000">
+										<option value="1000000">
 											USD 1,000,000
 										</option>
 										<option value="other">Other</option>
@@ -428,8 +447,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<p className="py-2">pricing</p>
 							</div>
 
-							<div className="grid grid-cols-1 gap-4">
-								<div className="col-span-12">
+							<div className="grid grid-cols-2 gap-4">
+								<div className="col-span-1">
 									<select
 										name="dayCount"
 										id="day-count"
@@ -442,27 +461,53 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option defaultValue="">
 											Day Count
 										</option>
-										<option value="actual/actual">
+										<option value="actual / actual">
 											Actual / Actual
 										</option>
 										<option value="30/360">30 / 360</option>
-										<option value="actual/360">
+										<option value="actual / 360">
 											Actual / 360
 										</option>
-										<option value="actual/365">
+										<option value="actual / 365">
 											Actual / 365
+										</option>
+									</select>
+								</div>
+								<div className="col-span-1">
+									<select
+										name="offerType"
+										id="offer-type"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+										value={
+											formState.pricing.offerType
+												.name
+										}
+										onChange={(e) => handleOfferTypeChange(e)}
+									>
+
+										<option defaultValue="">
+											Offer type
+										</option>
+										<option value="fixed price">
+											Fixed price
+										</option>
+										<option value="book build">
+											Book build
 										</option>
 									</select>
 								</div>
 							</div>
 
 							<div className="grid grid-cols-2 gap-4 mt-5">
+
 								<div className="col-span-1">
-									<select
-										name="fixedPrice"
-										id="fixed-price"
+									{hiddenFieldTrigger.offerType === "fixed price"? (<input
+										type="text"
+										name="discountRate"
+										id="discount-rate"
+										placeholder="Discount rate"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={formState.pricing.offerType.name}
+										value={formState.pricing.offerType.fixedPrice.discountRate}
 										onChange={(e) =>
 											setFormState((state) => {
 												return {
@@ -472,35 +517,27 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														offerType: {
 															...state.pricing
 																.offerType,
-															name: e.target
-																.value,
+															fixedPrice: {
+																...state.pricing
+																.offerType.fixedPrice,
+																discountRate: e.target.value
+															}
 														},
 													},
 												};
 											})
 										}
-									>
-										<option defaultValue="">
-											Fixed price (offer type)
-										</option>
-										<option value="discount-rate">
-											Discount rate
-										</option>
-										<option value="implied-yield">
-											Implied yield
-										</option>
-									</select>
+								    />):null}
 								</div>
 
 								<div className="col-span-1">
-									<select
-										name="bookBuild"
-										id="buildType"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-										value={
-											formState.pricing.offerType
-												.bookBuild
-										}
+									{hiddenFieldTrigger.offerType === "fixed price"? (<input
+										type="text"
+										name="impliedYield"
+										id="implied-yield"
+										placeholder="Implied yield"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										value={formState.pricing.offerType.fixedPrice.impliedYield}
 										onChange={(e) =>
 											setFormState((state) => {
 												return {
@@ -510,22 +547,37 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														offerType: {
 															...state.pricing
 																.offerType,
-															bookBuild:
-																e.target.value,
+															fixedPrice: {
+																...state.pricing
+																.offerType.fixedPrice,
+																impliedYield: e.target.value
+															}
 														},
 													},
 												};
 											})
 										}
-									>
-										<option defaultValue="">
-											Book build (offer type)
-										</option>
-										<option value="discount-rate-range">
-											Discount rate range
-										</option>
-										<option value="yield">Yield</option>
-									</select>
+								    />):null}
+								</div>
+
+								<div className="col-span-1">
+									{hiddenFieldTrigger.offerType === "book build"?(<input
+										type="text"
+										name="discountRateRange"
+										id="discount-rate-range"
+										placeholder="Discount rate range"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+								    />):null}
+								</div>
+
+								<div className="col-span-1">
+									{hiddenFieldTrigger.offerType === "book build"?(<input
+										type="text"
+										name="yield"
+										id="yield"
+										placeholder="Yield"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+								    />):null}
 								</div>
 							</div>
 						</div>
