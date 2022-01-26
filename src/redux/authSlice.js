@@ -68,14 +68,13 @@ export const signUpAsync = (data) => (dispatch) => {
 
 export const signInAsync = (data) => (dispatch) => {
 	return signInRequest(data).then((response) => {
-
-		// Check if error stack object exist
+		
+		// Check error
 		if ("stack" in response) {
 			const message = response.message;
+			// console.log(response.response)
 
 			dispatch(setServerMessage(message));
-
-			return	
 		}
 
 		dispatch(signInAction(response));
