@@ -76,7 +76,6 @@ export default function Login() {
 
 		// Redux hook dispatches sign-in action (Login requst)
 		dispatch(signInAsync(data)).then((response) => {
-			// console.log(response);
 
 			if ("user" in response) {
 
@@ -87,14 +86,14 @@ export default function Login() {
 					window.location.href = "/client/dashboard";
 				}
 
-				if (userType.name === "Brocker") {
-					/*navigate("/broker/dashboard");
-					window.location.href = "/client/dashboard";*/
+				if (userType.name === "Broker") {
+					navigate("/broker/dashboard");
+					window.location.href = "/client/dashboard";
 				}
 
 				if (userType.name === "Investor") {
-					/*navigate("/investor/dashboard");
-					window.location.href = "/client/dashboard";*/
+					navigate("/investor/dashboard");
+					window.location.href = "/client/dashboard";
 				}
 			}
 		});
