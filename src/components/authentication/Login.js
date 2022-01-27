@@ -83,17 +83,17 @@ export default function Login() {
 
 				if (userType.name === "Client") {
 					navigate("/client/dashboard");
-					window.location.href = "/client/dashboard";
+					window.location.reload();
 				}
 
 				if (userType.name === "Broker") {
 					navigate("/broker/dashboard");
-					window.location.href = "/client/dashboard";
+					window.location.reload();
 				}
 
 				if (userType.name === "Investor") {
 					navigate("/investor/dashboard");
-					window.location.href = "/client/dashboard";
+					window.location.reload();
 				}
 			}
 		});
