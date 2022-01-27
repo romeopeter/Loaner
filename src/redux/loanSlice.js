@@ -6,7 +6,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-import { loanRequest } from "../services/auth.service.js";
+import { loanRequest } from "../services/loan.service.js";
 
 import { setServerMessage } from "./messageSlice";
 
