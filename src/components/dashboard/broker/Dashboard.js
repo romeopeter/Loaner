@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { signOutAsync } from "../../../redux/authSlice";
 
-import Button from '../../Button';
 
 import NavMenu from '../NavMenu';
 
@@ -21,6 +20,7 @@ import Brokerdata from '../../../data/broker/DummyData';
 import { 
 	Flex,
 	Box,
+    Button,
 	Text,
     Table,
     Thead,
@@ -61,7 +61,7 @@ const BrokerDashboard = () => {
                     className="bg-white px-16 py-10 shadow-md flex justify-start"
                 >
                     <div id="loan" className="dropdown-container mr-5">
-                        Clients{" "}
+                    <Link to="/broker/dashboard/allclients">Clients{" "}</Link>
                         <i
                             className="fa fa-caret-down"
                             aria-hidden="true"
@@ -95,11 +95,17 @@ const BrokerDashboard = () => {
                             incididunt ut labore et dolore magna aliqua. Ut
                             enim ad minim veniam, quis nostrud exercitation.
                         </p>
-                        <Button
-                            title="Update my profile"
-                            link="/profile"
-                            buttonClass="intro-cta"
-                        />
+                        
+						<Button 
+                        flex={1} 
+                        bg={"#002276"} 
+                        px={["6"]} 
+                        color={"#fff"} 
+                        _hover={{bg:"#002276"}} 
+                        borderRadius={"0"} 
+                        as={Link} 
+                        to="/profile"  >Update my profile</Button>
+                         
                     </div>
                     <Flex color={"#fff"} justifyContent={"space-between"} bg="#555" position={"sticky"} mt={"3.5em"} py={['6']} px={["10"]} flexDirection={["column", "row"]}>
                         <h2 style={{fontSize: "1.3em", marginLeft:"2%"}} >Quick access</h2>
@@ -108,7 +114,7 @@ const BrokerDashboard = () => {
                                 <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Link to="/broker/dashboard/new-client"><Text ml={["2"]}>New Client</Text></Link>
                             </Flex>
                             <Flex>
-                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Text ml={["2"]}>New Order</Text>
+                                <Box w={["30px"]} h={["30px"]} borderRadius={"50%"} bg={"#fff"} m="auto"></Box><Link to="/broker/dashboard/new-offer"><Text ml={["2"]}>New Order</Text></Link>
                             </Flex>
 
                         </Flex>

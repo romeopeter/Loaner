@@ -29,7 +29,10 @@ import AllClients from "./dashboard/broker/AllClients";
 import NewOffer from "./dashboard/broker/NewOffer";
 import NewOfferTranche from "./dashboard/broker/NewOfferTranche";
 import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
-
+import LoanSummary from "./dashboard/broker/LoanSummary";
+import AllLoanRequests from "./dashboard/broker/LoanRequests";
+import LoanOffer from "./dashboard/broker/LoanOffer";
+import SelectInvestor from "./dashboard/broker/SelectInvestor";
 function App() {
   return (
     <ChakraProvider>
@@ -181,6 +184,26 @@ function App() {
           }
         />
       </Routes>
+      <Route path="/broker/dashboard/new-offer/summary" element={
+        <RequireAuth>
+          <LoanSummary/>
+        </RequireAuth>
+      } />
+       <Route path="/broker/dashboard/allloans/" element={
+        <RequireAuth>
+          <AllLoanRequests/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/loan-offer/" element={
+        <RequireAuth>
+          <LoanOffer/>
+        </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/loan-offer/select-investor" element={
+        <RequireAuth>
+          <SelectInvestor/>
+        </RequireAuth>
+      } />
     </ChakraProvider>
   );
 }

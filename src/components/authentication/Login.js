@@ -29,7 +29,8 @@ export default function Login() {
 		emptyFields: "",
 	});
 
-	const { isLoggedIn } = useSelector((state) => state.auth);
+	const { isLoggedIn } = true;
+	// useSelector((state) => state.auth);
 
 	const { message } = useSelector((state) => state.message.server);
 
