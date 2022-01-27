@@ -221,6 +221,27 @@ function App() {
             // </RequireAuth>
           }
         />
+     
+        <Route path="/broker/dashboard/new-offer/summary" element={
+          <RequireAuth>
+            <LoanSummary/>
+          </RequireAuth>
+        } />
+         <Route path="/broker/dashboard/allloans/" element={
+          <RequireAuth>
+            <AllLoanRequests/>
+          </RequireAuth>
+        } />
+        <Route path="/broker/dashboard/loan-offer/" element={
+          <RequireAuth>
+            <LoanOffer/>
+          </RequireAuth>
+        } />
+        <Route path="/broker/dashboard/loan-offer/select-investor" element={
+          <RequireAuth>
+            <SelectInvestor/>
+          </RequireAuth>
+        } />
       </Routes>
     </ChakraProvider>
   );
