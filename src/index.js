@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter} from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
 import { Provider } from 'react-redux'
 import App from "./components/App";
 import store from "./redux/store";
@@ -17,7 +17,7 @@ const options = {
 };
 
 ReactDOM.render(
-  <HashRouter>
+  <BrowserRouter>
     <React.StrictMode>
       <Provider store={store}>
         <AlertProvider template={AlertTemplate} {...options}>
@@ -25,7 +25,7 @@ ReactDOM.render(
         </AlertProvider>
       </Provider>
     </React.StrictMode>
-  </HashRouter>,
+  </BrowserRouter>,
   document.getElementById("root")
 );
 
