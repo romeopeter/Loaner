@@ -41,7 +41,7 @@ export default function ClientDashboard() {
 				<section id="dashboard-intro-container">
 					<div
 						id="loan-invest-dropdown"
-						class="bg-white px-16 py-10 shadow-md flex justify-start"
+						className="bg-white px-16 py-10 shadow-md flex justify-start"
 					>
 						<div id="loan" className="dropdown-container">
 							Loan{" "}
@@ -156,10 +156,6 @@ export default function ClientDashboard() {
 											type="button"
 											buttonClass="h-2 p-2 bg-grey"
 										/>
-										{/*<i
-											class="fa fa-long-arrow-right"
-											aria-hidden="true"
-										></i>*/}
 										<Button
 											title="Publish"
 											type="button"
@@ -191,10 +187,7 @@ export default function ClientDashboard() {
 											type="button"
 											buttonClass="h-2 p-2 bg-grey"
 										/>
-										{/*<i
-											class="fa fa-long-arrow-right"
-											aria-hidden="true"
-										></i>*/}
+										
 										<Button
 											title="Publish"
 											type="button"
@@ -226,17 +219,14 @@ export default function ClientDashboard() {
 											type="button"
 											buttonClass="h-2 p-2 last-button"
 										/>
-										{/*<i
-											class="fa fa-long-arrow-right"
-											aria-hidden="true"
-										></i>*/}
+										
 									</div>
 								</div>
 							</div>
 							<div id="view-more" className="text-right">
 								View more{" "}
 								<i
-									class="fa fa-long-arrow-right"
+									className="fa fa-long-arrow-right"
 									aria-hidden="true"
 								></i>
 							</div>
