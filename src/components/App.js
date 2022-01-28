@@ -40,7 +40,13 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
+
+        {/*Profile*/}
+        <Route path="/profile" element={
+          <RequireAuth>
+            <Profile />
+          </RequireAuth>} 
+        />
 
         {/*Client dashboard*/}
         <Route
