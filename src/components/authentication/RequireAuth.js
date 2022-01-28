@@ -6,7 +6,6 @@ export default function RequireAuth({ children }) {
 	const location = useLocation();
 
 	const { isLoggedIn } = useSelector((state) => state.auth);
-	const testLogin = true;
 
 	return isLoggedIn === true ? (
 		children
