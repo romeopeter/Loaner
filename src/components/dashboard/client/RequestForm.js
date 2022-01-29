@@ -6,6 +6,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const { formState, setFormState } = requestFormState;
 	const { summaryState, setSummaryState, handleModal } = showSummary;
 
+	const secondSlideRef = createRef();
+	const lastSlideSlideRef = createRef();
+
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
 		secondSlideIn: false,
@@ -16,17 +19,15 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 	const [hiddenFieldTrigger, setHiddenFieldTrigger] = useState({
 		dealType: "",
-		offerType: ""
-	})
+		offerType: "",
+		customMinimumSub: false,
+	});
 
-	const secondSlideRef = createRef();
-	const lastSlideSlideRef = createRef();
-
-	/**Handles the slide-in and slide-out of the second form 
-		field set (slide-2)
+	/**Methods handle the slide-in and slide-out of second and third form 
+		field.
 	**/
 	const handleSecondFormSlideIn = () => {
-		const isSlidedIn = secondSlideRef.current.classList.toggle("slide-out");
+		const isSlidedIn = secondSlideRef.current.classList.add("slide-out");
 
 		if (isSlidedIn) {
 			setState((state) => {
@@ -48,9 +49,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		});
 	};
 
-	/**Handles the slide-in and slide-out of the last form 
-		field set (slide-3)
-	**/
 	const handleLastFormSlideIn = () => {
 		const isSlidedIn =
 			lastSlideSlideRef.current.classList.toggle("slide-out");
@@ -77,6 +75,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		});
 	};
 
+	// Handles all field chanages
 	const handleChange = (e, fieldClass) => {
 		const target = e.target;
 		const name = target.name;
@@ -102,9 +101,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		});
 	};
 
+	// Custom field change methods for offer-type field
 	const handleOfferTypeChange = (e) => {
-
-		// Set it in form state
 		setFormState((state) => {
 			return {
 				...state,
@@ -116,17 +114,49 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					},
 				},
 			};
-		})
+		});
 
 		// set in state to trigger offer type fields to show
-		setHiddenFieldTrigger(state => {
+		setHiddenFieldTrigger((state) => {
 			return {
 				...state,
-				offerType: e.target.value
-			}
+				offerType: e.target.value,
+			};
 		});
-	}
+	};
 
+	// Custom field change methods for minimum-subscription field
+	const handleMinimumSubscription = (e) => {
+		if (e.target.value === "other") {
+			// set in state to trigger offer type fields to show
+			setHiddenFieldTrigger((state) => {
+				return {
+					...state,
+					customMinimumSub: true,
+				};
+			});
+		} else {
+			setFormState((state) => {
+				return {
+					...state,
+					trancheSize: {
+						...state.trancheSize,
+						minSubscription: e.target.value
+					},
+				};
+			});
+
+			// set in state to trigger offer type fields to show
+			setHiddenFieldTrigger((state) => {
+				return {
+					...state,
+					customMinimumSub: false,
+				};
+			});
+		}
+	};
+
+	// Form fields validation
 	const handleValidation = (e) => {
 		e.preventDefault();
 
@@ -145,7 +175,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			}
 		}
 
-		// Trigger for showing tables in LoanRequest component
+		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
 	};
 
@@ -182,9 +212,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<option defaultValue="">
 										Select deal type
 									</option>
-									<option value="CP">
-										Commercial paper
-									</option>
+									<option value="CP">Commercial paper</option>
 									<option value="bond">Bond</option>
 								</select>
 							</div>
@@ -351,7 +379,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-1">
+								<div className="col-span-2">
 									<select
 										name="currency"
 										id="currency"
@@ -369,23 +397,32 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 								<div className="col-span-1">
-									<select
-										name="value"
-										id="tranche-value"
+									<input
+										type="text"
+										name="faceValue"
+										id="face-value"
+										placeholder="Face value"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={formState.trancheSize.value}
+										value={formState.trancheSize.faceValue}
 										onChange={(e) =>
 											handleChange(e, "trancheSize")
 										}
-									>
-										<option defaultValue="">Value</option>
-										<option value="face-value">
-											Face value
-										</option>
-										<option value="discount-value">
-											Discount value
-										</option>
-									</select>
+									/>
+								</div>
+								<div className="col-span-1">
+									<input
+										name="discountValue"
+										type="text"
+										placeholder="Discount value"
+										id="tranche-value"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										value={
+											formState.trancheSize.discountValue
+										}
+										onChange={(e) =>
+											handleChange(e, "trancheSize")
+										}
+									/>
 								</div>
 								<div className="col-span-1">
 									<input
@@ -407,9 +444,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											formState.trancheSize
 												.minSubscription
 										}
-										onChange={(e) =>
-											handleChange(e, "trancheSize")
-										}
+										onChange={(e) => handleMinimumSubscription(e)}
 									>
 										<option defaultValue="">
 											Min subscription
@@ -438,13 +473,39 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="other">Other</option>
 									</select>
 								</div>
+								<div className="col-span-2">
+									{hiddenFieldTrigger.customMinimumSub ? (
+										<input 
+											type="number" 
+											id="custom-min-subscription" 
+											name="custom-min-subscription" 
+											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											value={formState.trancheSize.minSubscription}
+											placeholder="Enter minimum subscription" 
+											min="200000" 
+											max="10000000000"
+											onChange={(e) => {
+												setFormState((state) => {
+													return {
+														...state,
+														trancheSize: {
+															...state.trancheSize,
+															minSubscription: e.target.value
+														},
+													};
+												})
+												}
+											} 
+										/>
+									) : null}
+								</div>
 							</div>
 						</div>
 
 						{/*Pricing*/}
 						<div id="Pricing">
 							<div id="terms-heading">
-								<p className="py-2">pricing</p>
+								<p className="py-2">Pricing</p>
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
@@ -478,13 +539,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										name="offerType"
 										id="offer-type"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-										value={
-											formState.pricing.offerType
-												.name
+										value={formState.pricing.offerType.name}
+										onChange={(e) =>
+											handleOfferTypeChange(e)
 										}
-										onChange={(e) => handleOfferTypeChange(e)}
 									>
-
 										<option defaultValue="">
 											Offer type
 										</option>
@@ -499,85 +558,110 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4 mt-5">
-
 								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType === "fixed price"? (<input
-										type="text"
-										name="discountRate"
-										id="discount-rate"
-										placeholder="Discount rate"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={formState.pricing.offerType.fixedPrice.discountRate}
-										onChange={(e) =>
-											setFormState((state) => {
-												return {
-													...state,
-													pricing: {
-														...state.pricing,
-														offerType: {
-															...state.pricing
-																.offerType,
-															fixedPrice: {
+									{hiddenFieldTrigger.offerType ===
+									"fixed price" ? (
+										<input
+											type="text"
+											name="discountRate"
+											id="discount-rate"
+											placeholder="Discount rate"
+											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											value={
+												formState.pricing.offerType
+													.fixedPrice.discountRate
+											}
+											onChange={(e) =>
+												setFormState((state) => {
+													return {
+														...state,
+														pricing: {
+															...state.pricing,
+															offerType: {
 																...state.pricing
-																.offerType.fixedPrice,
-																discountRate: e.target.value
-															}
+																	.offerType,
+																fixedPrice: {
+																	...state
+																		.pricing
+																		.offerType
+																		.fixedPrice,
+																	discountRate:
+																		e.target
+																			.value,
+																},
+															},
 														},
-													},
-												};
-											})
-										}
-								    />):null}
+													};
+												})
+											}
+										/>
+									) : null}
 								</div>
 
 								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType === "fixed price"? (<input
-										type="text"
-										name="impliedYield"
-										id="implied-yield"
-										placeholder="Implied yield"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={formState.pricing.offerType.fixedPrice.impliedYield}
-										onChange={(e) =>
-											setFormState((state) => {
-												return {
-													...state,
-													pricing: {
-														...state.pricing,
-														offerType: {
-															...state.pricing
-																.offerType,
-															fixedPrice: {
+									{hiddenFieldTrigger.offerType ===
+									"fixed price" ? (
+										<input
+											type="text"
+											name="impliedYield"
+											id="implied-yield"
+											placeholder="Implied yield"
+											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											value={
+												formState.pricing.offerType
+													.fixedPrice.impliedYield
+											}
+											onChange={(e) =>
+												setFormState((state) => {
+													return {
+														...state,
+														pricing: {
+															...state.pricing,
+															offerType: {
 																...state.pricing
-																.offerType.fixedPrice,
-																impliedYield: e.target.value
-															}
+																	.offerType,
+																fixedPrice: {
+																	...state
+																		.pricing
+																		.offerType
+																		.fixedPrice,
+																	impliedYield:
+																		e.target
+																			.value,
+																},
+															},
 														},
-													},
-												};
-											})
-										}
-								    />):null}
+													};
+												})
+											}
+										/>
+									) : null}
 								</div>
 
 								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType === "book build"?(<input
-										type="text"
-										name="discountRateRange"
-										id="discount-rate-range"
-										placeholder="Discount rate range"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-								    />):null}
+									{hiddenFieldTrigger.offerType ===
+									"book build" ? (
+										<input
+											type="text"
+											name="discountRateRange"
+											id="discount-rate-range"
+											placeholder="Discount rate range"
+											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										/>
+									) : null}
 								</div>
 
 								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType === "book build"?(<input
-										type="text"
-										name="yield"
-										id="yield"
-										placeholder="Yield"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-								    />):null}
+									{hiddenFieldTrigger.offerType ===
+									"book build" ? (
+										<input
+											type="text"
+											name="yield"
+											id="yield"
+											placeholder="Yield"
+											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										/>
+									) : null}
 								</div>
 							</div>
 						</div>
@@ -791,14 +875,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					buttonDisabled={state.submitButtonIsDisabled}
 					handleClick={summaryState ? handleModal : undefined}
 				/>
-
-				{/*{state.emptyFields !== "" ? (
-					<div className="mt-5">
-						<Alert severity="error" variant="filled">
-							{state.emptyFields}!
-						</Alert>
-					</div>
-				) : ("")}*/}
 			</form>
 		</>
 	);
