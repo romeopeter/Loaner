@@ -22,15 +22,15 @@ export default function NavMenu() {
 	const handleDropdown = (e) => {
 		console.log(e.targer.name);
 	} 
-
+ 
 	const handleSignOut = () => {
-		dispatch(signOutAsync())
-
+		dispatch(signOutAsync());
 		navigate("/");
-
-		// Reload page after loging out
-		window.location.reload()
 	}
+
+	const {user} = JSON.parse(localStorage.getItem("USER"));
+
+	const userType = user.groups ? user.groups[0] : "";
 
 	return (
 		<div id="dashboard-nav">
@@ -61,7 +61,7 @@ export default function NavMenu() {
 									aria-hidden="true"
 								></i>
 							</div>
-							{showDropdown ? (<div
+							<div
 								id="deals-dropdown"
 								className="shadow-md rounded"
 							>
@@ -71,7 +71,7 @@ export default function NavMenu() {
 								<Link to="/">
 									Create deal - multiple tranche
 								</Link>
-							</div>): undefined}
+							</div>
 						</li>
 						<li id="analysis-dropdown" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
 							<div>
@@ -156,7 +156,7 @@ export default function NavMenu() {
 									></i>
 									<div id="profile-menu-nav" className="bg-white shadow-md rounded">
 										<div id="profile" className="menu-nav-container">
-											<Link to="/">Dashboard</Link>
+											<Link to={`/${userType.name.toLowerCase()}/dashboard`}>Dashboard</Link>
 											<Link to="/profile">Profile</Link>
 											<Link to="/user/client/edit-profile">Edit Profile</Link>
 										</div>
