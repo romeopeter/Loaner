@@ -1,4 +1,5 @@
 import React, { useState, createRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderbookLayout from "../../OrderbookLayout";
@@ -71,9 +72,8 @@ export default function LoanRequest() {
 
 	const userFullName = `${user.first_name} ${user.last_name}`;
 
-	// Disptaches redux action(s)
 	const dispatch = useDispatch();
-
+	const navigate = useNavigate()
 	const requestContainerRef = createRef();
 
 	const handleModal = () => {
@@ -207,6 +207,7 @@ export default function LoanRequest() {
 				}
 
 				console.log("Loan created");
+				navigate("/client/offers/offer/publish");
 			});
 		}
 
@@ -222,6 +223,7 @@ export default function LoanRequest() {
 				}
 
 				console.log("Loan created");
+				navigate("/client/offers/offer/publish");
 			});
 		}
 
