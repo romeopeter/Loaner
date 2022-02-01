@@ -90,7 +90,7 @@ export default function ClientDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								<Link to="#">Create new list</Link>
+								<Link to="/client/offers/offer/publish">Create new list</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
