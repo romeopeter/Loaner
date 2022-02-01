@@ -70,7 +70,7 @@ export default function ClientDashboard() {
 					</div>
 					<div
 						id="user-quick-action"
-						className="flex flex-row justify-evenly h-20"
+						className="flex flex-row justify-center h-20"
 					>
 						<div className="actions action-1 border-r border-black">
 							<h2 className="font-bold">
@@ -124,7 +124,7 @@ export default function ClientDashboard() {
 							<h3 className="font-bold mb-10 md:mb-0">My offers</h3>
 							<div id="sort-by">
 								<label htmlFor="sort-offer" className="font-bold">Sort by:</label>{" "}
-								<select name="sort-offer" id="sort-offer" className="font-bold">
+								<select name="sort-offer" id="sort-offer" className="font-bold p-2">
 									<option value="status">Status</option>
 								</select>
 							</div>
