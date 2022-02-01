@@ -10,7 +10,7 @@ import Button from "../../Button";
 
 import { setServerMessage } from "../../../redux/messageSlice";
 
-import { asyncLoanRequest } from "../../../redux/loanSlice";
+import { asyncCPLoanRequest, asyncBondLoanRequest} from "../../../redux/loanSlice";
 
 export default function LoanRequest() {
 	const pageName = "Loan request";
@@ -28,11 +28,17 @@ export default function LoanRequest() {
 		trancheSize: {
 			currency: "NGN",
 			value: "",
+			faceValue: "",
+			discountValue:"",
 			parValue: 1000,
 			minSubscription: "",
 		},
 		pricing: {
 			dayCount: "",
+			couponType: "",
+			benchmark: "",
+			couponFrequency: "",
+			callOption:"",
 			offerType: {
 				name: "",
 				fixedPrice: {
@@ -94,12 +100,12 @@ export default function LoanRequest() {
 						amount: formState.trancheSize.minSubscription,
 					},
 					value: {
-						face_value: null,
-						discount_value: null,
+						face_value: formState.trancheSize.faceValue,
+						discount_value: formState.trancheSize.discountValue,
 						value: formState.trancheSize.parValue
 					},
 					currency: formState.trancheSize.currency,
-					amount: formState.trancheSize.value
+					amount: formState.trancheSize.minSubscription
 				},
 				timing: {
 					offer_start: formState.timing.offerStart,
@@ -114,15 +120,15 @@ export default function LoanRequest() {
 					scale: formState.rating.scale,
 				},
 				offer_type:  formState.pricing.offerType.name,
-				name: formState.trancheName, // tranche_name
+				name: formState.trancheName,
 				use_of_proceeds: formState.useOfProceeds,
 				tax_consideration: formState.taxConsideration,
 				pricing: {
 					day_count: formState.pricing.dayCount,
-					coupon_type: "fixed",
-					benchmark: null,
-					coupon_frequency: null,
-					call_option: null,
+					coupon_type: formState.pricing.couponType !== "" ? formState.pricing.couponType:null,
+					benchmark: "benchmark",
+					coupon_frequency: "monthly",
+					call_option: "yes",
 					offer_type: {
 						fixed_price: {
 							discount_rate: Number(formState.pricing.offerType.fixedPrice.discountRate).toFixed(3) ,
@@ -133,18 +139,37 @@ export default function LoanRequest() {
 			},
 		};
 
-		dispatch(asyncLoanRequest(data)).then((response) => {
-			setIsLoading(true);
+		if (formState.dealType === "cp") {
+			dispatch(asyncCPLoanRequest(data)).then((response) => {
+				setIsLoading(true);
 
-			// Check error.
-			if ("stack" in response) {
-				setIsLoading(false);
-				console.log("Loan not created");
-				return;
-			}
+				// Check error.
+				if ("stack" in response) {
+					setIsLoading(false);
+					console.log("Loan not created");
+					return;
+				}
 
-			console.log("Loan created");
-		});
+				console.log("Loan created");
+			});
+		}
+
+		if (formState.dealType === "bond") {
+			dispatch(asyncBondLoanRequest(data)).then((response) => {
+				setIsLoading(true);
+
+				// Check error.
+				if ("stack" in response) {
+					setIsLoading(false);
+					console.log("Loan not created");
+					return;
+				}
+
+				console.log("Loan created");
+			});
+		}
+
+		console.log(data)
 	};
 
 	return (
@@ -217,7 +242,7 @@ export default function LoanRequest() {
 										&times;
 									</span>
 									<h2 className="text-md text-center sm:text-left sm:text-2xl font-bold mb-5">
-										Loan offer Summary
+										Loan Offer Summary
 									</h2>
 									<table className="table-fixed w-full h-auto">
 										<thead>
@@ -241,11 +266,8 @@ export default function LoanRequest() {
 												<td>
 													<small>Type of offer</small>
 													<span>
-														{formState
-															.dealType !== "" &&
-															formState
-																.generalTerms
-																.dealType}
+														{(formState.dealType !== "" && formState.dealType === "CP") && "Commercial paper"}
+														{(formState.dealType !== "" && formState.dealType === "bond") && "Bond"}
 													</span>
 												</td>
 											</tr>
@@ -253,12 +275,14 @@ export default function LoanRequest() {
 												<td>
 													<small>Loan amount</small>
 													<span>
+														{formState.trancheSize.currency}{" "}
 														{formState.trancheSize
 															.minSubscription !==
 															"" &&
 															formState
 																.trancheSize
-																.minSubscription}
+																.minSubscription
+														}
 													</span>
 												</td>
 											</tr>
@@ -337,11 +361,6 @@ export default function LoanRequest() {
 												title="Save as draft"
 												buttonClass="col-span-2 bg-gray-400 rounded"
 											/>
-											{/*<Button
-												type="button"
-												title="Share"
-												buttonClass="col-span-1 rounded bg-blue-600 rounded share"
-											/>*/}
 										</div>
 										<Button
 											type="button"
