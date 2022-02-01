@@ -79,7 +79,7 @@
 							position: absolute;
 							background: $grey;
 							top: 0;
-							right: 700px;
+							right: 1000px;
 							width: 100%;
 							visibility: hidden;
 							transition: all $transition;
@@ -119,7 +119,7 @@
 								}
 
 								// Issuer, par-value field
-								&#issuer, &#par-value::placeholder {
+								&#issuer, &#par-value::placeholder, &#benchmark::disabled {
 									color: whitesmoke !important;
 								}
 
