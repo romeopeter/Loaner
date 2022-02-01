@@ -83,17 +83,17 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		const name = target.name;
 		const value = target.value;
 
-		if (value === "bond") {
+		if (value === "BOND") {
 			setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
 		} else {
 			setHiddenFieldTrigger((state) => ({ ...state, isBond: false }));
 		}
 
-		/*if (value === "floating") {
+		if (value === "floating") {
 			setHiddenFieldTrigger(state => ({...state, showBenchmark: true}))
 		} else {
 			setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
-		}*/
+		}
 
 		if (fieldClass) {
 			setFormState((state) => {
@@ -198,11 +198,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		Not really the best way but needed to be done
 		*/
 	const formHeightIsExtended =
-		state.secondSlideIn === true && formState.dealType === "bond";
+		state.secondSlideIn === true && formState.dealType === "BOND";
 	const secondSlideWillHide =
-		state.lastSlideIn === true && formState.dealType === "bond";
+		state.lastSlideIn === true && formState.dealType === "BOND";
 	const secondSlideWillShow =
-		state.lastSlideIn === false && formState.dealType === "bond";
+		state.lastSlideIn === false && formState.dealType === "BOND";
 
 	return (
 		<>
@@ -244,7 +244,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										Select deal type
 									</option>
 									<option value="CP">Commercial paper</option>
-									<option value="bond">Bond</option>
+									<option value="BOND">Bond</option>
 								</select>
 							</div>
 
@@ -369,8 +369,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 						{/*Tranche terms*/}
 						<div id="tranche-terms">
-							<div className="grid grid-cols-1 gap-4">
-								<div className="col-span-12">
+							<div className="grid grid-cols-2 gap-4">
+								<div className="col-span-2">
 									<select
 										name="status"
 										id="status"
@@ -397,7 +397,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</option>
 									</select>
 								</div>
-								<div className="col-span-12">
+
+								<div className="col-span-2">
 									<input
 										type="text"
 										name="trancheName"
@@ -555,7 +556,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
-								{hiddenFieldTrigger.isBond ? (
+								{formState.dealType === "BOND" ? (
 									<>
 										<div className="col-span-1">
 											<select
@@ -581,27 +582,31 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</select>
 										</div>
 
-										{hiddenFieldTrigger.showBenchmark ? (
-											<div className="col-span-1">
-												<input
-													type="text"
-													name="benchmark"
-													id="benchmark"
-													placeholder="Benchmark"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-													value={
-														formState.pricing
-															.benchmark
-													}
-													onChange={(e) =>
-														handleChange(
-															e,
-															"pricing"
-														)
-													}
-												/>
-											</div>
-										) : null}
+
+										<div className="col-span-1">
+											<input
+												type="text"
+												name="benchmark"
+												id="benchmark"
+												placeholder="Benchmark"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												disabled={hiddenFieldTrigger.showBenchmark? false : true}
+												style={{
+													backgroundColor: hiddenFieldTrigger.showBenchmark ? "#d1d5db" : "#888",
+													cursor:  hiddenFieldTrigger.showBenchmark ? "text":"not-allowed",
+												}}
+												value={
+													formState.pricing
+														.benchmark
+												}
+												onChange={(e) =>
+													handleChange(
+														e,
+														"pricing"
+													)
+												}
+											/>
+										</div>
 									</>
 								) : null}
 
@@ -654,7 +659,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4 mt-5">
-								{hiddenFieldTrigger.offerType ===
+								{formState.pricing.offerType.name ===
 								"fixed price" ? (
 									<>
 										<div className="col-span-1">
@@ -666,7 +671,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
-														.fixedPrice.discountRate
+														.fixedPrice.rate
 												}
 												onChange={(e) =>
 													setFormState((state) => {
@@ -684,10 +689,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																				.pricing
 																				.offerType
 																				.fixedPrice,
-																			discountRate:
-																				e
-																					.target
-																					.value,
+																			rate: e.target.value,
 																		},
 																},
 															},
@@ -705,7 +707,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
-														.fixedPrice.impliedYield
+														.fixedPrice.yield
 												}
 												onChange={(e) =>
 													setFormState((state) => {
@@ -723,10 +725,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																				.pricing
 																				.offerType
 																				.fixedPrice,
-																			impliedYield:
-																				e
-																					.target
-																					.value,
+																			yield: e.target.value,
 																		},
 																},
 															},
@@ -738,7 +737,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</>
 								) : null}
 
-								{hiddenFieldTrigger.offerType ===
+								{formState.pricing.offerType.name ===
 								"book build" ? (
 									<>
 										<div className="col-span-1">
@@ -748,6 +747,33 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												id="discount-rate-range"
 												placeholder="Discount rate range"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												value={
+													formState.pricing.offerType
+														.fixedPrice.rate
+												}
+												onChange={(e) =>
+													setFormState((state) => {
+														return {
+															...state,
+															pricing: {
+																...state.pricing,
+																offerType: {
+																	...state
+																		.pricing
+																		.offerType,
+																	fixedPrice:
+																		{
+																			...state
+																				.pricing
+																				.offerType
+																				.fixedPrice,
+																			rate: e.target.value,
+																		},
+																},
+															},
+														};
+													})
+												}
 											/>
 										</div>
 										<div className="col-span-1">
@@ -757,12 +783,39 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												id="yield"
 												placeholder="Yield"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												value={
+													formState.pricing.offerType
+														.fixedPrice.yield
+												}
+												onChange={(e) =>
+													setFormState((state) => {
+														return {
+															...state,
+															pricing: {
+																...state.pricing,
+																offerType: {
+																	...state
+																		.pricing
+																		.offerType,
+																	fixedPrice:
+																		{
+																			...state
+																				.pricing
+																				.offerType
+																				.fixedPrice,
+																			yield: e.target.value,
+																		},
+																},
+															},
+														};
+													})
+												}
 											/>
 										</div>
 									</>
 								) : null}
 
-								{hiddenFieldTrigger.isBond ? (
+								{formState.dealType === "BOND" ? (
 									<>
 										<div className="col-span-2">
 											<select
@@ -792,7 +845,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</select>
 										</div>
 
-										<div className="col-span-1">
+										<div className="col-span-2">
 											<h5 className="font-md text-white mb-2">
 												Call option
 											</h5>
@@ -851,7 +904,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</div>
 										</div>
 
-										<div className="col-span-1">
+										<div className="col-span-2">
 											{hiddenFieldTrigger.showCallOption ? (
 												<input
 													type="text"
@@ -1022,7 +1075,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<p className="py-2">Ratings</p>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-1">
+								<div className="col-span-2">
 									<select
 										name="name"
 										id="name"
@@ -1044,7 +1097,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-1">
+								<div className="col-span-2">
 									<select
 										name="scale"
 										id="scale"
@@ -1083,7 +1136,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					title="View summary"
 					type="submit"
 					style={{
-						marginTop: formHeightIsExtended ? "300px" : "5rem",
+						marginTop: "6.5rem",
 					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
