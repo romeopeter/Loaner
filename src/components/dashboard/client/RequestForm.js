@@ -12,7 +12,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
 		secondSlideIn: false,
-		lastSideIn: false,
+		lastSlideIn: false,
 		isValidated: true,
 		emptyFields: "",
 	});
@@ -21,22 +21,23 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		dealType: "",
 		offerType: "",
 		customMinimumSub: false,
+		isBond: false,
+		showBenchmark: false,
+		showCallOption: true,
 	});
 
 	/**Methods handle the slide-in and slide-out of second and third form 
 		field.
 	**/
 	const handleSecondFormSlideIn = () => {
-		const isSlidedIn = secondSlideRef.current.classList.add("slide-out");
+		secondSlideRef.current.classList.add("slide-out");
 
-		if (isSlidedIn) {
-			setState((state) => {
-				return {
-					...state,
-					secondSlideIn: true,
-				};
-			});
-		}
+		setState((state) => {
+			return {
+				...state,
+				secondSlideIn: true,
+			};
+		});
 	};
 
 	const handleSecondFormSlideOut = () => {
@@ -58,7 +59,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				return {
 					...state,
 					submitButtonIsDisabled: false,
-					lastSideIn: true,
+					lastSlideIn: true,
+					secondSlideIn: false,
 				};
 			});
 		}
@@ -70,7 +72,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			return {
 				...state,
 				submitButtonIsDisabled: true,
-				lastSideIn: false,
+				lastSlideIn: false,
 			};
 		});
 	};
@@ -80,6 +82,18 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		const target = e.target;
 		const name = target.name;
 		const value = target.value;
+
+		if (value === "bond") {
+			setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
+		} else {
+			setHiddenFieldTrigger((state) => ({ ...state, isBond: false }));
+		}
+
+		/*if (value === "floating") {
+			setHiddenFieldTrigger(state => ({...state, showBenchmark: true}))
+		} else {
+			setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
+		}*/
 
 		if (fieldClass) {
 			setFormState((state) => {
@@ -141,7 +155,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					...state,
 					trancheSize: {
 						...state.trancheSize,
-						minSubscription: e.target.value
+						minSubscription: e.target.value,
 					},
 				};
 			});
@@ -179,12 +193,29 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		setSummaryState(true);
 	};
 
+	/*
+		These are tweaks to extend form slide parent hide.
+		Not really the best way but needed to be done
+		*/
+	const formHeightIsExtended =
+		state.secondSlideIn === true && formState.dealType === "bond";
+	const secondSlideWillHide =
+		state.lastSlideIn === true && formState.dealType === "bond";
+	const secondSlideWillShow =
+		state.lastSlideIn === false && formState.dealType === "bond";
+
 	return (
 		<>
 			<form
 				id="loan-summary-form"
 				className="h-full pb-5"
 				onSubmit={handleValidation}
+				style={{
+					height:
+						formHeightIsExtended | secondSlideWillShow
+							? "1080px"
+							: "auto",
+				}}
 			>
 				<div id="loan-request-steps">
 					{/*loan request -- 1st step*/}
@@ -321,7 +352,17 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					</div>
 
 					{/*loan request -- 2nd step*/}
-					<div className="form-slide slide-2" ref={secondSlideRef}>
+					<div
+						className="form-slide slide-2"
+						ref={secondSlideRef}
+						style={{
+							visibility: secondSlideWillHide
+								? "hidden"
+								: secondSlideWillShow
+								? "visible"
+								: "auto",
+						}}
+					>
 						<div id="terms-heading">
 							<h3 className="py-2 text-xl">Tranche Terms</h3>
 						</div>
@@ -337,9 +378,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										value={formState.status}
 										onChange={(e) => handleChange(e)}
 									>
-										<option defaultValue="">
-											Select status
-										</option>
+										<option defaultValue="">Status</option>
 										<option value="draft">Draft</option>
 										<option value="invitation">
 											Invitation
@@ -435,6 +474,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										style={{ cursor: "not-allowed" }}
 									/>
 								</div>
+
 								<div className="col-span-1">
 									<select
 										name="minSubscription"
@@ -444,7 +484,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											formState.trancheSize
 												.minSubscription
 										}
-										onChange={(e) => handleMinimumSubscription(e)}
+										onChange={(e) =>
+											handleMinimumSubscription(e)
+										}
 									>
 										<option defaultValue="">
 											Min subscription
@@ -473,16 +515,20 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="other">Other</option>
 									</select>
 								</div>
+
 								<div className="col-span-2">
 									{hiddenFieldTrigger.customMinimumSub ? (
-										<input 
-											type="number" 
-											id="custom-min-subscription" 
-											name="custom-min-subscription" 
+										<input
+											type="number"
+											id="custom-min-subscription"
+											name="custom-min-subscription"
 											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-											value={formState.trancheSize.minSubscription}
-											placeholder="Enter minimum subscription" 
-											min="200000" 
+											value={
+												formState.trancheSize
+													.minSubscription
+											}
+											placeholder="Enter minimum subscription"
+											min="200000"
 											max="10000000000"
 											onChange={(e) => {
 												setFormState((state) => {
@@ -490,12 +536,12 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														...state,
 														trancheSize: {
 															...state.trancheSize,
-															minSubscription: e.target.value
+															minSubscription:
+																e.target.value,
 														},
 													};
-												})
-												}
-											} 
+												});
+											}}
 										/>
 									) : null}
 								</div>
@@ -509,11 +555,61 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
+								{hiddenFieldTrigger.isBond ? (
+									<>
+										<div className="col-span-1">
+											<select
+												id="coupon-type"
+												name="couponType"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												value={
+													formState.pricing.couponType
+												}
+												onChange={(e) =>
+													handleChange(e, "pricing")
+												}
+											>
+												<option defaultValue="">
+													Coupon Type
+												</option>
+												<option value="fixed">
+													Fixed
+												</option>
+												<option value="floating">
+													Floating
+												</option>
+											</select>
+										</div>
+
+										{hiddenFieldTrigger.showBenchmark ? (
+											<div className="col-span-1">
+												<input
+													type="text"
+													name="benchmark"
+													id="benchmark"
+													placeholder="Benchmark"
+													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={
+														formState.pricing
+															.benchmark
+													}
+													onChange={(e) =>
+														handleChange(
+															e,
+															"pricing"
+														)
+													}
+												/>
+											</div>
+										) : null}
+									</>
+								) : null}
+
 								<div className="col-span-1">
 									<select
 										name="dayCount"
 										id="day-count"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.pricing.dayCount}
 										onChange={(e) =>
 											handleChange(e, "pricing")
@@ -558,111 +654,226 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4 mt-5">
-								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType ===
-									"fixed price" ? (
-										<input
-											type="text"
-											name="discountRate"
-											id="discount-rate"
-											placeholder="Discount rate"
-											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-											value={
-												formState.pricing.offerType
-													.fixedPrice.discountRate
-											}
-											onChange={(e) =>
-												setFormState((state) => {
-													return {
-														...state,
-														pricing: {
-															...state.pricing,
-															offerType: {
-																...state.pricing
-																	.offerType,
-																fixedPrice: {
+								{hiddenFieldTrigger.offerType ===
+								"fixed price" ? (
+									<>
+										<div className="col-span-1">
+											<input
+												type="text"
+												name="discountRate"
+												id="discount-rate"
+												placeholder="Discount rate"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+												value={
+													formState.pricing.offerType
+														.fixedPrice.discountRate
+												}
+												onChange={(e) =>
+													setFormState((state) => {
+														return {
+															...state,
+															pricing: {
+																...state.pricing,
+																offerType: {
 																	...state
 																		.pricing
-																		.offerType
-																		.fixedPrice,
-																	discountRate:
-																		e.target
-																			.value,
+																		.offerType,
+																	fixedPrice:
+																		{
+																			...state
+																				.pricing
+																				.offerType
+																				.fixedPrice,
+																			discountRate:
+																				e
+																					.target
+																					.value,
+																		},
 																},
 															},
-														},
-													};
-												})
-											}
-										/>
-									) : null}
-								</div>
-
-								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType ===
-									"fixed price" ? (
-										<input
-											type="text"
-											name="impliedYield"
-											id="implied-yield"
-											placeholder="Implied yield"
-											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-											value={
-												formState.pricing.offerType
-													.fixedPrice.impliedYield
-											}
-											onChange={(e) =>
-												setFormState((state) => {
-													return {
-														...state,
-														pricing: {
-															...state.pricing,
-															offerType: {
-																...state.pricing
-																	.offerType,
-																fixedPrice: {
+														};
+													})
+												}
+											/>
+										</div>
+										<div className="col-span-1">
+											<input
+												type="text"
+												name="impliedYield"
+												id="implied-yield"
+												placeholder="Implied yield"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+												value={
+													formState.pricing.offerType
+														.fixedPrice.impliedYield
+												}
+												onChange={(e) =>
+													setFormState((state) => {
+														return {
+															...state,
+															pricing: {
+																...state.pricing,
+																offerType: {
 																	...state
 																		.pricing
-																		.offerType
-																		.fixedPrice,
-																	impliedYield:
-																		e.target
-																			.value,
+																		.offerType,
+																	fixedPrice:
+																		{
+																			...state
+																				.pricing
+																				.offerType
+																				.fixedPrice,
+																			impliedYield:
+																				e
+																					.target
+																					.value,
+																		},
 																},
 															},
-														},
-													};
-												})
-											}
-										/>
-									) : null}
-								</div>
+														};
+													})
+												}
+											/>
+										</div>
+									</>
+								) : null}
 
-								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType ===
-									"book build" ? (
-										<input
-											type="text"
-											name="discountRateRange"
-											id="discount-rate-range"
-											placeholder="Discount rate range"
-											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										/>
-									) : null}
-								</div>
+								{hiddenFieldTrigger.offerType ===
+								"book build" ? (
+									<>
+										<div className="col-span-1">
+											<input
+												type="text"
+												name="discountRateRange"
+												id="discount-rate-range"
+												placeholder="Discount rate range"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+											/>
+										</div>
+										<div className="col-span-1">
+											<input
+												type="text"
+												name="yield"
+												id="yield"
+												placeholder="Yield"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+											/>
+										</div>
+									</>
+								) : null}
 
-								<div className="col-span-1">
-									{hiddenFieldTrigger.offerType ===
-									"book build" ? (
-										<input
-											type="text"
-											name="yield"
-											id="yield"
-											placeholder="Yield"
-											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										/>
-									) : null}
-								</div>
+								{hiddenFieldTrigger.isBond ? (
+									<>
+										<div className="col-span-2">
+											<select
+												id="coupon-frequency"
+												name="couponFrequency"
+												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												value={
+													formState.pricing
+														.couponFrequency
+												}
+												onChange={(e) =>
+													handleChange(e, "pricing")
+												}
+											>
+												<option defaultValue="">
+													Coupon frequency
+												</option>
+												<option value="monthly">
+													Monthly
+												</option>
+												<option value="quaterly">
+													Quaterly
+												</option>
+												<option value="semi annually">
+													Semi Annually
+												</option>
+											</select>
+										</div>
+
+										<div className="col-span-1">
+											<h5 className="font-md text-white mb-2">
+												Call option
+											</h5>
+											<div className="flex justify-start text-white">
+												<div className="form-check mr-2">
+													<label htmlFor="call-option-yes">
+														Yes
+													</label>{" "}
+													<input
+														type="radio"
+														name="call-option-yes"
+														id="call-option-yes"
+														className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none cursor-pointer"
+														checked={
+															hiddenFieldTrigger.showCallOption
+														}
+														value="yes"
+														onChange={(e) => {
+															setHiddenFieldTrigger(
+																(state) => {
+																	return {
+																		...state,
+																		showCallOption: true,
+																	};
+																}
+															);
+														}}
+													/>
+												</div>
+
+												<div className="form-check">
+													<label htmlFor="call-option-no">
+														No
+													</label>{" "}
+													<input
+														type="radio"
+														name="call-option-no"
+														id="call-option-no"
+														className="appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none cursor-pointer"
+														checked={
+															!hiddenFieldTrigger.showCallOption
+														}
+														value="no"
+														onChange={(e) => {
+															setHiddenFieldTrigger(
+																(state) => {
+																	return {
+																		...state,
+																		showCallOption: false,
+																	};
+																}
+															);
+														}}
+													/>
+												</div>
+											</div>
+										</div>
+
+										<div className="col-span-1">
+											{hiddenFieldTrigger.showCallOption ? (
+												<input
+													type="text"
+													name="callOption"
+													id="call-option"
+													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={
+														formState.pricing
+															.callOption
+													}
+													placeholder="Call option"
+													onChange={(e) =>
+														handleChange(
+															e,
+															"pricing"
+														)
+													}
+												/>
+											) : null}
+										</div>
+									</>
+								) : null}
 							</div>
 						</div>
 
@@ -871,6 +1082,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				<Button
 					title="View summary"
 					type="submit"
+					style={{
+						marginTop: formHeightIsExtended ? "300px" : "5rem",
+					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
 					handleClick={summaryState ? handleModal : undefined}
