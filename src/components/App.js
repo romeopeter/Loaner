@@ -23,6 +23,14 @@ import LoanSummary from "./dashboard/broker/LoanSummary";
 import AllLoanRequests from "./dashboard/broker/LoanRequests";
 import LoanOffer from "./dashboard/broker/LoanOffer";
 import SelectInvestor from "./dashboard/broker/SelectInvestor";
+
+import AdminCurrencies from "./dashboard/admin/AdminCurrencies";
+import AdminCompanies from "./dashboard/admin/AdminCompanies";
+import AdminTranche from "./dashboard/admin/AdminTranche";
+import AdminPreference from "./dashboard/admin/AdminPreferenc";
+import AdminProfile from "./dashboard/admin/AdminProfileSettings";
+import PrivacyPolicy from "./dashboard/admin/PrivacyPolicy";
+import Terms from "./dashboard/admin/Terms";
 function App() {
   return (
     <ChakraProvider>
@@ -100,7 +108,43 @@ function App() {
           <SelectInvestor/>
         // </RequireAuth>
       } />
-    </Routes>
+
+      <Route path="/admin/currencies" element={
+        // <RequireAuth>
+          <AdminCurrencies/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/companies" element={
+        // <RequireAuth>
+          <AdminCompanies/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/tranche" element={
+        // <RequireAuth>
+          <AdminTranche/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/preference" element={
+        // <RequireAuth>
+          <AdminPreference/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/profile-settings" element={
+        // <RequireAuth>
+          <AdminProfile/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/privacy" element={
+        // <RequireAuth>
+          <PrivacyPolicy/>
+        // </RequireAuth>
+      } />
+      <Route path="/admin/terms" element={
+        // <RequireAuth>
+          <Terms/>
+        // </RequireAuth>
+      } />
+      </Routes>
     
     </ChakraProvider>
   );
