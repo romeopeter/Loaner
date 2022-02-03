@@ -139,7 +139,7 @@
 		}
 	}
 
-	#offer-modal {
+	#save-list-modal {
 		display: none;
 
 		&.accept-modal {
@@ -156,7 +156,7 @@
 			#modal-content {
 				background: $white;
 				padding: 20px;
-				width: 40%;
+				width: 60%;
 				height: 40%;
 				margin: 15% auto;
 
@@ -175,8 +175,27 @@
 					}
 				}
 
-				button {
-					width: 200px;
+				input {
+					&::placeholder {
+						color: $black;
+						font-weight: bold;
+					}
+				}
+
+				#modal-buttons {
+					button {
+						font-family: $header-font;
+						font-size: 1.5rem !important;
+						font-weight: bolder;
+
+						&.cancel {
+							color: #ff69b48f;
+						}
+
+						&.create {
+							color: #22c55e;
+						}
+					}
 				}
 			}
 		}
