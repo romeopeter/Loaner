@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
-import { signInAsync } from "../../redux/authSlice";
-
+import { signInAction } from "../../redux/authSlice";
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
 
@@ -12,30 +12,28 @@ import phoneLady from "../../assets/images/phoneLady.jpg";
 
 export default function Login() {
 	const pageName = "Login";
+
 	const navigate = useNavigate();
 	const { state } = useLocation();
+	const alert = useAlert();
+	const dispatch = useDispatch();
+
+	const { isLoggedIn, user } = useSelector((state) => state.auth);
+	const { message } = useSelector((state) => state.message.server);
 
 	const [form, setForm] = useState({
 		emailAddress: "",
 		password: "",
 		isChecked: false,
 		isLoading: false,
+		userType: null,
 	});
-
 
 	const [formErrors, setFormErrors] = useState({
 		emailAddress: "",
 		password: "",
 		emptyFields: "",
 	});
-
-	const { isLoggedIn } = true;
-	// useSelector((state) => state.auth);
-
-	const { message } = useSelector((state) => state.message.server);
-
-	// Dipstach Redux actions
-	const dispatch = useDispatch();
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -53,6 +51,7 @@ export default function Login() {
 
 	// Input from form state
 	const { emailAddress, password } = form;
+	const authState = useSelector((state) => state.auth);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -68,38 +67,35 @@ export default function Login() {
 
 		for (let props in data) {
 			if (data[props] === "" || data[props] === null) {
-				setForm((state) => ({...state, isLoading: false}));
-				setFormErrors((state) => ({...state, emptyFields: "Please fill in the fields"}));
-				return
-			} 
+				// setForm((state) => ({...state, isLoading: false}));
+				alert.error("Please fill all fields");
+				return;
+			}
 		}
 
-		// Redux hook dispatches sign-in action (Login requst)
-		dispatch(signInAsync(data)).then((response) => {
+		// Dispatch redux sign-in action
+		dispatch(signInAction(data)).then(() => {
+			const {user} = JSON.parse(localStorage.getItem("USER"));
 
-			if ("user" in response) {
+			const userType = user.groups ? user.groups[0].name : navigate("/login");
 
-				const userType = response.user.groups[0];
+			// Acess store and check user role
+			if (userType === "Client") {
+				navigate(state?.path || "/client/dashboard");
+			}
 
-				if (userType.name === "Client") {
-					navigate("/client/dashboard");
-					window.location.reload();
-				}
+			if (userType === "Broker") {
+				navigate(state?.path || "/broker/dashboard");
+			}
 
-				if (userType.name === "Broker") {
-					navigate("/broker/dashboard");
-					window.location.reload();
-				}
-
-				if (userType.name === "Investor") {
-					navigate("/investor/dashboard");
-					window.location.reload();
-				}
+			if (userType === "Investor") {
+				navigate(state?.path || "/investor/dashboard");
 			}
 		});
 	};
 
-	if (isLoggedIn) return (<Navigate to="/" replace />);
+	
+	// if (isLoggedIn) return <Navigate replace to="/" />;
 
 	return (
 		<>
@@ -224,7 +220,10 @@ export default function Login() {
 										>
 											Login{" "}
 											{form.isLoading ? (
-												<i className="fa fa-spinner fa-pulse fa-3x fa-fw" style={{fontSize: 20}}></i>
+												<i
+													className="fa fa-spinner fa-pulse fa-3x fa-fw"
+													style={{ fontSize: 20 }}
+												></i>
 											) : null}
 										</Button>
 									</div>
