@@ -16,20 +16,7 @@ const signUpRequest = (data) => {
 const signInRequest = (data) => {
 	return axios
 		.post(`${API_URL}/api/v1/registration/sign_in/`, data)
-		.then((response) => {
-
-			if (response.data.tokens.access) {
-				// Store access token in browser storage
-				localStorage.setItem("USER", JSON.stringify(response.data));
-			}
-
-			return response.data;
-		})
 		.catch((error) => error);
-};
-
-const signOutRequest = () => {
-	localStorage.removeItem("USER");
 };
 
 export { signUpRequest, signInRequest};
