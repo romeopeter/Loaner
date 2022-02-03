@@ -13,11 +13,10 @@ if (currentUser?.tokens.access !== undefined) {
 const API_URL = "https://order-book-online.herokuapp.com";
 
 
-const loanRequest = (data) => {
-	const requestURL = "https://order-book-online.herokuapp.com";
+const loanRequestCP = (data) => {
 
 	return axios
-		.post(`${requestURL}/api/v1/loan_request/cp/`, data)
+		.post(`${API_URL}/api/v1/loan_request/cp/`, data)
 		.catch((error) => error);
 
         // Get refresh token
@@ -30,4 +29,11 @@ const loanRequest = (data) => {
         // Save token in storage
 };
 
-export { loanRequest };
+const loanRequestBond = (data) => {
+
+	return axios
+		.post(`${API_URL}/api/v1/loan_request/bonds/`, data)
+		.catch((error) => error);
+};
+
+export { loanRequestCP, loanRequestBond };
