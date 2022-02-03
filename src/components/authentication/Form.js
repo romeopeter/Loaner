@@ -1,11 +1,11 @@
 import React, { useState, createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import PhoneInput from 'react-phone-number-input';
 import { useAlert } from "react-alert";
 
-import Button from "../Button";
-
+import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+
+import Button from "../Button";
 
 export default function Form( props ) {
 	const [state, setState] = useState({
@@ -128,6 +128,7 @@ export default function Form( props ) {
 				</div>
 
 				<div className="col-span-12 grid grid-cols-2 gap-4">
+
 					<div className="col-span-1">
 						<select
 							type="text"
@@ -135,7 +136,7 @@ export default function Form( props ) {
 							value={form.role}
 							id="role"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							// required
+							required
 							onChange={(e) => handleChange(e)}
 						>
 							<option defaultValue="">Select role</option>
@@ -154,21 +155,21 @@ export default function Form( props ) {
 							autoComplete="email"
 							placeholder="Email address"
 							className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-							// required
+							required
 							onChange={(e) => handleChange(e)}
 						/>
 					</div>
-				</div>
 
-				<div className="col-span-12 text-right">
-					<Button
-						id="next-field-button"
-						title="Next"
-						buttonClass={`form-slide-button text-white bg-gray-400 rounded mt-2 ${
-							form.finalFormIsSlidedIn ? "hidden" : ""
-						}`}
-						handleClick={slideFinalFormIn}
-					/>
+					<div className="col-span-2 text-right">
+						<Button
+							id="next-field-button"
+							title="Next"
+							buttonClass={`form-slide-button text-white bg-gray-400 rounded mt-2 ${
+								form.finalFormIsSlidedIn ? "hidden" : ""
+							}`}
+							handleClick={slideFinalFormIn}
+						/>
+					</div>
 				</div>
 			</div>
 
