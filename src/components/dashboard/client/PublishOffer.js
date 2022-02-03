@@ -1,20 +1,31 @@
 import React, { createRef, useState } from "react";
-
 import { Link } from "react-router-dom";
+import { components, selectInstance } from "react-select";
+import { useAlert } from "react-alert";
 
-import { default as ReactSelect, components } from "react-select";
-
+import CustomSelect from "./CustomSelect";
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 
-export default function PublishOffer() {
+export default function PublishOffer({children, ...props}) {
 	const pageName = "Publish offer";
 
 	const modalContainerRef = createRef();
+	const alert = useAlert();
 
+	const [state, setState] = useState({
+		investorSelected: null,
+		categoryCheckbox: [],
+		saveAsOpen: false,
+		saveAsComing: false,
+		favouriteListName: "",
+		favouriteListDescription: ""
+	});
+
+	const [categoriesTrigger, setCategoriesTrigger] = useState(5);
 	const categories = [
 		{ id: 1, name: "Ethics" },
 		{ id: 2, name: "Agriculture & Food" },
@@ -42,64 +53,6 @@ export default function PublishOffer() {
 		]}
 	]);
 
-	const [categoriesTrigger, setCategoriesTrigger] = useState(5);
-
-	const [favouriteList, setFavouriteList] = useState({
-		categories: ["Agriculture & Food", "Ethics"],
-		investors: [],
-	});
-
-	const selectAllInvestors = () => {};
-	const selectInvestorsInCategory = () => {};
-
-	const saveList = (e) => {
-		const inputType = e.target.type;
-		const value = e.target.value;
-		const categories = favouriteList.categories;
-		const investors = favouriteList.investors;
-
-		if (inputType === "checkbox") {
-			const isChecked = e.target.checked;
-
-			if (isChecked) {
-				categories.length > 0 &&
-					categories.forEach((category, index) => {
-						if (value === category) console.log(true);
-						else console.log(false);
-					});
-
-				/*setFavouriteList(state => {
-					
-				});*/
-			}
-		}
-
-		if (inputType === "select-multiple") {
-			console.log(inputType);
-		}
-	};
-
-	/*const = handleChange = (selected) => {
-	    this.setState({
-	      optionSelected: selected
-	    });
-	};*/
-
-	const InvestorOptionsComponent = (props) => {
-		return (
-			<div>
-				<components.Option {...props}>
-					<input
-						type="checkbox"
-						checked={props.isSelected}
-						onChange={() => null}
-					/>{" "}
-					<label>{props.label}</label>
-				</components.Option>
-			</div>
-		);
-	};
-
 	const investorOptions = [
 		{ value: "durward reynolds", label: "Durward Reynolds" },
 		{ value: "kenton towne", label: "Kenton Towne" },
@@ -115,9 +68,161 @@ export default function PublishOffer() {
 		{ value: "edward paul", label: "Edward Paul" },
 	];
 
-	const handlePublish = () => {
+	const handleInvestorChange = (selected) => {
+	    setState(state => {
+	    	return {
+	    		...state,
+	    		investorSelected: selected
+	    	}
+	    })
+	};
+
+	const handleChange = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+
+		if (e.target.checked) {
+			if (name === "saveAsOpen" || name === "saveAsComing") {
+				setState(state => ({...state, [name]: e.target.checked}));
+			}
+
+			if (name === "categoryCheckbox") {
+				setState(state => ({...state, [name]: [...state[name], value]}))
+			}
+		} else {
+			if (name === "saveAsOpen" || name === "saveAsComing") {
+				setState(state => ({...state, [name]: !e.target.checked}));
+			}
+
+			if (name === "categoryCheckbox") {
+				if (state[name] !== null && state[name].length > 0) {
+					const result = state[name].filter(data => data !== value);
+					setState(state => ({...state, [name]: result}));
+
+					return
+				}
+
+				setState(state => ({...state, [name]: []}))
+			}
+		}
+	}
+
+	const FavouriteListModal = () => {
 		modalContainerRef.current.classList.add("accept-modal");
 	};
+
+	const removeFavouriteListModal = () => {
+		modalContainerRef.current.classList.remove("accept-modal");
+	};
+
+	const selectAllInvestors = (e) => {
+		
+		if (e.target.checked) {
+			console.log("Selects all investor");
+		}
+	};
+
+	const listAsFavourite = {
+		listName: "",
+		listDescription: "",
+		listItems: {
+			categories: [],
+			investors: [],
+		},
+		saveAsOpen: state.saveAsOpen ? state.saveAsOpen : state.saveAsOpen,
+		saveAsComing: state.saveAsComing ? state.saveAsComing : state.saveAsComing
+	};
+
+
+	const investorValues = state.investorSelected;
+	const categoryValues = state.categoryCheckbox;
+
+	if (investorValues !== null) {
+		// const [{value: selectedInvestor}] = investorValue;
+
+		listAsFavourite.listItems = {
+			...listAsFavourite.listItems,
+			investors: investorValues
+		}
+	}
+
+	if (categoryValues !== null) {
+		listAsFavourite.listItems = {
+			...listAsFavourite.listItems,
+			categories: categoryValues
+		}
+	}
+
+	const saveFavouriteList = () => {
+		if (state.favouriteListName === "") {
+			alert.error("List must have name")
+
+			return
+		}
+
+		listAsFavourite.listName = state.favouriteListName;
+		listAsFavourite.listDescription = state.favouriteListDescription;
+
+		const favouriteList = JSON.stringify(listAsFavourite);
+
+		window.localStorage.setItem("FAVOURITE_lIST", favouriteList);
+
+		alert.success("List created");
+
+		removeFavouriteListModal();
+	}
+
+	/* React-select customization start */
+	const Option = (props) => {
+		return (
+			<div>
+			<components.Option {...props}>
+				<input
+					type="checkbox"
+					checked={props.isSelected}
+					className="rounded"
+					onChange={() => null}
+				/>{" "}
+				<label>{props.label}</label>
+			</components.Option>
+			</div>
+		);
+	};
+
+	const allOption = {
+		label: "Select all",
+		value: "*"
+	}
+
+	const ValueContainer = ({ children, ...props }) => {
+		const currentValues = props.getValue();
+	  	let toBeRendered = children;
+
+	  	if (currentValues.some(val => val.value === allOption.value)) {
+	    	toBeRendered = [[children[0][0]], children[1]];
+	  	}
+
+	  	return (
+		    <components.ValueContainer {...props}>
+		      {toBeRendered}
+		    </components.ValueContainer>
+	  	);
+	};
+
+	const MultiValue = (props) => {
+		let labelToBeDisplayed = `${props.data.label}, `;
+
+		if (props.data.label === allOption.label) {
+			labelToBeDisplayed = "All investors selected";
+		}
+
+		return (
+			<components.MultiValue {...props}>
+				<span>{labelToBeDisplayed}</span>
+			</components.MultiValue>
+		);
+	}
+	/* React-select customization ends */
 
 	return (
 		<>
@@ -152,7 +257,7 @@ export default function PublishOffer() {
 								className="flex justify-center items-center p-5"
 							>
 								<div className="grid grid-cols-12 gap-4 w-full ">
-									<div
+									{/*<div
 										id="select-all-investors"
 										className="checkboxes col-span-12 sm:col-span-3 border-r border-white sm:border-black"
 									>
@@ -160,12 +265,13 @@ export default function PublishOffer() {
 											type="checkbox"
 											name="categoryCheckbox"
 											className="mr-2 rounded"
+											onChange={(e) => selectAllInvestors(e)}
 										/>
 										<label htmlFor="select-all-investors">
 											Select all investors
 										</label>
-									</div>
-									<div className="col-span-12 sm:col-span-9">
+									</div>*/}
+									<div className="col-span-12 sm:col-span-12">
 										<div id="select-category">
 											<span
 												id="cat-title"
@@ -196,18 +302,12 @@ export default function PublishOffer() {
 																		>
 																			<input
 																				type="checkbox"
-																				name="category-checkbox"
+																				name="categoryCheckbox"
 																				value={
 																					category.name
 																				}
+																				onChange={(e) => handleChange(e)}
 																				className="mr-2 rounded"
-																				onClick={(
-																					e
-																				) =>
-																					saveList(
-																						e
-																					)
-																				}
 																			/>
 																			<label htmlFor="category-checkbox">
 																				{
@@ -239,33 +339,17 @@ export default function PublishOffer() {
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<div className="col-span-2 sm:col-span-1">
-								{/*<select
-									name="select-investors"
-									id="select-investors"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-white border-none p-5 mb-5 focus:outline-none form-field"
-									// onClick={(e) => e.target.setAttribute("multiple", "")}
-									multiple
-									onChange={(e) => saveList(e)}
-								>
-									<option defaultValue="Select investors" style={{backgroundColor: "lightgrey"}}>
-										Select category
-									</option>
-									{people.length > 0 ? people.map(person => (<option key={person.id} value={person.name}>{person.name}</option>)) : null}
-
-								</select>*/}
-
-								<ReactSelect
+							<div className="col-span-2 mb-5">
+								<CustomSelect
 									options={investorOptions}
 									isMulti
 									closeMenuOnSelect={false}
 									hideSelectedOptions={false}
-									components={{
-										InvestorOptionsComponent,
-									}}
-									onChange={(e) => console.log(e)}
+									components={{Option, MultiValue, ValueContainer}}
+									placeholder="Select investors"
+									onChange={(e) => handleInvestorChange(e)}
 									allowSelectAll={true}
-									// value={this.state.optionSelected}
+									value={state.investorSelected}
 								/>
 							</div>
 						</div>
@@ -278,7 +362,8 @@ export default function PublishOffer() {
 								<input
 									type="checkbox"
 									id="sava-as-open"
-									name="sava-as-open"
+									name="savaAsOpen"
+									onChange={(e) => handleChange(e)}
 									className="mr-2 rounded focus:ring-0"
 								/>
 								<label
@@ -293,7 +378,8 @@ export default function PublishOffer() {
 								<input
 									type="checkbox"
 									id="save-as-now-coming"
-									name="save-as-now-coming"
+									name="saveAsComing"
+									onChange={(e) => handleChange(e)}
 									className="mr-2 rounded focus:ring-0"
 								/>
 								<label
@@ -313,36 +399,52 @@ export default function PublishOffer() {
 							title="Save list as favourite"
 							type="submit"
 							buttonClass="save-list bg-gray-400 mb-5 sm:mb-0 sm:mr-5 py-5 text-center"
-							handleClick={handlePublish}
+							handleClick={FavouriteListModal}
 						/>
 
 						<Button
 							title="Publish loan"
 							type="submit"
 							buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
-							handleClick={handlePublish}
 						/>
 					</div>
 
 					{/*Modal*/}
 					<div
-						id="offer-modal"
+						id="save-list-modal"
 						className="h-60"
 						ref={modalContainerRef}
 					>
 						<div
 							id="modal-content"
-							className="flex flex-col justify-center items-center"
+							className=""
 						>
-							<h4 className="font-bold text-lg">
-								Congratulations!
+							<h4 className="font-bold text-2xl self-start my-5">
+								New list
 							</h4>
-							<p className="py-5">Your loan has been published</p>
-							<Button
-								title="Go home"
-								link="/client/offers"
-								buttonClass="bg-green-500"
-							/>
+
+							<div className="grid grid-cols-2 gap-4 mb-10">
+								<div className="col-span-2">
+									<input type="text" name="favouriteListName" value={state.favouriteListName} onChange={(e) => setState(state => ({...state, [e.target.name]: e.target.value}))} placeholder="Title" className="w-full border-l-0 border-t-0 border-r-0 focus:border-white" />
+								</div>
+								<div className="col-span-2">
+									<input type="text" name="favouriteListDescription" value={state.favouriteListDescription} onChange={(e) => setState(state => ({...state, [e.target.name]: e.target.value}))} placeholder="Description (optional)" className="w-full border-l-0 border-t-0 border-r-0 focus:border-white" />
+								</div>
+							</div>
+							
+							<div id="modal-buttons" className="flex justify-end pr-5">
+								<Button
+									title="Cancel"
+									buttonClass="cancel mr-5"
+									handleClick={removeFavouriteListModal}
+							    />
+
+							    <Button
+									title="Create"
+									buttonClass="create"
+									handleClick={saveFavouriteList}
+							    />
+							</div>
 						</div>
 					</div>
 				</div>
