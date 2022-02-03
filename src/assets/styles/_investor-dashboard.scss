@@ -1,22 +1,4 @@
 /*#### SMALL SCREENS #####*/
-@media (max-width: 1190px) {
-	#dashboard-nav {
-		#nav-menu {
-			#nav-menu-list {
-				.nav-menu-item {
-					#profile {
-						#profile-image {
-							img {
-							}
-						}
-						img {
-						}
-					}
-				}
-			}
-		}
-	}
-}
 
 @include respond-below(md) {
 	#orderbook-investor-dashboard {
@@ -41,35 +23,34 @@
 			padding: 10px !important;
 			font-size: 18.5px !important;
 		}
-	}
+	
 
-	#user-quick-action {
-		.actions {
-			h2 {
-				font-size: 15px !important;
-
-				.fa-thumbs-o-up {
-					width: 35px !important;
-					height: 35px !important;
+		#user-quick-action {
+			.actions {
+				h2 {
+					.fa-thumbs-o-up {
+						width: 35px !important;
+						height: 35px !important;
+					}
 				}
 			}
 		}
-	}
 
-	#notifications-container {
-		width: 90%;
+		#notifications-container {
+			width: 90%;
 
-		#notifications {
-			width: 100% !important;
+			#notifications {
+				width: 100% !important;
 
-			.notification {
-				div {
-					a {
-						font-size: 16px !important;
-					}
+				.notification {
+					div {
+						a {
+							font-size: 16px !important;
+						}
 
-					small {
-						font-size: 13px !important;
+						small {
+							font-size: 13px !important;
+						}
 					}
 				}
 			}
@@ -78,46 +59,46 @@
 }
 
 @include respond-below(sm) {
-	#user-quick-action {
-		height: 300px !important;
-		flex-direction: column !important;
-		align-items: flex-start !important;
-		padding: 0 30px !important;
+	#orderbook-investor-dashboard {
+		#user-quick-action {
+			height: 300px !important;
+			flex-direction: column !important;
+			align-items: flex-start !important;
+			padding: 0 30px !important;
 
-		.actions {
-			border: none !important;
-			padding-right: 0 !important;
+			.actions {
+				border: none !important;
+				padding-right: 0 !important;
 
-			h2 {
-				font-size: 15px !important;
-
-				.fa-thumbs-o-up {
-					width: 35px !important;
-					height: 35px !important;
+				h2 {
+					.fa-thumbs-o-up {
+						width: 35px !important;
+						height: 35px !important;
+					}
 				}
 			}
 		}
-	}
 
-	#notifications-container {
-		width: 100% !important;
+		#notifications-container {
+			width: 100% !important;
 
-		#notifications {
-			.notification {
-				display: block !important;
+			#notifications {
+				.notification {
+					display: block !important;
 
-				.badge {
-					width: 40px !important;
-					height: 40px !important;
-					border-radius: 20px !important;
-					font-size: 25px !important;
+					.badge {
+						width: 40px !important;
+						height: 40px !important;
+						border-radius: 20px !important;
+						font-size: 25px !important;
+					}
 				}
 			}
 		}
-	}
 
-	#offer-status {
-		overflow-x: scroll !important;
+		#offer-status {
+			overflow-x: scroll !important;
+		}
 	}
 }
 
