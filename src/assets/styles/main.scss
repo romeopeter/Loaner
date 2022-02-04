@@ -29,3 +29,9 @@ html {
 @import "_investor-dashboard.scss";
 @import "_investor-offers.scss";
 @import "_investor-bids.scss";
+
+
+#orderbook-not-found {
+	h1 {font-family: $header-font;}
+	p {font-family: $body-font;}
+}
