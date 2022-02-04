@@ -152,12 +152,14 @@ export default function ClientDashboard() {
 									</p>
 									<div className="offer-button">
 										<Button
-											title={`Edit draft`}
+											title="Edit draft"
+											link="/client/offers/offer/edit"
 											type="button"
 											buttonClass="h-2 p-2 bg-grey"
 										/>
 										<Button
 											title="Publish"
+											link="/client/offers/offer/publish"
 											type="button"
 											buttonClass="h-2 p-2 bg-white"
 										/>
@@ -184,12 +186,14 @@ export default function ClientDashboard() {
 									<div className="offer-button">
 										<Button
 											title="Edit draft"
+											link="/client/offers/offer/edit"
 											type="button"
 											buttonClass="h-2 p-2 bg-grey"
 										/>
 										
 										<Button
 											title="Publish"
+											link="/client/offers/offer/publish"
 											type="button"
 											buttonClass="h-2 p-2 bg-white"
 										/>
@@ -215,6 +219,7 @@ export default function ClientDashboard() {
 									</p>
 									<div className="offer-button">
 										<Button
+											link="/client/offers/offer/edit"
 											title="Edit draft"
 											type="button"
 											buttonClass="h-2 p-2 last-button"
@@ -224,9 +229,9 @@ export default function ClientDashboard() {
 								</div>
 							</div>
 							<div id="view-more" className="text-right">
-								View more{" "}
+								<Link to="/client/offers"  className="text-white text-lg font-bold">View more</Link>{" "}{" "}
 								<i
-									className="fa fa-long-arrow-right"
+									className="fa fa-long-arrow-right text-white"
 									aria-hidden="true"
 								></i>
 							</div>
