@@ -60,18 +60,17 @@
 					button {
 						width: 50%;
 						height: 40px;
-						// background: hotpink;
 						font-size: 15px;
 						font-weight: bold;
 						font-family: $body-font;
 
 						&.bg-grey {
 							background: #c4c4c4 !important;
-							color: $black;
+							a {color: $white;}
 						}
 						&.bg-white {
 							background: $white;
-							color: $black;
+							a {color: $black;}
 						}
 					}
 
