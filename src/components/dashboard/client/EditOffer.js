@@ -125,7 +125,7 @@ export default function EditOffer() {
 									trillion.
 								</p>
 								<div id="loan-edit" className="col-span-12 lg:col-start-5 lg:col-span-8">
-									<form onSubmit={() => console.log("submit trigger")}>
+									<form onSubmit={() => console.log("submit trigger")} className="mt-10 sm:mt-0">
 										<div className="grid grid-cols-12 gap-4 p-4 border-t-2 border-black pt-5">
 											<div className="col-span-12 sm:col-span-3">
 												<label htmlFor="name">Name</label>
@@ -133,11 +133,13 @@ export default function EditOffer() {
 											</div>
 
 											<div className="col-span-12 sm:col-span-3">
-												<label htmlFor="offer-type">Type of offer</label>
-												<select name="offerType" id="offer-type" className="bg-gray-300 border-none w-full">
-													<option defaultValue="Commercial paper">Commercial paper</option>
-													<option value="Bond">Bond</option>
-												</select>
+												<label htmlFor="offer-type">
+													Type of offer
+													<select name="offerType" id="offer-type" className="bg-gray-300 border-none w-full p-2">
+														<option value="Commercial paper">Commercial paper</option>
+														<option value="Bond">Bond</option>
+													</select>
+												</label>
 											</div>
 
 											<div className="col-span-12 sm:col-span-3">

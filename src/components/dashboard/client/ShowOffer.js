@@ -77,7 +77,7 @@ export default function ShowOffer() {
 										
 									</div>
 								</div>
-								<p id="offer-description" className="px-5 md:px-0 col-span-12 lg:col-span-8">
+								<p id="offer-description" className="px-5 md:px-0 col-span-12 lg:col-span-8 px-10 sm:px-10">
 									Rice is the most consumed commodity. Total
 									global rice expenditure in 2020 was $350
 									billion. To put in perspective, total
@@ -124,7 +124,7 @@ export default function ShowOffer() {
 									was just four times that amount at $1.3
 									trillion.
 								</p>
-								<div id="loan-summary" className="col-span-12 lg:col-start-5 lg:col-span-8">
+								<div id="loan-summary" className="col-span-12 lg:col-start-5 lg:col-span-8 mt-10 sm:mt-0">
 									<table className="table-auto w-full h-auto">
 										<thead></thead>
 										<tbody>
