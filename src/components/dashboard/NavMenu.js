@@ -31,6 +31,7 @@ export default function NavMenu() {
 	const {user} = JSON.parse(localStorage.getItem("USER"));
 
 	const userType = user.groups ? user.groups[0] : "";
+	const role = userType.name.toLowerCase();
 
 	return (
 		<div id="dashboard-nav">
@@ -65,10 +66,10 @@ export default function NavMenu() {
 								id="deals-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to="">Current deals</Link>
-								<Link to="/">Archived deals</Link>
-								<Link to="/">Create deal - single tranche</Link>
-								<Link to="/">
+								<Link to={`/${role}/current-deals`}>Current deals</Link>
+								<Link to={`/${role}/archived-deals`}>Archived deals</Link>
+								<Link to={`/${role}/single-tranche-deal`}>Create deal - single tranche</Link>
+								<Link to={`/${role}/multiple-tranche-deal`}>
 									Create deal - multiple tranche
 								</Link>
 							</div>
@@ -85,9 +86,9 @@ export default function NavMenu() {
 								id="analysis-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to="">Saved report</Link>
-								<Link to="/">Create report</Link>
-								<Link to="/">Search</Link>
+								<Link to={`/${role}/saved-report`}>Saved report</Link>
+								<Link to={`/${role}/create-report`}>Create report</Link>
+								<Link to={`/${role}/search`}>Search</Link>
 							</div>
 						</li>
 						<li id="admin" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
@@ -102,10 +103,10 @@ export default function NavMenu() {
 								id="admin-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to="">Companies</Link>
-								<Link to="/">Currencies</Link>
-								<Link to="/">Deal/Tranche</Link>
-								<Link to="/">
+								<Link to={`/${role}/companies`}>Companies</Link>
+								<Link to={`/${role}/currencies`}>Currencies</Link>
+								<Link to={`/${role}/deal-and-tranche`}>Deal/Tranche</Link>
+								<Link to={`/${role}/profile-settings`}>
 									Personal Settings
 								</Link>
 							</div>
@@ -125,15 +126,15 @@ export default function NavMenu() {
 								id="help-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to="">FAQ</Link>
-								<Link to="/">Contact us</Link>
+								<Link to={`/${role}/faq`}>FAQ</Link>
+								<Link to={`/${role}/contact-us`}>Contact us</Link>
 							</div>
 						</li>
 						<li className="nav-menu-item">
-							<Link to="/">Privacy</Link>
+							<Link to={`/${role}/privacy-policy`}>Privacy</Link>
 						</li>
 						<li className="nav-menu-item">
-							<Link to="/register">Terms of Use</Link>
+							<Link to={`/${role}/terms-of-use`}>Terms of Use</Link>
 						</li>
 						<li
 							id="user-profile-menu-item"
@@ -156,7 +157,7 @@ export default function NavMenu() {
 									></i>
 									<div id="profile-menu-nav" className="bg-white shadow-md rounded">
 										<div id="profile" className="menu-nav-container">
-											<Link to={`/${userType.name.toLowerCase()}/dashboard`}>Dashboard</Link>
+											<Link to={`/${role}/dashboard`}>Dashboard</Link>
 											<Link to="/profile">Profile</Link>
 											<Link to="/user/client/edit-profile">Edit Profile</Link>
 										</div>
