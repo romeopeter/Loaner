@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import LandingPage from "./LandingPage";
+import NotFound from "./NotFound";
 
 import Login from "./authentication/Login";
 import RequireAuth from "./authentication/RequireAuth";
@@ -44,6 +45,7 @@ function App() {
   return (
     <ChakraProvider>
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
