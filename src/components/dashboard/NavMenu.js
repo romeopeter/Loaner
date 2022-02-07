@@ -159,20 +159,21 @@ export default function NavMenu() {
 										<div id="profile" className="menu-nav-container">
 											<Link to={`/${role}/dashboard`}>Dashboard</Link>
 											<Link to="/profile">Profile</Link>
-											<Link to="/user/client/edit-profile">Edit Profile</Link>
+											<Link to="/client/new-loan">Create loan offer</Link>
 										</div>
 										<hr className="hidden md:block" />
 										<div id="account" className="menu-nav-container">
+											<Link to="/user/client/edit-profile">Edit Profile</Link>
 											<Link to="/user/client/account-settings">Account Settings</Link>
 											<span onClick={() => handleSignOut()}>Sign out</span>
 										</div>
 									</div>
 								</div>
-								<img
+								{/*<img
 									src={UBALogo}
 									id="bank-photo"
 									className="round-lg"
-								/>{" "}
+								/>{" "}*/}
 							</div>
 						</li>
 					</ul>
