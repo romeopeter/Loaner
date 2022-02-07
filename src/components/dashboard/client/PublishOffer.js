@@ -155,8 +155,7 @@ export default function PublishOffer({children, ...props}) {
 
 	const saveFavouriteList = () => {
 		if (state.favouriteListName === "") {
-			alert.error("List must have name")
-
+			alert.error("List must have a title")
 			return
 		}
 
