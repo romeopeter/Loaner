@@ -18,17 +18,42 @@ const authState = user
 	? { isLoggedIn: true, user, error: null }
 	: { isLoggedIn: false, user: null, error: null };
 
-export const signInAction = createAsyncThunk("auth/signInAction", async credentials => {
-	const res = await signInRequest(credentials);
+export const signInAction = createAsyncThunk(
+	"auth/signInAction", async (credentials, thunkAPI) => {
+		const res = await signInRequest(credentials);
+		const requestConfig = res.config;
+		const dispatch = thunkAPI.dispatch
 
-	// Check if error object exist
-	if ("stack" in res) {
-		return res
+		// Check if error object exist
+		if ("stack" in res) {
+			const errorMessage = res.message;
+
+			if (errorMessage === "Network Error") {
+
+				// Dipatch action
+				dispatch(setServerMessage({
+					status: null, 
+					message: "Network Error", 
+					detail: "Poor network connection"
+				}));
+
+				return
+			}
+
+			return;
+		}
+
+		// Recieves new token if old is expired
+		if ("code" in res.data && res.data.code === "token_not_valid") {
+			// Request new token
+			// Store new token
+			console.log("Token is expired");
+			return;
+		}
+
+		if (res.status === 200) return res.data;
 	}
-
-	return res.data;
-});
-
+);
 
 export const authSlice = createSlice({
 	name: "auth",
@@ -50,7 +75,7 @@ export const authSlice = createSlice({
 			console.log("rejected");
 		},
 		[signInAction.fulfilled]: (state, action) => {
-			const payload = action.payload;
+			const payload = action.payload !== undefined && action.payload;
 
 			// Store user object in browser storage
 			localStorage.setItem("USER", JSON.stringify(payload));
@@ -58,7 +83,7 @@ export const authSlice = createSlice({
 			state.isLoggedIn = true;
 			state.user = payload;
 		},
-	}
+	},
 });
 
 export const { signUpAction, signOutAction } = authSlice.actions;
