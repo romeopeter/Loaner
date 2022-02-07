@@ -12,6 +12,7 @@ import phoneLady from "../../assets/images/phoneLady.jpg";
 
 export default function Login() {
 	const pageName = "Login";
+	let confirmEmailMessage = null;
 
 	const navigate = useNavigate();
 	const { state } = useLocation();
@@ -100,10 +101,12 @@ export default function Login() {
 		});
 	};
 
-	if (typeof message === "object" && message.message === "Network Error") {
-		alert.error(message.message);
+	// Network Error
+	if (typeof message === "object" && message.messageType === "account_created") {
+		confirmEmailMessage = message.message
 	}
 
+	// Rediret if already logged in
 	if (isLoggedIn && typeof user === "object") {
 		return <Navigate replace to="/" />
 	};
@@ -156,6 +159,13 @@ export default function Login() {
 									</Link>
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
+									<div className="mb-5">
+										{confirmEmailMessage !== null && confirmEmailMessage !== ""?(
+											<div className="text-black text-center bg-green-100 p-2 rounded border border-1 border-green-400">
+												{confirmEmailMessage}
+											</div>
+										):null}
+									</div>
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Welcome back
 									</h2>
@@ -222,6 +232,7 @@ export default function Login() {
 										>
 											Forgot password?
 										</Link>
+
 									</div>
 
 									<div className="col-span-6 sm:col-span-4 mt-1">
