@@ -27,6 +27,7 @@ export default function Register() {
 		password: "",
 		confirmPassword: "",
 		isLoading: false,
+		registerContainerIsExtended: false
 	});
 
 	const [formError, setFormError] = useState({
@@ -129,19 +130,19 @@ export default function Register() {
 		// Redux async call
 		dispatch(signUpAsync(data)).then((response) => {
 
-			if ("status" in response && response.status == 201) {
+			if ("status" in response && response.status === 201) {
 				const userType = response.data.groups[0];
 
 				if (userType.name === "Client") {
-					navigate("/client/dashboard");
+					navigate("/login");
 				}
 
 				if (userType.name === "Broker") {
-					navigate("/broker/dashboard");
+					navigate("/login");
 				}
 
 				if (userType.name === "Investor") {
-					navigate("/investor/dashboard");
+					navigate("/login");
 				}
 			} else {
 				serverMessage && alert.show(serverMessage);
@@ -214,6 +215,7 @@ export default function Register() {
 									<div
 										id="registration-steps"
 										className="col-span-12"
+										style={{height: form.registerContainerIsExtended? "auto":"300px"}}
 									>
 										<Form
 											formState={{ form, setForm }}
@@ -223,35 +225,6 @@ export default function Register() {
 											}}
 											setFormErrorState={{formError, setFormError}}
 										/>
-									</div>
-
-									<div className="col-span-12">
-										<div className="flex items-start">
-											<div className="flex items-center h-5">
-												<input
-													id="terms-and-conditions"
-													name="termsAndConditionsIsChecked"
-													type="checkbox"
-													className="focus:ring-white h-4 w-4 text-indigo-600 border-black rounded"
-													required
-													onChange={(e) =>
-														handleChange(e)
-													}
-												/>
-											</div>
-											<div className="ml-3 text-sm">
-												<label
-													htmlFor="terms-and-conditions"
-													className="font-medium text-black"
-												>
-													By signing up, you agree to
-												</label>{" "}
-												<Link to="/">
-													Orderbook’s Terms of Use &
-													Privacy Policy
-												</Link>
-											</div>
-										</div>
 									</div>
 
 									<div className="col-span-12 mt-1">
