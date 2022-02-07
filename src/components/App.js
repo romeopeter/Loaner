@@ -9,6 +9,11 @@ import RequireAuth from "./authentication/RequireAuth";
 import Register from "./authentication/Register";
 import Profile from "./dashboard/client/ProfileSettings";
 
+import CurrentDeals from "./CurrentDeals";
+import ArchivedDeals from "./ArchivedDeals";
+import SingleTrancheDeal from "./SingleTrancheDeal";
+import MultipleTrancheDeal from "./MultipleTrancheDeal";
+
 import ClientDashboard from "./dashboard/client/ClientDashboard";
 import LoanRequest from "./dashboard/client/LoanRequest";
 import Offers from "./dashboard/client/Offers";
