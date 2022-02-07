@@ -6,7 +6,7 @@ const axiosHeaders = axios.defaults.headers;
 const currentUser = JSON.parse(localStorage.getItem("USER"));
 axiosHeaders.post["Content-Type"] = "application/json";
 
-if (currentUser?.tokens.access !== undefined) {
+if (currentUser !== null && typeof currentUser === "object") {
 	axiosHeaders.common["Authorization"] = `Bearer ${currentUser.tokens.access}`;
 }
 
