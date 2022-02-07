@@ -1,5 +1,6 @@
 import React, { useState, createRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 
 import PhoneInput from 'react-phone-number-input';
@@ -36,6 +37,13 @@ export default function Form( props ) {
 				buttonIsDisabled: false,
 			};
 		});
+
+		setForm(state => {
+			return {
+				...state,
+				registerContainerIsExtended: true
+			}	
+		})
 	};
 
 	let slideFinalFormOut = () => {
@@ -50,6 +58,13 @@ export default function Form( props ) {
 				buttonIsDisabled: true,
 			};
 		});
+
+		setForm(state => {
+			return {
+				...state,
+				registerContainerIsExtended: false
+			}	
+		})
 	};
 
 	
@@ -93,7 +108,6 @@ export default function Form( props ) {
 						<option value="Miss">Miss</option>
 						<option value="Mrs">Mrs</option>
 						<option value="Ms">Ms</option>
-
 						<option value="Dr">Dr</option>
 						<option value="Other">Other</option>
 					</select>
@@ -249,11 +263,40 @@ export default function Form( props ) {
 					</div>
 				</div>
 
+				<div className="col-span-12">
+					<div className="flex items-start">
+						<div className="flex items-center h-5">
+							<input
+								id="terms-and-conditions"
+								name="termsAndConditionsIsChecked"
+								type="checkbox"
+								className="focus:ring-white h-4 w-4 text-indigo-600 border-black rounded"
+								required
+								onChange={(e) =>
+									handleChange(e)
+								}
+							/>
+						</div>
+						<div className="ml-3 text-sm">
+							<label
+								htmlFor="terms-and-conditions"
+								className="font-medium text-black"
+							>
+								By signing up, you agree to
+							</label>{" "}
+							<Link to="/">
+								Orderbook’s Terms of Use &
+								Privacy Policy
+							</Link>
+						</div>
+					</div>
+				</div>
+
 				<div className="col-span-12 text-left">
 					<Button
 						title="Previous"
 						id="previous-field-button"
-						buttonClass="form-slide-button text-white bg-gray-400 rounded"
+						buttonClass="form-slide-button text-white bg-blue-600"
 						handleClick={slideFinalFormOut}
 					/>
 				</div>
