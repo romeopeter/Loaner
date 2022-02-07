@@ -75,27 +75,38 @@ export default function Login() {
 
 		// Dispatch redux sign-in action
 		dispatch(signInAction(data)).then(() => {
-			const {user} = JSON.parse(localStorage.getItem("USER"));
+			const { user } = JSON.parse(localStorage.getItem("USER"));
 
-			const userType = user.groups ? user.groups[0].name : navigate("/login");
 
-			// Acess store and check user role
-			if (userType === "Client") {
-				navigate(state?.path || "/client/dashboard");
+
+			if (user !== undefined && "groups" in user) {
+				const userType = user.groups[0].name;
+
+				// Acess store and check user role
+				if (userType === "Client") {
+					navigate(state?.path || "/client/dashboard");
+				}
+
+				if (userType === "Broker") {
+					navigate(state?.path || "/broker/dashboard");
+				}
+
+				if (userType === "Investor") {
+					navigate(state?.path || "/investor/dashboard");
+				}
 			}
 
-			if (userType === "Broker") {
-				navigate(state?.path || "/broker/dashboard");
-			}
-
-			if (userType === "Investor") {
-				navigate(state?.path || "/investor/dashboard");
-			}
+			navigate("/login");
 		});
 	};
 
-	
-	// if (isLoggedIn) return <Navigate replace to="/" />;
+	if (typeof message === "object" && message.message === "Network Error") {
+		alert.error(message.message);
+	}
+
+	if (isLoggedIn && typeof user === "object") {
+		return <Navigate replace to="/" />
+	};
 
 	return (
 		<>
