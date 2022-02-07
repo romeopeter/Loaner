@@ -9,7 +9,7 @@ axiosHeaders.post["Content-Type"] = "application/json";
 /*Authentication requests*/
 const signUpRequest = (data) => {
 	return axios
-		.post(`${API_URL}/api/v1/registration/sign_up/`, data)
+		.post(`${API_URL}/api/v1/registration/sign_up/?is_superuser=True`, data)
 		.catch((error) => error);
 };
 
