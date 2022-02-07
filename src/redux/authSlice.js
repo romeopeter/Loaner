@@ -93,16 +93,21 @@ export const signUpAsync = (data) => (dispatch) => {
 	return signUpRequest(data).then((response) => {
 		// Check if error stack object exist
 		if ("stack" in response) {
-			const { data, status } = response.response;
-			const message = data.error;
+			const { data, config } = response
 
-			dispatch(setServerMessage(message));
+			// dispatch(setServerMessage(message));
+			console.log(response);
 
 			return response;
 		}
 
 		if (response.status === 201) {
-			dispatch(setServerMessage("Please sign in."));
+			dispatch(setServerMessage({
+				status: 201,
+				messageType: "account_created", 
+				message: "A confirmation email has been sent to your email 📧", 
+				detail: "Account created successfully"
+			}));
 
 			return response;
 		}
