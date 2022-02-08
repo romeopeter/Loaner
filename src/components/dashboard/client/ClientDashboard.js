@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { signOutAsync } from "../../../redux/authSlice";
+import { getOffersAction } from "../../../redux/loanSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderbookLayout from "../../OrderbookLayout";
@@ -20,6 +21,10 @@ export default function ClientDashboard() {
 	const dispatch = useDispatch();
 	const authUser = useSelector((state) => state.auth.user);
 
+	useEffect(() => {
+		getOffersAction()
+	}, [])
+
 	const { user: currentUser } = authUser;
 
 	if (!currentUser) {
@@ -30,8 +35,6 @@ export default function ClientDashboard() {
 	const handleSignOut = () => {
 		dispatch(signOutAsync());
 		navigate("/");
-
-		window.location.reload();
 	};
 
 	return (
