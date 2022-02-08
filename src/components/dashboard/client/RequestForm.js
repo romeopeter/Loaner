@@ -590,10 +590,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												id="benchmark"
 												placeholder="Benchmark"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-												disabled={hiddenFieldTrigger.showBenchmark? false : true}
+												disabled={formState.pricing.couponType === "floating" ? false : true}
 												style={{
-													backgroundColor: hiddenFieldTrigger.showBenchmark ? "#d1d5db" : "#888",
-													cursor:  hiddenFieldTrigger.showBenchmark ? "text":"not-allowed",
+													backgroundColor: formState.pricing.couponType === "floating" ? "#d1d5db" : "#888",
+													cursor:  formState.pricing.couponType === "floating" ? "text":"not-allowed",
 												}}
 												value={
 													formState.pricing
