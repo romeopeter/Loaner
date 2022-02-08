@@ -4,11 +4,18 @@
  *
  * **/
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { loanRequestCP, loanRequestBond } from "../services/loan.service.js";
 
 import { setServerMessage } from "./messageSlice";
+import { getOffers } from "../services/loan.service.js";
+
+export const getOffersAction = createAsyncThunk("loan/getOffers", async (thunkAPI) => {
+    const res = await getOffers();
+
+    if (res.status === 200) return res.data;
+});
 
 export const loanSlice = createSlice({
     name: "loan",
@@ -16,6 +23,18 @@ export const loanSlice = createSlice({
     reducers: {
         createLoan: (state, action) => {
             return;
+        },
+    },
+    extraReducers: {
+        [getOffersAction.pending]: (state, action) => {
+            console.log("Pending")
+        },
+        [getOffersAction.rejected]: (state, action) => {
+            console.log("Rejected")
+        },
+        [getOffersAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state = payload
         },
     }
 });
