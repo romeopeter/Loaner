@@ -51,22 +51,47 @@
 }
 
 @include respond-below(sm) {
-	#user-quick-action {
-		height: 300px !important;
-		flex-direction: column !important;
-		align-items: flex-start !important;
+	#client-user-quick-action {
+		height: 250px !important;
 		padding: 0 30px !important;
 
 		.actions {
 			border: none !important;
 			padding-right: 0 !important;
-			margin-bottom: 15px;
-			width: auto !important;
+			margin-bottom: 20px;
+			width: 100% !important;
+			padding: 0 0 0 3rem;
 
 			h2 {
+				text-align: start !important;
 				.fa-thumbs-o-up {
 					width: 35px !important;
 					height: 35px !important;
+				}
+			}
+		}
+	}
+
+	#account-overview {
+		height: 300px;
+
+		#account {
+			height: 200px !important;
+			.loan-count {
+				padding: 0 0 0 3rem;
+				a {
+
+					.account-icon-container {
+						margin-right: 10px !important;
+						img {	
+						}
+					}
+
+					p {
+						width: 90%;
+						align-self: center;
+						br {display: none !important;}
+					}
 				}
 			}
 		}
@@ -76,6 +101,48 @@
 /*##### LARGE SCREEN #####*/
 
 #dashboard-intro-container {
+	#dashboard-dropdown {
+		#loan {
+			position: relative;
+			cursor: pointer;
+
+			#loan-dropdown {
+				visibility: hidden;
+				position: absolute;
+				width: 200px;
+				height: 150px;
+				z-index: 1;
+
+				a {
+					display: block;
+					color: $black;
+					padding: 8px 8px 8px 15px;
+					margin-top: 10px;
+
+					&:hover {
+						background: lightgrey;
+						// font-weight: bold !important;
+					}
+				}
+
+				&::after {
+					content: "";
+					position: absolute;
+					bottom: 100%;
+					left: 13%;
+					margin-left: -5px;
+					border-width: 5px;
+					border-style: solid;
+					border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+				}
+			}
+
+			&:hover #loan-dropdown {
+				visibility: visible;
+			}
+		}
+	}
+
 	#orderbook-dashboard-intro {
 		height: 450px;
 		width: 100%;
@@ -111,7 +178,7 @@
 		}
 	}
 
-	#user-quick-action {
+	#client-user-quick-action {
 		height: 100px;
 
 		.actions {
@@ -120,21 +187,31 @@
 			align-items: center;
 			width: 450px;
 
-			h2 {
-				font-size: 20px !important;
+			a {
 				width: 100%;
-				text-align: center;
-
-				.fa-thumbs-o-up {
-					width: 45px;
-					height: 45px;
-					border-radius: 22.5px;
-					background: lightgray;
-					color: white;
+					h2 {
+					font-size: 20px !important;
+					width: 100%;
 					text-align: center;
-					vertical-align: middle;
-					padding: 10px 0px;
-					margin-right: 8px;
+
+					.action-icon-container {
+						display: inline-block;
+						width: 45px;
+						height: 45px;
+						border-radius: 22.5px;
+						background: lightgray;
+						color: white;
+						text-align: center;
+						vertical-align: middle;
+						padding: 10px 0px;
+						margin-right: 8px;
+
+						img {
+							width: auto;
+							height: 25px;
+							margin: 0 auto;
+						}
+					}
 				}
 			}
 		}
@@ -154,16 +231,37 @@
 			width: 550px;
 			height: 100px;
 
-			p {
-				.count {
-					height: 50px;
-					width: 50px;
-					background: $white;
-					color: $black;
-					border-radius: 25px;
-					padding: 5px;
+			
+			.loan-count {
+				margin-right: 15px;
+
+				a {
+					display: flex;
+
+					.account-icon-container {
+						height: 50px;
+						width: 50px;
+						background: $white;
+						border-radius: 25px;
+						padding: 5px;
+					    display: flex;
+					    justify-content: center;
+					    align-items: center;
+					    margin-right: 5px;
+
+						img {
+							width: 30px;
+							height: 30px;
+							margin: 0 auto;
+						}
+					}
+
+					p {
+						font-size: 18px;
+					}
 				}
 			}
+			
 		}
 	}
 
