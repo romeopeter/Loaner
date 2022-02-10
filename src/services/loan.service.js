@@ -1,16 +1,13 @@
 import axios from "axios";
+import axiosConfig from "./authHeader";
 
 
 // Default Axios config
-const axiosHeaders = axios.defaults.headers;
-const currentUser = JSON.parse(localStorage.getItem("USER"));
-axiosHeaders.post["Content-Type"] = "application/json";
-
-if (currentUser !== null && typeof currentUser === "object") {
-	axiosHeaders.common["Authorization"] = `Bearer ${currentUser.tokens.access}`;
-}
+axiosConfig();
 
 const API_URL = "https://order-book-online.herokuapp.com";
+
+const getOffers = axios.get(`${API_URL}/api/v1/loan_request/cp/`).catch(error => console.log(error));
 
 
 const loanRequestCP = (data) => {
@@ -21,12 +18,6 @@ const loanRequestCP = (data) => {
 
         // Get refresh token
         const {tokens: {refresh}} = JSON.parse(localStorage.getItem("USER"));
-
-        // Modify header in config
-
-        // Make new request for access token
-
-        // Save token in storage
 };
 
 const loanRequestBond = (data) => {
@@ -36,4 +27,4 @@ const loanRequestBond = (data) => {
 		.catch((error) => error);
 };
 
-export { loanRequestCP, loanRequestBond };
+export { loanRequestCP, loanRequestBond, getOffers };
