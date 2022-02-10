@@ -32,7 +32,40 @@ html {
 
 
 #orderbook-not-found {
+	@include respond-below(sm) {
+		#lead-404 {
+			font-size: 10rem !important;
+		}
+
+		#message {
+			width: normal !important;
+		}
+	}
+
 	height: 100vh;
-	h1 {font-family: $header-font;}
-	p {font-family: $body-font;}
+	#lead-404 {
+		font-family: $body-font;
+		color: $primary-dark;
+		font-size: 15rem;
+	}
+
+	p {
+
+		&:nth-child(1) {
+			font-family: $header-font;
+		}
+		&#message {
+			font-family: $body-font;
+			max-width: 60rem;
+		}
+
+		&#go-home {
+			background: $primary-dark;
+			max-width: 300px;
+
+			a {
+				display: block;
+			}
+		}
+	}
 }
