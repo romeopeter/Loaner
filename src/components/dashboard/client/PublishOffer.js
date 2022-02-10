@@ -128,6 +128,12 @@ export default function PublishOffer({children, ...props}) {
 		publishSuccessModalRef.current.classList.add("accept-modal");
 	};
 
+
+	/*Save list as favourite*/
+
+	const investorValues = state.investorSelected;
+	const categoryValues = state.categoryCheckbox;
+
 	const listAsFavourite = {
 		listName: "",
 		listDescription: "",
@@ -135,16 +141,11 @@ export default function PublishOffer({children, ...props}) {
 			categories: [],
 			investors: [],
 		},
-		saveAsOpen: state.saveAsOpen ? state.saveAsOpen : state.saveAsOpen,
-		saveAsComing: state.saveAsComing ? state.saveAsComing : state.saveAsComing
+		saveAsOpen: state.saveAsOpen === false ? !state.saveAsOpen : state.saveAsOpen,
+		saveAsComing: state.saveAsComing === false ? !state.saveAsComing : state.saveAsComing
 	};
 
-
-	const investorValues = state.investorSelected;
-	const categoryValues = state.categoryCheckbox;
-
 	if (investorValues !== null) {
-		// const [{value: selectedInvestor}] = investorValue;
 
 		listAsFavourite.listItems = {
 			...listAsFavourite.listItems,
@@ -160,21 +161,27 @@ export default function PublishOffer({children, ...props}) {
 	}
 
 	const saveFavouriteList = () => {
+		const favouriteList = []
+
 		if (state.favouriteListName === "") {
 			alert.error("List must have a title")
-			return
+		} else {
+
+			const x =  {
+				...listAsFavourite,
+				listName: state.favouriteListName,
+				listDescription: state.favouriteListDescription
+			}
+			
+			favouriteList.push(x);
+
+
+			localStorage.setItem("FAVOURITE_lIST", JSON.stringify(favouriteList));
+
+			alert.success("List created");
+
+			removeFavouriteListModal();
 		}
-
-		listAsFavourite.listName = state.favouriteListName;
-		listAsFavourite.listDescription = state.favouriteListDescription;
-
-		const favouriteList = JSON.stringify(listAsFavourite);
-
-		window.localStorage.setItem("FAVOURITE_lIST", favouriteList);
-
-		alert.success("List created");
-
-		removeFavouriteListModal();
 	}
 
 	/* React-select customization start */
