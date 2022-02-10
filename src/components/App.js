@@ -23,6 +23,7 @@ import LoanSummary from "./dashboard/broker/LoanSummary";
 import AllLoanRequests from "./dashboard/broker/LoanRequests";
 import LoanOffer from "./dashboard/broker/LoanOffer";
 import SelectInvestor from "./dashboard/broker/SelectInvestor";
+import NewClientSave from "./dashboard/broker/NewClientSave";
 
 import AdminCurrencies from "./dashboard/admin/AdminCurrencies";
 import AdminCompanies from "./dashboard/admin/AdminCompanies";
@@ -66,6 +67,11 @@ function App() {
       <Route path="/broker/dashboard/new-client" element={
         // <RequireAuth>
           <NewClient/>
+        // </RequireAuth>
+      } />
+      <Route path="/broker/dashboard/new-client-save" element={
+        // <RequireAuth>
+          <NewClientSave/>
         // </RequireAuth>
       } />
       <Route path="/broker/dashboard/allclients" element={

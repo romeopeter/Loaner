@@ -56,7 +56,7 @@ const NewClient = () => {
                         <Flex flexDirection={["column", "row"]}>
                             <Box flex={"1"} >
                                 <FormLabel htmlFor='select'/>
-                                <Select  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"} placeholder='Select type of offer'>
+                                <Select  bgColor={"#C4C4C4"} borderRadius={"0"} border={"none"} placeholder='Select category'>
                                     <option value='option1'>Option 1</option>
                                     <option value='option2'>Option 2</option>
                                     <option value='option3'>Option 3</option>
