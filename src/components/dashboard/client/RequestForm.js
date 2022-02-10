@@ -492,8 +492,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option defaultValue="">
 											Min subscription
 										</option>
-										<option value="500000">
-											NGN 500,000
+										<option value="5000000">
+											NGN 5,000,000
 										</option>
 										<option value="10000000">
 											NGN 10,000,000
