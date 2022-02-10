@@ -13,7 +13,8 @@ import offerImage from "../../../assets/images/offerImage.png";
 export default function PublishOffer({children, ...props}) {
 	const pageName = "Publish offer";
 
-	const modalContainerRef = createRef();
+	const saveListModalRef = createRef();
+	const publishSuccessModalRef = createRef();
 	const alert = useAlert();
 
 	const [state, setState] = useState({
@@ -107,19 +108,24 @@ export default function PublishOffer({children, ...props}) {
 		}
 	}
 
-	const FavouriteListModal = () => {
-		modalContainerRef.current.classList.add("accept-modal");
-	};
-
-	const removeFavouriteListModal = () => {
-		modalContainerRef.current.classList.remove("accept-modal");
-	};
-
 	const selectAllInvestors = (e) => {
 		
 		if (e.target.checked) {
 			console.log("Selects all investor");
 		}
+	};
+
+	// Save list modal trigger
+	const FavouriteListModal = () => {
+		saveListModalRef.current.classList.add("accept-modal");
+	};
+	const removeFavouriteListModal = () => {
+		saveListModalRef.current.classList.remove("accept-modal");
+	};
+
+	// Publish successful modal trigger
+	const publishSuccessModal = () => {
+		publishSuccessModalRef.current.classList.add("accept-modal");
 	};
 
 	const listAsFavourite = {
@@ -405,14 +411,15 @@ export default function PublishOffer({children, ...props}) {
 							title="Publish loan"
 							type="submit"
 							buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
+							handleClick={publishSuccessModal}
 						/>
 					</div>
 
-					{/*Modal*/}
+					{/*Save list modal*/}
 					<div
 						id="save-list-modal"
 						className="h-60"
-						ref={modalContainerRef}
+						ref={saveListModalRef}
 					>
 						<div
 							id="modal-content"
@@ -442,6 +449,40 @@ export default function PublishOffer({children, ...props}) {
 									title="Create"
 									buttonClass="create"
 									handleClick={saveFavouriteList}
+							    />
+							</div>
+						</div>
+					</div>
+
+					{/*Publish succesful Modal*/}
+					<div
+						id="publish-success-modal"
+						className="h-40"
+						ref={publishSuccessModalRef}
+					>
+						<div
+							id="modal-content"
+							className=""
+						>
+							<h4 className="font-bold text-2xl text-center my-5">
+								Congratulations
+							</h4>
+
+							<p className="text-center mb-5 font-bold" id="message">
+								Your loan offer has been published
+							</p>
+							
+							<div id="modal-buttons" className="flex justify-center pr-5">
+								<Button
+									title="View orders"
+									link="/client/offers/"
+									buttonClass="view-orders mr-5"
+							    />
+
+							    <Button
+									title="Go home"
+									link="/"
+									buttonClass="go-home create"
 							    />
 							</div>
 						</div>
