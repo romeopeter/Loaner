@@ -20,6 +20,7 @@ import Offers from "./dashboard/client/Offers";
 import ShowOffer from "./dashboard/client/ShowOffer";
 import EditOffer from "./dashboard/client/EditOffer";
 import PublishOffer from "./dashboard/client/PublishOffer";
+import ViewInvestor from "./dashboard/client/ViewInvestor";
 
 import InvestorDashboard from "./dashboard/investor/InvestorDashboard";
 import InvestorDashboard2 from "./dashboard/investor/InvestorDashboard2";
@@ -117,6 +118,15 @@ function App() {
           element={
             <RequireAuth>
               <PublishOffer />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/client/offers/offer/view-investors"
+          element={
+            <RequireAuth>
+              <ViewInvestor />
             </RequireAuth>
           }
         />
