@@ -9,10 +9,10 @@ import RequireAuth from "./authentication/RequireAuth";
 import Register from "./authentication/Register";
 import Profile from "./dashboard/client/ProfileSettings";
 
-import CurrentDeals from "./CurrentDeals";
-import ArchivedDeals from "./ArchivedDeals";
-import SingleTrancheDeal from "./SingleTrancheDeal";
-import MultipleTrancheDeal from "./MultipleTrancheDeal";
+import CurrentDeals from "./dashboard/CurrentDeals";
+import ArchivedDeals from "./dashboard/ArchivedDeals";
+import SingleTrancheDeal from "./dashboard/SingleTrancheDeal";
+import MultipleTrancheDeal from "./dashboard/MultipleTrancheDeal";
 
 import ClientDashboard from "./dashboard/client/ClientDashboard";
 import LoanRequest from "./dashboard/client/LoanRequest";
@@ -54,6 +54,11 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/current-deals" element={<CurrentDeals />} />
+        <Route path="/archived-deals" element={<ArchivedDeals />} />
+        <Route path="single-tranche-deal" element={<SingleTrancheDeal />} />
+        <Route path="/multiple-tranche-deal" element={<MultipleTrancheDeal />} />
 
         {/*Profile*/}
         <Route

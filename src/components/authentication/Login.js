@@ -108,7 +108,7 @@ export default function Login() {
 
 	// Rediret if already logged in
 	if (isLoggedIn && typeof user === "object") {
-		return <Navigate replace to="/" />
+		return <Navigate replace to="/client/dashboard" />
 	};
 
 	return (

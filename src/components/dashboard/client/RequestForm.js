@@ -78,7 +78,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	};
 
 	// Handles all field chanages
-	const handleChange = (e, fieldClass) => {
+	const handleChange = (e, fieldclassName) => {
 		const target = e.target;
 		const name = target.name;
 		const value = target.value;
@@ -95,12 +95,12 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
 		}
 
-		if (fieldClass) {
+		if (fieldclassName) {
 			setFormState((state) => {
 				return {
 					...state,
-					[fieldClass]: {
-						...state[fieldClass],
+					[fieldclassName]: {
+						...state[fieldclassName],
 						[name]: value,
 					},
 				};
@@ -248,7 +248,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</select>
 							</div>
 
-							<div className="col-span-12">
+							{/*<div className="col-span-12">
 								<select
 									name="issuer"
 									id="issuer"
@@ -261,7 +261,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										Client/issuer
 									</option>
 								</select>
-							</div>
+							</div>*/}
 
 							<div className="col-span-12">
 								<input
@@ -1009,7 +1009,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 						</div>
 
-						<div class="grid grid-cols-1 gap-4 mt-5">
+						<div className="grid grid-cols-1 gap-4 mt-5">
 							<div className="col-span-12">
 								<input
 									type="text"
@@ -1136,7 +1136,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					title="View summary"
 					type="submit"
 					style={{
-						marginTop: "6.5rem",
+						marginTop: "15rem",
+						visibility: state.lastSlideIn?"visible":"hidden"
 					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}

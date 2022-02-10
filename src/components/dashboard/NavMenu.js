@@ -66,10 +66,10 @@ export default function NavMenu() {
 								id="deals-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to={`/${role}/current-deals`}>Current deals</Link>
-								<Link to={`/${role}/archived-deals`}>Archived deals</Link>
-								<Link to={`/${role}/single-tranche-deal`}>Create deal - single tranche</Link>
-								<Link to={`/${role}/multiple-tranche-deal`}>
+								<Link to={`/current-deals`}>Current deals</Link>
+								<Link to={`/archived-deals`}>Archived deals</Link>
+								<Link to={`/single-tranche-deal`}>Create deal - single tranche</Link>
+								<Link to={`/multiple-tranche-deal`}>
 									Create deal - multiple tranche
 								</Link>
 							</div>

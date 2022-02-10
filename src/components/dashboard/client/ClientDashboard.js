@@ -12,6 +12,12 @@ import NavMenu from "../NavMenu";
 import setBgImage from "../../../utils/setBgImage";
 import headerBanner from "../../../assets/images/headerBanner.png";
 import offerImage from "../../../assets/images/offerImage.png";
+import createList from "../../../assets/images/createList.png";
+import createOffer from "../../../assets/images/createOffer.png";
+import offers from "../../../assets/images/offers.png";
+import allLoans from "../../../assets/images/allLoans.png";
+import approvedLoans from "../../../assets/images/approvedLoans.png";
+import declineLoans from "../../../assets/images/declineLoans.png";
 
 export default function ClientDashboard() {
 	const pageName = "Dashboard";
@@ -43,13 +49,19 @@ export default function ClientDashboard() {
 			<OrderbookLayout PageNav={NavMenu}>
 				<section id="dashboard-intro-container">
 					<div
-						id="loan-invest-dropdown"
+						id="dashboard-dropdown"
 						className="bg-white px-16 py-10 shadow-md flex justify-start"
 					>
 						<div id="loan" className="dropdown-container">
-							Loan{" "}
-							<i className="fa fa-caret-down mr-5" aria-hidden="true"></i>
-							<div id="load-dropdown"></div>
+							<div>
+								Loan{" "}
+								<i className="fa fa-caret-down mr-5" aria-hidden="true"></i>
+							</div>
+							<div id="loan-dropdown" className="shadow-md rounded bg-white">
+								<Link to="#">All loans</Link>
+								<Link to="#">Approved loans</Link>
+								<Link to="#">Declined loans</Link>
+							</div>
 						</div>
 						<div id="investor" className="dropdown-container">
 							Investor{" "}
@@ -67,60 +79,85 @@ export default function ClientDashboard() {
 							nostrud exercitation
 						</p>
 						<Button
-							title="Update your profile"
+							title="Update my profile"
 							link="/profile"
 							buttonClass="update-profile-cta"
 						/>
 					</div>
 					<div
-						id="user-quick-action"
-						className="flex flex-row justify-center h-20"
+						id="client-user-quick-action"
+						className="flex flex-col sm:flex-row justify-around items-stretch sm:items-center h-20"
 					>
 						<div className="actions action-1 border-r border-black">
+							<Link to="/client/new-loan">
 							<h2 className="font-bold">
-								<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>	
+								<div className="action-icon-container">
+									<img src={createOffer} alt="" />
+								</div>
+									
 
-								<Link to="/client/new-loan">Create new offer</Link>
+								Create new offer
 							</h2>
+							</Link>
 						</div>
 						<div className="actions action-2 border-r border-black">
+							<Link to="/client/offers/offer/publish">
 							<h2 className="font-bold">
-								<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>	
+								<div className="action-icon-container">
+									<img src={createList} alt="" />
+								</div>	
 
-								<Link to="/client/offers/offer/publish">Create new list</Link>
+								Create new list
 							</h2>
+							</Link>
 						</div>
 						<div className="actions action-3">
+							<Link to="/client/offers">
 							<h2 className="font-bold">
-								<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>	
+								<div className="action-icon-container">
+									<img src={offers} alt="" />
+								</div>	
 
-								<Link to="/client/offers">My offers</Link>
+								My offers
 							</h2>
+							</Link>
 						</div>
 					</div>
 					<div id="account-overview" className="flex justify-around flex-col md:flex-row">
 						<div id="overview-title" className="flex justify-center items-center px-5 pt-5 md:p-2">
 							<h3>Account Overview</h3>
 						</div>
-						<div id="account" className="flex justify-around sm:justify-around items-center sm:w-full">
-							<p>
-								<span className="count">10</span>	All loans
-							</p>
-							<p>
-								<span className="count">15</span>	Approved loans
-							</p>
-							<p>
-								<span className="count">10</span>	Decline
-							</p>
+						<div id="account" className="flex flex-col sm:flex-row justify-around items-stretch sm:items-center sm:w-full">
+							<div id="all-loan" className="loan-count">
+								<Link to="#">
+									<div className="account-icon-container">
+									<img src={allLoans} alt="" />
+									</div>
+									<p>
+										10 <br/>All loans
+									</p>
+								</Link>
+							</div>
+							<div id="approved-loan" className="loan-count">
+								<Link to="#">
+									<div className="account-icon-container">
+									<img src={approvedLoans} alt="" />
+									</div>
+									<p>
+										5 <br/>Approved loans
+									</p>
+								</Link>
+							</div>
+							<div id="declined-loan" className="loan-count">
+								<Link to="#">
+									<div className="account-icon-container">
+									<img src={declineLoans} alt="" />
+									</div>
+									<p>
+										10 <br/>Declined
+									</p>
+								</Link>
+							</div>
 						</div>
 					</div>
 					<div id="offers" className="bg-black p-14">

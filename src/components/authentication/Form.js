@@ -209,15 +209,16 @@ export default function Form( props ) {
 
 				<div className="col-span-12">
 					<input
-						type="text"
+						// type="text"
+						type="date"
 						id="data-of-birth"
 						name="dateOfBirth"
 						value={form.dateOfBirth}
 						autoComplete="date-of-birth"
 						placeholder="Date of birth (MM/DD/YYYY)"
 						className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-						onFocus={(e) => (e.target.type = "date")}
-						onBlur={(e) => (e.target.type = "text")}
+						// onFocus={(e) => (e.target.type = "date")}
+						// onBlur={(e) => (e.target.type = "text")}
 						onChange={(e) => handleChange(e)}
 					/>
 				</div>
