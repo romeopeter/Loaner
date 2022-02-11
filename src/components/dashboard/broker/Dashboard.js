@@ -28,6 +28,7 @@ import {
     Tr,
     Th,
     Td,
+    Checkbox
 } from '@chakra-ui/react';
 const BrokerDashboard = () => {
 
@@ -146,10 +147,12 @@ const BrokerDashboard = () => {
                                 <Tr key={index} 
                                 >
                                     <Td>
-                                        <Flex>
-                                            <Box w="30px" h="30px" borderRadius={"5px"} border={"2px solid #555"}></Box>
-                                            <Box w="30px" h="30px" borderRadius={"50%"} bg={"#555"} mx={["6"]}></Box>
+                                        <Flex justifyContent={"center"} alignItems="center">
+                                            {/* <Box w="30px" h="30px" borderRadius={"5px"} border={"2px solid #555"}></Box> */}
+                                            <input type={"checkbox"} /> 
+                                            <Box w="30px" h="30px" textAlign={"center"} borderRadius={"50%"} bg={"#555"} mx={["6"]}></Box>
                                             {data.offerName}
+                                           
                                         </Flex>
                                         
                                     </Td>
