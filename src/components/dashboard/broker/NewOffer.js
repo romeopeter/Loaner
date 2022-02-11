@@ -9,7 +9,6 @@ import {
 	Box,
 	Text,
 	FormControl,
-	FormLabel,
 	Input,
 	Select,
 	Heading,
@@ -54,7 +53,7 @@ const NewOffer = () => {
           </div>
           <main>
               <Flex flexDirection={"column"} bg="#555" px={["4.2%"]} py={[10]}>
-                  <Heading as="h1" size="lg" color={"#fff"}>New Client</Heading>
+                  <Heading as="h1" size="lg" color={"#fff"}>New Offer</Heading>
                   <Text color={"#fff"}>General Issue terms</Text>
               </Flex>
               <Flex flexDirection={["column", "row"]}>

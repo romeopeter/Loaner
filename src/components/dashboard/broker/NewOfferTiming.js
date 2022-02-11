@@ -53,7 +53,7 @@ const NewOfferTiming = () => {
           </div>
           <main>
               <Flex flexDirection={"column"} bg="#555" px={["4.2%"]} py={[10]}>
-                  <Heading as="h1" size="lg" color={"#fff"}>New Client</Heading>
+                  <Heading as="h1" size="lg" color={"#fff"}>New Offer</Heading>
                   <Text color={"#fff"}>Tranche terms</Text>
                   <Text color={"#fff"}>Timing</Text>
               </Flex>
