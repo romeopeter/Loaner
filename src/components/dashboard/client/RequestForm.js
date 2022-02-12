@@ -438,7 +438,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 								<div className="col-span-1">
 									<input
-										type="text"
+										type="number"
 										name="faceValue"
 										id="face-value"
 										placeholder="Face value"
@@ -452,7 +452,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<div className="col-span-1">
 									<input
 										name="discountValue"
-										type="text"
+										type="number"
 										placeholder="Discount value"
 										id="tranche-value"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
@@ -466,7 +466,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 								<div className="col-span-1">
 									<input
-										type="text"
+										type="number"
 										name="par-value"
 										id="par-value"
 										placeholder="Par value"
@@ -585,7 +585,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 										<div className="col-span-1">
 											<input
-												type="text"
+												type="number"
 												name="benchmark"
 												id="benchmark"
 												placeholder="Benchmark"
@@ -664,7 +664,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<>
 										<div className="col-span-1">
 											<input
-												type="text"
+												type="number"
 												name="discountRate"
 												id="discount-rate"
 												placeholder="Discount rate"
@@ -700,7 +700,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</div>
 										<div className="col-span-1">
 											<input
-												type="text"
+												type="number"
 												name="impliedYield"
 												id="implied-yield"
 												placeholder="Implied yield"
@@ -742,7 +742,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<>
 										<div className="col-span-1">
 											<input
-												type="text"
+												type="number"
 												name="discountRateRange"
 												id="discount-rate-range"
 												placeholder="Discount rate range"
@@ -778,7 +778,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</div>
 										<div className="col-span-1">
 											<input
-												type="text"
+												type="number"
 												name="yield"
 												id="yield"
 												placeholder="Yield"
