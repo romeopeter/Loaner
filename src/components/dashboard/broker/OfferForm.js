@@ -31,26 +31,44 @@ export default function OfferForm({ requestFormState, showSummary }) {
 	**/
 	const handleSecondFormSlide = () => {
 		secondSlideRef.current.classList.toggle("slide-out");
+		const isToggled = secondSlideRef.current.classList.contains("slide-out");
 
-		setState((state) => {
-			return {
-				...state,
-				secondSlideIn: true,
-			};
-		});
+		if (isToggled) {
+			setState((state) => {
+				return {
+					...state,
+					secondSlideIn: true,
+				};
+			});
+		} else {
+			setState((state) => {
+				return {
+					...state,
+					secondSlideIn: false,
+				};
+			});
+		}
 	};
 
 	const handleLastFormSlide = () => {
-		const isSlidedIn =
-			lastSlideSlideRef.current.classList.toggle("slide-out");
+		lastSlideSlideRef.current.classList.toggle("slide-out");
+		const isToggled = lastSlideSlideRef.current.classList.contains("slide-out");
 
-		if (isSlidedIn) {
+		if (isToggled) {
 			setState((state) => {
 				return {
 					...state,
 					submitButtonIsDisabled: false,
 					lastSlideIn: true,
 					secondSlideIn: false,
+				};
+			});
+		} else {
+			setState((state) => {
+				return {
+					...state,
+					submitButtonIsDisabled: true,
+					lastSlideIn: false,
 				};
 			});
 		}
@@ -318,7 +336,7 @@ export default function OfferForm({ requestFormState, showSummary }) {
 							<div
 								id="general-terms-next-button"
 								className={`col-span-12 text-right form-slide-button ${
-									state.secondSlideIn && "hidden"
+									state.secondSlideIn ? "hidden" : "visible"
 								}`}
 							>
 								<Button
