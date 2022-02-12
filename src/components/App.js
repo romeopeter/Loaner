@@ -217,14 +217,6 @@ function App() {
             </RequireAuth>
           }
         />
-       {/* <Route
-          path="/broker/dashboard/new-offer-tranche"
-          element={
-            <RequireAuth>
-              <CreateOffer />
-            </RequireAuth>
-          }
-        />*/}
         <Route
           path="/broker/dashboard/new-offer-timing"
           element={
