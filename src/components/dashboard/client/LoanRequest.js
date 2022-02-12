@@ -11,7 +11,7 @@ import Button from "../../Button";
 
 import { setServerMessage } from "../../../redux/messageSlice";
 
-import {cp, bond} from "./loan-request-data/requestData"
+import {cp, bond} from "../loan-request-data/requestData"
 
 import { asyncCPLoanRequest, asyncBondLoanRequest} from "../../../redux/loanSlice";
 
