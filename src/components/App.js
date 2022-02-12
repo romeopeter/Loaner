@@ -181,89 +181,89 @@ function App() {
         <Route
           path="/broker/dashboard"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <BrokerDashboard />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-client"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <NewClient />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-client-save"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <NewClientSave />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/allclients"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AllClients />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-offer"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <NewOffer />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-offer-tranche"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <NewOfferTranche />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-offer-timing"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <NewOfferTiming />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/new-offer/summary"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <LoanSummary />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/allloans/"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AllLoanRequests />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/loan-offer/"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <LoanOffer />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/broker/dashboard/loan-offer/select-investor"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <SelectInvestor />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
 
@@ -271,57 +271,57 @@ function App() {
         <Route
           path="/admin/currencies"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AdminCurrencies />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/companies"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AdminCompanies />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/tranche"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AdminTranche />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/preference"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AdminPreference />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/profile-settings"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <AdminProfile />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/privacy"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <PrivacyPolicy />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
         <Route
           path="/admin/terms"
           element={
-            // <RequireAuth>
+            <RequireAuth>
             <Terms />
-            // </RequireAuth>
+            </RequireAuth>
           }
         />
       </Routes>
