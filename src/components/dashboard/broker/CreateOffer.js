@@ -1,6 +1,6 @@
 import React, { useState, createRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import OfferForm from "./OfferForm";
