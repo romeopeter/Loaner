@@ -31,11 +31,10 @@ import InvestorDeclinedBids from "./dashboard/investor/InvestorDeclinedBids";
 import BrokerDashboard from "./dashboard/broker/Dashboard";
 import NewClient from "./dashboard/broker/NewClient";
 import AllClients from "./dashboard/broker/AllClients";
-import NewOffer from "./dashboard/broker/NewOffer";
-import NewOfferTranche from "./dashboard/broker/NewOfferTranche";
+import CreateOffer from "./dashboard/broker/CreateOffer"; 
 import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
 import LoanSummary from "./dashboard/broker/LoanSummary";
-import AllLoanRequests from "./dashboard/broker/LoanRequests";
+import AllLoans from "./dashboard/broker/AllLoans";
 import LoanOffer from "./dashboard/broker/LoanOffer";
 import SelectInvestor from "./dashboard/broker/SelectInvestor";
 import NewClientSave from "./dashboard/broker/NewClientSave";
@@ -211,21 +210,21 @@ function App() {
           }
         />
         <Route
-          path="/broker/dashboard/new-offer"
+          path="/broker/dashboard/create-offer"
           element={
             <RequireAuth>
-            <NewOffer />
+            <CreateOffer />
             </RequireAuth>
           }
         />
-        <Route
+       {/* <Route
           path="/broker/dashboard/new-offer-tranche"
           element={
             <RequireAuth>
-            <NewOfferTranche />
+              <CreateOffer />
             </RequireAuth>
           }
-        />
+        />*/}
         <Route
           path="/broker/dashboard/new-offer-timing"
           element={
@@ -246,7 +245,7 @@ function App() {
           path="/broker/dashboard/allloans/"
           element={
             <RequireAuth>
-            <AllLoanRequests />
+            <AllLoans/>
             </RequireAuth>
           }
         />
