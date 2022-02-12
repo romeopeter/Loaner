@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { signOutAsync } from "../../../redux/authSlice";
 import { getOffersAction } from "../../../redux/loanSlice";
@@ -26,9 +26,13 @@ export default function ClientDashboard() {
 
 	const dispatch = useDispatch();
 	const authUser = useSelector((state) => state.auth.user);
+	const offers = useSelector((state) => state.loan.offers);
 
 	useEffect(() => {
-		getOffersAction()
+
+		// Get request
+		dispatch(getOffersAction())
+
 	}, [])
 
 	const { user: currentUser } = authUser;
@@ -172,7 +176,7 @@ export default function ClientDashboard() {
 						</div>
 						<div id="the-offers">
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center place-content-center gap-10">
-								<div className="offer" id="offer-1">
+								{/*<div className="offer" id="offer-1">
 									<div className="offer-title">
 										<img
 											className="offer-image"
@@ -204,69 +208,39 @@ export default function ClientDashboard() {
 											buttonClass="h-2 p-2 bg-white"
 										/>
 									</div>
-								</div>
-								<div className="offer" id="offer-2">
-									<div className="offer-title">
-										<img
-											className="offer-image"
-											src={offerImage}
-											alt=""
-										/>
-										<h3 className="title">
-											Rice Value Chain (Project Finance)
-										</h3>
+								</div>*/}
+								{offers.length > 0 && offers.map(offer => (
+									<div className="offer" id="offer-1" key={offer.id}>
+										<div className="offer-title">
+											<img
+												className="offer-image"
+												src={offerImage}
+												alt=""
+											/>
+											<h3 className="title">
+												{offer.deal_name}
+											</h3>
+										</div>
+										<p className="offer-description">
+											{offer.deal_name}
+										</p>
+										<div className="offer-button">
+											<Button
+												title="Edit draft"
+												link="/client/offers/offer/edit"
+												type="button"
+												buttonClass="h-2 p-2 bg-grey"
+											/>
+											<Button
+												title="Publish"
+												link="/client/offers/offer/publish"
+												type="button"
+												buttonClass="h-2 p-2 bg-white"
+											/>
+										</div>
+										{console.log(offer)}
 									</div>
-									<p className="offer-description">
-										Rice is the most consumed commodity.
-										Total global rice expenditure in 2020
-										was $350 billion. To put in pective,
-										totoal global crude oil in 2020 was just
-										four times that amount at $1.3 trillion
-									</p>
-									<div className="offer-button">
-										<Button
-											title="Edit draft"
-											link="/client/offers/offer/edit"
-											type="button"
-											buttonClass="h-2 p-2 bg-grey"
-										/>
-										
-										<Button
-											title="Publish"
-											link="/client/offers/offer/publish"
-											type="button"
-											buttonClass="h-2 p-2 bg-white"
-										/>
-									</div>
-								</div>
-								<div className="offer" id="offer-3">
-									<div className="offer-title">
-										<img
-											className="offer-image"
-											src={offerImage}
-											alt=""
-										/>
-										<h3 className="title">
-											Rice Value Chain (Project Finance)
-										</h3>
-									</div>
-									<p className="offer-description">
-										Rice is the most consumed commodity.
-										Total global rice expenditure in 2020
-										was $350 billion. To put in pective,
-										totoal global crude oil in 2020 was just
-										four times that amount at $1.3 trillion
-									</p>
-									<div className="offer-button">
-										<Button
-											link="/client/offers/offer/edit"
-											title="Edit draft"
-											type="button"
-											buttonClass="h-2 p-2 last-button"
-										/>
-										
-									</div>
-								</div>
+								))}
 							</div>
 							<div id="view-more" className="text-right">
 								<Link to="/client/offers"  className="text-white text-lg font-bold">View more</Link>{" "}{" "}
