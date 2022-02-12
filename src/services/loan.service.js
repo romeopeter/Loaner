@@ -7,7 +7,9 @@ axiosConfig();
 
 const API_URL = "https://order-book-online.herokuapp.com";
 
-const getOffers = axios.get(`${API_URL}/api/v1/loan_request/cp/`).catch(error => console.log(error));
+const getOffers = () => {
+	return axios.get(`${API_URL}/api/v1/loan_request/`).catch(error => console.log(error));
+}
 
 
 const loanRequestCP = (data) => {

@@ -1,10 +1,9 @@
 import axios from "axios";
+import axiosConfig from "./authHeader";
+
+axiosConfig();
 
 const API_URL = "https://order-book-online.herokuapp.com";
-
-// Default Axios config
-const axiosHeaders = axios.defaults.headers;
-axiosHeaders.post["Content-Type"] = "application/json";
 
 /*Authentication requests*/
 const signUpRequest = (data) => {
