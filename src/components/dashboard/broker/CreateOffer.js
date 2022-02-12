@@ -92,7 +92,7 @@ export default function CreateOffer() {
 				}
 
 				console.log("Loan created");
-				navigate("/client/offers/offer/publish");
+				navigate("/broker/dashboard/loan-offer/select-investor");
 			});
 		}
 
@@ -305,7 +305,7 @@ export default function CreateOffer() {
 										</div>
 										<Button
 											type="button"
-											title="Publish"
+											// title="Publish"
 											buttonClass="w-full bg-green-600 rounded"
 											handleClick={() => handleSubmit()}
 										>
