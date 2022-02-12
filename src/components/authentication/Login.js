@@ -108,10 +108,18 @@ export default function Login() {
 		confirmEmailMessage = message.message
 	}
 
-	// Rediret if already logged in
-	if (isLoggedIn && typeof user === "object") {
-		return <Navigate replace to="/client/dashboard" />
-	};
+	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
+
+	if ("user" in currentUserObj) {
+		const {user} = currentUserObj;
+
+		const role = user.groups[0].name;
+
+		// Rediret if already logged in
+		if (isLoggedIn && typeof user === "object") {
+			return <Navigate replace to={`/${role}/dashboard`} />
+		};
+	}
 
 	return (
 		<>
