@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import {Link} from "react-router-dom";
 
@@ -12,6 +13,9 @@ import offerImage from "../../../assets/images/offerImage.png";
 
 export default function Offers() {
 	const pageName = "Offers";
+
+	const dispatch = useDispatch();
+	const offers = useSelector((state) => state.loan.offers);
 
 	// Mock offer data
 	const [mockData, setMockData] = useState([
@@ -259,7 +263,7 @@ export default function Offers() {
 		list: mockData.length > 0 && mockData,
 		perPage: eachPage,
 		page: 0,
-		pages: Math.floor(mockData.length / eachPage)
+		pages: Math.floor(offers.length / eachPage)
 	})
 
 	const {page, perPage, pages, list} = paginateState;
@@ -295,9 +299,9 @@ export default function Offers() {
 
 						<div id="the-offers">
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center place-content-center gap-20">
-								{items.length > 0 && items.map((offer, index) => (
+								{offers.length > 0 && offers.map((offer) => (
 									<div
-										id={`offer-${index + 1}`}
+										id={offer.id}
 										className="offer"
 									>
 										<div className="offer-title">
@@ -307,11 +311,11 @@ export default function Offers() {
 												className="offer-image"
 											/>
 											<h3 className="title">
-												{offer.offerTitle}
+												{offer.deal_name}
 											</h3>
 										</div>
 										<p className="offer-description">
-											{offer.offerDescription}
+											{offer.deal_name}
 										</p>
 										<div className="offer-button">
 											<Button
@@ -331,9 +335,9 @@ export default function Offers() {
 						</div>
 					</div>
 
-					<div id="paginate-offers">
+					{/*<div id="paginate-offers">
 						<ReactPaginate previousLabel={'<'} nextLabel={'>'} pageCount={pages} containerClassName={'pagination'} onPageChange={(e) => handlePageClick(e)} />
-					</div>
+					</div>*/}
 				</section>
 			</OrderbookLayout>
 		</>
