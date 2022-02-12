@@ -20,14 +20,20 @@ const authState = user
 
 export const signInAction = createAsyncThunk(
 	"auth/signInAction", async (credentials, thunkAPI) => {
-		const res = await signInRequest(credentials);
-		const requestConfig = res.config;
+		const response = await signInRequest(credentials);
+		const requestConfig = response.config;
 		const dispatch = thunkAPI.dispatch
 
-		// Check if error object exist
-		if ("stack" in res) {
-			const errorMessage = res.message;
+		
 
+		// Check if error object exist
+		if ("stack" in response) {
+			const errorMessage = response.message;
+			const errorResponse = response.request;
+			const errorResponseText = JSON.parse(errorResponse.responseText);
+			const {code, detail} = errorResponseText;
+
+			// Network Error
 			if (errorMessage === "Network Error") {
 
 				// Dipatch action
@@ -40,18 +46,20 @@ export const signInAction = createAsyncThunk(
 				return
 			}
 
-			return;
+			// Unauthorized access
+			if (errorResponse.status === 401) {
+				
+				dispatch(setServerMessage({
+					status: errorResponse.status,
+					messageType: code, 
+					detail: detail, 
+				}));
+
+				return
+			}
 		}
 
-		// Recieves new token if old is expired
-		if ("code" in res.data && res.data.code === "token_not_valid") {
-			// Request new token
-			// Store new token
-			console.log("Token is expired");
-			return;
-		}
-
-		if (res.status === 200) return res.data;
+		if (response.status === 200) return response.data;
 	}
 );
 

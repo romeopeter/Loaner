@@ -6,10 +6,9 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { loanRequestCP, loanRequestBond } from "../services/loan.service.js";
+import { loanRequestCP, loanRequestBond, getOffers } from "../services/loan.service.js";
 
 import { setServerMessage } from "./messageSlice";
-import { getOffers } from "../services/loan.service.js";
 
 export const getOffersAction = createAsyncThunk("loan/getOffers", async (thunkAPI) => {
     const res = await getOffers();
@@ -19,7 +18,7 @@ export const getOffersAction = createAsyncThunk("loan/getOffers", async (thunkAP
 
 export const loanSlice = createSlice({
     name: "loan",
-    initialState: [],
+    initialState: {offers: []},
     reducers: {
         createLoan: (state, action) => {
             return;
@@ -34,7 +33,9 @@ export const loanSlice = createSlice({
         },
         [getOffersAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
-            state = payload
+            state.offers = payload;
+
+            console.log(state.offers);
         },
     }
 });
