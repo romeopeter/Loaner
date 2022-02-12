@@ -102,7 +102,9 @@ export default function Login() {
 	};
 
 	// Network Error
-	if (typeof message === "object" && message.messageType === "account_created") {
+	const messageType = "account_created" | "no_active_account";
+	if (typeof message === "object" && message.messageType === messageType) {
+
 		confirmEmailMessage = message.message
 	}
 
@@ -160,8 +162,15 @@ export default function Login() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									<div className="mb-5">
-										{confirmEmailMessage !== null && confirmEmailMessage !== ""?(
+										{confirmEmailMessage !== null && confirmEmailMessage == "account_created"?(
 											<div className="text-black text-center bg-green-100 p-2 rounded border border-1 border-green-400">
+												{confirmEmailMessage}
+											</div>
+										):null}
+									</div>
+									<div className="mb-5">
+										{confirmEmailMessage !== null && confirmEmailMessage == "no_active_account"?(
+											<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
 												{confirmEmailMessage}
 											</div>
 										):null}
