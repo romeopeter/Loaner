@@ -27,8 +27,8 @@ import {
     Tr,
     Th,
     Td,
-    Checkbox,
 } from "@chakra-ui/react";
+
 const BrokerDashboard = () => {
     const navigate = useNavigate();
 
