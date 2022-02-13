@@ -28,10 +28,13 @@ export default function NavMenu() {
 		navigate("/");
 	}
 
-	const {user} = JSON.parse(localStorage.getItem("USER"));
-
-	const userType = user.groups ? user.groups[0] : "";
-	const role = userType.name.toLowerCase();
+	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
+	let role;
+	if (currentUserObj === "object" && currentUserObj !== null) {
+		const {user} = currentUserObj;
+		const userType = user.groups ? user.groups[0] : "";
+		role = userType.name;
+	}
 
 	return (
 		<div id="dashboard-nav">
@@ -86,9 +89,9 @@ export default function NavMenu() {
 								id="analysis-dropdown"
 								className="shadow-md rounded"
 							>
-								<Link to={`/${role}/saved-report`}>Saved report</Link>
-								<Link to={`/${role}/create-report`}>Create report</Link>
-								<Link to={`/${role}/search`}>Search</Link>
+								<Link to={`/${role !== undefined && role}/saved-report`}>Saved report</Link>
+								<Link to={`/${role !== undefined && role}/create-report`}>Create report</Link>
+								<Link to={`/${role !== undefined && role}/search`}>Search</Link>
 							</div>
 						</li>
 						<li id="admin" className="nav-menu-item dropdown" style={{ color: "white", cursor: "pointer" }}>
