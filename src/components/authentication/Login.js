@@ -12,7 +12,6 @@ import phoneLady from "../../assets/images/phoneLady.jpg";
 
 export default function Login() {
 	const pageName = "Login";
-	let confirmEmailMessage = null;
 
 	const navigate = useNavigate();
 	const { state } = useLocation();
@@ -101,16 +100,27 @@ export default function Login() {
 		});
 	};
 
-	// Network Error
-	const messageType = "account_created" | "no_active_account";
-	if (typeof message === "object" && message.messageType === messageType) {
+	// Auth request responses
+	const [acountCreated, noActiveAccount, networkError] = ["account_created", "no_active_account", "network_error"];
 
-		confirmEmailMessage = message.message
+	let networkErrorMessage = null;
+	let confirmEmailMessage = null;
+	let noUserMessage = null;
+
+	if (typeof message === "object") {
+		if (message.messageType === acountCreated) confirmEmailMessage = message.detail;
+		if (message.messageType === noActiveAccount) noUserMessage = message.detail;
+		if (message.messageType === networkError) {
+			networkErrorMessage = message.detail;
+
+			// Try login again
+			handleSubmit()
+		};
 	}
 
+	// If already logged in.
 	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
-
-	if ("user" in currentUserObj) {
+	if (currentUserObj !== null && typeof currentUserObj === "object") {
 		const {user} = currentUserObj;
 
 		const role = user.groups[0].name;
@@ -120,6 +130,32 @@ export default function Login() {
 			return <Navigate replace to={`/${role}/dashboard`} />
 		};
 	}
+
+	const ErrorComoponent = () => (
+		<>
+			<div className="mb-5">
+				{networkErrorMessage !== null ?(
+					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
+						{networkErrorMessage}
+					</div>
+				):null}
+			</div>
+			<div className="mb-5">
+				{confirmEmailMessage !== null ?(
+					<div className="text-black text-center bg-green-100 p-2 rounded border border-1 border-green-400">
+						{confirmEmailMessage}
+					</div>
+				):null}
+			</div>
+			<div className="mb-5">
+				{noUserMessage !== null ?(
+					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
+						{noUserMessage}
+					</div>
+				):null}
+			</div>
+		</>
+	)
 
 	return (
 		<>
@@ -169,20 +205,8 @@ export default function Login() {
 									</Link>
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
-									<div className="mb-5">
-										{confirmEmailMessage !== null && confirmEmailMessage == "account_created"?(
-											<div className="text-black text-center bg-green-100 p-2 rounded border border-1 border-green-400">
-												{confirmEmailMessage}
-											</div>
-										):null}
-									</div>
-									<div className="mb-5">
-										{confirmEmailMessage !== null && confirmEmailMessage == "no_active_account"?(
-											<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-												{confirmEmailMessage}
-											</div>
-										):null}
-									</div>
+									{/*Request error messages*/}
+									<ErrorComoponent />
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Welcome back
 									</h2>
