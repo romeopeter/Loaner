@@ -108,7 +108,7 @@ export default function CreateOffer() {
 				}
 
 				console.log("Loan created");
-				navigate("/client/offers/offer/publish");
+				navigate("/broker/dashboard/loan-offer/select-investor");
 			});
 		}
 	};
