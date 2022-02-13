@@ -24,27 +24,28 @@ export const signInAction = createAsyncThunk(
 		const requestConfig = response.config;
 		const dispatch = thunkAPI.dispatch
 
+
+		// Network error, unable to sent request
+		if (response.message === "Network Error") {
+
+			// Dipatch action
+			dispatch(setServerMessage({
+				status: null, 
+				messageType: "network_error",
+				message: "Network error", 
+				detail: "Poor network connection"
+			}));
+
+			return
+		}
+
 		
 
-		// Check if error object exist
+		// Request sent but unsuccessful
 		if ("stack" in response) {
-			const errorMessage = response.message;
 			const errorResponse = response.request;
 			const errorResponseText = JSON.parse(errorResponse.responseText);
 			const {code, detail} = errorResponseText;
-
-			// Network Error
-			if (errorMessage === "Network Error") {
-
-				// Dipatch action
-				dispatch(setServerMessage({
-					status: null, 
-					message: "Network Error", 
-					detail: "Poor network connection"
-				}));
-
-				return
-			}
 
 			// Unauthorized access
 			if (errorResponse.status === 401) {
@@ -59,6 +60,7 @@ export const signInAction = createAsyncThunk(
 			}
 		}
 
+		// Request sent and resolved
 		if (response.status === 200) return response.data;
 	}
 );
@@ -75,11 +77,11 @@ export const authSlice = createSlice({
 		},
 	},
 	extraReducers: {
+		// Sign-in cycle
 		[signInAction.pending]: (state, action) => {
 			console.log("Loading");
 		},
 		[signInAction.rejected]: (state, action) => {
-			console.log(action.payload);
 			console.log("rejected");
 		},
 		[signInAction.fulfilled]: (state, action) => {
@@ -99,22 +101,22 @@ export default authSlice.reducer;
 
 export const signUpAsync = (data) => (dispatch) => {
 	return signUpRequest(data).then((response) => {
-		// Check if error stack object exist
+		// Error in sign-in request
 		if ("stack" in response) {
 			const { data, config } = response
 
-			// dispatch(setServerMessage(message));
 			console.log(response);
 
 			return response;
 		}
 
+		// Request successfull
 		if (response.status === 201) {
 			dispatch(setServerMessage({
 				status: 201,
 				messageType: "account_created", 
-				message: "A confirmation email has been sent to your email 📧", 
-				detail: "Account created successfully"
+				message: "Account created succesfully", 
+				detail: "A confirmation email has been sent to your email 📧"
 			}));
 
 			return response;
