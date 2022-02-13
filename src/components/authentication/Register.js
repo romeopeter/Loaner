@@ -39,7 +39,7 @@ export default function Register() {
 	});
 
 	// Check login state
-	const { isLoggedIn } = useSelector((state) => state.auth);
+	const { isLoggedIn, user } = useSelector((state) => state.auth);
 
 	// Server message
 	const {message: serverMessage} =  useSelector(state => state.message.server);
@@ -151,7 +151,7 @@ export default function Register() {
 		});
 	};
 
-	if (isLoggedIn) return (<Navigate to="/" replace />);
+	if (isLoggedIn && typeof user === "object") return (<Navigate to="/" replace />);
 
 	return (
 		<>
