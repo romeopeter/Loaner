@@ -209,7 +209,7 @@ export default function ClientDashboard() {
 										/>
 									</div>
 								</div>*/}
-								{offers.length > 0 && offers.map(offer => (
+								{offers.length > 0 ? offers.map(offer => (
 									<div className="offer" id="offer-1" key={offer.id}>
 										<div className="offer-title">
 											<img
@@ -238,9 +238,8 @@ export default function ClientDashboard() {
 												buttonClass="h-2 p-2 bg-white"
 											/>
 										</div>
-										{console.log(offer)}
 									</div>
-								))}
+								)):(<p className="text-white">Loading offers...</p>)}
 							</div>
 							<div id="view-more" className="text-right">
 								<Link to="/client/offers"  className="text-white text-lg font-bold">View more</Link>{" "}{" "}
