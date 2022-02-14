@@ -8,24 +8,30 @@ export default function axiosConfig() {
 	const currentUser = JSON.parse(localStorage.getItem("USER"));
 
 	if (currentUser !== null && typeof currentUser === "object") {
-		let {tokens: {refresh, access}} = currentUser;
+		let {
+			tokens: { refresh, access },
+		} = currentUser;
 
 		const decode = jwt_decode(access);
-		const tokenExpirationDate = decode.exp
+		const tokenExpirationDate = decode.exp;
 		const currentDate = Date.now();
 
 		if (tokenExpirationDate < currentDate / 1000 || access === null) {
-
 			// Make new request for access token
-			axios.post(`https://order-book-online.herokuapp.com/api/v1/token/refresh/`, {refresh: `${refresh}`})
-			.then(res => {
-				const newAccessToken = res.data.access;
+			axios
+				.post(
+					`https://order-book-online.herokuapp.com/api/v1/token/refresh/`,
+					{ refresh: `${refresh}` }
+				)
+				.then((res) => {
+					const newAccessToken = res.data.access;
 
-				// Reset expired tokem with new one
-				access = newAccessToken;
-			});
+					// Update local storage with new token
+					access = newAccessToken;
 
-		} else  {
+					axiosHeaders.common["Authorization"] = `Bearer ${access}`;
+				});
+		} else {
 			axiosHeaders.common["Authorization"] = `Bearer ${access}`;
 		}
 	}
