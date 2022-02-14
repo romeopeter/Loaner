@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
@@ -29,11 +29,14 @@ export default function Login() {
 		userType: null,
 	});
 
-	const [formErrors, setFormErrors] = useState({
-		emailAddress: "",
-		password: "",
-		emptyFields: "",
-	});
+	// Custom side-effect hook
+	const useLogin = (callback) => {
+		useEffect(() => {
+			if(callback) {
+				const IntervalId = setInterval(callback, 1000);
+			};
+		}, [])
+	}
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -49,12 +52,12 @@ export default function Login() {
 		});
 	};
 
-	// Input from form state
+	
 	const { emailAddress, password } = form;
 	const authState = useSelector((state) => state.auth);
 
 	const handleSubmit = (e) => {
-		e.preventDefault();
+		if (e !== null && typeof e === "object") e.preventDefault();
 
 		setForm((state) => {
 			return {
@@ -113,9 +116,13 @@ export default function Login() {
 		if (message.messageType === networkError) {
 			networkErrorMessage = message.detail;
 
-			// Try login again
-			handleSubmit()
-		};
+			/*setForm((state) => {
+				return {
+					...state,
+					isLoading: false,
+				};
+			});*/
+		}
 	}
 
 	// If already logged in.
