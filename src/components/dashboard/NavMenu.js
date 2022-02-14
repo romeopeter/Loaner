@@ -9,8 +9,12 @@ import UBALogo from "../../assets/images/UBALogo.png";
 
 export default function NavMenu() {
 	const [showDropdown, setshowDropdown] = useState(false)
-	/*Dashboard navigation*/
+	
+	// Dashboard nav reference
 	let navMenuRef = createRef();
+
+	// Current user object from local storage
+	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
 
 	const respondsiveNav = () => {
 		navMenuRef.current.classList.toggle("responsive-nav-menu");
@@ -20,7 +24,7 @@ export default function NavMenu() {
 	const navigate = useNavigate()
 
 	const handleDropdown = (e) => {
-		console.log(e.targer.name);
+		console.log(e.target.name);
 	} 
  
 	const handleSignOut = () => {
@@ -28,12 +32,11 @@ export default function NavMenu() {
 		navigate("/");
 	}
 
-	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
+	// Get user role
 	let role;
-	if (currentUserObj === "object" && currentUserObj !== null) {
+	if (typeof currentUserObj === "object" && currentUserObj !== null) {
 		const {user} = currentUserObj;
-		const userType = user.groups ? user.groups[0] : "";
-		role = userType.name;
+		if ("groups" in user) role = user.groups[0].name
 	}
 
 	return (
