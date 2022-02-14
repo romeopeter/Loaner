@@ -9,7 +9,7 @@ import NavMenu from "../NavMenu";
 import setBgImage from "../../../utils/setBgImage";
 import headerBanner from "../../../assets/images/headerBanner.png";
 
-export default function InvestorDashboard() {
+export default function Dashboard() {
 	const pageName = "Investor"
 
 	return (
@@ -35,7 +35,7 @@ export default function InvestorDashboard() {
 							Lorem ipsum dolor sit amet, consectetur adipiscing
 							elit, sed do eiusmod tempor incididunt ut labore et
 							dolore magna aliqua. Ut enim ad minim veniam, quis
-							nostrud exercitation
+							nostrud exercitation.
 						</p>
 						<Button
 							title="Update your profile"
@@ -64,7 +64,7 @@ export default function InvestorDashboard() {
 									aria-hidden="true"
 								></i>	
 
-								<Link to="/investor/bids">Successful offers</Link>
+								<Link to="/investor/sucessful-bids">Successful offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">

@@ -12,7 +12,7 @@ import NavMenu from "../NavMenu";
 import setBgImage from "../../../utils/setBgImage";
 import headerBanner from "../../../assets/images/headerBanner.png";
 
-export default function InvestorDashboard2() {
+export default function AllOffers() {
 	const pageName = "Investor";
 
 	const mockData = [
@@ -122,7 +122,7 @@ export default function InvestorDashboard2() {
 									aria-hidden="true"
 								></i>	
 
-								<Link to="/investor/bids">Successful offers</Link>
+								<Link to="/investor/sucessful-bids">Successful offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">

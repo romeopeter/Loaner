@@ -11,7 +11,7 @@ import NavMenu from "../NavMenu";
 
 import offerImage from "../../../assets/images/offerImage.png";
 
-export default function InvestorBids() {
+export default function SuccessfulBids() {
 	const pageName = "Bids";
 
 	const mockData = [

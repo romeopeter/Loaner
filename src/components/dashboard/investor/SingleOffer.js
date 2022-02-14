@@ -7,7 +7,7 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 
-export default function InvestorOffers() {
+export default function SingleOffer() {
 	const pageName = "Investor offers";
 
 	const modalContainerRef = createRef();
