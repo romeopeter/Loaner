@@ -28,12 +28,12 @@ export const signInAction = createAsyncThunk(
 		// Network error, unable to sent request
 		if (response.message === "Network Error") {
 
-			// Dipatch action
+			// Dipatch actionT
 			dispatch(setServerMessage({
 				status: null, 
 				messageType: "network_error",
 				message: "Network error", 
-				detail: "Poor network connection"
+				detail: "Poor network connection. Try signing in again"
 			}));
 
 			return
