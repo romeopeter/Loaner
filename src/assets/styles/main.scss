@@ -25,12 +25,16 @@ html {
 @import "_offers.scss";
 @import "_show-offer.scss";
 @import "_client-publish-offer.scss";
+@import "_client-publish-offer.scss";
+@import "_client-show-bids.scss";
+@import "_client-show-all-bids.scss";
 
 @import "_investor-dashboard.scss";
 @import "_investor-offers.scss";
 @import "_investor-bids.scss";
 
 
+// NotFound component
 #orderbook-not-found {
 	@include respond-below(sm) {
 		#lead-404 {
