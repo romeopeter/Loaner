@@ -1,0 +1,79 @@
+#orderbook-show-all-bids {
+	background: $grey;
+	// padding: 6em;
+
+	// SMALL SCREENS
+
+	// LARGE SCREENS
+	#loan-offer {
+		padding: 3rem 6rem;
+	}
+
+	#all-loans-bid {
+		padding: 0 0px 20px 0;
+		overflow-x: auto;
+		
+		&::-webkit-scrollbar {
+		  width: 10px;
+		}
+
+		/* Track */
+		&::-webkit-scrollbar-track {
+		  background: #f1f1f1; 
+		}
+		 
+		/* Handle */
+		&::-webkit-scrollbar-thumb {
+		  background: #888;
+		  border-radius: 10px; 
+		}
+
+		/* Handle on hover */
+		&::-webkit-scrollbar-thumb:hover {
+		  background: #555; 
+		}
+
+		table {
+			tbody {
+				tr {
+					border-top: 1px solid $black;
+					
+
+					td {
+						padding-top: 20px;
+						padding-bottom: 15px;
+						padding-right: 10px;
+						text-align: left;
+						font-size: 17.5px;
+						border-right: 1px solid $black;
+						text-align: center;
+
+						&:nth-child(6) {
+							width: 250px;
+						}
+
+						.bid-actions-btns {
+							display: flex !important;
+							justify-content: center !important;
+
+							button {
+								width: 150px;
+								height: 40px;
+
+								&.approve-bid {
+									color: $white;
+									background: #008060 !important;
+									margin-right: 1rem;
+								}
+								&.reject-bid {
+									color: $white;
+									background: #d82c0d !important;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
