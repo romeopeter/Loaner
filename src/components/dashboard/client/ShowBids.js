@@ -243,7 +243,7 @@ export default function VBids() {
 									<Button
 										title="View list of all bids"
 										type="submit"
-										link="/"
+										link="/client/offers/offer/show-all-bids"
 										buttonClass="view-all-bids"
 									/>
 								</div>
