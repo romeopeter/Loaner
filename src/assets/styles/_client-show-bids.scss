@@ -1,0 +1,253 @@
+#orderbook-show-bids {
+
+	// SMALL SCREENS
+	@include respond-below(sm) {
+		padding: 0 !important;
+
+		#offer {
+			#header {
+			    margin-bottom: 2em !important;
+			    padding: 1em 0 0 1em !important;
+			}
+
+			#the-offer {
+				#loan-bids {
+					.bid-actions-btns {
+						flex-direction: column;
+
+						button {
+							width: 100% !important;
+
+							&.approve-bid {
+								margin-right: 0 !important;
+								margin-bottom: 1rem !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@include respond-below(md) {
+		#the-offer {
+			.grid {
+				#offer-description {
+					padding: 20px !important;
+				}
+
+				#loan-summary {
+					overflow-x: auto !important;
+
+					&::-webkit-scrollbar {
+					  width: 5px;
+					}
+
+					/* Track */
+					&::-webkit-scrollbar-track {
+					  background: #f1f1f1; 
+					}
+					 
+					/* Handle */
+					&::-webkit-scrollbar-thumb {
+					  background: #888;
+					  border-radius: 10px; 
+					}
+
+					/* Handle on hover */
+					&::-webkit-scrollbar-thumb:hover {
+					  background: #555; 
+					}
+				}
+			}
+		}
+	}
+
+	// LARGE SCREENS
+	background: $grey;
+	padding: 6em;
+
+	#offer {
+		#header {
+			font-size: 30px;
+			color: $white;
+			font-weight: bold;
+			margin-bottom: 3em;
+		}
+
+		#the-offer {
+			background: $white;
+
+			#go-back {
+				background: lightgray;
+				height: 50px;
+				width: 50px;
+				margin-bottom: 50px;
+				text-align: center;
+
+				a {
+					font-size: 24px;
+					font-weight: bold;
+					text-align: center;
+				}
+			}
+
+			.grid {
+				// display: none;
+
+				#offer-header {
+					padding: 0 35px;
+					img {
+					}
+
+					h3 {
+						text-decoration: underline;
+						font-weight: bold;
+						margin-top: 10px;
+					}
+
+					#schedule-payment {
+						p {
+							font-weight: 400;
+							font-size: 15px;
+							margin: 5px 0;
+						}
+
+						.grid {
+							div {
+								background: lightgray;
+								text-align: center;
+								padding: 8px;
+								font-weight: bold;
+							}
+						}
+
+						#address {
+							margin-top: 20px;
+
+							address {
+								font-family: $body-font;
+								font-style: normal;
+
+								p {
+									font-weight: bold;
+
+									span {
+										margin-right: 10px;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#offer-description {
+					font-size: 17px;
+					padding: 0 30px 5px 0;
+					height: 450px;
+					overflow-x: auto;
+
+					&::-webkit-scrollbar {
+					  width: 10px;
+					}
+
+					/* Track */
+					&::-webkit-scrollbar-track {
+					  background: #f1f1f1; 
+					}
+					 
+					/* Handle */
+					&::-webkit-scrollbar-thumb {
+					  background: #888;
+					  border-radius: 10px; 
+					}
+
+					/* Handle on hover */
+					&::-webkit-scrollbar-thumb:hover {
+					  background: #555; 
+					}
+				}
+				#loan-bids {
+					padding: 0 0px 20px 0;
+					overflow-x: auto;
+					
+					&::-webkit-scrollbar {
+					  width: 10px;
+					}
+
+					/* Track */
+					&::-webkit-scrollbar-track {
+					  background: #f1f1f1; 
+					}
+					 
+					/* Handle */
+					&::-webkit-scrollbar-thumb {
+					  background: #888;
+					  border-radius: 10px; 
+					}
+
+					/* Handle on hover */
+					&::-webkit-scrollbar-thumb:hover {
+					  background: #555; 
+					}
+
+					table {
+						tbody {
+							tr {
+								border-top: 1px solid $black;
+
+								td {
+									padding-top: 20px;
+									padding-bottom: 15px;
+									padding-right: 10px;
+									text-align: left;
+									font-size: 17.5px;
+
+									.bid-actions-btns {
+										display: flex !important;
+
+										button {
+											width: 150px;
+											height: 40px;
+
+											&.approve-bid {
+												color: $white;
+												background: #008060 !important;
+												margin-right: 1rem;
+											}
+											&.reject-bid {
+												color: $white;
+												background: #d82c0d !important;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#view-all-bids-btn {
+					button {
+						width: 200px;
+						height: 40px;
+
+						&.view-all-bids {
+							border: 3px solid $black !important;
+
+							a {
+								color: $black !important;
+								font-weight: bold;
+							}
+						}
+
+						&.next {
+							background: #008060;
+							color: $white !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
