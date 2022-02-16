@@ -260,7 +260,7 @@ export default function Offers() {
 	const eachPage = 6;
 
 	const [paginateState, setPaginateState] = useState({
-		list: mockData.length > 0 && mockData,
+		list: offers.length > 0 && offers,
 		perPage: eachPage,
 		page: 0,
 		pages: Math.floor(offers.length / eachPage)
@@ -299,7 +299,7 @@ export default function Offers() {
 
 						<div id="the-offers">
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center place-content-center gap-20">
-								{offers.length > 0 && offers.map((offer) => (
+								{offers.length > 0 && items.map((offer) => (
 									<div
 										id={offer.id}
 										className="offer"
@@ -335,9 +335,9 @@ export default function Offers() {
 						</div>
 					</div>
 
-					{/*<div id="paginate-offers">
+					<div id="paginate-offers">
 						<ReactPaginate previousLabel={'<'} nextLabel={'>'} pageCount={pages} containerClassName={'pagination'} onPageChange={(e) => handlePageClick(e)} />
-					</div>*/}
+					</div>
 				</section>
 			</OrderbookLayout>
 		</>
