@@ -1,14 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter} from "react-router-dom";
-import { Provider } from 'react-redux'
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import axios from "axios";
+
 import App from "./components/App";
 import store from "./redux/store";
 import "./assets/styles/index.css";
 import "./assets/styles/main.scss";
 
-import {transitions, positions, Provider as AlertProvider} from "react-alert";
-import AlertTemplate from 'react-alert-template-basic'
+import { positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
+// Axios configuration
+const currentUserObj = JSON.parse(localStorage.getItem("USER"));
+axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
+axios.defaults.headers.common["Authorization"] = currentUserObj !== null ? `Bearer ${currentUserObj.tokens.access}` : undefined;
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const options = {
   timeout: 5000,
