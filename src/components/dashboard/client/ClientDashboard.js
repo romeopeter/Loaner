@@ -209,37 +209,41 @@ export default function ClientDashboard() {
 										/>
 									</div>
 								</div>*/}
-								{offers.length > 0 ? offers.map(offer => (
-									<div className="offer" id="offer-1" key={offer.id}>
-										<div className="offer-title">
-											<img
-												className="offer-image"
-												src={offerImage}
-												alt=""
-											/>
-											<h3 className="title">
+								{offers.length > 0 ? offers.map((offer,index) => {
+									if (index <= 5) {
+										return (
+											<div className="offer" id="offer-1" key={offer.id}>
+											<div className="offer-title">
+												<img
+													className="offer-image"
+													src={offerImage}
+													alt=""
+												/>
+												<h3 className="title">
+													{offer.deal_name}
+												</h3>
+											</div>
+											<p className="offer-description">
 												{offer.deal_name}
-											</h3>
-										</div>
-										<p className="offer-description">
-											{offer.deal_name}
-										</p>
-										<div className="offer-button">
-											<Button
-												title="Edit draft"
-												link="/client/offers/offer/edit"
-												type="button"
-												buttonClass="h-2 p-2 bg-grey"
-											/>
-											<Button
-												title="Publish"
-												link="/client/offers/offer/publish"
-												type="button"
-												buttonClass="h-2 p-2 bg-white"
-											/>
-										</div>
-									</div>
-								)):(<p className="text-white">Loading offers...</p>)}
+											</p>
+											<div className="offer-button">
+												<Button
+													title="Edit draft"
+													link="/client/offers/offer/edit"
+													type="button"
+													buttonClass="h-2 p-2 bg-grey"
+												/>
+												<Button
+													title="Publish"
+													link="/client/offers/offer/publish"
+													type="button"
+													buttonClass="h-2 p-2 bg-white"
+												/>
+											</div>
+											</div>
+										)
+									}
+								}):(<p className="text-white">Loading offers...</p>)}
 							</div>
 							<div id="view-more" className="text-right">
 								<Link to="/client/offers"  className="text-white text-lg font-bold">View more</Link>{" "}{" "}
