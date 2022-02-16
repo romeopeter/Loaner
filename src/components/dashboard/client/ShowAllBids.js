@@ -36,7 +36,7 @@ export default function ShowAllBids() {
 					</div>
 				</div>
 				<section id="orderbook-show-all-bids">
-					<h3 id="loan-offer" className="text-white">Rice value chain</h3>
+					<h3 id="loan-offer" className="text-white text-3xl">Rice value chain</h3>
 					<div className="bg-gray-300 h-10"></div>
 					<div id="all-loans-bid" className="bg-white px-10">
 						<table className="table-auto w-full h-auto">
