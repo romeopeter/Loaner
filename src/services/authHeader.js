@@ -12,6 +12,7 @@ async function axiosConfig() {
 	if (currentUser !== null && typeof currentUser === "object") {
 		let {tokens: { refresh} } = currentUser;
 
+		// eslint-disable-next-line no-undef
 		const decode = jwt_decode(access, {complete: true});
 		const tokenExpirationDate = decode.exp;
 		const currentDate = new Date();
