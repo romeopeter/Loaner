@@ -42,7 +42,7 @@ const BrokerDashboard = () => {
         <>
             <DocumentHead title='Dashboard' />
             <OrderbookLayout PageNav={NavMenu} className='broker'>
-                <header id='orderbook-header' style={setBgImage(headerBanner)}>
+                <header id='orderbook-header'>
                     <Flex flexDirection={['column']} className='broker-header'>
                         <div id='loan-invest-dropdown' className=' bg-white px-16 py-10 shadow-md flex justify-start'>
                             <div id='loan' className='dropdown-container mr-5'>
@@ -131,7 +131,7 @@ const BrokerDashboard = () => {
                         </div>
                     </Flex>
                 </header>
-                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }}>
+                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }} className='scrollWrapper'>
                     <Box w={['90vw']} m='auto'>
                         <Text py={['6']}>My offers</Text>
                         <Table size='sm' display={['none', 'table']} colorScheme={'blackAlpha'}>
