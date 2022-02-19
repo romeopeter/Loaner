@@ -31,7 +31,7 @@ export const getInvestorsListAction = createAsyncThunk(
 );
 
 export const getInvestorAction = createAsyncThunk(
-	"investorsList/getInvestorsListAction",
+	"investorsList/getInvestorAction",
 	async (ID, thunkAPI) => {
 		const response = await getInvestor(ID);
 		const dispatch = thunkAPI.dispatch;
@@ -44,7 +44,7 @@ export const getInvestorAction = createAsyncThunk(
 
 export const investorsListSlice = createSlice({
 	name: "investorsList",
-	initialState: { investorsList: [] },
+	initialState: { list: [] },
 	extraReducers: {
 
 		// Save List
@@ -52,7 +52,7 @@ export const investorsListSlice = createSlice({
 		[saveInvestorListAction.rejected]: (state, action) => {console.log("rejected")},
 		[saveInvestorListAction.fulfilled]: (state, action) => {
 			const payload = action.payload !== undefined && action.payload;
-			state.investorsList = payload
+			state.list = payload
 		},
 
 		// Get Lists
@@ -60,7 +60,7 @@ export const investorsListSlice = createSlice({
 		[getInvestorsListAction.rejected]: (state, action) => {console.log("rejected")},
 		[getInvestorsListAction.fulfilled]: (state, action) => {
 			const payload = action.payload !== undefined && action.payload;
-			state.investorsList = payload
+			state.list = payload
 		},
 
 		// Get investor
@@ -68,7 +68,7 @@ export const investorsListSlice = createSlice({
 		[getInvestorAction.rejected]: (state, action) => {console.log("rejected")},
 		[getInvestorAction.fulfilled]: (state, action) => {
 			const payload = action.payload !== undefined && action.payload;
-			state.investorsList = payload
+			state.list = payload
 		},
 	},
 });
