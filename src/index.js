@@ -15,7 +15,10 @@ import AlertTemplate from "react-alert-template-basic";
 // Axios configuration
 const currentUserObj = JSON.parse(localStorage.getItem("USER"));
 axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
-axios.defaults.headers.common["Authorization"] = currentUserObj !== null ? `Bearer ${currentUserObj.tokens.access}` : undefined;
+axios.defaults.headers.common["Authorization"] = undefined;
+if (currentUserObj !== null && currentUserObj !== false) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${currentUserObj.tokens.access}`;
+}
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const options = {
