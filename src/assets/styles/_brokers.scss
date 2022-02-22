@@ -1,0 +1,22 @@
+.broker {
+    &-checkbox {
+        height: 20px;
+        width: 20px;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+
+    &-header {
+        width: 100%;
+    }
+}
+.btn {
+    padding: 25px;
+    font-weight: 700;
+}
+// @media only screen and (max-width: 600px){
+// 	/*Big smartphones [426px -> 600px]*/
+// }

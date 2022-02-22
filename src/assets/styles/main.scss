@@ -1,75 +1,74 @@
 html {
-	height: 100%;
-	body {
-  		margin: 0;
-  		padding: 0;
-  		overflow-x: hidden;
-  		min-height: 100vh;
-  		box-sizing: border-box !important;
-	}
+    height: 100%;
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        min-height: 100vh;
+        box-sizing: border-box !important;
+    }
 }
 
-@import "_variables.scss";
-@import "_mixin.scss";
+@import '_variables.scss';
+@import '_mixin.scss';
 
-@import "_general.scss";
-@import "_orderbook-layout.scss";
-@import "_landing-page.scss";
-@import "_button.scss";
+@import '_general.scss';
+@import '_orderbook-layout.scss';
+@import '_landing-page.scss';
+@import '_button.scss';
 
-@import "_login.scss";
-@import "_register.scss";
+@import '_login.scss';
+@import '_register.scss';
 
-@import "_client-dashboard.scss";
-@import "_client-loan-request.scss";
-@import "_offers.scss";
-@import "_show-offer.scss";
-@import "_client-publish-offer.scss";
-@import "_client-publish-offer.scss";
-@import "_client-show-bids.scss";
-@import "_client-show-all-bids.scss";
+@import '_client-dashboard.scss';
+@import '_client-loan-request.scss';
+@import '_offers.scss';
+@import '_show-offer.scss';
+@import '_client-publish-offer.scss';
+@import '_client-publish-offer.scss';
+@import '_client-show-bids.scss';
+@import '_client-show-all-bids.scss';
 
-@import "_investor-dashboard.scss";
-@import "_investor-offers.scss";
-@import "_investor-bids.scss";
-
+@import '_investor-dashboard.scss';
+@import '_investor-offers.scss';
+@import '_investor-bids.scss';
+@import '_brokers';
 
 // NotFound component
 #orderbook-not-found {
-	@include respond-below(sm) {
-		#lead-404 {
-			font-size: 10rem !important;
-		}
+    @include respond-below(sm) {
+        #lead-404 {
+            font-size: 10rem !important;
+        }
 
-		#message {
-			width: normal !important;
-		}
-	}
+        #message {
+            width: normal !important;
+        }
+    }
 
-	height: 100vh;
-	#lead-404 {
-		font-family: $body-font;
-		color: $primary-dark;
-		font-size: 15rem;
-	}
+    height: 100vh;
+    #lead-404 {
+        font-family: $body-font;
+        color: $primary-dark;
+        font-size: 15rem;
+    }
 
-	p {
+    p {
+        &:nth-child(1) {
+            font-family: $header-font;
+        }
+        &#message {
+            font-family: $body-font;
+            max-width: 60rem;
+        }
 
-		&:nth-child(1) {
-			font-family: $header-font;
-		}
-		&#message {
-			font-family: $body-font;
-			max-width: 60rem;
-		}
+        &#go-home {
+            background: $primary-dark;
+            max-width: 300px;
 
-		&#go-home {
-			background: $primary-dark;
-			max-width: 300px;
-
-			a {
-				display: block;
-			}
-		}
-	}
+            a {
+                display: block;
+            }
+        }
+    }
 }
