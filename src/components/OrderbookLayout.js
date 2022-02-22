@@ -1,10 +1,12 @@
-import React, { createRef } from "react";
+import React, { createRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import getAuthToken from "../utils/getAuthToken";
+import checkTokenExpiration from "../utils/checkTokenExpiration";
 
 export default function OrderbookLayout({ children, PageNav }) {
+
+	useEffect(() => checkTokenExpiration(), []);
 
 	const { isLoggedIn } = useSelector((state) => state.auth);
 
