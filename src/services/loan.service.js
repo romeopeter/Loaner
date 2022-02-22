@@ -20,18 +20,18 @@ const loanRequestBond = (data) => {
 
 // Investor list endpoints
 const saveInvestorsList = (data) => {
-	return axios.post("/v1/lists/investor", data).catch((error) => error);
+	return axios.post("/v1/lists/investors/", data).catch((error) => error);
 };
 
 const getInvestorsList = () => {
 	return axios
-		.get("/v1/lists/investor/")
+		.get("/v1/lists/investors/")
 		.catch((error) => console.log(error));
 };
 
 const getInvestor = (id) => {
 	return axios
-		.get(`/v1/list/investor/${id}/`)
+		.get(`/v1/list/investors/${id}/`)
 		.catch((error) => console.log(error));
 };
 
