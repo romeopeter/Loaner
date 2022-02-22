@@ -25,14 +25,17 @@ export default function ClientDashboard() {
 	const navigate = useNavigate();
 
 	const dispatch = useDispatch();
-	const authUser = useSelector((state) => state.auth.user);
+	const currentUserObj = useSelector((state) => state.auth)
+	const authUser = currentUserObj.user;
+	const authToken = authUser.tokens;
 	const offers = useSelector((state) => state.loan.offers);
 
 	useEffect(() => {
 
 		// Get request
-		dispatch(getOffersAction())
-
+		if (authToken.access !== null && authToken.access !== undefined) {
+			dispatch(getOffersAction());
+		}
 	}, [])
 
 	const { user: currentUser } = authUser;
