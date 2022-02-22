@@ -1,6 +1,7 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { components, selectInstance } from "react-select";
+import { useDispatch, useSelector } from "react-redux";
+import { components } from "react-select";
 import { useAlert } from "react-alert";
 
 import CustomSelect from "./CustomSelect";
@@ -8,14 +9,28 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
-import offerImage from "../../../assets/images/offerImage.png";
 
-export default function PublishOffer({children, ...props}) {
+import { getInvestorsInCategoryAction, mergeInvestorsInCategoriesAction } from "../../../redux/investorsInCategorySlice";
+
+import { getInvestorsCategoriesAction } from "../../../redux/investorCategorySlice";
+
+import { saveInvestorListAction } from "../../../redux/investorListSlice";
+
+export default function PublishOffer({ children, ...props }) {
 	const pageName = "Publish offer";
 
 	const saveListModalRef = createRef();
 	const publishSuccessModalRef = createRef();
 	const alert = useAlert();
+	const dispatch = useDispatch();
+
+	const currentUserObj = useSelector(state => state.auth.user)
+	const investorsInCategory = useSelector(
+		(state) => state.investorsInCategory.investors
+	);
+	const investorCategories = useSelector(
+		(state) => state.investorsCategories.categories
+	);
 
 	const [state, setState] = useState({
 		investorSelected: null,
@@ -23,59 +38,42 @@ export default function PublishOffer({children, ...props}) {
 		saveAsOpen: false,
 		saveAsComing: false,
 		favouriteListName: "",
-		favouriteListDescription: ""
+		favouriteListDescription: "",
+		menuIsOpen: false,
 	});
+	const [favouriteList, setFavouriteList] = useState([]);
+	const [investorCatCount, setInvestorCatCount] = useState(5);
+	const [categoriesIds, setCategoriesIds] = useState([]);
 
-	const [categoriesTrigger, setCategoriesTrigger] = useState(5);
-	const categories = [
-		{ id: 1, name: "Ethics" },
-		{ id: 2, name: "Agriculture & Food" },
-		{ id: 3, name: "Healthcare" },
-		{ id: 4, name: "Beverages & Alchohol" },
-		{ id: 5, name: "Agriculture & Food" },
-		{ id: 6, name: "Beverages & Alchohol" },
-		{ id: 7, name: "Ethics" },
-		{ id: 8, name: "Healthcare" },
-		{ id: 9, name: "Beverages & Alchohol" },
-		{ id: 10, name: "Agriculture & Food" },
-		{ id: 11, name: "Ethics" },
-		{ id: 12, name: "Healthcare" },
-	];
+	useEffect(() => {
+		// Save favourite list after state update
+		const LISTS = favouriteList.length > 0 && JSON.stringify(favouriteList);
+		localStorage.setItem("FAVOURITE_LISTS", LISTS);
+	}, [favouriteList]);
 
-	const [investorCategory, setInvestorCategory] = useState([
-		{id: 1, ethics: ["durward reynolds", "Kenton Towne", "therese wunsch"]},
-		{id: 2, agricultureAndFood: ["tobi lekan", "john uche", "mary thomas"]},
-		{id: 3, healthcare: ["john doe", "jane doe", "kenton towne", "tobi lekan"]},
-		{id: 4, beverages: ["katelyn rohan", "aisha yussuf", "benedict kessler"]},
-		{id: 5, BeveragesAndAlchohol: [
-			"durward reynolds",
-			"mary thomas",
-			"aisha yussuf",
-		]}
-	]);
+	useEffect(() => {
+		// Get all investors categories
+		dispatch(getInvestorsCategoriesAction());
+		dispatch(getInvestorsInCategoryAction());
+	}, [dispatch]);
 
-	const investorOptions = [
-		{ value: "durward reynolds", label: "Durward Reynolds" },
-		{ value: "kenton towne", label: "Kenton Towne" },
-		{ value: "therese wunsch", label: "Therese Wunsch" },
-		{ value: "benedict kessler", label: "Benedict Kessler" },
-		{ value: "john doe", label: "John Doe" },
-		{ value: "mary doe", label: "Mary Doe" },
-		{ value: "tobi lekan", label: "Tobi Lekan" },
-		{ value: "john uche", label: "John Uche" },
-		{ value: "katelyn rohan", label: "Katelyn Rohan" },
-		{ value: "aisha yussuf", label: "Aisha Yussuf" },
-		{ value: "mary thomas", label: "Mary Thomas" },
-		{ value: "edward paul", label: "Edward Paul" },
-	];
+	useEffect(() => {
+		// Invoke function to get all categories IDs
+		getCategoriesIds();
+	}, [state.categoryCheckbox])
+
+	useEffect(() => {
+		// Invoke function to generate request based on categories clicked
+		genMultiInvestorsRequests()
+	}, [categoriesIds])
 
 	const handleInvestorChange = (selected) => {
-	    setState(state => {
-	    	return {
-	    		...state,
-	    		investorSelected: selected
-	    	}
-	    })
+		setState((state) => {
+			return {
+				...state,
+				investorSelected: selected,
+			};
+		});
 	};
 
 	const handleChange = (e) => {
@@ -84,34 +82,30 @@ export default function PublishOffer({children, ...props}) {
 
 		if (e.target.checked) {
 			if (name === "saveAsOpen" || name === "saveAsComing") {
-				setState(state => ({...state, [name]: e.target.checked}));
+				setState((state) => ({ ...state, [name]: e.target.checked }));
 			}
 
 			if (name === "categoryCheckbox") {
-				setState(state => ({...state, [name]: [...state[name], value]}))
+				setState((state) => ({
+					...state,
+					[name]: [...state[name], value],
+				}));
 			}
 		} else {
 			if (name === "saveAsOpen" || name === "saveAsComing") {
-				setState(state => ({...state, [name]: !e.target.checked}));
+				setState((state) => ({ ...state, [name]: !e.target.checked }));
 			}
 
 			if (name === "categoryCheckbox") {
 				if (state[name] !== null && state[name].length > 0) {
-					const result = state[name].filter(data => data !== value);
-					setState(state => ({...state, [name]: result}));
+					const result = state[name].filter((data) => data !== value);
+					setState((state) => ({ ...state, [name]: result }));
 
-					return
+					return;
 				}
 
-				setState(state => ({...state, [name]: []}))
+				setState((state) => ({ ...state, [name]: [] }));
 			}
-		}
-	}
-
-	const selectAllInvestors = (e) => {
-		
-		if (e.target.checked) {
-			console.log("Selects all investor");
 		}
 	};
 
@@ -128,97 +122,113 @@ export default function PublishOffer({children, ...props}) {
 		publishSuccessModalRef.current.classList.add("accept-modal");
 	};
 
-
 	/*Save list as favourite*/
+	const saveFavouriteList = () => {
+		const investorValues = state.investorSelected;
+		const categoryValues = state.categoryCheckbox;
 
-	const investorValues = state.investorSelected;
-	const categoryValues = state.categoryCheckbox;
+		const dataToSave = () => {
+			const clientInvestorsList = {};
+			const serverInvestorsList = {}
 
-	const listAsFavourite = {
-		listName: "",
-		listDescription: "",
-		listItems: {
-			categories: [],
-			investors: [],
-		},
-		saveAsOpen: state.saveAsOpen === false ? !state.saveAsOpen : state.saveAsOpen,
-		saveAsComing: state.saveAsComing === false ? !state.saveAsComing : state.saveAsComing
+			if (state.favouriteListName === "") {
+				alert.error("List must have a title");
+			} else {
+
+				// Investors list sent to server to save
+				const investorsIds = investorsInCategory.map((investor) => investor.id);
+
+				serverInvestorsList.name = state.favouriteListName;
+				serverInvestorsList.descripption = state.favouriteListDescription;
+				serverInvestorsList.investor_ids = investorsIds;
+				serverInvestorsList.user = currentUserObj.user.id;
+
+				console.log(serverInvestorsList, currentUserObj);
+
+				/*Investors lists to saved in client starts*/
+					clientInvestorsList.listName = state.favouriteListName;
+					clientInvestorsList.descripption = state.favouriteListDescription;
+					clientInvestorsList.listItems = {};
+
+					if (investorValues !== null) {
+						clientInvestorsList.listItems.investors = state.investorSelected;
+					}
+
+					if (categoryValues !== null) {
+						clientInvestorsList.listItems.categories = state.categoryCheckbox;
+					}
+
+					clientInvestorsList.saveAsOpen =
+						state.saveAsOpen === false
+							? !state.saveAsOpen
+							: state.saveAsOpen;
+					clientInvestorsList.saveAsComing =
+						state.saveAsComing === false
+							? !state.saveAsComing
+							: state.saveAsComing;
+				/*Investors lists to saved in client ends*/
+
+				dispatch(saveInvestorListAction(serverInvestorsList)).then(() => {
+					setFavouriteList((state) => {
+						return [...state, clientInvestorsList];
+					});
+					
+					alert.success("List created");
+				});
+
+				// Removes save list modal
+				removeFavouriteListModal();
+			}
+		};
+		dataToSave();
 	};
 
-	if (investorValues !== null) {
+	// Get categories ID
+	const getCategoriesIds = () => {
+		const IDs = state.categoryCheckbox.length > 0
+			? state.categoryCheckbox.map((category) => {
+				return Number(category.split("_")[1]);
+			})
+			: [];
 
-		listAsFavourite.listItems = {
-			...listAsFavourite.listItems,
-			investors: investorValues
-		}
-	}
-
-	if (categoryValues !== null) {
-		listAsFavourite.listItems = {
-			...listAsFavourite.listItems,
-			categories: categoryValues
-		}
-	}
-
-	const saveFavouriteList = () => {
-		const favouriteList = []
-
-		if (state.favouriteListName === "") {
-			alert.error("List must have a title")
-		} else {
-
-			const x =  {
-				...listAsFavourite,
-				listName: state.favouriteListName,
-				listDescription: state.favouriteListDescription
-			}
-			
-			favouriteList.push(x);
-
-
-			localStorage.setItem("FAVOURITE_lIST", JSON.stringify(favouriteList));
-
-			alert.success("List created");
-
-			removeFavouriteListModal();
-		}
-	}
+		setCategoriesIds(state => ([...IDs]));
+	};
 
 	/* React-select customization start */
+	const allOption = {
+		label: "Select all",
+		value: "*",
+	};
+
 	const Option = (props) => {
 		return (
 			<div>
-			<components.Option {...props}>
-				<input
-					type="checkbox"
-					checked={props.isSelected}
-					className="rounded"
-					onChange={() => null}
-				/>{" "}
-				<label>{props.label}</label>
-			</components.Option>
+				<components.Option {...props}>
+					<input
+						type="checkbox"
+						checked={props.isSelected}
+						className="rounded"
+						onChange={() => null}
+					/>{" "}
+					<label>{props.label}</label>
+				</components.Option>
 			</div>
 		);
 	};
 
-	const allOption = {
-		label: "Select all",
-		value: "*"
-	}
-
 	const ValueContainer = ({ children, ...props }) => {
 		const currentValues = props.getValue();
-	  	let toBeRendered = children;
+		let toBeRendered = children;
 
-	  	if (currentValues.some(val => val.value === allOption.value)) {
-	    	toBeRendered = [[children[0][0]], children[1]];
-	  	}
+		if (currentValues.some((val) => val.value === allOption.value)) {
+			toBeRendered = [[children[0][0]], children[1]];
+		}
 
-	  	return (
-		    <components.ValueContainer {...props}>
-		      {toBeRendered}
-		    </components.ValueContainer>
-	  	);
+		return (
+			<components.ValueContainer {...props}>
+				{toBeRendered}
+			</components.ValueContainer>
+		);
 	};
 
 	const MultiValue = (props) => {
@@ -233,8 +243,36 @@ export default function PublishOffer({children, ...props}) {
 				<span>{labelToBeDisplayed}</span>
 			</components.MultiValue>
 		);
+	};
+
+	const loadAllInvestorsOptionsFunc = () => {
+
+		if (investorsInCategory.length > 0) {
+			return investorsInCategory.map((investor) => {
+				const label = `${investor.user.first_name} ${investor.user.last_name}`;
+				const value = investor.user.id;
+				return { value, label };
+			})
+		}
+
+		return []
+	};
+	const loadInvestorsOptions = loadAllInvestorsOptionsFunc();
+
+	// Generate multi request
+	const genMultiInvestorsRequests = () => {
+		const multiRequests = categoriesIds.map((id, index) => {;
+			const API_URL = "https://order-book-online.herokuapp.com/v1/investor_category";
+			return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
+		});
+		dispatch(mergeInvestorsInCategoriesAction(multiRequests))
 	}
 	/* React-select customization ends */
+
+	// Captialize first letter of alphabets characters
+	const capFirstLetter = (str) => {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
 
 	return (
 		<>
@@ -295,15 +333,15 @@ export default function PublishOffer({children, ...props}) {
 												id="categories"
 												className="flex justify-start flex-wrap"
 											>
-												{categories.length > 0
-													? categories.map(
+												{investorCategories.length > 0
+													? investorCategories.map(
 															(
 																category,
 																index
 															) => {
 																if (
-																	index + 1 <=
-																	categoriesTrigger
+																	index <=
+																	investorCatCount
 																) {
 																	return (
 																		<div
@@ -315,16 +353,23 @@ export default function PublishOffer({children, ...props}) {
 																			<input
 																				type="checkbox"
 																				name="categoryCheckbox"
-																				value={
-																					category.name
+																				value={`${category.name}_${category.id}`}
+																				onChange={(
+																					e
+																				) =>
+																					handleChange(
+																						e
+																					)
 																				}
-																				onChange={(e) => handleChange(e)}
 																				className="mr-2 rounded"
 																			/>
 																			<label htmlFor="category-checkbox">
-																				{
+																				{capFirstLetter(
 																					category.name
-																				}
+																				).replace(
+																					"-",
+																					" & "
+																				)}
 																			</label>
 																		</div>
 																	);
@@ -332,13 +377,13 @@ export default function PublishOffer({children, ...props}) {
 															}
 													  )
 													: null}
-												{categoriesTrigger <= 5 ? (
+												{investorCatCount <= 5 ? (
 													<Button
 														title="view more"
 														buttonClass="view-more font-bold"
 														handleClick={() =>
-															setCategoriesTrigger(
-																categories.length
+															setInvestorCatCount(
+																investorCategories.length
 															)
 														}
 													/>
@@ -353,11 +398,15 @@ export default function PublishOffer({children, ...props}) {
 						<div className="grid grid-cols-2 gap-4">
 							<div className="col-span-2 mb-5">
 								<CustomSelect
-									options={investorOptions}
+									options={loadInvestorsOptions}
 									isMulti
 									closeMenuOnSelect={false}
 									hideSelectedOptions={false}
-									components={{Option, MultiValue, ValueContainer}}
+									components={{
+										Option,
+										MultiValue,
+										ValueContainer,
+									}}
 									placeholder="Select investors"
 									onChange={(e) => handleInvestorChange(e)}
 									allowSelectAll={true}
@@ -428,35 +477,59 @@ export default function PublishOffer({children, ...props}) {
 						className="h-60"
 						ref={saveListModalRef}
 					>
-						<div
-							id="modal-content"
-							className=""
-						>
+						<div id="modal-content" className="">
 							<h4 className="font-bold text-2xl self-start my-5">
 								New list
 							</h4>
 
 							<div className="grid grid-cols-2 gap-4 mb-10">
 								<div className="col-span-2">
-									<input type="text" name="favouriteListName" value={state.favouriteListName} onChange={(e) => setState(state => ({...state, [e.target.name]: e.target.value}))} placeholder="Title" className="w-full border-l-0 border-t-0 border-r-0 focus:border-white" />
+									<input
+										type="text"
+										name="favouriteListName"
+										value={state.favouriteListName}
+										onChange={(e) =>
+											setState((state) => ({
+												...state,
+												[e.target.name]: e.target.value,
+											}))
+										}
+										placeholder="Title"
+										className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
+									/>
 								</div>
 								<div className="col-span-2">
-									<input type="text" name="favouriteListDescription" value={state.favouriteListDescription} onChange={(e) => setState(state => ({...state, [e.target.name]: e.target.value}))} placeholder="Description (optional)" className="w-full border-l-0 border-t-0 border-r-0 focus:border-white" />
+									<input
+										type="text"
+										name="favouriteListDescription"
+										value={state.favouriteListDescription}
+										onChange={(e) =>
+											setState((state) => ({
+												...state,
+												[e.target.name]: e.target.value,
+											}))
+										}
+										placeholder="Description (optional)"
+										className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
+									/>
 								</div>
 							</div>
-							
-							<div id="modal-buttons" className="flex justify-end pr-5">
+
+							<div
+								id="modal-buttons"
+								className="flex justify-end pr-5"
+							>
 								<Button
 									title="Cancel"
 									buttonClass="cancel mr-5"
 									handleClick={removeFavouriteListModal}
-							    />
+								/>
 
-							    <Button
+								<Button
 									title="Create"
 									buttonClass="create"
 									handleClick={saveFavouriteList}
-							    />
+								/>
 							</div>
 						</div>
 					</div>
@@ -467,30 +540,33 @@ export default function PublishOffer({children, ...props}) {
 						className="h-40"
 						ref={publishSuccessModalRef}
 					>
-						<div
-							id="modal-content"
-							className=""
-						>
+						<div id="modal-content" className="">
 							<h4 className="font-bold text-2xl text-center my-5">
 								Congratulations
 							</h4>
 
-							<p className="text-center mb-5 font-bold" id="message">
+							<p
+								className="text-center mb-5 font-bold"
+								id="message"
+							>
 								Your loan offer has been published
 							</p>
-							
-							<div id="modal-buttons" className="flex justify-center pr-5">
+
+							<div
+								id="modal-buttons"
+								className="flex justify-center pr-5"
+							>
 								<Button
 									title="View orders"
 									link="/client/offers/"
 									buttonClass="view-orders mr-5"
-							    />
+								/>
 
-							    <Button
+								<Button
 									title="Go home"
 									link="/"
 									buttonClass="go-home create"
-							    />
+								/>
 							</div>
 						</div>
 					</div>
