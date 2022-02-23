@@ -25,7 +25,7 @@ import ViewInvestor from "./dashboard/client/ViewInvestor";
 import ShowBids from "./dashboard/client/ShowBids";
 import ShowAllBids from "./dashboard/client/ShowAllBids";
 
-import InvestorDashboard from "./dashboard/investor/InvestorDashboard";
+import Dashboard from "./dashboard/investor/Dashboard";
 import AllOffers from "./dashboard/investor/AllOffers";
 import SingleOffer from "./dashboard/investor/SingleOffer";
 import SuccessfulBids from "./dashboard/investor/SuccessfulBids";
@@ -160,7 +160,7 @@ function App() {
           path="/investor/dashboard"
           element={
             <RequireAuth>
-              <InvestorDashboard />
+              <Dashboard />
             </RequireAuth>
           }
         />
