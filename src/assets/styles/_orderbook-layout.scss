@@ -1,465 +1,477 @@
 #app {
-	/*######## PORTRAIT & SMALL SCREENS ##########*/
-
-	// Custom breakpoint
-	@media (max-width: 1190px) {
-		#dashboard-nav {
-			#nav-menu {
-				#nav-menu-list {
-					.nav-menu-item {
-						#profile {
-							#profile-image {
-								img {
-								}
-							}
-							img {
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Custom breakpoint
-	@media (max-width: 974px) {
-		#orderbook-nav {
-			flex-direction: column !important;
-		}
-
-		#orderbook-footer {
-			flex-direction: column !important;
-			height: auto !important;
-
-			#orderbook-about-us {
-				#about-us {
-					font-size: 17px !important;
-				}
-			}
-
-			#orderbook-footer-links {
-				justify-content: space-between !important;
-			}
-		}
-	}
-
-	// Custom breakpoint
-	@media (max-width: 662px) {
-		#orderbook-footer {
-			#orderbook-footer-links {
-				flex-direction: column !important;
-			}
-		}
-	}
-
-	@media (max-width: 1150px) {
-		#orderbook-nav {
-			#orderbook-logo span {
-				font-size: 30px !important;
-			}
-		}
-	}
-
-	@include respond-below(sm) {
-		#nav-menu {
-			width: 100% !important;
-
-			#nav-menu-list {
-				.dropdown {
-					#deals-dropdown,
-					#analysis-dropdown,
-					#admin-dropdown,
-					#help-dropdown {
-						visibility: visible !important;
-						background: none !important;
-						position: static !important;
-						top: 0 !important;
-
-						&::after {
-							display: none !important;
-						}
-					}
-				}
-
-				#user-profile-menu-item {
-					width: 100% !important;
-
-					#horizontal-divider {
-						border-top: 1px solid lightgrey;
-						margin: 15px 70px;
-					}
-
-					#profile-container {
-						#profile-dropdown {
-							width: 100% !important;
-
-							#profile-photo {
-								margin-left: 10px;
-							}
-
-							#profile-menu-nav {
-								background: black;
-								position: static !important;
-								width: inherit !important;
-								visibility: visible !important;
-								margin-top: 15px;
-
-								.menu-nav-container {
-									color: $white !important;
-
-									a {
-										color: $white !important;
-
-										&:hover {
-											background: none !important;
-										}
-									}
-
-									span:hover {
-										background: none !important;
-									}
-								}
-
-								&::after {
-									display: none !important;
-								}
-							}
-						}
-
-						#bank-photo {
-							display: none !important;
-						}
-					}
-				}
-			}
-		}
-
-		#orderbook-nav {
-			padding: 20px 25px !important;
-			height: auto !important;
-
-			#burger-toggle {
-				display: block !important;
-			}
-
-			#orderbook-logo {
-				margin-bottom: 10px;
-				width: inherit !important;
-			}
-
-			#nav-menu {
-				#nav-menu-list {
-					display: none !important;
-
-					&.responsive-nav-menu {
-						display: flex !important;
-						width: 100% !important;
-						flex-direction: column !important;
-						height: auto !important;
-						.nav-menu-item {
-							margin: 5px 0px;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@include respond-below(sm) {
-		#dashboard-nav {
-			// padding: 20px 25px !important;
-			height: auto !important;
-
-			#burger-toggle {
-				display: block !important;
-			}
-
-			#orderbook-logo {
-				margin-bottom: 10px;
-				width: inherit !important;
-			}
-
-			#nav-menu {
-				#nav-menu-list {
-					display: none !important;
-
-					&.responsive-nav-menu {
-						display: flex !important;
-						width: 100% !important;
-						flex-direction: column !important;
-						height: auto !important;
-						.nav-menu-item {
-							margin: 5px 0px;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/*###### LANDSCAPE & LARGE SCREENS ######*/
-
-	#orderbook-nav {
-		display: flex;
-		align-items: center;
-		background-color: $black !important;
-		height: 130px;
-		padding: 20px 0px 20px 40px;
-
-		#burger-toggle {
-			color: $white;
-			font-size: 30px;
-			align-self: flex-end !important;
-			cursor: pointer;
-			display: none;
-		}
-
-		#orderbook-logo {
-			width: 40%;
-			color: $white;
-			font-family: $header-font;
-			font-size: 40px;
-			font-weight: bold;
-		}
-
-		#nav-menu {
-			#nav-menu-list {
-				list-style-type: none !important;
-				margin-block: 0px;
-				padding-inline-start: 0px;
-				display: flex;
-				align-items: center;
-				width: 700px;
-				justify-content: space-evenly;
-
-				.nav-menu-item {
-					margin-right: 30px;
-
-					a {
-						display: block;
-						color: $white;
-						font-family: $body-font !important;
-						text-decoration: none;
-						height: 100%;
-					}
-				}
-
-				#login {
-					a {
-						font-weight: 900;
-					}
-				}
-
-				#register-cta {
-					background-color: $white;
-					width: 120px;
-					height: 20px;
-					padding: 20px;
-					margin: 0px;
-
-					a {
-						color: $black !important;
-						font-weight: 900;
-						display: flex !important;
-						align-items: center;
-						justify-content: center;
-					}
-				}
-			}
-		}
-	}
-
-	#orderbook-nav {
-		height: auto !important;
-
-		#nav-menu {
-			width: 80%;
-			#nav-menu-list {
-				width: 100% !important;
-
-				.nav-menu-item {
-					margin-right: 0 !important;
-
-					&.dropdown {
-						position: relative;
-
-						#deals-dropdown,
-						#analysis-dropdown,
-						#admin-dropdown,
-						#help-dropdown {
-							visibility: hidden;
-							position: absolute;
-							background: $white !important;
-							top: 115%;
-							z-index: 1;
-							padding: 0px 0px 15px 0px;
-							width: 250px;
-
-							a {
-								color: $black;
-								padding: 8px 8px 8px 15px;
-								margin-top: 10px;
-
-								&:hover {
-									background: lightgray;
-								}
-							}
-
-							&::after {
-								content: "";
-								position: absolute;
-								bottom: 100%;
-								left: 13%;
-								margin-left: -5px;
-								border-width: 5px;
-								border-style: solid;
-								border-color: transparent transparent $white
-									transparent;
-							}
-						}
-
-						&:hover #deals-dropdown,
-						&:hover #analysis-dropdown,
-						&:hover #admin-dropdown,
-						&:hover #help-dropdown {
-							visibility: visible;
-						}
-					}
-
-					#profile-container {
-						display: flex;
-						justify-content: space-between;
-
-						#profile-dropdown {
-							position: relative;
-							display: inline-block;
-
-							#profile-photo {
-								display: inline-block;
-								width: 40px;
-								height: 40px;
-								border-top: 3px dashed $white;
-								border-right: 3px dashed $white;
-								border-radius: 20px;
-							}
-
-							#profile-menu-nav {
-								position: absolute;
-								top: 115%;
-								right: -15px;
-								z-index: 1;
-								width: 200px;
-								visibility: hidden;
-								padding: 30px 20px;
-
-								.menu-nav-container {
-									color: $black;
-									font-family: $body-font;
-									font-size: 17px;
-									width: 100%;
-
-									a {
-										padding: 10px;
-										color: $black;
-
-										&:hover {
-											background: lightgray;
-										}
-									}
-								}
-
-								#account {
-									span {
-										display: block;
-										padding: 10px;
-										&:hover {
-											background: lightgray;
-										}
-									}
-								}
-
-								&::after {
-									content: "";
-									position: absolute;
-									bottom: 100%;
-									left: 75%;
-									margin-left: -5px;
-									border-width: 5px;
-									border-style: solid;
-									border-color: transparent transparent $white
-										transparent;
-								}
-							}
-
-							&:hover #profile-menu-nav {
-								visibility: visible !important;
-							}
-
-							margin-right: 7px;
-						}
-
-						img {
-							width: 45px;
-							height: 45px;
-							display: block;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// FOOTER
-	#orderbook-footer {
-		background-color: $primary-dark;
-		height: 457px;
-		display: flex;
-		justify-content: space-between !important;
-		padding: 40px 40px;
-
-		#orderbook-about-us {
-			#logo {
-				font-family: $header-font;
-				font-size: 35px;
-				font-weight: bold;
-				color: $white;
-			}
-
-			#about-us {
-				font-family: $body-font;
-				color: $white;
-				line-height: 1.5;
-				max-width: 500px;
-				margin: 10px 0px;
-				font-size: 16.5px;
-			}
-		}
-
-		#orderbook-footer-links {
-			width: 70%;
-			display: flex;
-			justify-content: space-evenly;
-
-			.links-container {
-				display: flex;
-				flex-direction: column;
-
-				h4 {
-					color: $white;
-					font-family: $header-font;
-					font-size: 25px;
-				}
-
-				.links {
-					text-decoration: none;
-					font-family: $body-font;
-					color: $white;
-					margin-bottom: 30px;
-				}
-
-				&#site-links {
-				}
-			}
-		}
-	}
+    /*######## PORTRAIT & SMALL SCREENS ##########*/
+
+    // Custom breakpoint
+    @media (max-width: 1190px) {
+        #dashboard-nav {
+            #nav-menu {
+                #nav-menu-list {
+                    .nav-menu-item {
+                        #profile {
+                            #profile-image {
+                                img {
+                                }
+                            }
+                            img {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Custom breakpoint
+    @media (max-width: 974px) {
+        // Fixes overflow div on the nav
+        #orderbook-logo {
+            flex-basis: 100%;
+        }
+        #nav-menu {
+            flex-basis: 0;
+        }
+        // -----------------------------
+
+        #orderbook-footer {
+            flex-direction: column !important;
+            height: auto !important;
+
+            #orderbook-about-us {
+                #about-us {
+                    font-size: 17px !important;
+                }
+            }
+
+            #orderbook-footer-links {
+                justify-content: space-between !important;
+            }
+        }
+    }
+
+    // Custom breakpoint
+    @media (max-width: 662px) {
+        #orderbook-footer {
+            #orderbook-footer-links {
+                flex-direction: column !important;
+            }
+        }
+    }
+
+    @media (max-width: 1150px) {
+        #orderbook-nav {
+            #orderbook-logo span {
+                font-size: 30px !important;
+            }
+        }
+    }
+
+    @include respond-below(sm) {
+        #nav-menu {
+            width: 100% !important;
+
+            #nav-menu-list {
+                .dropdown {
+                    #deals-dropdown,
+                    #analysis-dropdown,
+                    #admin-dropdown,
+                    #help-dropdown {
+                        visibility: visible !important;
+                        background: none !important;
+                        position: static !important;
+                        top: 0 !important;
+
+                        &::after {
+                            display: none !important;
+                        }
+                    }
+                }
+
+                #user-profile-menu-item {
+                    width: 100% !important;
+
+                    #horizontal-divider {
+                        border-top: 1px solid lightgrey;
+                        margin: 15px 70px;
+                    }
+
+                    #profile-container {
+                        #profile-dropdown {
+                            width: 100% !important;
+
+                            #profile-photo {
+                                margin-left: 10px;
+                            }
+
+                            #profile-menu-nav {
+                                background: black;
+                                position: static !important;
+                                width: inherit !important;
+                                visibility: visible !important;
+                                margin-top: 15px;
+
+                                .menu-nav-container {
+                                    color: $white !important;
+
+                                    a {
+                                        color: $white !important;
+
+                                        &:hover {
+                                            background: none !important;
+                                        }
+                                    }
+
+                                    span:hover {
+                                        background: none !important;
+                                    }
+                                }
+
+                                &::after {
+                                    display: none !important;
+                                }
+                            }
+                        }
+
+                        #bank-photo {
+                            display: none !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        #orderbook-nav {
+            padding: 20px 25px !important;
+            height: auto !important;
+
+            #burger-toggle {
+                display: block !important;
+            }
+
+            #orderbook-logo {
+                margin-bottom: 10px;
+                width: inherit !important;
+            }
+
+            #nav-menu {
+                #nav-menu-list {
+                    display: none !important;
+
+                    &.responsive-nav-menu {
+                        display: flex !important;
+                        width: 100% !important;
+                        flex-direction: column !important;
+                        height: auto !important;
+                        .nav-menu-item {
+                            margin: 5px 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include respond-below(sm) {
+        #dashboard-nav {
+            // padding: 20px 25px !important;
+            height: auto !important;
+
+            #burger-toggle {
+                display: block !important;
+            }
+
+            #orderbook-logo {
+                margin-bottom: 10px;
+                width: inherit !important;
+            }
+
+            #nav-menu {
+                #nav-menu-list {
+                    display: none !important;
+
+                    &.responsive-nav-menu {
+                        display: flex !important;
+                        width: 100% !important;
+                        flex-direction: column !important;
+                        height: auto !important;
+                        .nav-menu-item {
+                            margin: 5px 0px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /*###### LANDSCAPE & LARGE SCREENS ######*/
+
+    #orderbook-nav {
+        display: flex;
+        align-items: center;
+        background-color: $black !important;
+        height: 130px;
+        padding: 20px 0px 20px 40px;
+
+        // Fixes overflow div on the nav
+        @media only screen and (max-width: 980px) {
+            flex-direction: column;
+        }
+        @media only screen and (max-width: 767px) {
+            flex-direction: row;
+        }
+        // -------------------------------
+
+        #burger-toggle {
+            color: $white;
+            font-size: 30px;
+            // align-self: flex-end !important;
+            cursor: pointer;
+            display: none;
+        }
+
+        #orderbook-logo {
+            width: 40%;
+            color: $white;
+            font-family: $header-font;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        #nav-menu {
+            #nav-menu-list {
+                list-style-type: none !important;
+                margin-block: 0px;
+                padding-inline-start: 0px;
+                display: flex;
+                align-items: center;
+                width: 700px;
+                justify-content: space-evenly;
+
+                .nav-menu-item {
+                    margin-right: 30px;
+
+                    a {
+                        display: block;
+                        color: $white;
+                        font-family: $body-font !important;
+                        text-decoration: none;
+                        height: 100%;
+                    }
+                }
+
+                #login {
+                    a {
+                        font-weight: 900;
+                    }
+                }
+
+                #register-cta {
+                    background-color: $white;
+                    width: 120px;
+                    height: 20px;
+                    padding: 20px;
+                    margin: 0px;
+
+                    a {
+                        color: $black !important;
+                        font-weight: 900;
+                        display: flex !important;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+
+    #orderbook-nav {
+        height: auto !important;
+
+        #nav-menu {
+            width: 80%;
+            #nav-menu-list {
+                width: 100% !important;
+
+                .nav-menu-item {
+                    margin-right: 0 !important;
+
+                    &.dropdown {
+                        position: relative;
+
+                        #deals-dropdown,
+                        #analysis-dropdown,
+                        #admin-dropdown,
+                        #help-dropdown {
+                            visibility: hidden;
+                            position: absolute;
+                            background: $white !important;
+                            top: 115%;
+                            z-index: 1;
+                            padding: 0px 0px 15px 0px;
+                            width: 250px;
+
+                            a {
+                                color: $black;
+                                padding: 8px 8px 8px 15px;
+                                margin-top: 10px;
+
+                                &:hover {
+                                    background: lightgray;
+                                }
+                            }
+
+                            &::after {
+                                content: '';
+                                position: absolute;
+                                bottom: 100%;
+                                left: 13%;
+                                margin-left: -5px;
+                                border-width: 5px;
+                                border-style: solid;
+                                border-color: transparent transparent $white transparent;
+                            }
+                        }
+
+                        &:hover #deals-dropdown,
+                        &:hover #analysis-dropdown,
+                        &:hover #admin-dropdown,
+                        &:hover #help-dropdown {
+                            visibility: visible;
+                        }
+                    }
+
+                    #profile-container {
+                        display: flex;
+                        justify-content: space-between;
+
+                        #profile-dropdown {
+                            position: relative;
+                            display: inline-block;
+
+                            #profile-photo {
+                                display: inline-block;
+                                width: 40px;
+                                height: 40px;
+                                border-top: 3px dashed $white;
+                                border-right: 3px dashed $white;
+                                border-radius: 20px;
+                            }
+
+                            #profile-menu-nav {
+                                position: absolute;
+                                top: 115%;
+                                right: -15px;
+                                z-index: 1;
+                                width: 200px;
+                                visibility: hidden;
+                                padding: 30px 20px;
+
+                                .menu-nav-container {
+                                    color: $black;
+                                    font-family: $body-font;
+                                    font-size: 17px;
+                                    width: 100%;
+
+                                    a {
+                                        padding: 10px;
+                                        color: $black;
+
+                                        &:hover {
+                                            background: lightgray;
+                                        }
+                                    }
+                                }
+
+                                #account {
+                                    span {
+                                        display: block;
+                                        padding: 10px;
+                                        &:hover {
+                                            background: lightgray;
+                                        }
+                                    }
+                                }
+
+                                &::after {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: 100%;
+                                    left: 75%;
+                                    margin-left: -5px;
+                                    border-width: 5px;
+                                    border-style: solid;
+                                    border-color: transparent transparent $white transparent;
+                                }
+                            }
+
+                            &:hover #profile-menu-nav {
+                                visibility: visible !important;
+                            }
+
+                            margin-right: 7px;
+                        }
+
+                        img {
+                            width: 45px;
+                            height: 45px;
+                            display: block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // FOOTER
+    #orderbook-footer {
+        background-color: $primary-dark;
+        height: 457px;
+        display: flex;
+        justify-content: space-between !important;
+        padding: 40px 40px;
+
+        #orderbook-about-us {
+            #logo {
+                font-family: $header-font;
+                font-size: 35px;
+                font-weight: bold;
+                color: $white;
+            }
+
+            #about-us {
+                font-family: $body-font;
+                color: $white;
+                line-height: 1.5;
+                max-width: 500px;
+                margin: 10px 0px;
+                font-size: 16.5px;
+            }
+        }
+
+        #orderbook-footer-links {
+            width: 70%;
+            display: flex;
+            justify-content: space-evenly;
+
+            .links-container {
+                display: flex;
+                flex-direction: column;
+
+                h4 {
+                    color: $white;
+                    font-family: $header-font;
+                    font-size: 25px;
+                }
+
+                .links {
+                    text-decoration: none;
+                    font-family: $body-font;
+                    color: $white;
+                    margin-bottom: 30px;
+                }
+
+                &#site-links {
+                }
+            }
+        }
+    }
 }

@@ -1,7 +1,9 @@
+// -----------------------DASHBOARD
 .broker {
     &-checkbox {
         height: 20px;
         width: 20px;
+        background: #e5e5e5;
         border-radius: 3px;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
@@ -12,11 +14,256 @@
     &-header {
         width: 100%;
     }
+    &-orderbook-header {
+        background-image: linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)),
+            url('/assets/images/broker-header.png');
+
+        @media only screen and (max-width: 750px) {
+            background-image: none;
+            background-color: rgba(255, 250, 237, 0.979);
+        }
+    }
+    &-mid {
+        padding: 30px 15px;
+        display: flex;
+        justify-content: space-between;
+        color: $surface;
+        @media only screen and (max-width: 750px) {
+            flex-direction: column;
+            text-align: center;
+
+            h2 {
+                margin-bottom: 10px;
+            }
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 18px;
+            flex-basis: 30%;
+        }
+    }
+
+    &-mid2 {
+        display: flex;
+        flex-basis: 48%;
+        @media only screen and (max-width: 750px) {
+            justify-content: center;
+        }
+    }
+}
+@media only screen and (max-width: 750px) {
+    .myOffers {
+        padding-left: 20px !important;
+    }
+    .quickAccess {
+        margin-left: 0 !important;
+    }
 }
 .btn {
     padding: 25px;
     font-weight: 700;
 }
-// @media only screen and (max-width: 600px){
-// 	/*Big smartphones [426px -> 600px]*/
-// }
+.tableScroll {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    .border {
+        border: 1px solid #dddddd;
+    }
+}
+
+.broker-orderbook-intro {
+    padding: 6em 0 3em 5em;
+    @media only screen and (max-width: 750px) {
+        padding: 4em 1em !important;
+        margin: auto;
+        text-align: center;
+    }
+
+    h1 {
+        font-family: $header-font;
+        font-size: 40px;
+        font-weight: 900;
+        max-width: 450px;
+        margin-block-start: 0px;
+    }
+
+    p {
+        font-family: $body-font;
+        font-size: 20px;
+        margin-bottom: 20px;
+        max-width: 450px;
+    }
+
+    .intro-cta {
+        background-color: $primary-dark;
+    }
+}
+
+// ---------------------------------All Bids
+.bids {
+    &-heading {
+        display: flex;
+        background: #555;
+        justify-content: space-between;
+        align-items: center;
+
+        &--mod {
+            height: 80px;
+            @media only screen and (max-width: 1000px) {
+                height: 40px;
+                padding: 10px 0;
+            }
+            @media only screen and (max-width: 600px) {
+                height: 50px;
+                font-size: smaller;
+            }
+        }
+
+        @media only screen and (max-width: 1000px) {
+            display: block;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-left: 60px;
+            @media only screen and (max-width: 1000px) {
+                text-align: center;
+                margin-left: 0px !important;
+                font-size: 22px;
+            }
+        }
+
+        &--links {
+            a {
+                padding: 0 40px;
+                color: rgba(255, 255, 255, 0.3);
+                @media only screen and (max-width: 1000px) {
+                }
+            }
+        }
+    }
+}
+
+.mid-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+    width: auto;
+    @media only screen and (max-width: 750px) {
+        padding: 20px 20px;
+        display: block;
+    }
+
+    &--dropdown {
+        display: flex;
+
+        select,
+        button {
+            padding: 7px;
+            width: 140px;
+            @media only screen and (max-width: 750px) {
+                width: 130px;
+            }
+        }
+        button {
+            background: #555;
+            color: #fff;
+            margin-left: 20px;
+            @media only screen and (max-width: 750px) {
+                margin-left: 10px;
+            }
+        }
+    }
+    &--addNewBid {
+        background: #555;
+        color: #fff;
+        padding: 7px;
+        width: 140px;
+        @media only screen and (max-width: 750px) {
+            margin-top: 10px;
+            width: 130px;
+        }
+    }
+}
+.cta-buttons {
+    &--approve,
+    &--reject,
+    &--edit {
+        border-right: 1px solid #555;
+        margin-right: 10px;
+        padding-right: 10px;
+    }
+
+    &--approve {
+        color: #008060;
+    }
+
+    &--reject {
+        color: #d82c0d;
+    }
+    &--edit,
+    &--disagree {
+        color: #555555;
+    }
+}
+// Temp active filter link
+.active {
+    color: white !important;
+}
+// --------------------Add New Bid Form
+.NewBid {
+    margin: 50px 0;
+    padding: 20px;
+    &--form {
+        border: 1px solid #c4c4c4;
+        max-width: 850px;
+        padding: 20px;
+        margin: auto;
+        .buttonMod {
+            background: #fff;
+            color: black;
+            height: 60px;
+            font-size: 30px;
+            border: 1px solid #c4c4c4;
+            width: 100%;
+        }
+        h1 {
+            font-size: 30px;
+            text-align: center;
+        }
+
+        &-input {
+            background: #c4c4c4;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+        input,
+        select,
+        button {
+            color: #000000;
+            // height: 60px;
+            border: none;
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+        }
+        select {
+            padding: 10px;
+        }
+        button {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            margin-bottom: 10px;
+            height: 60px;
+            font-size: 25px;
+        }
+    }
+}
