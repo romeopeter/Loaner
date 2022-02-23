@@ -58,10 +58,6 @@
 				}
 			}
 		}
-
-		#offer-status {
-			overflow-x: scroll !important;
-		}
 	}
 }
 
@@ -132,6 +128,21 @@
 
 	#offer-status {
 		background: #e5e5e5;
+		overflow-x: scroll;
+		&::-webkit-scrollbar {
+		  width: 10px;
+		}
+
+		/* Track */
+		&::-webkit-scrollbar-track {
+		  background: #f1f1f1; 
+		}
+		 
+		/* Handle */
+		&::-webkit-scrollbar-thumb {
+		  background: #888;
+		  border-radius: 10px; 
+		}
 
 		#title {
 			h3 {
@@ -158,16 +169,25 @@
 					td {
 						padding: 0.5rem;
 						text-align: center;
-						width: 200px;
 						border-top: 1px solid $grey;
 						border-bottom: 1px solid $grey;
 
 						button {
-							height: 37px !important;
+							height: 30px !important;
+							max-width: 120px;
+							font-size: inherit;
 						}
 
-						&.offer-status-name {
-							text-align: left;
+						&.offer-title {
+							width: 250px;
+							text-align: left !important;
+
+							img {
+								display: inline-block !important;
+								height: 40px;
+								width: 40px;
+								border-radius: 20px;
+							}
 						}
 					}
 				}
@@ -177,28 +197,28 @@
 		#paginate-offer-status {
 			padding: 20px;
 
-		.pagination {
-			display: flex;
-			justify-content: flex-end;
+			.pagination {
+				display: flex;
+				justify-content: flex-end;
 
-			li {
-				color: $black;
-				font-family: $body-font;
-				font-size: 17px;
-				font-weight: bold;
-				height: 45px;
-				width: 45px;
-				border-radius: 22.5px;
-			    display: flex;
-			    justify-content: center;
-			    align-items: center;
+				li {
+					color: $black;
+					font-family: $body-font;
+					font-size: 17px;
+					font-weight: bold;
+					height: 45px;
+					width: 45px;
+					border-radius: 22.5px;
+				    display: flex;
+				    justify-content: center;
+				    align-items: center;
 
-				&.selected {
-					background: $black;
-					color: $white;
+					&.selected {
+						background: $black;
+						color: $white;
+					}
 				}
 			}
-		}
 		}
 	}
 }
