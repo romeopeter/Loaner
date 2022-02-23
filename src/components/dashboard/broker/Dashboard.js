@@ -1,21 +1,13 @@
 import React from 'react';
 
 import { Link, useNavigate, Navigate } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { signOutAsync } from '../../../redux/authSlice';
-import { useMediaQuery } from '@chakra-ui/react';
-
 import NavMenu from '../NavMenu';
-
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
-
-import headerBanner from '../../../assets/images/broker-header.png';
 import newOrder from '../../../assets/images/newOrder.png';
 import newClient from '../../../assets/images/newClient.png';
-import setBgImage from '../../../utils/setBgImage';
 
 import Brokerdata from '../../../data/broker/DummyData';
 
@@ -33,6 +25,7 @@ const BrokerDashboard = () => {
         return <Navigate replace to='login' />;
     }
 
+    // eslint-disable-next-line no-unused-vars
     const handleSignOut = () => {
         dispatch(signOutAsync());
         navigate('/');
@@ -42,7 +35,7 @@ const BrokerDashboard = () => {
         <>
             <DocumentHead title='Dashboard' />
             <OrderbookLayout PageNav={NavMenu} className='broker'>
-                <header id='orderbook-header'>
+                <header id='orderbook-header' className='broker-orderbook-header'>
                     <Flex flexDirection={['column']} className='broker-header'>
                         <div id='loan-invest-dropdown' className=' bg-white px-16 py-10 shadow-md flex justify-start'>
                             <div id='loan' className='dropdown-container mr-5'>
@@ -60,8 +53,8 @@ const BrokerDashboard = () => {
                             </div>
                         </div>
                         <div className='grid grid-cols-1 gap-x-6'>
-                            <div id='orderbook-intro'>
-                                <h1 className='mt-0'>Hello, {currentUser.first_name}</h1>
+                            <div className='broker-orderbook-intro'>
+                                <h1 className='pt-2'>Hello, {currentUser.first_name}</h1>
                                 <h2
                                     className='mb-4'
                                     style={{
@@ -89,103 +82,111 @@ const BrokerDashboard = () => {
                                     Update my profile
                                 </Button>
                             </div>
-                            <Flex
-                                color={'#fff'}
-                                justifyContent={'space-between'}
-                                bg='#555'
-                                position={'sticky'}
-                                mt={'3.5em'}
-                                py={['6']}
-                                px={['10']}
-                                flexDirection={['column', 'row']}
-                            >
-                                <h2
-                                    style={{
-                                        fontSize: '1.3em',
-                                        marginLeft: '2%',
-                                        fontWeight: '700',
-                                    }}
-                                >
-                                    Quick access
-                                </h2>
-                                <Flex flexDirection={['column', 'row']} mr={['50px']}>
-                                    <Link to='/broker/dashboard/new-client'>
-                                        <Flex mr={['10']}>
-                                            <Center w={['35px']} h={['35px']} borderRadius={'50%'} bg={'#fff'} m='auto'>
-                                                <img alt='' src={newClient} />
-                                            </Center>
-                                            <Text ml={['2']}>New Client</Text>
-                                        </Flex>
-                                    </Link>
+                            <div style={{ background: '#555' }}>
+                                <div className='broker-mid'>
+                                    <h2 className='ml-20 pl-10 quickAccess'>Quick access</h2>
 
-                                    <Link to='/broker/dashboard/create-offer'>
-                                        <Flex>
-                                            <Center w={['35px']} h={['35px']} borderRadius={'50%'} bg={'#fff'} m='auto'>
-                                                <img alt='' src={newOrder} />
-                                            </Center>
-                                            <Text ml={['2']}>New Order</Text>
-                                        </Flex>
-                                    </Link>
-                                </Flex>
-                            </Flex>
+                                    <div className='broker-mid2'>
+                                        <Link to='/broker/dashboard/new-client' className='mr-16'>
+                                            <Flex>
+                                                <Center
+                                                    w={['35px']}
+                                                    h={['35px']}
+                                                    borderRadius={'50%'}
+                                                    bg={'#fff'}
+                                                    className='mr-2'
+                                                >
+                                                    <img alt='' src={newClient} />
+                                                </Center>
+                                                <Text fontSize='md'>New Client</Text>
+                                            </Flex>
+                                        </Link>
+
+                                        <Link to='/broker/dashboard/create-offer'>
+                                            <Flex>
+                                                <Center
+                                                    w={['35px']}
+                                                    h={['35px']}
+                                                    borderRadius={'50%'}
+                                                    bg={'#fff'}
+                                                    className='mr-2'
+                                                >
+                                                    <img alt='' src={newOrder} />
+                                                </Center>
+                                                <Text fontSize='md'>New Order</Text>
+                                            </Flex>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </Flex>
                 </header>
-                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }} className='scrollWrapper'>
-                    <Box w={['90vw']} m='auto'>
-                        <Text py={['6']}>My offers</Text>
-                        <Table size='sm' display={['none', 'table']} colorScheme={'blackAlpha'}>
-                            <Thead>
-                                <Tr
-                                    // key={index}
-                                    fontWeight={'extrabold'}
-                                    fontSize={['1.9em']}
-                                >
-                                    <Th>Name</Th>
-                                    <Th>Tranche </Th>
-                                    <Th>Tenure</Th>
-                                    <Th>Size</Th>
-                                    <Th>Status</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {Brokerdata.map((data, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>
-                                                <Flex justifyContent={'center'} alignItems='center'>
-                                                    <input className='broker-checkbox' type={'checkbox'} />
+                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }}>
+                    <Box>
+                        <Text className='myOffers ml-6' px={['28']} py={['6']}>
+                            My offers
+                        </Text>
+                        <div className='tableScroll'>
+                            <Table size='sm' colorScheme={'blackAlpha'}>
+                                <Thead>
+                                    <Tr
+                                        // key={index}
+                                        fontWeight={'extrabold'}
+                                        fontSize={['1.9em']}
+                                    >
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th>Name</Th>
+                                        <Th>Tranche </Th>
+                                        <Th>Tenure</Th>
+                                        <Th>Size</Th>
+                                        <Th>Status</Th>
+                                        <Th></Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody className='body'>
+                                    {Brokerdata.map((data, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td></Td>
+                                                <Td></Td>
+                                                <Td>
+                                                    <Flex alignItems='center'>
+                                                        <input className='broker-checkbox' type={'checkbox'} />
+                                                        <Box
+                                                            w='50px'
+                                                            h='50px'
+                                                            textAlign={'center'}
+                                                            borderRadius={'50%'}
+                                                            bg={'#555'}
+                                                            mx={['4']}
+                                                        ></Box>
+                                                        {data.offerName}
+                                                    </Flex>
+                                                </Td>
+                                                <Td>{data.tranche}</Td>
+                                                <Td>{data.tenure}</Td>
+                                                <Td>{data.size}</Td>
+                                                <Td>
                                                     <Box
-                                                        w='30px'
-                                                        h='30px'
+                                                        bg='#555'
+                                                        color='#fff'
                                                         textAlign={'center'}
-                                                        borderRadius={'50%'}
-                                                        bg={'#555'}
-                                                        mx={['4']}
-                                                    ></Box>
-                                                    {data.offerName}
-                                                </Flex>
-                                            </Td>
-                                            <Td>{data.tranche}</Td>
-                                            <Td>{data.tenure}</Td>
-                                            <Td>{data.size}</Td>
-                                            <Td>
-                                                <Box
-                                                    bg='#555'
-                                                    color='#fff'
-                                                    textAlign={'center'}
-                                                    p={['2']}
-                                                    borderRadius={'5px'}
-                                                    w='70%'
-                                                >
-                                                    {data.status}
-                                                </Box>
-                                            </Td>
-                                        </Tr>
-                                    );
-                                })}
-                            </Tbody>
-                        </Table>
+                                                        p={['2']}
+                                                        borderRadius={'5px'}
+                                                        w='100px'
+                                                    >
+                                                        {data.status}
+                                                    </Box>
+                                                </Td>
+                                                <Td></Td>
+                                            </Tr>
+                                        );
+                                    })}
+                                </Tbody>
+                            </Table>
+                        </div>
                     </Box>
 
                     {/* scrollable table */}

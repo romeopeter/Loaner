@@ -1,329 +1,283 @@
-import React, { useState, createRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React, { useState, createRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import OrderbookLayout from "../../OrderbookLayout";
-import OfferForm from "./OfferForm";
-import DocumentHead from "../../DocumentHead";
-import NavMenu from "../NavMenu";
+import OrderbookLayout from '../../OrderbookLayout';
+import OfferForm from './OfferForm';
+import DocumentHead from '../../DocumentHead';
+import NavMenu from '../NavMenu';
 
-import Button from "../../Button";
+import Button from '../../Button';
 
-import { asyncCPLoanRequest, asyncBondLoanRequest} from "../../../redux/loanSlice";
-import {cp, bond} from "../loan-request-data/requestData"
+import { asyncCPLoanRequest, asyncBondLoanRequest } from '../../../redux/loanSlice';
+import { cp, bond } from '../loan-request-data/requestData';
 
 export default function CreateOffer() {
-	const [summaryState, setSummaryState] = useState(false);
+    const [summaryState, setSummaryState] = useState(false);
 
-	const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-	const { user } = JSON.parse(localStorage.getItem("USER"));
+    const { user } = JSON.parse(localStorage.getItem('USER'));
 
-	const userFullName = `${user.first_name} ${user.last_name}`;
+    const userFullName = `${user.first_name} ${user.last_name}`;
 
-	const dispatch = useDispatch();
-	const navigate = useNavigate()
-	const requestContainerRef = createRef();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const requestContainerRef = createRef();
 
-	const [formState, setFormState] = useState({
-		dealType: "",
-		// issuer: "",
-		guarantor: "",
-		dealName: "",
-		projectName: "",
-		dealOwner: "",
-		dealTeam: "",
-		status: "",
-		trancheName: "",
-		trancheSize: {
-			currency: "NGN",
-			value: "",
-			faceValue: "",
-			discountValue:"",
-			parValue: 1000,
-			minSubscription: "",
-		},
-		pricing: {
-			dayCount: "",
-			couponType: "",
-			benchmark: "",
-			couponFrequency: "",
-			callOption:"",
-			offerType: {
-				name: "",
-				fixedPrice: {
-					rate: "", // Can be discount rate or rate range
-					yield: "", // Can be implied yield or yield type
-				}
-			},
-		},
-		timing: {
-			offerStart: "",
-			offerEnd: "",
-			allotmentDate: "",
-			settlementDate: "",
-			maturityDate: "",
-		},
-		useOfProceeds: "",
-		taxConsideration: "",
-		eligibleInvestors: "",
-		rating: {
-			name: "",
-			scale: "",
-		},
-	});
+    const [formState, setFormState] = useState({
+        dealType: '',
+        // issuer: "",
+        guarantor: '',
+        dealName: '',
+        projectName: '',
+        dealOwner: '',
+        dealTeam: '',
+        status: '',
+        trancheName: '',
+        trancheSize: {
+            currency: 'NGN',
+            value: '',
+            faceValue: '',
+            discountValue: '',
+            parValue: 1000,
+            minSubscription: '',
+        },
+        pricing: {
+            dayCount: '',
+            couponType: '',
+            benchmark: '',
+            couponFrequency: '',
+            callOption: '',
+            offerType: {
+                name: '',
+                fixedPrice: {
+                    rate: '', // Can be discount rate or rate range
+                    yield: '', // Can be implied yield or yield type
+                },
+            },
+        },
+        timing: {
+            offerStart: '',
+            offerEnd: '',
+            allotmentDate: '',
+            settlementDate: '',
+            maturityDate: '',
+        },
+        useOfProceeds: '',
+        taxConsideration: '',
+        eligibleInvestors: '',
+        rating: {
+            name: '',
+            scale: '',
+        },
+    });
 
-	const handleModal = () => {
-		requestContainerRef.current.classList.toggle("modal");
-	};
+    const handleModal = () => {
+        requestContainerRef.current.classList.toggle('modal');
+    };
 
-	const handleSubmit = () => {
-		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
+    const handleSubmit = () => {
+        const { user: currentUser } = JSON.parse(localStorage.getItem('USER'));
 
-		if (formState.dealType === "CP") {
-			dispatch(asyncCPLoanRequest(cp(formState, currentUser))).then((response) => {
-				setIsLoading(true);
+        if (formState.dealType === 'CP') {
+            dispatch(asyncCPLoanRequest(cp(formState, currentUser))).then((response) => {
+                setIsLoading(true);
 
-				// Check error.
-				if ("stack" in response) {
-					setIsLoading(false);
-					console.log("Loan not created");
-					return;
-				}
+                // Check error.
+                if ('stack' in response) {
+                    setIsLoading(false);
+                    console.log('Loan not created');
+                    return;
+                }
 
-				console.log("Loan created");
-				navigate("/broker/dashboard/loan-offer/select-investor");
-			});
-		}
+                console.log('Loan created');
+                navigate('/broker/dashboard/loan-offer/select-investor');
+            });
+        }
 
-		if (formState.dealType === "BOND") {
-			dispatch(asyncBondLoanRequest(bond(formState, currentUser))).then((response) => {
-				setIsLoading(true);
+        if (formState.dealType === 'BOND') {
+            dispatch(asyncBondLoanRequest(bond(formState, currentUser))).then((response) => {
+                setIsLoading(true);
 
-				// Check error.
-				if ("stack" in response) {
-					setIsLoading(false);
-					console.log("Loan not created");
-					return;
-				}
+                // Check error.
+                if ('stack' in response) {
+                    setIsLoading(false);
+                    console.log('Loan not created');
+                    return;
+                }
 
-				console.log("Loan created");
-				navigate("/broker/dashboard/loan-offer/select-investor");
-			});
-		}
-	};
+                console.log('Loan created');
+                navigate('/broker/dashboard/loan-offer/select-investor');
+            });
+        }
+    };
 
-	return (
-		<>
-			<DocumentHead title="New offer" />
-			<OrderbookLayout PageNav={NavMenu}>
-				<section id="orderbook-loan-request">
-					<div
-						id="loan-invest-dropdown"
-						className="bg-white px-16 py-10 shadow-md flex justify-start"
-					>
-						<div id="loan" className="dropdown-container mr-5">
-							Loan{" "}
-							<i
-								className="fa fa-caret-down"
-								aria-hidden="true"
-							></i>
-							<div id="load-dropdown"></div>
-						</div>
-						<div id="investor" className="dropdown-container">
-							Investor{" "}
-							<i
-								className="fa fa-caret-down"
-								aria-hidden="true"
-							></i>
-							<div id="investor-dropdown"></div>
-						</div>
-					</div>
-					<div
-						id="loan-request-container"
-						className=""
-						ref={requestContainerRef}
-					>
-						<div
-							id="request-loan-form"
-							className="loan-request-flex-item"
-						>
-							<OfferForm
-								requestFormState={{ formState, setFormState }}
-								showSummary={{
-									summaryState,
-									setSummaryState,
-									handleModal,
-								}}
-							/>
-						</div>
-						<div
-							id="loan-summary"
-							className="bg-white loan-request-flex-item modal-content"
-						>
-							{!summaryState ? (
-								<div id="summary-intro" className="mt-20 ml-20">
-									<h2 className="text-2xl font-bold mb-5">
-										Loan Offer Summary
-									</h2>
-									<p className="font-bold">
-										View your loan summary here.
-									</p>
-								</div>
-							) : (
-								<div id="summary-table" className="mt-20 mx-10">
-									<span
-										class="md:hidden modal-close"
-										onClick={() =>
-											requestContainerRef.current.classList.remove(
-												"modal"
-											)
-										}
-									>
-										&times;
-									</span>
-									<h2 className="text-md text-center sm:text-left sm:text-2xl font-bold mb-5">
-										Loan Offer Summary
-									</h2>
-									<table className="table-fixed w-full h-auto">
-										<thead>
-											<tr>
-												<th></th>
-												<th></th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													<small>Name</small>
-													<span>
-														{userFullName &&
-															userFullName}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<small>Type of offer</small>
-													<span>
-														{(formState.dealType !== "" && formState.dealType === "CP") && "Commercial paper"}
-														{(formState.dealType !== "" && formState.dealType === "BOND") && "Bond"}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<small>Loan amount</small>
-													<span>
-														{formState.trancheSize.currency}{" "}
-														{formState.trancheSize
-															.minSubscription !==
-															"" &&
-															formState
-																.trancheSize
-																.minSubscription
-														}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<small>Tranche</small>
-													<span>
-														{formState.trancheName !==
-															"" &&
-															formState.trancheName}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<small>Tenor</small>
-													<span>180 days</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<small>Size</small>
-													<span>
-														{formState.trancheSize
-															.minSubscription !==
-															"" &&
-															formState
-																.trancheSize
-																.minSubscription}
-													</span>
-												</td>
-											</tr>
-											<tr id="summary-dates-row">
-												<td className="border-r border-black">
-													<small>Offer opens</small>
-													<span>
-														{formState.timing
-															.offerStart !==
-															"" &&
-															formState.timing
-																.offerStart}
-													</span>
-												</td>
-												<td className="border-r border-black">
-													<small>Offer closes</small>
-													<span>
-														{formState.timing
-															.offerEnd !== "" &&
-															formState.timing
-																.offerEnd}
-													</span>
-												</td>
-												<td>
-													<small>
-														Settlement date
-													</small>
-													<span>
-														{formState.timing
-															.settlementDate !==
-															"" &&
-															formState.timing
-																.settlementDate}
-													</span>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+    return (
+        <>
+            <DocumentHead title='New offer' />
+            <OrderbookLayout PageNav={NavMenu}>
+                <section id='orderbook-loan-request'>
+                    <div
+                        // id="loan-invest-dropdown"
+                        // cli = client loan investor
+                        id='cli-dropdown'
+                        className='bg-white px-16 py-10 shadow-md flex justify-start'
+                    >
+                        <div id='clients' className='dropdown-container mr-5'>
+                            Clients <i className='fa fa-caret-down' aria-hidden='true'></i>
+                            <div id='clients-dropdown'></div>
+                        </div>
+                        <div id='loan' className='dropdown-container mr-5'>
+                            Loan <i className='fa fa-caret-down' aria-hidden='true'></i>
+                            <div id='loan-dropdown'></div>
+                        </div>
+                        <div id='investor' className='dropdown-container'>
+                            Investor <i className='fa fa-caret-down' aria-hidden='true'></i>
+                            <div id='investor-dropdown'></div>
+                        </div>
+                    </div>
+                    <div id='loan-request-container' className='' ref={requestContainerRef}>
+                        <div id='request-loan-form' className='loan-request-flex-item'>
+                            <OfferForm
+                                requestFormState={{ formState, setFormState }}
+                                showSummary={{
+                                    summaryState,
+                                    setSummaryState,
+                                    handleModal,
+                                }}
+                            />
+                        </div>
+                        <div id='loan-summary' className='bg-white loan-request-flex-item modal-content'>
+                            {!summaryState ? (
+                                <div id='summary-intro' className='mt-20 ml-20'>
+                                    <h2 className='text-2xl font-bold mb-5'>Loan Offer Summary</h2>
+                                    <p className='font-bold'>View your loan summary here.</p>
+                                </div>
+                            ) : (
+                                <div id='summary-table' className='mt-20 mx-10'>
+                                    <span
+                                        className='md:hidden modal-close'
+                                        onClick={() => requestContainerRef.current.classList.remove('modal')}
+                                    >
+                                        &times;
+                                    </span>
+                                    <h2 className='text-md text-center sm:text-left sm:text-2xl font-bold mb-5'>
+                                        Loan Offer Summary
+                                    </h2>
+                                    <table className='table-fixed w-full h-auto'>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <small>Name</small>
+                                                    <span>{userFullName && userFullName}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small>Type of offer</small>
+                                                    <span>
+                                                        {formState.dealType !== '' &&
+                                                            formState.dealType === 'CP' &&
+                                                            'Commercial paper'}
+                                                        {formState.dealType !== '' &&
+                                                            formState.dealType === 'BOND' &&
+                                                            'Bond'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small>Loan amount</small>
+                                                    <span>
+                                                        {formState.trancheSize.currency}{' '}
+                                                        {formState.trancheSize.minSubscription !== '' &&
+                                                            formState.trancheSize.minSubscription}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small>Tranche</small>
+                                                    <span>{formState.trancheName !== '' && formState.trancheName}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small>Tenor</small>
+                                                    <span>180 days</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <small>Size</small>
+                                                    <span>
+                                                        {formState.trancheSize.minSubscription !== '' &&
+                                                            formState.trancheSize.minSubscription}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr id='summary-dates-row'>
+                                                <td className='border-r border-black'>
+                                                    <small>Offer opens</small>
+                                                    <span>
+                                                        {formState.timing.offerStart !== '' &&
+                                                            formState.timing.offerStart}
+                                                    </span>
+                                                </td>
+                                                <td className='border-r border-black'>
+                                                    <small>Offer closes</small>
+                                                    <span>
+                                                        {formState.timing.offerEnd !== '' && formState.timing.offerEnd}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <small>Settlement date</small>
+                                                    <span>
+                                                        {formState.timing.settlementDate !== '' &&
+                                                            formState.timing.settlementDate}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
-									<div
-										id="loan-summary-buttons"
-										className="my-10"
-									>
-										<div className="grid grid-cols-2 gap-3 mt-5 mb-5">
-											<Button
-												type="button"
-												title="Save as draft"
-												buttonClass="col-span-2 bg-gray-400 rounded"
-											/>
-										</div>
-										<Button
-											type="button"
-											// title="Publish"
-											buttonClass="w-full bg-green-600 rounded"
-											handleClick={() => handleSubmit()}
-										>
-											Create loan{" "}
-											{isLoading ? (
-												<i
-													className="fa fa-spinner fa-pulse fa-3x fa-fw"
-													style={{ fontSize: 20 }}
-												></i>
-											) : null}
-										</Button>
-									</div>
-								</div>
-							)}
-						</div>
-					</div>
-				</section>
-			</OrderbookLayout>
-		</>
-	)
+                                    <div id='loan-summary-buttons' className='my-10'>
+                                        <div className='grid grid-cols-2 gap-3 mt-5 mb-5'>
+                                            <Button
+                                                type='button'
+                                                title='Save as draft'
+                                                buttonClass='col-span-2 bg-gray-400 rounded'
+                                            />
+                                        </div>
+                                        <Button
+                                            type='button'
+                                            // title="Publish"
+                                            buttonClass='w-full bg-green-600 rounded'
+                                            handleClick={() => handleSubmit()}
+                                        >
+                                            Create loan{' '}
+                                            {isLoading ? (
+                                                <i
+                                                    className='fa fa-spinner fa-pulse fa-3x fa-fw'
+                                                    style={{ fontSize: 20 }}
+                                                ></i>
+                                            ) : null}
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            </OrderbookLayout>
+        </>
+    );
 }

@@ -1,67 +1,131 @@
-const AllClientsData = [
+export const AllClientsData = [
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
     {
-        clientName: "Rice Value Chain",
-        clientType: "Investor",
-        category: "Private Organization",
-        org:"Private Organization",
-        details:"View more details"
+        clientName: 'Rice Value Chain',
+        clientType: 'Investor',
+        category: 'Private Organization',
+        org: 'Private Organization',
+        details: 'View more details',
     },
-    
-]
-export default AllClientsData
+];
+
+export const AllBidsData = [
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+    {
+        clientName: 'Rice Value Chain',
+        tranche: 'Tranche1',
+        duration: '90days',
+        amount: 'NGN 5 billion',
+        status: 'Bid accepted',
+    },
+];
