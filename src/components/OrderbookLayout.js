@@ -1,9 +1,14 @@
-import React, { createRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { createRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import checkTokenExpiration from "../utils/checkTokenExpiration";
 
 export default function OrderbookLayout({ children, PageNav }) {
-    const { isLoggedIn } = useSelector((state) => state.auth);
+
+	useEffect(() => checkTokenExpiration(), []);
+
+	const { isLoggedIn } = useSelector((state) => state.auth);
 
     let navMenuRef = createRef();
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-import axiosConfig from "./authHeader";
 
 /*Authentication requests*/
 const signUpRequest = (data) => {

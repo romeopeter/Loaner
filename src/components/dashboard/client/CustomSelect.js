@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Select from "react-select";
 
 function CustomSelect(props) {
+
 	if (props.allowSelectAll) {
 		return (
 			<Select
@@ -43,7 +44,7 @@ function CustomSelect(props) {
 }
 
 CustomSelect.propTypes = {
-	options: PropTypes.array,
+	loadInvestorsFunc: PropTypes.func,
 	value: PropTypes.any,
 	onChange: PropTypes.func,
 	allowSelectAll: PropTypes.bool,
