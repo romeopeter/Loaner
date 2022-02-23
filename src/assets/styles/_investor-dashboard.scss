@@ -35,26 +35,6 @@
 				}
 			}
 		}
-
-		#notifications-container {
-			width: 90%;
-
-			#notifications {
-				width: 100% !important;
-
-				.notification {
-					div {
-						a {
-							font-size: 16px !important;
-						}
-
-						small {
-							font-size: 13px !important;
-						}
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -74,23 +54,6 @@
 					.fa-thumbs-o-up {
 						width: 35px !important;
 						height: 35px !important;
-					}
-				}
-			}
-		}
-
-		#notifications-container {
-			width: 100% !important;
-
-			#notifications {
-				.notification {
-					display: block !important;
-
-					.badge {
-						width: 40px !important;
-						height: 40px !important;
-						border-radius: 20px !important;
-						font-size: 25px !important;
 					}
 				}
 			}
@@ -167,61 +130,6 @@
 		}
 	}
 
-	/* InvestorDashboard 1 -- InvestorDashboard.js */
-	#notifications-container {
-		background: $grey;
-
-		#notifications,
-		#blank-space {
-			height: auto;
-		}
-
-		#notifications {
-			width: 60%;
-
-			.notification {
-				border-top: 1px solid $white;
-				padding: 25px 0;
-				padding-left: 25px;
-				display: flex;
-
-				.badge {
-					display: inline-block;
-					height: 55px;
-					width: 55px;
-					border-radius: 27.5px;
-					background: $white;
-					font-family: $header-font;
-					font-size: 30px;
-					font-weight: bold;
-					text-align: center;
-					color: $black;
-					margin-right: 20px;
-				}
-
-				div {
-					color: $white;
-
-					a {
-						font-weight: bold;
-						font-size: 18px;
-						text-align: left;
-					}
-
-					small {
-						font-size: 20px;
-						display: block;
-					}
-				}
-			}
-		}
-
-		#blank-space {
-			width: 40%;
-		}
-	}
-
-	/* InvestorDashboard 1 -- InvestorDashboard2.js */
 	#offer-status {
 		background: #e5e5e5;
 
