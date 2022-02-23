@@ -3,7 +3,7 @@ import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
 import { Link } from "react-router-dom";
-import adminCurrenyData from '../../../data/admin/Currencies';
+import adminCurrenyData from '../../../fake-backend/admin/Currencies';
 import { 
 	Flex,
 	Box,

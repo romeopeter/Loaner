@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
-import LoanRequestData from '../../../data/broker/LoanRequest';
+import LoanRequestData from '../../../fake-backend/broker/LoanRequest';
 import { 
 	Flex,
 	Box,

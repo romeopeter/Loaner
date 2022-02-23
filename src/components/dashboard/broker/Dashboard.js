@@ -17,7 +17,7 @@ import newOrder from '../../../assets/images/newOrder.png';
 import newClient from '../../../assets/images/newClient.png';
 import setBgImage from '../../../utils/setBgImage';
 
-import Brokerdata from '../../../data/broker/DummyData';
+import Brokerdata from '../../../fake-backend/broker/DummyData';
 
 import { Flex, Box, Button, Center, Text, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 

@@ -8,7 +8,7 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
 // Mock data
-import { allBids } from "../../../data/client/allBids";
+import { allBids } from "../../../fake-backend/client/allBids";
 
 export default function ShowAllBids() {
 	const pageName = "Show all bids";
