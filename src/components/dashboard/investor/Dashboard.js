@@ -167,13 +167,15 @@ export default function AllOffers() {
 										{item.status === "Offer open" && (
 											<Button
 												title={item.status}
-												buttonClass="bg-gray-500 rounded-md bid-rejected"
+												link="/investor/dashboard/show-bid-offer"
+												buttonClass="bg-gray-500 rounded-md offer-open"
 											/>
 										)}
 										{item.status === "Coming soon" && (
 											<Button
 												title={item.status}
-												buttonClass="bg-gray-500 rounded-md bid-rejected"
+												link="/client/bid-coming-soon"
+												buttonClass="bg-gray-500 rounded-md coming-soon"
 											/>
 										)}
 									</td>
