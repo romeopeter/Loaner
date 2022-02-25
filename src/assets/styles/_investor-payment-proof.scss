@@ -1,0 +1,42 @@
+/*
+	This file shares styles with _investors-bid-approved.scss partial.
+	This is because parts of the stylesheet are the same.
+*/
+
+#orderbook-bid-payment-proof {
+	@media  (max-width: 600px) {
+		#bid-container {
+			height: 600px !important;
+
+			#bid {
+				#action-btns {
+					button {
+						width: 100% !important;
+					}
+				}
+			}
+		}
+	}
+
+	#bid-container {
+		#inner-bid-container {
+			#bid {
+				#action-btns {
+					button {
+						width: 200px;
+						font-size: bold;
+
+						&.view-offers {
+							border: 2px solid $black;
+							color: $black;
+						}
+
+						&.go-home {
+							background: #008060;
+						}
+					}
+				}
+			}
+		}
+	}
+}
