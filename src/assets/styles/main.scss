@@ -30,8 +30,12 @@ html {
 @import '_client-show-all-bids.scss';
 
 @import '_investor-dashboard.scss';
-@import '_investor-offers.scss';
+@import '_investor-incoming-bid.scss';
+@import '_investor-show-bid.scss';
+@import '_investor-bid-approved.scss';
+@import '_investor-payment-proof.scss';
 @import '_investor-bids.scss';
+
 @import '_brokers';
 
 // NotFound component
