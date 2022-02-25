@@ -1,0 +1,67 @@
+/*
+	This style sheet is mainly for the _investor-bid-approved.scss 
+	partial but part of it affect _investor-payment-proof.scss, _investor-proof-upload.scss,
+	and _investor-payment-details.scss. No need to repeat styles in other files if there are the same.
+*/
+
+#orderbook-bid-approved, 
+#orderbook-bid-payment-proof {
+	background: $grey;
+
+	#offer-title {
+		h2 {
+			font-size: 1rem;
+		}
+	}
+
+	#bid-container {
+		height: 550px;
+
+		#go-back-arrow {
+			display: inline-block;
+			width: 50px;
+			height: 40px;
+			text-align: center;
+
+			a {
+			    height: 100%;
+			    text-align: center;
+			}
+		}
+
+		#bid {
+			max-width: 500px;
+
+			#img-container {
+				width: 80%;
+				margin: 0 auto !important;
+				position: relative;
+
+				.overlay {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					background: rgba(0, 0, 0, 0.8);
+
+					#tick-icon {
+						margin: 25% auto;
+					}
+				}
+			}
+
+			#offer-description {
+				max-width: 450px;
+    			margin: 0 auto;
+    			line-height: 1.3;
+    			text-align: center;
+			}
+
+			#upload-label {
+				font-family: $body-font;
+				height: 100%;
+			}
+		}
+	}
+}
