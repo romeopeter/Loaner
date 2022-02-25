@@ -26,8 +26,11 @@ import ShowBids from './dashboard/client/ShowBids';
 import ShowAllBids from './dashboard/client/ShowAllBids';
 
 import Dashboard from "./dashboard/investor/Dashboard";
+import BidComingSoon from "./dashboard/investor/BidComingSoon";
 import AllOffers from "./dashboard/investor/AllOffers";
-import SingleOffer from "./dashboard/investor/SingleOffer";
+import ShowBidOffer from "./dashboard/investor/ShowBidOffer";
+import BidApproved from "./dashboard/investor/BidApproved";
+import BAPaymentProof from "./dashboard/investor/BAPaymentProof";
 import SuccessfulBids from "./dashboard/investor/SuccessfulBids";
 import DeclinedBids from "./dashboard/investor/DeclinedBids";
 
@@ -65,9 +68,9 @@ function App() {
                 <Route
                     path='/profile'
                     element={
-                        <RequireAuth>
-                            <Profile />
-                        </RequireAuth>
+                      <RequireAuth>
+                          <Profile />
+                      </RequireAuth>
                     }
                 />
 
@@ -82,6 +85,14 @@ function App() {
                     element={
                         <RequireAuth>
                             <ClientDashboard />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/client/bid-coming-soon'
+                    element={
+                        <RequireAuth>
+                            <BidComingSoon />
                         </RequireAuth>
                     }
                 />
@@ -163,11 +174,27 @@ function App() {
                     }
                 />
                 <Route
-                    path='/investor/offers/offer'
+                    path='/investor/dashboard/show-bid-offer'
                     element={
                         <RequireAuth>
-                            <SingleOffer />
+                            <ShowBidOffer />
                         </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/investor/dashboard/bid-approved'
+                    element={
+                      <RequireAuth>
+                          <BidApproved />
+                      </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/investor/dashboard/payment-proof'
+                    element={
+                      <RequireAuth>
+                          <BAPaymentProof />
+                      </RequireAuth>
                     }
                 />
                 <Route
