@@ -1,6 +1,7 @@
 import React, { createRef, useState } from "react";
 
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import ReactPaginate from "react-paginate";
 
@@ -16,6 +17,9 @@ import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
 	const pageName = "Investor";
+
+	const currentUserObj = useSelector((state) => state.auth)
+	const { user: currentUser } = currentUserObj.user;
 
 	// Parameters
 	const eachPage = 9;
@@ -63,7 +67,7 @@ export default function AllOffers() {
 						id="orderbook-dashboard-intro"
 						style={setBgImage(headerBanner)}
 					>
-						<h1>Hello, Ola</h1>
+						<h1>Hello, {currentUser.first_name}</h1>
 						<h3>Welcome to your dashboard</h3>
 						<p>
 							Lorem ipsum dolor sit amet, consectetur adipiscing
@@ -155,6 +159,7 @@ export default function AllOffers() {
 										{item.status === "Bid Approved" && (
 											<Button
 												title={item.status}
+												link="/investor/dashboard/bid-approved"
 												buttonClass="bg-green-600 rounded-md bid-approved"
 											/>
 										)}
