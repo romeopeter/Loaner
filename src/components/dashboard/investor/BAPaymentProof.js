@@ -7,6 +7,7 @@ import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
+import accepted from "./icons/accepted.png";
 
 export default function BAPaymentProof() {
 	const pageName = "Payment proof";
@@ -28,7 +29,9 @@ export default function BAPaymentProof() {
 								<div id="img-container">
 									<img src={offerImage} alt="" className="w-full" />
 									<div className="overlay">
-										<div id="tick-icon" className="bg-white h-20 w-20 rounded-full"></div>
+										<div id="tick-icon" className="bg-white h-20 w-20 rounded-full flex justify-center items-center">
+											<img src={accepted} alt="accepted-tick-marked" />
+										</div>
 									</div>
 								</div>
 								<h3 className="text-2xl underline text-center py-5 font-bold">Rice Value Chain (Project Finance).</h3>
