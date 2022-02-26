@@ -184,7 +184,7 @@ export default function Register() {
 			<div className="mb-5">
 				{emailConflictMessage !== null ?(
 					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-						{networkErrorMessage}
+						{emailConflictMessage}
 					</div>
 				):null}
 			</div>
