@@ -30,7 +30,9 @@ import BidComingSoon from "./dashboard/investor/BidComingSoon";
 import AllOffers from "./dashboard/investor/AllOffers";
 import ShowBidOffer from "./dashboard/investor/ShowBidOffer";
 import BidApproved from "./dashboard/investor/BidApproved";
+import BidRejected from "./dashboard/investor/BidRejected";
 import BAPaymentProof from "./dashboard/investor/BAPaymentProof";
+import BAPaymentDetail from "./dashboard/investor/BAPaymentDetail";
 import SuccessfulBids from "./dashboard/investor/SuccessfulBids";
 import DeclinedBids from "./dashboard/investor/DeclinedBids";
 
@@ -189,11 +191,27 @@ function App() {
                       </RequireAuth>
                     }
                 />
+                 <Route
+                    path='/investor/dashboard/bid-rejected'
+                    element={
+                      <RequireAuth>
+                          <BidRejected />
+                      </RequireAuth>
+                    }
+                />
                 <Route
                     path='/investor/dashboard/payment-proof'
                     element={
                       <RequireAuth>
                           <BAPaymentProof />
+                      </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/investor/dashboard/payment-detail'
+                    element={
+                      <RequireAuth>
+                          <BAPaymentDetail />
                       </RequireAuth>
                     }
                 />
