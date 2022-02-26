@@ -166,6 +166,7 @@ export default function AllOffers() {
 										{item.status === "Bid Rejected" && (
 											<Button
 												title={item.status}
+												link="/investor/dashboard/bid-rejected"
 												buttonClass="bg-red-600 rounded-md bid-rejected"
 											/>
 										)}
