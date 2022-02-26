@@ -6,6 +6,7 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setServerMessage } from "./messageSlice";
+import handleRequestError from "./errorResponse"
 import {
 	signUpRequest,
 	signInRequest,
@@ -24,41 +25,8 @@ export const signInAction = createAsyncThunk(
 		const requestConfig = response.config;
 		const dispatch = thunkAPI.dispatch
 
-
-		// Network error, unable to sent request
-		if (response.message === "Network Error") {
-
-			// Dipatch actionT
-			dispatch(setServerMessage({
-				status: null, 
-				messageType: "network_error",
-				message: "Network error", 
-				detail: "Poor network connection. Try signing in again"
-			}));
-
-			return
-		}
-
-		
-
-		// Request sent but unsuccessful
-		if ("stack" in response) {
-			const errorResponse = response.request;
-			const errorResponseText = JSON.parse(errorResponse.responseText);
-			const {code, detail} = errorResponseText;
-
-			// Unauthorized access
-			if (errorResponse.status === 401) {
-				
-				dispatch(setServerMessage({
-					status: errorResponse.status,
-					messageType: code, 
-					detail: detail, 
-				}));
-
-				return
-			}
-		}
+		// Handle error response
+		handleRequestError(response, dispatch);	
 
 		// Request sent and resolved
 		if (response.status === 200) return response.data;
@@ -101,14 +69,11 @@ export default authSlice.reducer;
 
 export const signUpAsync = (data) => (dispatch) => {
 	return signUpRequest(data).then((response) => {
-		// Error in sign-in request
-		if ("stack" in response) {
-			const { data, config } = response
 
-			console.log(response);
+		console.log(response);
 
-			return response;
-		}
+		// Handle error response
+		handleRequestError(response, dispatch);
 
 		// Request successfull
 		if (response.status === 201) {
