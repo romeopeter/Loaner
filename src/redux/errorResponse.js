@@ -36,5 +36,18 @@ export default function handleRequestError(errorResponse, dispatch) {
 
 			return;
 		}
+
+		// A user with similar email exists.
+		if (errorResponse.status === 409) {
+			if (errorResponseText.error) {
+				dispatch(
+					setServerMessage({
+						status: errorResponse.status,
+						messageType: "Email_Conflict",
+						detail: errorResponseText.error
+					})
+				);	
+			}
+		}
 	}
 }
