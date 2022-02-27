@@ -39,8 +39,8 @@ export default function BAPaymentProof() {
 									Your file has been successfully uploaded
 								</p>
 								<div id="action-btns" className="flex flex-col sm:flex-row justify-evenly items-center">
-									<Button title="View offers" buttonClass="view-offers sm:mb-0 mb-5 w-full" />
-									<Button title="Go home" buttonClass="go-home w-full" />
+									<Button title="View offers" buttonClass="view-offers sm:mb-0 mb-5 rounded w-full" />
+									<Button title="Go home" buttonClass="go-home rounded w-full" />
 								</div>
 							</div>	
 						</div>

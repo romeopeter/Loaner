@@ -473,7 +473,7 @@ export default function SingleOffer() {
 						>
 							<Button
 								title="Place your bid"
-								buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center place-bid"
+								buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center rounded place-bid"
 								handleClick={() =>
 									setState((state) => ({
 										...state,
@@ -483,7 +483,7 @@ export default function SingleOffer() {
 							/>
 							<Button
 								title="Reject offer"
-								buttonClass="self-center bg-red-500 reject-offer"
+								buttonClass={`self-center ${state.showBidFields? "bg-red-300" : "bg-red-500"} rounded reject-offer`}
 								handleClick={() => handleRejectOffer()}
 							/>
 						</div>
@@ -525,11 +525,11 @@ export default function SingleOffer() {
 								>
 									<Button
 										title="Edit Offer"
-										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 border-2 self-center edit-offer"
+										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 border-2 self-center rounded edit-offer"
 									/>
 									<Button
 										title="Publish Offer"
-										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center publish-offer"
+										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center rounded publish-offer"
 										handleClick={() => handleAcceptOffer()}
 									/>
 								</div>
@@ -573,7 +573,7 @@ export default function SingleOffer() {
 							<Button
 								title="Go home"
 								link="/investor/dashboard"
-								buttonClass="bg-green-500"
+								buttonClass="bg-green-500 rounded"
 							/>
 						</div>
 					</div>
