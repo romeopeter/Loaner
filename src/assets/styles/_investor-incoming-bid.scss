@@ -1,0 +1,29 @@
+#orderbook-incoming-bid {
+
+	#offer {
+		#the-offer {
+			#img-container {
+				position: relative;
+
+				#img-overlay {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					background: rgba(0, 0, 0, 0.8);
+
+					p {width: 150px;}
+				}
+			}
+		}
+	}
+
+	#notify-when-open {
+		button {
+			width: auto !important;
+			height: auto !important;
+			background-color: #008060 !important;
+		}
+	}
+}

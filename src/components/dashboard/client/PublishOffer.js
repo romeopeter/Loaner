@@ -1,3 +1,5 @@
+// Also called the assigning-invetor page
+
 import React, { createRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -127,6 +129,7 @@ export default function PublishOffer({ children, ...props }) {
 		const investorValues = state.investorSelected;
 		const categoryValues = state.categoryCheckbox;
 
+
 		const dataToSave = () => {
 			const clientInvestorsList = {};
 			const serverInvestorsList = {}
@@ -137,10 +140,12 @@ export default function PublishOffer({ children, ...props }) {
 
 				// Investors list sent to server to save
 				const investorsIds = investorsInCategory.map((investor) => investor.id);
+				const status = state.saveAsOpen ? "open": state.saveAsComing ? "incoming" : null;
 
 				serverInvestorsList.name = state.favouriteListName;
 				serverInvestorsList.descripption = state.favouriteListDescription;
 				serverInvestorsList.investor_ids = investorsIds;
+				serverInvestorsList.status = status;
 				serverInvestorsList.user = currentUserObj.user.id;
 
 				console.log(serverInvestorsList, currentUserObj);

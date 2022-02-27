@@ -14,20 +14,20 @@ import phoneLady from "../../assets/images/phoneLady.jpg";
 import setBgImage from "../../utils/setBgImage";
 
 export default function Register() {
-	const pageName = "Regsiter";
+	const pageName = "Register";
 
 	const [form, setForm] = useState({
 		title: "",
 		firstName: "",
 		lastName: "",
 		emailAddress: "",
-		role:"",
+		role: "",
 		dateOfBirth: "",
 		organization: "",
 		password: "",
 		confirmPassword: "",
 		isLoading: false,
-		registerContainerIsExtended: false
+		registerContainerIsExtended: false,
 	});
 
 	const [formError, setFormError] = useState({
@@ -42,7 +42,9 @@ export default function Register() {
 	const { isLoggedIn, user } = useSelector((state) => state.auth);
 
 	// Server message
-	const {message: serverMessage} =  useSelector(state => state.message.server);
+	const { message: serverMessage } = useSelector(
+		(state) => state.message.server
+	);
 
 	// State for react-phone-number plugin used for international phone numbers
 	const [phoneNumber, setPhoneNumber] = useState(undefined);
@@ -51,7 +53,7 @@ export default function Register() {
 	const navigate = useNavigate();
 
 	// Alerts
-	const alert = useAlert()
+	const alert = useAlert();
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -107,51 +109,87 @@ export default function Register() {
 
 		for (let props in data) {
 			if (data[props] === "" || data[props] === null) {
-				setForm((state) => ({...state,isLoading: false}));
+				setForm((state) => ({ ...state, isLoading: false }));
 
 				alert.error("Please fill all fields");
 
 				return;
-			} 
+			}
 		}
 
 		if (form.password !== "" && form.password.length < 6) {
-			setForm((state) => ({...state,isLoading: false}));
+			setForm((state) => ({ ...state, isLoading: false }));
 			alert.show("Password is too short");
-			return
+			return;
 		}
 
-		if (form.confirmPassword !== "" && form.confirmPassword !== form.password) {
-			setForm((state) => ({...state,isLoading: false}));
+		if (
+			form.confirmPassword !== "" &&
+			form.confirmPassword !== form.password
+		) {
+			setForm((state) => ({ ...state, isLoading: false }));
 			alert.error("Password does not match!");
-			return
+			return;
 		}
 
 		// Redux async call
 		dispatch(signUpAsync(data)).then((response) => {
-
-			if ("status" in response && response.status === 201) {
+			if (typeof response ==="object" && response.status === 201) {
 				const userType = response.data.groups[0];
 
-				if (userType.name === "Client") {
-					navigate("/login");
-				}
-
-				if (userType.name === "Broker") {
-					navigate("/login");
-				}
-
-				if (userType.name === "Investor") {
+				if (
+					userType.name === "Client" ||
+					userType.name === "Broker" ||
+					userType.name === "Investor"
+				) {
 					navigate("/login");
 				}
 			} else {
 				serverMessage && alert.show(serverMessage);
-				setForm((state) => ({...state,isLoading: false}));
+				setForm((state) => ({ ...state, isLoading: false }));
 			}
 		});
 	};
 
-	if (isLoggedIn && typeof user === "object") return (<Navigate to="/" replace />);
+	if (isLoggedIn && typeof user === "object")
+		return <Navigate to="/" replace />;
+
+
+	// Auth request responses
+	const [networkError, emailConflict] = ["network_error", "Email_Conflict"];
+
+	let networkErrorMessage = null;
+	let emailConflictMessage = null;
+
+	if (typeof serverMessage === "object") {
+		if (serverMessage.messageType === networkError) {
+			networkErrorMessage = serverMessage.detail;
+		}
+
+		if (serverMessage.messageType === emailConflict) {
+			emailConflictMessage = serverMessage.detail;
+		}
+	}
+
+	const ErrorComoponent = () => (
+		<>
+			<div className="mb-5">
+				{networkErrorMessage !== null ?(
+					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
+						{networkErrorMessage}
+					</div>
+				):null}
+			</div>
+
+			<div className="mb-5">
+				{emailConflictMessage !== null ?(
+					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
+						{emailConflictMessage}
+					</div>
+				):null}
+			</div>
+		</>
+	)
 
 	return (
 		<>
@@ -177,9 +215,11 @@ export default function Register() {
 							>
 								Orderbook
 							</div>
+
 							<h1 className="text-shadow-lg">
 								Welcome to your go to financial platform
 							</h1>
+
 							<p>
 								Lorem ipsum dolor sit amet, consectetur
 								adipiscing elit, sed do eiusmod tempor
@@ -202,6 +242,9 @@ export default function Register() {
 									</Link>
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
+									{/*Request error messages*/}
+									<ErrorComoponent />
+
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Nice to meet you.
 									</h2>
@@ -215,7 +258,11 @@ export default function Register() {
 									<div
 										id="registration-steps"
 										className="col-span-12"
-										style={{height: form.registerContainerIsExtended? "auto":"300px"}}
+										style={{
+											height: form.registerContainerIsExtended
+												? "auto"
+												: "300px",
+										}}
 									>
 										<Form
 											formState={{ form, setForm }}
@@ -223,7 +270,10 @@ export default function Register() {
 												phoneNumber,
 												setPhoneNumber,
 											}}
-											setFormErrorState={{formError, setFormError}}
+											setFormErrorState={{
+												formError,
+												setFormError,
+											}}
 										/>
 									</div>
 

@@ -158,11 +158,58 @@
 		}
 	}
 
-	#offer-buttons {
+	#offer-btns {
 		background: #e5e5e5;
 
 		button {
 			width: 200px;
+			font-size: 20px;
+
+			&.place-bid {
+				border: 2px solid black;
+				color: black;
+				font-family: $body-font;
+			}
+		}
+	}
+
+	#place-bid {
+		#bid-fields {
+
+			#offer-terms {
+				label {
+					font-family: $body-font;
+					font-size: 18px;
+				}
+			}
+
+			#bid-value {
+				padding-top: 15px;
+				padding-bottom: 15px;
+				&::placeholder {
+					color: black;
+					font-weight: bolder;
+					font-size: 18px;
+					font-family: $body-font;
+				}
+			}
+		
+			#bid-action-btns {
+				button {
+					width: 200px;
+					font-size: 20px;
+
+					&.edit-offer {
+						border: 2px solid black;
+						color: black;
+						font-family: $body-font;
+					}
+
+					&.publish-offer {
+						background: #008060;
+					}	
+				}
+			}
 		}
 	}
 
@@ -184,8 +231,13 @@
 				background: $white;
 				padding: 20px;
 				width: 40%;
-				height: 40%;
+				height: 45%;
 				margin: 15% auto;
+
+				p {
+					font-family: $header-font;
+					font-size: 17px !important;
+				}
 
 				.close {
 					color: #aaa;
@@ -204,6 +256,7 @@
 
 				button {
 					width: 200px;
+					background: #008060;
 				}
 			}
 		}

@@ -7,8 +7,8 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 
-export default function SingleOffer() {
-	const pageName = "Investor offers";
+export default function BidComingSoon() {
+	const pageName = "Bid coming soon";
 
 	const modalContainerRef = createRef();
 
@@ -31,8 +31,8 @@ export default function SingleOffer() {
 	return (
 		<>
 			<DocumentHead title={pageName} />
-			<OrderbookLayout PageNav={NavMenu}>
-				<section id="orderbook-investor-offers">
+			<OrderbookLayout>
+				<section id="orderbook-incoming-bid">
 					<div
 						id="loan-invest-dropdown"
 						class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
@@ -60,11 +60,16 @@ export default function SingleOffer() {
 									id="offer-header"
 									className="col-span-12 lg:col-span-4 row-start-1 row-end-3 pb-5"
 								>
-									<img
-										src={offerImage}
-										alt=""
-										className="w-full pt-10"
-									/>
+									<div id="img-container">
+										<img
+											src={offerImage}
+											alt=""
+											className="w-full pt-10"
+										/>
+										<div id="img-overlay" className="flex justify-center items-center">
+											<p className="text-white text-center border-2  border-white p-2">Coming soon</p>
+										</div>
+									</div>
 									<h3 className="text-white">
 										Rice Value Chain ( Project Finance )
 									</h3>
@@ -166,6 +171,7 @@ export default function SingleOffer() {
 										four times that amount at $1.3 trillion.
 									</p>
 								</div>
+
 								<div
 									id="offer-pitch"
 									className="col-span-12 lg:col-start-5 lg:col-span-8 bg-blue-400 py-10 px-5 lg:mr-10"
@@ -194,6 +200,7 @@ export default function SingleOffer() {
 							</div>
 						</div>
 					</div>
+
 					<div id="offer-table" className="mt-20">
 						<div>
 							<table className="table-auto w-full border-collapse border border-slate-500">
@@ -451,7 +458,7 @@ export default function SingleOffer() {
 								</h4>
 							</div>
 						</div>
-						<div
+						{/*<div
 							id="offer-buttons"
 							className="h-40 md:h-20 flex flex-col sm:flex-row justify-center"
 						>
@@ -465,35 +472,18 @@ export default function SingleOffer() {
 								buttonClass="self-center bg-red-500 rounded"
 								handleClick={() => handleRejectOffer()}
 							/>
-						</div>
+						</div>*/}
 					</div>
 
-					{/*Modal*/}
-					<div
-						id="offer-modal"
-						className="h-60"
-						ref={modalContainerRef}
-					>
-						<div
-							id="modal-content"
-							className="flex flex-col justify-center items-center"
-						>
-							{/*<span class="close">&times;</span>*/}
-							<h4 className="font-bold text-lg">
-								Congratulations!
-							</h4>
-							<p className="py-5" style={{ paddingLeft: "10px" }}>
-								Your loan has been published
-							</p>
-							<Button
-								title="Go home"
-								link="/investor/offers"
-								buttonClass="bg-green-500"
-							/>
-						</div>
+					<div id="notify-when-open" className="flex flex-col justify-center items-center h-40 w-full bg-gray-300 py-5">
+						<Button
+							title="Notify me when open"
+							// link="/investor/offers"
+							buttonClass="bg-green-700 px-5 py-2 sm:py-5 rounded w-full"
+						/>
 					</div>
 				</section>
 			</OrderbookLayout>
 		</>
-	);
+	)
 }

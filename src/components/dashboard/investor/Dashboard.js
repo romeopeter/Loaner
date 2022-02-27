@@ -1,6 +1,7 @@
 import React, { createRef, useState } from "react";
 
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import ReactPaginate from "react-paginate";
 
@@ -11,10 +12,14 @@ import NavMenu from "../NavMenu";
 
 import setBgImage from "../../../utils/setBgImage";
 import headerBanner from "../../../assets/images/headerBanner.png";
+import offerImage from "../../../assets/images/offerImage.png";
 import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
 	const pageName = "Investor";
+
+	const currentUserObj = useSelector((state) => state.auth)
+	const { user: currentUser } = currentUserObj.user;
 
 	// Parameters
 	const eachPage = 9;
@@ -50,7 +55,11 @@ export default function AllOffers() {
 						>
 							Home
 						</Link>
-						<Link to="/investor/offers/offer" id="offers" className="dropdown-container">
+						<Link
+							to="/investor/offers/offer"
+							id="offers"
+							className="dropdown-container"
+						>
 							Offers
 						</Link>
 					</div>
@@ -58,7 +67,7 @@ export default function AllOffers() {
 						id="orderbook-dashboard-intro"
 						style={setBgImage(headerBanner)}
 					>
-						<h1>Hello, Ola</h1>
+						<h1>Hello, {currentUser.first_name}</h1>
 						<h3>Welcome to your dashboard</h3>
 						<p>
 							Lorem ipsum dolor sit amet, consectetur adipiscing
@@ -80,7 +89,7 @@ export default function AllOffers() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>	
+								></i>
 
 								<Link to="/investor/offers">My offers</Link>
 							</h2>
@@ -90,9 +99,11 @@ export default function AllOffers() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>	
+								></i>
 
-								<Link to="/investor/sucessful-bids">Successful offers</Link>
+								<Link to="/investor/sucessful-bids">
+									Successful offers
+								</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
@@ -100,9 +111,11 @@ export default function AllOffers() {
 								<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>	
+								></i>
 
-								<Link to="/investor/bids/declined">Decline offers</Link>
+								<Link to="/investor/bids/declined">
+									Decline offers
+								</Link>
 							</h2>
 						</div>
 					</div>
@@ -121,24 +134,63 @@ export default function AllOffers() {
 								</tr>
 							</thead>
 
+							<tbody>
 							{items.map((item, index) => (
-								<tbody key={index}>
-									<tr>
-										<td className="offer-status-name">
-											<input type="checkbox" name="checkbox" className="checkbox mr-2 rounded" />
-											<span>{item.name}</span>
-										</td>
-										<td>{item.tranche}</td>
-										<td>{item.tenor}</td>
-										<td>{item.size}</td>
-										<td>
-											<Button title={item.status} buttonClass="bg-gray-500 rounded-md" />
-										</td>
-									</tr>
-								</tbody>
+								
+								<tr key={index}>
+									<td className="offer-title">
+										<input
+											type="checkbox"
+											name="checkbox"
+											className="checkbox mr-2 rounded"
+										/>
+										<img
+											src={offerImage}
+											alt=""
+											className="h-10 w-10 rounded mx-2"
+											id="offer-image"
+										/>
+										<span>{item.name}</span>
+									</td>
+									<td>{item.tranche}</td>
+									<td>{item.tenor}</td>
+									<td>{item.size}</td>
+									<td>
+										{item.status === "Bid Approved" && (
+											<Button
+												title={item.status}
+												link="/investor/dashboard/bid-approved"
+												buttonClass="bg-green-600 rounded-md bid-approved"
+											/>
+										)}
+										{item.status === "Bid Rejected" && (
+											<Button
+												title={item.status}
+												link="/investor/dashboard/bid-rejected"
+												buttonClass="bg-red-600 rounded-md bid-rejected"
+											/>
+										)}
+										{item.status === "Offer open" && (
+											<Button
+												title={item.status}
+												link="/investor/dashboard/show-bid-offer"
+												buttonClass="bg-gray-500 rounded-md offer-open"
+											/>
+										)}
+										{item.status === "Coming soon" && (
+											<Button
+												title={item.status}
+												link="/client/bid-coming-soon"
+												buttonClass="bg-gray-500 rounded-md coming-soon"
+											/>
+										)}
+									</td>
+								</tr>
+								
 							))}
+							</tbody>
 						</table>
-						
+
 						<hr className="border-1 border-white mt-10" />
 
 						{/*Pagination*/}
