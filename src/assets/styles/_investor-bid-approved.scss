@@ -5,7 +5,9 @@
 */
 
 #orderbook-bid-approved, 
-#orderbook-bid-payment-proof {
+#orderbook-bid-payment-proof,
+#orderbook-bid-payment-detail,
+#orderbook-bid-rejected {
 	background: $grey;
 
 	#offer-title {
