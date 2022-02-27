@@ -262,8 +262,187 @@
             background: rgba(0, 0, 0, 0.5);
             color: white;
             margin-bottom: 10px;
-            height: 60px;
-            font-size: 25px;
+            height: 40px;
+            font-weight: 700;
+            float: right;
+            width: 120px;
+            // font-size: 25px;
+        }
+    }
+}
+
+// ------------------------APPROVE AND REJECT PAYMENT PAGE
+.payment-cta {
+    &--approve {
+        background: #008060;
+        color: #fff;
+        margin-right: 20px;
+        padding: 8px;
+    }
+    &--reject {
+        background: #d82c0d;
+        color: #fff;
+        padding: 8px;
+    }
+}
+
+// MODAL -----------------------
+.paymentProof {
+    height: 350px;
+    width: 350px;
+    padding: 25px;
+}
+.payment-modal-button {
+    border: 1px solid black;
+    max-width: auto;
+    margin: 30px auto;
+    padding: 8px;
+}
+.modal {
+    visibility: hidden;
+    transition: all 0.4s;
+    opacity: 0;
+
+    &-button {
+        background: #008060;
+        color: #fff;
+        max-width: 170px;
+        margin: auto;
+        padding: 10px;
+        font-weight: 700;
+    }
+}
+.modal.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal,
+.modal-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+}
+
+.modal,
+.modal-body {
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    @media only screen and (max-width: 650px) {
+        padding: 20px;
+    }
+
+    h1,
+    .img {
+        margin-bottom: 12px;
+    }
+    p {
+        margin-bottom: 20px;
+        @media only screen and (max-width: 750px) {
+            font-size: 14px !important;
+        }
+    }
+    h1 {
+        margin-top: 10px;
+        font-size: 24px;
+        @media only screen and (max-width: 750px) {
+            font-size: 18px;
+        }
+    }
+    .h1Approved {
+        color: #008060;
+    }
+    .h1Rejected {
+        color: #d82c0d;
+    }
+    .img {
+        height: 60px;
+        width: 60px;
+        margin: auto;
+        @media only screen and (max-width: 650px) {
+            height: 40px;
+            width: 40px;
+        }
+    }
+}
+
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-body {
+    z-index: 101;
+
+    // margin: auto;
+    max-height: calc(100vh - 1rem);
+    // max-width: calc(100vw - 1rem);
+    max-width: 700px;
+    overflow: hidden;
+    background: white;
+}
+
+// -----------------------------CSVReader
+.csvReader {
+    max-width: 950px;
+    margin: auto;
+    padding: 20px;
+    // ---------
+    h1 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 25px;
+        margin: 20px 0;
+    }
+
+    &-accept {
+        border: 2px dashed #ccc;
+        padding: 30px 0 30px 15px;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+        margin-bottom: 50px;
+
+        p {
+            background: #ccc;
+            padding: 8px;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+        }
+    }
+    &-cta {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+
+        &--remove,
+        &--upload {
+            padding: 11px;
+            width: 120px;
+            color: #fff;
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+        }
+        &--remove {
+            background: #d82c0d;
+        }
+        &--upload {
+            background: #555;
+            margin-right: 20px;
         }
     }
 }

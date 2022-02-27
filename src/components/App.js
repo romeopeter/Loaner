@@ -25,11 +25,12 @@ import ViewInvestor from './dashboard/client/ViewInvestor';
 import ShowBids from './dashboard/client/ShowBids';
 import ShowAllBids from './dashboard/client/ShowAllBids';
 
-import Dashboard from "./dashboard/investor/Dashboard";
-import AllOffers from "./dashboard/investor/AllOffers";
-import SingleOffer from "./dashboard/investor/SingleOffer";
-import SuccessfulBids from "./dashboard/investor/SuccessfulBids";
-import DeclinedBids from "./dashboard/investor/DeclinedBids";
+import Dashboard from './dashboard/investor/Dashboard';
+import AllOffers from './dashboard/investor/AllOffers';
+import SingleOffer from './dashboard/investor/SingleOffer';
+import SuccessfulBids from './dashboard/investor/SuccessfulBids';
+import DeclinedBids from './dashboard/investor/DeclinedBids';
+import UploadInvestor from './dashboard/broker/UploadInvestor';
 
 import BrokerDashboard from './dashboard/broker/Dashboard';
 import NewClient from './dashboard/broker/NewClient';
@@ -40,6 +41,7 @@ import LoanSummary from './dashboard/broker/LoanSummary';
 import AllLoans from './dashboard/broker/AllLoans';
 import AllBids from './dashboard/broker/AllBids';
 import AddNewBid from './dashboard/broker/AddNewBid';
+import ApproveRejectPayment from './dashboard/broker/ApproveRejectPayment';
 import LoanOffer from './dashboard/broker/LoanOffer';
 import SelectInvestor from './dashboard/broker/SelectInvestor';
 import NewClientSave from './dashboard/broker/NewClientSave';
@@ -188,12 +190,12 @@ function App() {
                 />
 
                 <Route
-                  path='/client/offers/offer/show-all-bids'
-                  element={
-                      <RequireAuth>
-                          <ShowAllBids />
-                      </RequireAuth>
-                  }
+                    path='/client/offers/offer/show-all-bids'
+                    element={
+                        <RequireAuth>
+                            <ShowAllBids />
+                        </RequireAuth>
+                    }
                 />
 
                 {/*Broker dashboard*/}
@@ -274,6 +276,22 @@ function App() {
                     element={
                         <RequireAuth>
                             <AddNewBid />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/broker/dashboard/uploadInvestor/'
+                    element={
+                        <RequireAuth>
+                            <UploadInvestor />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/broker/dashboard/allbids/approve&RejectPayment/'
+                    element={
+                        <RequireAuth>
+                            <ApproveRejectPayment />
                         </RequireAuth>
                     }
                 />
