@@ -1,0 +1,45 @@
+#orderbook-bid-rejected {
+	@media  (max-width: 600px) {
+		#bid-container {
+			height: 600px !important;
+
+			#bid {
+				#action-btns {
+					button {
+						width: 100% !important;
+					}
+				}
+			}
+		}
+	}
+
+	#bid-container {
+		#inner-bid-container {
+			#bid {
+				#img-container {
+					.overlay {
+						#tick-icon {
+							#rejected-icon {
+								width: 2rem !important;
+								height: 2rem !important;
+							}
+						}
+					}
+				}
+
+				#action-btns {
+					button {
+						&.view-offers {
+							background: #008060;
+						}
+
+						&.go-home {
+							border: 2px solid black;
+							color: $black;
+						}
+					}
+				}
+			}
+		}
+	}
+}
