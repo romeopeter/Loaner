@@ -6,6 +6,7 @@ import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
+import rejected from "./icons/rejected.png";
 
 export default function SingleOffer() {
 	const pageName = "Investor offers";
@@ -13,7 +14,8 @@ export default function SingleOffer() {
 	const modalContainerRef = createRef();
 
 	const [state, setState] = useState({
-		showBidFields: false
+		showBidFields: false,
+		showIcon: false
 	});
 
 	const handleAcceptOffer = () => {
@@ -24,16 +26,22 @@ export default function SingleOffer() {
 		const modalContainer = modalContainerRef.current;
 		modalContainer.classList.add("reject-modal");
 
-		modalContainer.children[0].firstChild.innerText =
-			"Offer Rejected";
-		modalContainer.children[0].firstChild.style.color = "#ef4444";
+		modalContainer.children[0].children[1].innerText = "Offer Rejected";
+		modalContainer.children[0].children[1].style.color = "#ef4444";
 
-		modalContainer.children[0].children[1].innerText =
-			`We hope you find better offers that suit you. Thank you for your time`;
+		modalContainer.children[0].children[2].innerText = `We hope you find better offers that suit you. Thank you for your time`;
 
 		if (state.showBidFields) {
-			setState(state => ({...state, showBidFields: false}));
+			setState((state) => ({ 
+				...state, 
+				showBidFields: false,
+			}));
 		}
+
+		setState((state) => ({ 
+			...state, 
+			showIcon: true
+		}));
 	};
 
 	return (
@@ -466,7 +474,12 @@ export default function SingleOffer() {
 							<Button
 								title="Place your bid"
 								buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center place-bid"
-								handleClick={() => setState(state  => ({...state, showBidFields: true}))}
+								handleClick={() =>
+									setState((state) => ({
+										...state,
+										showBidFields: true,
+									}))
+								}
 							/>
 							<Button
 								title="Reject offer"
@@ -506,7 +519,10 @@ export default function SingleOffer() {
 										I have agreed to the terms of this offer
 									</label>
 								</div>
-								<div id="bid-action-btns" className="flex flex-col sm:flex-row justify-evenly">
+								<div
+									id="bid-action-btns"
+									className="flex flex-col sm:flex-row justify-evenly"
+								>
 									<Button
 										title="Edit Offer"
 										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 border-2 self-center edit-offer"
@@ -534,11 +550,24 @@ export default function SingleOffer() {
 							id="modal-content"
 							className="flex flex-col justify-center items-center"
 						>
-							{/*<span class="close">&times;</span>*/}
+							<div
+								className={`rejected-icon ${state.showIcon && "bg-white border border-black"} rounded-full flex justify-center items-center mb-2`}
+								style={{ width: "4rem", height: "4rem" }}
+							>
+								<img
+									src={rejected}
+									alt="rejected-icon-mark"
+									style={{ width: "2rem", height: "2rem" }}
+									className={!state.showIcon ? "hidden" : "block"}
+								/>
+							</div>
 							<h4 className="font-bold text-lg">
 								Congratulations!
 							</h4>
-							<p className="py-5" style={{ paddingLeft: "10px" }}>
+							<p
+								className="py-5 text-center"
+								style={{ paddingLeft: "10px" }}
+							>
 								Your loan has been published
 							</p>
 							<Button
