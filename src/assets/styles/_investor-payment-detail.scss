@@ -1,0 +1,21 @@
+#orderbook-bid-payment-detail {
+	#bid-container {
+		height: 800px !important;
+
+		#inner-bid-container {
+			#bid {
+				.action-btns {
+					button {
+						width: 300px !important;
+
+						&.payment-detail {}
+						&.confirm-payment {
+							border: 2px solid $black;
+							color: $black;
+						}
+					}
+				}
+			}
+		}
+	}
+}
