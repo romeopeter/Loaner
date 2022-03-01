@@ -8,7 +8,7 @@ const getOffers = () => {
 };
 
 const loanRequestCP = (data) => {
-	return axios.post("/api/v1/loan_request/cp/", data).catch((error) => error);
+	return axios.post("/v1/loan_request/cp/", data).catch((error) => error);
 };
 
 const loanRequestBond = (data) => {
