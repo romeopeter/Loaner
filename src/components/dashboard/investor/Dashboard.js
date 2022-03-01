@@ -51,17 +51,17 @@ export default function AllOffers() {
 						<Link
 							to="/investor/dashboard"
 							id="home"
-							className="dropdown-container mr-5"
+							className="dropdown-container mr-5 underline"
 						>
-							Home
+							View offers
 						</Link>
-						<Link
+						{/*<Link
 							to="/investor/offers/offer"
 							id="offers"
 							className="dropdown-container"
 						>
 							Offers
-						</Link>
+						</Link>*/}
 					</div>
 					<div
 						id="orderbook-dashboard-intro"
