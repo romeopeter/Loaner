@@ -14,7 +14,7 @@ import headerBanner from "../../../assets/images/headerBanner.png";
 import offerImage from "../../../assets/images/offerImage.png";
 import createList from "../../../assets/images/createList.png";
 import createOffer from "../../../assets/images/createOffer.png";
-import offers from "../../../assets/images/offers.png";
+import offersIcon from "../../../assets/images/offersIcon.png";
 import allLoans from "../../../assets/images/allLoans.png";
 import approvedLoans from "../../../assets/images/approvedLoans.png";
 import declineLoans from "../../../assets/images/declineLoans.png";
@@ -122,7 +122,7 @@ export default function ClientDashboard() {
 							<Link to="/client/offers">
 							<h2 className="font-bold">
 								<div className="action-icon-container">
-									<img src={offers} alt="" />
+									<img src={offersIcon} alt="" />
 								</div>	
 
 								My offers
