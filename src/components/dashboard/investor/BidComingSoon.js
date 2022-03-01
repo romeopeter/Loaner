@@ -40,17 +40,17 @@ export default function BidComingSoon() {
 						<Link
 							to="/investor/dashboard"
 							id="home"
-							className="dropdown-container mr-5"
+							className="dropdown-container mr-5 underline"
 						>
-							Home
+							View offers
 						</Link>
-						<Link
+						{/*<Link
 							to="/investor/offers/offer"
 							id="offers"
 							className="dropdown-container"
 						>
 							Offers
-						</Link>
+						</Link>*/}
 					</div>
 
 					<div id="offer">
@@ -440,7 +440,7 @@ export default function BidComingSoon() {
 							id="offer-signature"
 							className="h-40 md:h-20 flex flex-col sm:flex-row justify-evenly"
 						>
-							<Link
+							{/*<Link
 								to="/"
 								id="view-document"
 								className="self-center font-bold"
@@ -450,7 +450,7 @@ export default function BidComingSoon() {
 									class="fa fa-long-arrow-right"
 									aria-hidden="true"
 								></i>
-							</Link>
+							</Link>*/}
 							<div className="self-center">
 								<span className="block">OA</span>
 								<h4 className="font-bold text-lg">
