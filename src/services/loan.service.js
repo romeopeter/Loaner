@@ -1,10 +1,9 @@
 import axios from "axios";
 
-// Get loan request
-
+// LOAN REQUEST
 const getOffers = () => {
 	return axios
-		.get("/api/v1/loan_request/")
+		.get("/v1/loan_request/")
 		.catch((error) => console.log(error));
 };
 
@@ -14,11 +13,11 @@ const loanRequestCP = (data) => {
 
 const loanRequestBond = (data) => {
 	return axios
-		.post("/api/v1/loan_request/bonds/", data)
+		.post("/v1/loan_request/bonds/", data)
 		.catch((error) => error);
 };
 
-// Investor list endpoints
+// INVESTOR LIST
 const saveInvestorsList = (data) => {
 	return axios.post("/v1/lists/investors/", data).catch((error) => error);
 };
@@ -35,7 +34,7 @@ const getInvestor = (id) => {
 		.catch((error) => console.log(error));
 };
 
-// Investors category
+// INVESTOR cATEGORY
 const getInvestorsCategories = () => {
 	return axios
 		.get("/v1/investor_category/")
@@ -54,7 +53,8 @@ const getInvestorsCategory = (id) => {
 		.catch((error) => console.log(error));
 };
 
-// Assigning investors to categories and getting investors
+
+// INVESTOR
 const getInvestorsInCategory = () => {
 	return axios.get("/v1/investor/").catch((error) => console.log(error));
 };
@@ -63,6 +63,7 @@ const getInvestorsInCategories = (id) => {
 	return axios.get(`/v1/investor/${id}`);
 };
 
+// INVESTOR CATEGORY ASSIGN
 const mergeInvestorsInCategories = (requestsArr) => {
 	return axios
 		.all(requestsArr.map((request) => axios.get(request)))
