@@ -10,146 +10,18 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
 import offerImage from "../../../assets/images/offerImage.png";
+import { declinedBids } from "../../../fake-backend/investor/declinedBids";
 
 export default function DeclinedBids() {
 	const pageName = "Declined bids";
 
-	const mockData = [
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "Rice Value Chain",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-		{
-			bidName: "TribeModern Realty Transactions",
-			bidImage: "https://stockaru/skfd34-dfksdf-/ifksndfk3.jpg",
-			bidDescription:
-				"A real estate transaction is the process whereby rights in a unit of property (or designated real estate) is transferred between two or more parties, e.g. in case of conveyance one party being the seller(s) and the other being the buyer(s).",
-		},
-	];
-
 	const eachPage = 9;
 
 	const [paginateState, setPaginateState] = useState({
-		list: mockData.length > 0 && mockData,
+		list: declinedBids.length > 0 && declinedBids,
 		perPage: eachPage,
 		page: 0,
-		pages: Math.floor(mockData.length / eachPage)
+		pages: Math.floor(declinedBids.length / eachPage)
 	})
 
 	const {page, perPage, pages, list} = paginateState;

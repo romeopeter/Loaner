@@ -39,8 +39,8 @@ export default function BidRejected() {
 									Thank you for your offer, we are sorry to inform you that it was rejected.
 								</p>
 								<div id="action-btns" className="flex flex-col sm:flex-row justify-evenly items-center">
-									<Button title="View offers" buttonClass="view-offers font-bold sm:mb-0 mb-5 w-full" />
-									<Button title="Go home" buttonClass="go-home w-full font-bold" />
+									<Button title="View offers" buttonClass="view-offers font-bold rounded sm:mb-0 mb-5 w-full" />
+									<Button title="Go home" buttonClass="go-home w-full font-bold rounded" />
 								</div>
 							</div>	
 						</div>

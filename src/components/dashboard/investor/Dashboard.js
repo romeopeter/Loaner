@@ -10,15 +10,15 @@ import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
-import setBgImage from "../../../utils/setBgImage";
-import headerBanner from "../../../assets/images/headerBanner.png";
+// import setBgImage from "../../../utils/setBgImage";
+import InvestorHeader from "../../../assets/images/InvestorHeader.png";
 import offerImage from "../../../assets/images/offerImage.png";
 import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
 	const pageName = "Investor";
 
-	const currentUserObj = useSelector((state) => state.auth)
+	const currentUserObj = useSelector((state) => state.auth);
 	const { user: currentUser } = currentUserObj.user;
 
 	// Parameters
@@ -39,21 +39,25 @@ export default function AllOffers() {
 		setPaginateState((state) => ({ ...state, page: page }));
 	};
 
+	const dashboardBanner = {
+		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${InvestorHeader})`,
+	};
+
 	return (
 		<>
 			<DocumentHead title={pageName} />
 			<OrderbookLayout PageNav={NavMenu}>
 				<section id="orderbook-investor-dashboard">
-					<div
+					{/*<div
 						id="loan-invest-dropdown"
 						class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
 					>
 						<Link
 							to="/investor/dashboard"
 							id="home"
-							className="dropdown-container mr-5"
+							className="dropdown-container mr-5 underline"
 						>
-							Home
+							View offers
 						</Link>
 						<Link
 							to="/investor/offers/offer"
@@ -62,11 +66,8 @@ export default function AllOffers() {
 						>
 							Offers
 						</Link>
-					</div>
-					<div
-						id="orderbook-dashboard-intro"
-						style={setBgImage(headerBanner)}
-					>
+					</div>*/}
+					<div id="orderbook-dashboard-intro" style={dashboardBanner}>
 						<h1>Hello, {currentUser.first_name}</h1>
 						<h3>Welcome to your dashboard</h3>
 						<p>
@@ -135,59 +136,57 @@ export default function AllOffers() {
 							</thead>
 
 							<tbody>
-							{items.map((item, index) => (
-								
-								<tr key={index}>
-									<td className="offer-title">
-										<input
-											type="checkbox"
-											name="checkbox"
-											className="checkbox mr-2 rounded"
-										/>
-										<img
-											src={offerImage}
-											alt=""
-											className="h-10 w-10 rounded mx-2"
-											id="offer-image"
-										/>
-										<span>{item.name}</span>
-									</td>
-									<td>{item.tranche}</td>
-									<td>{item.tenor}</td>
-									<td>{item.size}</td>
-									<td>
-										{item.status === "Bid Approved" && (
-											<Button
-												title={item.status}
-												link="/investor/dashboard/bid-approved"
-												buttonClass="bg-green-600 rounded-md bid-approved"
+								{items.map((item, index) => (
+									<tr key={index}>
+										<td className="offer-title">
+											<input
+												type="checkbox"
+												name="checkbox"
+												className="checkbox mr-2 rounded"
 											/>
-										)}
-										{item.status === "Bid Rejected" && (
-											<Button
-												title={item.status}
-												link="/investor/dashboard/bid-rejected"
-												buttonClass="bg-red-600 rounded-md bid-rejected"
+											<img
+												src={offerImage}
+												alt=""
+												className="h-10 w-10 rounded mx-2"
+												id="offer-image"
 											/>
-										)}
-										{item.status === "Offer open" && (
-											<Button
-												title={item.status}
-												link="/investor/dashboard/show-bid-offer"
-												buttonClass="bg-gray-500 rounded-md offer-open"
-											/>
-										)}
-										{item.status === "Coming soon" && (
-											<Button
-												title={item.status}
-												link="/client/bid-coming-soon"
-												buttonClass="bg-gray-500 rounded-md coming-soon"
-											/>
-										)}
-									</td>
-								</tr>
-								
-							))}
+											<span>{item.name}</span>
+										</td>
+										<td>{item.tranche}</td>
+										<td>{item.tenor}</td>
+										<td>{item.size}</td>
+										<td>
+											{item.status === "Bid Approved" && (
+												<Button
+													title={item.status}
+													link="/investor/dashboard/bid-approved"
+													buttonClass="bg-green-600 rounded-md bid-approved"
+												/>
+											)}
+											{item.status === "Bid Rejected" && (
+												<Button
+													title={item.status}
+													link="/investor/dashboard/bid-rejected"
+													buttonClass="bg-red-600 rounded-md bid-rejected"
+												/>
+											)}
+											{item.status === "Offer open" && (
+												<Button
+													title={item.status}
+													link="/investor/dashboard/show-bid-offer"
+													buttonClass="bg-gray-500 rounded-md offer-open"
+												/>
+											)}
+											{item.status === "Coming soon" && (
+												<Button
+													title={item.status}
+													link="/client/bid-coming-soon"
+													buttonClass="bg-gray-500 rounded-md coming-soon"
+												/>
+											)}
+										</td>
+									</tr>
+								))}
 							</tbody>
 						</table>
 

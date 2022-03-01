@@ -4,11 +4,9 @@ import { Link } from "react-router-dom";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
-import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 import accepted from "./icons/accepted.png";
-import rejected from "./icons/rejected.png";
 
 export default function BidApproved() {
 	const pageName = "Bid Approved";

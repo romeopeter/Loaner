@@ -134,7 +134,7 @@ export default function Login() {
 
 		// Rediret if already logged in
 		if (isLoggedIn && typeof user === "object") {
-			return <Navigate replace to={`/${role}/dashboard`} />
+			return <Navigate replace to={`/${role.toLowerCase()}/dashboard`} />
 		};
 	}
 

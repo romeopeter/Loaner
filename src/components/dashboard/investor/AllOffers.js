@@ -3,7 +3,6 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
-import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
 import setBgImage from "../../../utils/setBgImage";

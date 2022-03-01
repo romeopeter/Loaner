@@ -39,7 +39,7 @@ export default function BAPaymentDetail() {
 									Your bid with Rice Value Chain has been approved
 								</p>
 								<div className="flex flex-col sm:flex-row justify-evenly items-center pb-5 action-btns">
-									<Button title="Click here to see payment details" buttonClass="bg-green-700 font-bold w-full payment-detail" />
+									<Button title="Click here to see payment details" buttonClass="bg-green-700 font-bold w-full rounded payment-detail" />
 								</div>
 								<div className="mb-5 payment-details">
 									<p className="font-bold text-lg text-black mb-5 text-center border border-t-black border-b-black border-x-white py-2">Payment details:</p>
@@ -51,7 +51,7 @@ export default function BAPaymentDetail() {
 									</div>
 								</div>
 								<div className="flex flex-col sm:flex-row justify-evenly items-center action-btns">
-									<Button title="Click here to confirm payment" buttonClass="sm:mb-0 mb-5 font-bold w-full confirm-payment" />
+									<Button title="Click here to confirm payment" buttonClass="sm:mb-0 mb-5 font-bold w-full rounded confirm-payment" />
 								</div>
 							</div>	
 						</div>
