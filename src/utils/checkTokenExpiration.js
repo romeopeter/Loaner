@@ -17,7 +17,7 @@ async function checkTokenExpiration() {
 			console.log("Old token expired. Getting new token...")
 
 			const response = await axios.post(
-				`https://order-book-online.herokuapp.com/api/v1/token/refresh/`,
+				`https://order-book-online.herokuapp.com/v1/token/refresh/`,
 				{ refresh: `${refresh}` }
 			);
 
