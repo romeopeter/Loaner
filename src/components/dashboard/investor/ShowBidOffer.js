@@ -5,6 +5,8 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
+import {Danger, Info} from "../../alert"
+
 import offerImage from "../../../assets/images/offerImage.png";
 import rejected from "./icons/rejected.png";
 
@@ -14,11 +16,53 @@ export default function SingleOffer() {
 	const modalContainerRef = createRef();
 
 	const [state, setState] = useState({
+		bidValue: "",
+		tcCheckbox: false,
 		showBidFields: false,
 		showIcon: false
 	});
 
-	const handleAcceptOffer = () => {
+	const [formError, setFormError] = useState({
+		bidValueMessage: "",
+		amountExceeded: "Amounted entered exceeds expectations",
+		tcNotCheckedMessage: "",
+	})
+
+	const handleChange = (e) => {
+		const target = e.target
+		const name = target.name;
+		const value = target.type === "checkbox" ? target.checked : target.value;
+
+		setState(state => ({...state, [name]: value}));
+	}
+
+	const handleAcceptOffer = (e) => {
+		e.preventDefault();
+
+		const setError = (error) => {
+			setFormError(state => ({...state, ...error}));
+		}
+
+		const updateState = (state) => {
+			setState(state => ({...state, ...state}));
+		} 
+
+		if (state.bidValue === "") {
+			setTimeout(() => setError({bidValueMessage: "Please fill all bids fields"}), 800);
+			return
+		} else {
+			// updateState({bidValue: state.bidValue});
+			setError({bidValueMessage: ""});
+		}
+
+		if (state.tcCheckbox === false) {
+			setTimeout(() => setError({tcNotCheckedMessage: "Please click check box and agree to bid terms"}), 800);
+			return;
+		} else {
+			// updateState({tcCheckbox: state.tcCheckbox});
+			setError({tcNotCheckedMessage: ""});
+		}
+
 		modalContainerRef.current.classList.add("accept-modal");
 	};
 
@@ -56,17 +100,17 @@ export default function SingleOffer() {
 						<Link
 							to="/investor/dashboard"
 							id="home"
-							className="dropdown-container mr-5"
+							className="dropdown-container mr-5 underline"
 						>
-							Home
+							View offers
 						</Link>
-						<Link
+						{/*<Link
 							to="/investor/offers/offer"
 							id="offers"
 							className="dropdown-container"
 						>
 							Offers
-						</Link>
+						</Link>*/}
 					</div>
 
 					<div id="offer">
@@ -449,7 +493,7 @@ export default function SingleOffer() {
 							id="offer-signature"
 							className="h-40 md:h-20 flex flex-col sm:flex-row justify-evenly"
 						>
-							<Link
+							{/*<Link
 								to="/"
 								id="view-document"
 								className="self-center font-bold"
@@ -459,7 +503,7 @@ export default function SingleOffer() {
 									class="fa fa-long-arrow-right"
 									aria-hidden="true"
 								></i>
-							</Link>
+							</Link>*/}
 							<div className="self-center">
 								<span className="block">OA</span>
 								<h4 className="font-bold text-lg">
@@ -495,44 +539,52 @@ export default function SingleOffer() {
 							id="place-bid"
 							className="flex flex-col items-center justify-center"
 						>
+							{formError.tcNotCheckedMessage !== "" && (<Info message={formError.tcNotCheckedMessage} />)}
+							{formError.bidValueMessage !== "" && (<Danger message={formError.bidValueMessage} />)}
 							<h3 className="text-center font-bold text-xl py-5">
 								Input your offer:
 							</h3>
 							<div id="bid-fields" className="pb-5">
-								<div className="">
-									<input
-										type="number"
-										name="bid-value"
-										placeholder="Enter amount"
-										id="bid-value"
-										className="w-full sm:text-sm border-2 border-black focus:ring-black focus:border-black block shadow-sm"
-									/>
-								</div>
-								<div id="offer-terms" className="py-5">
-									<label htmlFor="terms-of-offer">
+								<form onSubmit={(e) => handleAcceptOffer(e)}>
+									<div className="">
 										<input
-											type="checkbox"
-											name="terms-of-offer"
-											id="terms-of-offer"
-											className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-										/>{" "}
-										I have agreed to the terms of this offer
-									</label>
-								</div>
-								<div
-									id="bid-action-btns"
-									className="flex flex-col sm:flex-row justify-evenly"
-								>
-									<Button
-										title="Edit Offer"
-										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 border-2 self-center rounded edit-offer"
-									/>
-									<Button
-										title="Publish Offer"
-										buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center rounded publish-offer"
-										handleClick={() => handleAcceptOffer()}
-									/>
-								</div>
+											type="number"
+											name="bidValue"
+											placeholder="Enter amount"
+											id="bid-value"
+											value={state.bidValue}
+											className="w-full sm:text-sm border-2 border-black focus:ring-black focus:border-black block shadow-sm"
+											onChange={(e) => handleChange(e)}
+										/>
+									</div>
+									<div id="offer-terms" className="py-5">
+										<label htmlFor="terms-of-offer">
+											<input
+												type="checkbox"
+												name="tcCheckbox"
+												id="terms-of-offer"
+												value={state.tcCheckbox}
+												className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+												onChange={(e) => handleChange(e)}
+											/>{" "}
+											I have agreed to the terms of this offer
+										</label>
+									</div>
+									<div
+										id="bid-action-btns"
+										className="flex flex-col sm:flex-row justify-evenly"
+									>
+										{/*<Button
+											title="Edit Offer"
+											buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 border-2 self-center rounded edit-offer"
+										/>*/}
+										<Button
+											title="Submit bid"
+											type="submit"
+											buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center rounded publish-offer"
+										/>
+									</div>
+								</form>
 							</div>
 						</div>
 					)}
@@ -568,10 +620,10 @@ export default function SingleOffer() {
 								className="py-5 text-center"
 								style={{ paddingLeft: "10px" }}
 							>
-								Your loan has been published
+								Your bid has been placed
 							</p>
 							<Button
-								title="Go home"
+								title="View offers"
 								link="/investor/dashboard"
 								buttonClass="bg-green-500 rounded"
 							/>
