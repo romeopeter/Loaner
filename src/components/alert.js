@@ -17,7 +17,7 @@ const Danger = ({message}) => {
 		</div>
 	)
 }
-const Warning = () => {
+const Warning = ({message}) => {
 	return (
 		<div className="mb-5">
 			<div className="text-black text-center bg-yellow-100 p-2 rounded border border-1 border-yellow-400">
@@ -26,7 +26,7 @@ const Warning = () => {
 		</div>
 	)
 }
-const Info = () => {
+const Info = ({message}) => {
 	return (
 		<div className="mb-5">
 			<div className="text-black text-center bg-blue-100 p-2 rounded border border-1 border-blue-400">
