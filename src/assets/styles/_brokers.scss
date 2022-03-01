@@ -160,14 +160,16 @@
 
     &--dropdown {
         display: flex;
-
+        @media only screen and (max-width: 750px) {
+            margin-bottom: 15px;
+        }
+        select {
+            background: #fff;
+        }
         select,
         button {
-            padding: 7px;
+            padding: 6px;
             width: 140px;
-            @media only screen and (max-width: 750px) {
-                width: 130px;
-            }
         }
         button {
             background: #555;
@@ -177,6 +179,18 @@
                 margin-left: 10px;
             }
         }
+    }
+    select {
+        background-image: url('../images/dropdown.png');
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+    }
+
+    &--filter {
+        padding: 6px 0 6px 10px;
+        border: none;
+        width: 300px;
+        background: #c4c4c4;
     }
     &--addNewBid {
         background: #555;
@@ -192,7 +206,8 @@
 .cta-buttons {
     &--approve,
     &--reject,
-    &--edit {
+    &--edit,
+    &--disagree {
         border-right: 1px solid #555;
         margin-right: 10px;
         padding-right: 10px;
@@ -205,9 +220,20 @@
     &--reject {
         color: #d82c0d;
     }
+    &--delete {
+        color: rgb(206, 206, 63);
+    }
     &--edit,
     &--disagree {
         color: #555555;
+    }
+    button:disabled,
+    button[disabled] {
+        border: none;
+        background-color: #cccccc;
+        color: #838080;
+        padding: 5px;
+        cursor: not-allowed;
     }
 }
 // Temp active filter link
@@ -221,7 +247,7 @@
     &--form {
         border: 1px solid #c4c4c4;
         max-width: 850px;
-        padding: 20px;
+
         margin: auto;
         .buttonMod {
             background: #fff;
@@ -287,6 +313,7 @@
 }
 
 // MODAL -----------------------
+
 .paymentProof {
     height: 350px;
     width: 350px;
@@ -302,14 +329,35 @@
     visibility: hidden;
     transition: all 0.4s;
     opacity: 0;
+    // padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    height: 100vh;
+    width: 100vw;
 
     &-button {
+        margin-top: 30px !important;
         background: #008060;
         color: #fff;
         max-width: 170px;
         margin: auto;
         padding: 10px;
         font-weight: 700;
+    }
+    &-head {
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #c4c4c4;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+
+        .close-button:hover {
+            color: #c4c4c4;
+        }
     }
 }
 .modal.open {
@@ -322,19 +370,27 @@
     position: fixed;
     left: 0;
     top: 0;
+    z-index: 100;
+}
+
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
     height: 100vh;
     width: 100vw;
-    z-index: 100;
+}
+
+.modal-body {
+    z-index: 101;
+    max-height: calc(100vh - 1rem);
+    padding: 20px;
+    overflow: hidden;
+    background: white;
+    width: 50%;
+    margin: auto;
 }
 
 .modal,
 .modal-body {
-    padding: 40px 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    margin: auto;
     @media only screen and (max-width: 650px) {
         padding: 20px;
     }
@@ -344,7 +400,6 @@
         margin-bottom: 12px;
     }
     p {
-        margin-bottom: 20px;
         @media only screen and (max-width: 750px) {
             font-size: 14px !important;
         }
@@ -371,21 +426,6 @@
             width: 40px;
         }
     }
-}
-
-.modal-overlay {
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.modal-body {
-    z-index: 101;
-
-    // margin: auto;
-    max-height: calc(100vh - 1rem);
-    // max-width: calc(100vw - 1rem);
-    max-width: 700px;
-    overflow: hidden;
-    background: white;
 }
 
 // -----------------------------CSVReader
@@ -444,5 +484,24 @@
             background: #555;
             margin-right: 20px;
         }
+    }
+}
+
+// ------------------------------Loader
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #555;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

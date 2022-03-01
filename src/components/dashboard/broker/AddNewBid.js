@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -6,6 +7,7 @@ import Select from 'react-dropdown-select';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
+import Arrow from '../../../assets/images/Arrow.png';
 import { Grid, GridItem } from '@chakra-ui/react';
 
 const AddNewBid = () => {
@@ -34,7 +36,11 @@ const AddNewBid = () => {
             <OrderbookLayout PageNav={NavMenu}>
                 <div className='NewBid'>
                     <div className='NewBid--form'>
-                        <div>
+                        <Link to='/broker/dashboard/bids/'>
+                            <img alt='' src={Arrow} style={{ background: '#c4c4c4', padding: '12px' }} />
+                        </Link>
+
+                        <div style={{ padding: '20px' }}>
                             {/**Form 1 --- Select Investors */}
                             <Formik
                                 initialValues={{
@@ -45,7 +51,7 @@ const AddNewBid = () => {
                                     bidValue: Yup.string().required('*Required'),
                                 })}
                                 onSubmit={(values) => {
-                                    navigate('/broker/dashboard/allbids', { replace: true });
+                                    navigate('/broker/dashboard/bids', { replace: true });
                                     // send to api
                                     console.log(values);
                                 }}

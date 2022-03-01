@@ -1,67 +1,94 @@
 const Brokerdata = [
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 1',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 2',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 3',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 4',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 5',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 6',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 7',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 8',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
     {
-        offerName: "Rice Value Chain",
-        tranche: "Tranche 1",
-        tenure: "90days",
-        size:"NGN 5 billion",
-        status:"Published"
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 9',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
     },
-    
-]
-export default Brokerdata
+    {
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 10',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
+    },
+    {
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 11',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
+    },
+    {
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 12',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
+    },
+    {
+        offerName: 'Rice Value Chain',
+        tranche: 'Tranche 13',
+        tenure: '90days',
+        size: 'NGN 5 billion',
+        status: 'Published',
+    },
+];
+export default Brokerdata;

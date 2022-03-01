@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,12 +8,23 @@ import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import newOrder from '../../../assets/images/newOrder.png';
 import newClient from '../../../assets/images/newClient.png';
+import Pagination from './pagination/Pagination';
 
 import Brokerdata from '../../../fake-backend/broker/DummyData';
 
 import { Flex, Box, Button, Center, Text, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-
+let PageSize = 5;
 const BrokerDashboard = () => {
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const currentTableData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return Brokerdata.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage]);
+    // ----------------------
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -32,7 +43,7 @@ const BrokerDashboard = () => {
     };
 
     return (
-        <>
+        <div>
             <DocumentHead title='Dashboard' />
             <OrderbookLayout PageNav={NavMenu} className='broker'>
                 <header id='orderbook-header' className='broker-orderbook-header'>
@@ -46,10 +57,6 @@ const BrokerDashboard = () => {
                             <div id='loan' className='dropdown-container mr-5'>
                                 Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
                                 <div id='load-dropdown'></div>
-                            </div>
-                            <div id='investor' className='dropdown-container'>
-                                Investor <i className='fa fa-caret-down' aria-hidden='true'></i>
-                                <div id='investor-dropdown'></div>
                             </div>
                         </div>
                         <div className='grid grid-cols-1 gap-x-6'>
@@ -146,7 +153,7 @@ const BrokerDashboard = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody className='body'>
-                                    {Brokerdata.map((data, index) => {
+                                    {currentTableData.map((data, index) => {
                                         return (
                                             <Tr key={index}>
                                                 <Td></Td>
@@ -187,12 +194,19 @@ const BrokerDashboard = () => {
                                 </Tbody>
                             </Table>
                         </div>
+                        <Pagination
+                            className='pagination-bar'
+                            currentPage={currentPage}
+                            totalCount={Brokerdata.length}
+                            pageSize={PageSize}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
                     </Box>
 
                     {/* scrollable table */}
                 </section>
             </OrderbookLayout>
-        </>
+        </div>
     );
 };
 

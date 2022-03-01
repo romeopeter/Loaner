@@ -1,0 +1,65 @@
+import React from 'react';
+import bidApproved from '../../../../assets/images/bidApproved.png';
+import bidRejected from '../../../../assets/images/bidRejected.png';
+
+const Modal = ({ closeModal, state, notification, handleYes }) => {
+    const className = state.modal ? 'open' : '';
+    const classSuccessState = state.successState ? 'h1Approved' : 'h1Rejected';
+
+    return (
+        <div className={`modal ${className}`}>
+            <div className='modal-overlay' onClick={closeModal}></div>
+
+            <div className='modal-body'>
+                {!notification.confirmation && (
+                    <div>
+                        {state.successState ? (
+                            <p>Are you sure you want to approve this payment?</p>
+                        ) : (
+                            <p>Are you sure you want to reject this payment?</p>
+                        )}
+                        <div style={{ marginTop: '20px' }}>
+                            <button
+                                onClick={handleYes}
+                                style={{ background: '#e5e5e5', width: '50px', padding: '7px', marginRight: '20px' }}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                onClick={closeModal}
+                                style={{ background: '#d82c0d', width: '50px', padding: '7px', color: '#fff' }}
+                            >
+                                No
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {notification.confirmation && notification.isLoading ? <p className='loader'></p> : null}
+                {notification.confirmation && !notification.isLoading ? (
+                    <>
+                        {state.successState ? (
+                            <div>
+                                <img alt='approved' className='img' src={bidApproved} />
+                                <h1 className={`${classSuccessState}`}>Payment Approved</h1>
+                                <p>You have approved JJ N5 Billion Payment</p>
+                            </div>
+                        ) : (
+                            <div>
+                                <img alt='rejected' className='img' src={bidRejected} />
+                                <h1 className={`${classSuccessState}`}>Payment Rejected</h1>
+                                <p>You have rejected JJ N5 Billion Payment</p>
+                            </div>
+                        )}
+
+                        <button className='modal-button ' onClick={closeModal}>
+                            Back to list
+                        </button>
+                    </>
+                ) : null}
+            </div>
+        </div>
+    );
+};
+
+export default Modal;

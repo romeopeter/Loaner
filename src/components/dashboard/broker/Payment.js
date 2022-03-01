@@ -1,47 +1,73 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // Temp to create deadlinks
 
-import React, { useState } from 'react';
-
+import React, { useState, useMemo } from 'react';
+import Pagination from './pagination/Pagination';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
-import Modal from '../broker/modals/Modal';
-import PaymentModal from '../broker/modals/PaymentModal';
+import PaymentModal1 from './modals/PaymentModal1';
+import PaymentModal2 from './modals/PaymentModal2';
 import NavMenu from '../NavMenu';
 import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
 import { Paymentdata } from '../../../data/broker/DummyData';
-import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td, Center, Divider } from '@chakra-ui/react';
+import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
-const AllClients = () => {
-    // modal state
-    const [state, setState] = useState(false);
-    // modal state
-    const [paymentModal, setPaymentModal] = useState(false);
+let PageSize = 5;
 
-    // modal approved or rejected state
-    const [successState, setSuccessState] = useState(false);
+const Payment = () => {
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const currentTableData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return Paymentdata.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage]);
+    // ----------------------
+
+    const [notification, setNotification] = useState({
+        confirmation: false,
+        isLoading: undefined,
+        status: false,
+        statusText: undefined,
+    });
+    const handleYes = () => {
+        setNotification({ ...notification, confirmation: true, isLoading: true, status: false });
+
+        setTimeout(() => {
+            setNotification({ ...notification, confirmation: true, isLoading: false, status: true });
+        }, 2000);
+    };
+
+    // --------------------------------------make one general state
+    const [state, setState] = useState({
+        modal: false,
+        paymentModal: false,
+        successState: undefined,
+    });
 
     const onCheckboxChange = (checkboxes) => {
         // do something
     };
     const openPaymentModal = () => {
-        setPaymentModal(true);
+        setState({ ...state, paymentModal: true });
     };
     const closePaymentModal = () => {
-        setPaymentModal(false);
+        setState({ ...state, paymentModal: false });
     };
 
     const openModalApproved = () => {
-        setState(true);
-        setSuccessState(true);
+        setState({ modal: true, successState: true, paymentModal: false });
+        setNotification({ statusText: 'Approved' });
     };
+
     const openModalRejected = () => {
-        setState(true);
-        setSuccessState(false);
+        setState({ modal: true, successState: false, paymentModal: false });
+        setNotification({ statusText: 'Rejected' });
     };
-    
+
     const closeModal = () => {
-        setState(false);
+        setState({ ...state, modal: false });
     };
 
     return (
@@ -57,25 +83,10 @@ const AllClients = () => {
                         Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
                         <div id='load-dropdown'></div>
                     </div>
-                    <div id='investor' className='dropdown-container'>
-                        Investor <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='investor-dropdown'></div>
-                    </div>
                 </div>
                 <main className='bids'>
-                    <div className='bids-heading'>
-                        <h1>Rice Value Chain Bid List</h1>
-                        <div className='bids-heading--links'>
-                            <Center className='bids-heading--mod'>
-                                <a className='active' href='#'>
-                                    Prorated
-                                </a>
-                                <Divider orientation='vertical' />
-                                <a href='#'>Manual Listing</a>
-                                <Divider orientation='vertical' />
-                                <a href='#'>Ordered Listing</a>
-                            </Center>
-                        </div>
+                    <div className='bids-heading' style={{ height: '80px' }}>
+                        <h1>Rice Value Chain </h1>
                     </div>
                     <div className='mid-nav'>
                         <div className='mid-nav--dropdown'>
@@ -88,10 +99,12 @@ const AllClients = () => {
                             <button className='mid-nav-button'>Apply</button>
                         </div>
 
-                        <select>
-                            <option defaultValue={'Select action'}> Select action</option>
-                            <option value='approve all'>Approve all</option>
-                            <option value='reject'>Reject all</option>
+                        <select className='mid-nav--filter'>
+                            <option defaultValue={'Select action'}>Filter</option>
+                            <option value='approve all'>Payment made</option>
+                            <option value='reject'>Pending payments</option>
+                            <option value='reject'>Approved payments</option>
+                            <option value='reject'>Rejected payments</option>
                         </select>
                     </div>
                     <section style={{ paddingBottom: '10%' }}>
@@ -99,7 +112,7 @@ const AllClients = () => {
                             <div className='tableScroll'>
                                 <Table size='sm' colorScheme={'blackAlpha'}>
                                     <CheckboxGroup onChange={onCheckboxChange}>
-                                        <Thead bg='#C4C4C4' h='80px'>
+                                        <Thead bg='#F0F0F0' h='80px'>
                                             <Tr
                                                 // key={index}
                                                 fontWeight={'extrabold'}
@@ -119,7 +132,7 @@ const AllClients = () => {
                                             </Tr>
                                         </Thead>
                                         <Tbody>
-                                            {Paymentdata.map((data, index) => {
+                                            {currentTableData.map((data, index) => {
                                                 return (
                                                     <Tr key={index}>
                                                         <Td></Td>
@@ -133,7 +146,7 @@ const AllClients = () => {
                                                                     w='50px'
                                                                     h='50px'
                                                                     borderRadius={'50%'}
-                                                                    bg={'#C4C4C4'}
+                                                                    bg={'#555555'}
                                                                     // m={['auto']}
                                                                     mr={[4]}
                                                                 ></Box>
@@ -159,27 +172,31 @@ const AllClients = () => {
                                                                 }}
                                                                 onClick={openPaymentModal}
                                                             >
-                                                                View payment
+                                                                View Payment
                                                             </Td>
                                                         ) : (
                                                             <Td>-</Td>
                                                         )}
 
-                                                        <Td className='payment-cta'>
-                                                            <button
-                                                                onClick={openModalApproved}
-                                                                className='payment-cta--approve'
-                                                            >
-                                                                Approve Payment
-                                                            </button>
+                                                        {notification.status ? (
+                                                            <Td>{notification.statusText}</Td>
+                                                        ) : (
+                                                            <Td className='payment-cta'>
+                                                                <button
+                                                                    onClick={openModalApproved}
+                                                                    className='payment-cta--approve'
+                                                                >
+                                                                    Approve Payment
+                                                                </button>
 
-                                                            <button
-                                                                onClick={openModalRejected}
-                                                                className='payment-cta--reject'
-                                                            >
-                                                                Reject Payment
-                                                            </button>
-                                                        </Td>
+                                                                <button
+                                                                    onClick={openModalRejected}
+                                                                    className='payment-cta--reject'
+                                                                >
+                                                                    Reject Payment
+                                                                </button>
+                                                            </Td>
+                                                        )}
                                                     </Tr>
                                                 );
                                             })}
@@ -187,9 +204,27 @@ const AllClients = () => {
                                     </CheckboxGroup>
                                 </Table>
                             </div>
+                            <Pagination
+                                className='pagination-bar'
+                                currentPage={currentPage}
+                                totalCount={Paymentdata.length}
+                                pageSize={PageSize}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
                         </Box>
-                        <Modal closeModal={closeModal} state={state} successState={successState} />
-                        <PaymentModal closePaymentModal={closePaymentModal} paymentModal={paymentModal} />
+                        <PaymentModal1
+                            closeModal={closeModal}
+                            state={state}
+                            handleYes={handleYes}
+                            notification={notification}
+                        />
+                        <PaymentModal2
+                            state={state}
+                            closePaymentModal={closePaymentModal}
+                            notification={notification}
+                            openModalApproved={openModalApproved}
+                            openModalRejected={openModalRejected}
+                        />
                     </section>
                 </main>
             </OrderbookLayout>
@@ -197,4 +232,4 @@ const AllClients = () => {
     );
 };
 
-export default AllClients;
+export default Payment;

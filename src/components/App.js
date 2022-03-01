@@ -43,9 +43,9 @@ import CreateOffer from './dashboard/broker/CreateOffer';
 import NewOfferTiming from './dashboard/broker/NewOfferTiming';
 import LoanSummary from './dashboard/broker/LoanSummary';
 import AllLoans from './dashboard/broker/AllLoans';
-import AllBids from './dashboard/broker/AllBids';
+import Bids from './dashboard/broker/Bids';
 import AddNewBid from './dashboard/broker/AddNewBid';
-import ApproveRejectPayment from './dashboard/broker/ApproveRejectPayment';
+import Payment from './dashboard/broker/Payment';
 import LoanOffer from './dashboard/broker/LoanOffer';
 import SelectInvestor from './dashboard/broker/SelectInvestor';
 import NewClientSave from './dashboard/broker/NewClientSave';
@@ -309,15 +309,15 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/allbids/'
+                    path='/broker/dashboard/bids/'
                     element={
                         <RequireAuth>
-                            <AllBids />
+                            <Bids />
                         </RequireAuth>
                     }
                 />
                 <Route
-                    path='/broker/dashboard/allbids/addnewbid/'
+                    path='/broker/dashboard/bids/addnewbid/'
                     element={
                         <RequireAuth>
                             <AddNewBid />
@@ -333,10 +333,10 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/allbids/approve&RejectPayment/'
+                    path='/broker/dashboard/bids/payment/'
                     element={
                         <RequireAuth>
-                            <ApproveRejectPayment />
+                            <Payment />
                         </RequireAuth>
                     }
                 />
