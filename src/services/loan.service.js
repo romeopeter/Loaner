@@ -17,6 +17,16 @@ const loanRequestBond = (data) => {
 		.catch((error) => error);
 };
 
+const loanRequestAddInvestor = (id, data) => {
+	return axios
+		.post(`/v1/loan_request/${id}/add_investors/`, data)
+		.catch((error) => error);
+};
+
+const loanRequestPublish = (id) => {
+	return axios.get(`/v1/loan_request/${id}/publish/`).catch(error => error);
+}
+
 // INVESTOR LIST
 const saveInvestorsList = (data) => {
 	return axios.post("/v1/lists/investors/", data).catch((error) => error);
@@ -34,7 +44,7 @@ const getInvestor = (id) => {
 		.catch((error) => console.log(error));
 };
 
-// INVESTOR cATEGORY
+// INVESTOR CATEGORY
 const getInvestorsCategories = () => {
 	return axios
 		.get("/v1/investor_category/")
@@ -77,7 +87,14 @@ const assignInvestorsToCategories = () => {
 		.catch((error) => console.log(error));
 };
 
-export { loanRequestCP, loanRequestBond, getOffers };
+export { 
+	loanRequestCP, 
+	loanRequestBond, 
+	getOffers, 
+	loanRequestAddInvestor,
+	loanRequestPublish
+
+};
 export { saveInvestorsList, getInvestorsList, getInvestor };
 export {
 	getInvestorsCategories,
