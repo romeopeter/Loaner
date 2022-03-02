@@ -1,4 +1,6 @@
-// Also called the assigning-invetor page
+/*
+	Also called the assigning-invetor component/page
+*/
 
 import React, { createRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -12,11 +14,21 @@ import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
-import { getInvestorsInCategoryAction, mergeInvestorsInCategoriesAction } from "../../../redux/investorsInCategorySlice";
+import {
+	getInvestorsInCategoryAction,
+	mergeInvestorsInCategoriesAction,
+} from "../../../redux/investorsInCategorySlice";
 
 import { getInvestorsCategoriesAction } from "../../../redux/investorCategorySlice";
 
+import {
+	AddInvestorsAction,
+	publishOfferAction,
+} from "../../../redux/loanSlice.js";
+
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
+
+import { Danger, Info } from "../../alert";
 
 export default function PublishOffer({ children, ...props }) {
 	const pageName = "Publish offer";
@@ -26,7 +38,7 @@ export default function PublishOffer({ children, ...props }) {
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
-	const currentUserObj = useSelector(state => state.auth.user)
+	const currentUserObj = useSelector((state) => state.auth.user);
 	const investorsInCategory = useSelector(
 		(state) => state.investorsInCategory.investors
 	);
@@ -46,6 +58,10 @@ export default function PublishOffer({ children, ...props }) {
 	const [favouriteList, setFavouriteList] = useState([]);
 	const [investorCatCount, setInvestorCatCount] = useState(5);
 	const [categoriesIds, setCategoriesIds] = useState([]);
+	const [feedBack, setFeedBack] = useState({
+		investorsNotAssigned: "",
+		offerNotCreated: "",
+	});
 
 	useEffect(() => {
 		// Save favourite list after state update
@@ -62,12 +78,12 @@ export default function PublishOffer({ children, ...props }) {
 	useEffect(() => {
 		// Invoke function to get all categories IDs
 		getCategoriesIds();
-	}, [state.categoryCheckbox])
+	}, [state.categoryCheckbox]);
 
 	useEffect(() => {
 		// Invoke function to generate request based on categories clicked
-		genMultiInvestorsRequests()
-	}, [categoriesIds])
+		genMultiInvestorsRequests();
+	}, [categoriesIds]);
 
 	const handleInvestorChange = (selected) => {
 		setState((state) => {
@@ -129,74 +145,119 @@ export default function PublishOffer({ children, ...props }) {
 		const investorValues = state.investorSelected;
 		const categoryValues = state.categoryCheckbox;
 
+		// const clientInvestorsList = {};
+		const serverInvestorsList = {};
 
-		const dataToSave = () => {
-			const clientInvestorsList = {};
-			const serverInvestorsList = {}
+		if (state.favouriteListName === "") {
+			alert.error("List must have a title");
+		} else {
+			// Investors list sent to server to save
+			const investorsIds = investorsInCategory.map(
+				(investor) => investor.id
+			);
+			const status = state.saveAsOpen
+				? "open"
+				: state.saveAsComing
+				? "incoming"
+				: "open";
 
-			if (state.favouriteListName === "") {
-				alert.error("List must have a title");
-			} else {
+			serverInvestorsList.name = state.favouriteListName;
+			serverInvestorsList.descripption = state.favouriteListDescription;
+			serverInvestorsList.investor_ids = investorsIds;
+			serverInvestorsList.status = status;
+			serverInvestorsList.user = currentUserObj.user.id;
 
-				// Investors list sent to server to save
-				const investorsIds = investorsInCategory.map((investor) => investor.id);
-				const status = state.saveAsOpen ? "open": state.saveAsComing ? "incoming" : null;
+			/*Investors lists to saved in client starts*/
+			/*clientInvestorsList.listName = state.favouriteListName;
+				clientInvestorsList.descripption = state.favouriteListDescription;
+				clientInvestorsList.listItems = {};
 
-				serverInvestorsList.name = state.favouriteListName;
-				serverInvestorsList.descripption = state.favouriteListDescription;
-				serverInvestorsList.investor_ids = investorsIds;
-				serverInvestorsList.status = status;
-				serverInvestorsList.user = currentUserObj.user.id;
+				if (investorValues !== null) {
+					clientInvestorsList.listItems.investors = state.investorSelected;
+				}
 
-				console.log(serverInvestorsList, currentUserObj);
+				if (categoryValues !== null) {
+					clientInvestorsList.listItems.categories = state.categoryCheckbox;
+				}
 
-				/*Investors lists to saved in client starts*/
-					clientInvestorsList.listName = state.favouriteListName;
-					clientInvestorsList.descripption = state.favouriteListDescription;
-					clientInvestorsList.listItems = {};
+				clientInvestorsList.saveAsOpen =
+					state.saveAsOpen === false
+						? !state.saveAsOpen
+						: state.saveAsOpen;
+				clientInvestorsList.saveAsComing =
+					state.saveAsComing === false
+						? !state.saveAsComing
+						: state.saveAsComing;*/
+			/*Investors lists to saved in client ends*/
 
-					if (investorValues !== null) {
-						clientInvestorsList.listItems.investors = state.investorSelected;
-					}
+			dispatch(saveInvestorListAction(serverInvestorsList)).then(() => {
+				/*setFavouriteList((state) => {
+					return [...state, clientInvestorsList];
+				});*/
 
-					if (categoryValues !== null) {
-						clientInvestorsList.listItems.categories = state.categoryCheckbox;
-					}
+				alert.success("List created");
+			});
 
-					clientInvestorsList.saveAsOpen =
-						state.saveAsOpen === false
-							? !state.saveAsOpen
-							: state.saveAsOpen;
-					clientInvestorsList.saveAsComing =
-						state.saveAsComing === false
-							? !state.saveAsComing
-							: state.saveAsComing;
-				/*Investors lists to saved in client ends*/
+			// Removes save list modal
+			removeFavouriteListModal();
+		}
+	};
 
-				dispatch(saveInvestorListAction(serverInvestorsList)).then(() => {
-					setFavouriteList((state) => {
-						return [...state, clientInvestorsList];
-					});
-					
-					alert.success("List created");
-				});
+	// Assign and Publish investors
+	const assignAndPublishInvestors = (loanOfferId) => {
+		const investorsValue = state.investorSelected;
+		const status = state.saveAsOpen
+			? "open"
+			: state.saveAsComing
+			? "incoming"
+			: "open";
 
-				// Removes save list modal
-				removeFavouriteListModal();
-			}
-		};
-		dataToSave();
+		if (investorsValue === null) {
+			// alert.error("Can't publish. Investors not assigned");
+			setFeedBack((state) => ({
+				...state,
+				investorsNotAssigned:
+					"Can't publish offer. Investors not assigned!",
+			}));
+			return;
+		} else if (loanOfferId === undefined || loanOfferId === null) {
+			// alert.error("Can't assign investors to non existant loan. Create a list instead");
+			setFeedBack((state) => ({
+				...state,
+				offerNotCreated: "Can't assign investors to nonexistent offer!",
+			}));
+			return;
+		} else {
+			const investorsId = investorsValue.map(
+				(investor) => investor.value
+			);
+
+			const data = {
+				investor_ids: investorsId,
+				availability: status,
+			};
+
+			// Assign investors
+			dispatch(AddInvestorsAction(loanOfferId, data)).then(() => {
+				// Publish offers
+				dispatch(publishOfferAction(loanOfferId));
+			});
+		}
+
+		// Show modal
+		publishSuccessModal();
 	};
 
 	// Get categories ID
 	const getCategoriesIds = () => {
-		const IDs = state.categoryCheckbox.length > 0
-			? state.categoryCheckbox.map((category) => {
-				return Number(category.split("_")[1]);
-			})
-			: [];
+		const IDs =
+			state.categoryCheckbox.length > 0
+				? state.categoryCheckbox.map((category) => {
+						return Number(category.split("_")[1]);
+				  })
+				: [];
 
-		setCategoriesIds(state => ([...IDs]));
+		setCategoriesIds((state) => [...IDs]);
 	};
 
 	/* React-select customization start */
@@ -251,27 +312,30 @@ export default function PublishOffer({ children, ...props }) {
 	};
 
 	const loadAllInvestorsOptionsFunc = () => {
-
 		if (investorsInCategory.length > 0) {
 			return investorsInCategory.map((investor) => {
 				const label = `${investor.user.first_name} ${investor.user.last_name}`;
 				const value = investor.user.id;
 				return { value, label };
-			})
+			});
 		}
 
-		return []
+		return [];
 	};
+
 	const loadInvestorsOptions = loadAllInvestorsOptionsFunc();
 
 	// Generate multi request
 	const genMultiInvestorsRequests = () => {
-		const multiRequests = categoriesIds.map((id, index) => {;
-			const API_URL = "https://order-book-online.herokuapp.com/v1/investor_category";
-			return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
+		const multiRequests = categoriesIds.map((id, index) => {
+			const API_URL =
+				"https://order-book-online.herokuapp.com/v1/investor_category";
+			return `${API_URL}/${
+				id !== undefined && id
+			}/?display_investors=True`;
 		});
-		dispatch(mergeInvestorsInCategoriesAction(multiRequests))
-	}
+		dispatch(mergeInvestorsInCategoriesAction(multiRequests));
+	};
 	/* React-select customization ends */
 
 	// Captialize first letter of alphabets characters
@@ -304,6 +368,19 @@ export default function PublishOffer({ children, ...props }) {
 				<div id="orderbook-publish-offer">
 					<div id="offer-publication">
 						<div id="offer" className="mb-5">
+							<div className="flex justify-center items-center text-white">
+								{/*Feeback placement*/}
+								{feedBack.offerNotCreated !== "" && (
+									<Danger
+										message={feedBack.offerNotCreated}
+									/>
+								)}
+								{feedBack.investorsNotAssigned !== "" && (
+									<Danger
+										message={feedBack.investorsNotAssigned}
+									/>
+								)}
+							</div>
 							<h3 className="text-3xl font-bold text-white mb-5">
 								Select investors
 							</h3>
@@ -472,7 +549,7 @@ export default function PublishOffer({ children, ...props }) {
 							title="Publish loan"
 							type="submit"
 							buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
-							handleClick={publishSuccessModal}
+							handleClick={assignAndPublishInvestors}
 						/>
 					</div>
 
