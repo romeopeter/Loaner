@@ -6,15 +6,40 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { loanRequestCP, loanRequestBond, getOffers } from "../services/loan.service.js";
+import { 
+    loanRequestCP, 
+    loanRequestBond, 
+    getOffers, 
+    loanRequestAddInvestor, 
+    loanRequestPublish 
+} from "../services/loan.service.js";
 
 import { setServerMessage } from "./messageSlice";
+import handleRequestError from "./errorResponse";
 
 export const getOffersAction = createAsyncThunk("loan/getOffers", async (thunkAPI) => {
     const res = await getOffers();
 
     if (res.status === 200) return res.data;
 });
+
+export const AddInvestorsAction = createAsyncThunk("loan/AddInvestors", async(id, data, thunkAPI) => {
+    const res = await loanRequestAddInvestor(id, data);
+    const dispatch = thunkAPI.dispatch;
+
+    handleRequestError(res, dispatch);
+
+    if (res.status === 200) return res.data;
+})
+
+export const publishOfferAction = createAsyncThunk("loan/PublishOfferAction", async(id, thunkAPI) => {
+    const res = await loanRequestPublish(id);
+    const dispatch = thunkAPI.dispatch;
+
+    handleRequestError(res, dispatch);
+
+    if (res.status === 200) return res.data;
+})
 
 export const loanSlice = createSlice({
     name: "loan",
