@@ -2,8 +2,7 @@
 	Also called the assigning-invetor component/page
 */
 
-import React, { createRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
@@ -28,12 +27,13 @@ import {
 
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
 
-import { Danger, Info } from "../../alert";
+import { Danger, Success } from "../../alert";
 
 export default function PublishOffer({ children, ...props }) {
 	const pageName = "Publish offer";
 
 	const saveListModalRef = createRef();
+	const componentMounted = useRef(true);
 	const publishSuccessModalRef = createRef();
 	const alert = useAlert();
 	const dispatch = useDispatch();
@@ -45,6 +45,8 @@ export default function PublishOffer({ children, ...props }) {
 	const investorCategories = useSelector(
 		(state) => state.investorsCategories.categories
 	);
+	const currentOffer = useSelector(state => state.loan.currentOffer);
+	const serverError = useSelector(state => state.message.server)
 
 	const [state, setState] = useState({
 		investorSelected: null,
@@ -55,25 +57,20 @@ export default function PublishOffer({ children, ...props }) {
 		favouriteListDescription: "",
 		menuIsOpen: false,
 	});
-	const [favouriteList, setFavouriteList] = useState([]);
 	const [investorCatCount, setInvestorCatCount] = useState(5);
 	const [categoriesIds, setCategoriesIds] = useState([]);
 	const [feedBack, setFeedBack] = useState({
 		investorsNotAssigned: "",
 		offerNotCreated: "",
+		loanIsPublished: "",
+		statusNotSet: ""
 	});
-
-	useEffect(() => {
-		// Save favourite list after state update
-		const LISTS = favouriteList.length > 0 && JSON.stringify(favouriteList);
-		localStorage.setItem("FAVOURITE_LISTS", LISTS);
-	}, [favouriteList]);
 
 	useEffect(() => {
 		// Get all investors categories
 		dispatch(getInvestorsCategoriesAction());
 		dispatch(getInvestorsInCategoryAction());
-	}, [dispatch]);
+	}, []);
 
 	useEffect(() => {
 		// Invoke function to get all categories IDs
@@ -94,13 +91,14 @@ export default function PublishOffer({ children, ...props }) {
 		});
 	};
 
-	const handleChange = (e) => {
+	const handleCheckbox = (e) => {
+		const target = e.target;
 		const name = e.target.name;
 		const value = e.target.value;
 
-		if (e.target.checked) {
+		if (target.type === "checkbox") {
 			if (name === "saveAsOpen" || name === "saveAsComing") {
-				setState((state) => ({ ...state, [name]: e.target.checked }));
+				setState((state) => ({ ...state, [name]: target.checked }));
 			}
 
 			if (name === "categoryCheckbox") {
@@ -111,7 +109,7 @@ export default function PublishOffer({ children, ...props }) {
 			}
 		} else {
 			if (name === "saveAsOpen" || name === "saveAsComing") {
-				setState((state) => ({ ...state, [name]: !e.target.checked }));
+				setState((state) => ({ ...state, [name]: !target.checked }));
 			}
 
 			if (name === "categoryCheckbox") {
@@ -155,46 +153,19 @@ export default function PublishOffer({ children, ...props }) {
 			const investorsIds = investorsInCategory.map(
 				(investor) => investor.id
 			);
-			const status = state.saveAsOpen
-				? "open"
-				: state.saveAsComing
-				? "incoming"
-				: "open";
+			
+			let availability;
+
+			if (state.saveAsOpen) availability = "open";
+			if (state.saveAsComing) availability = "Coming soon";
 
 			serverInvestorsList.name = state.favouriteListName;
 			serverInvestorsList.descripption = state.favouriteListDescription;
 			serverInvestorsList.investor_ids = investorsIds;
-			serverInvestorsList.status = status;
+			serverInvestorsList.status = availability;
 			serverInvestorsList.user = currentUserObj.user.id;
 
-			/*Investors lists to saved in client starts*/
-			/*clientInvestorsList.listName = state.favouriteListName;
-				clientInvestorsList.descripption = state.favouriteListDescription;
-				clientInvestorsList.listItems = {};
-
-				if (investorValues !== null) {
-					clientInvestorsList.listItems.investors = state.investorSelected;
-				}
-
-				if (categoryValues !== null) {
-					clientInvestorsList.listItems.categories = state.categoryCheckbox;
-				}
-
-				clientInvestorsList.saveAsOpen =
-					state.saveAsOpen === false
-						? !state.saveAsOpen
-						: state.saveAsOpen;
-				clientInvestorsList.saveAsComing =
-					state.saveAsComing === false
-						? !state.saveAsComing
-						: state.saveAsComing;*/
-			/*Investors lists to saved in client ends*/
-
 			dispatch(saveInvestorListAction(serverInvestorsList)).then(() => {
-				/*setFavouriteList((state) => {
-					return [...state, clientInvestorsList];
-				});*/
-
 				alert.success("List created");
 			});
 
@@ -204,49 +175,78 @@ export default function PublishOffer({ children, ...props }) {
 	};
 
 	// Assign and Publish investors
-	const assignAndPublishInvestors = (loanOfferId) => {
+	const assignInvestors = (loanOfferId) => {
 		const investorsValue = state.investorSelected;
-		const status = state.saveAsOpen
-			? "open"
-			: state.saveAsComing
-			? "incoming"
-			: "open";
+		let availability;
+
+		if (state.saveAsOpen) availability = "open";
+		if (state.saveAsComing) availability = "Coming soon";
 
 		if (investorsValue === null) {
-			// alert.error("Can't publish. Investors not assigned");
 			setFeedBack((state) => ({
 				...state,
 				investorsNotAssigned:
 					"Can't publish offer. Investors not assigned!",
 			}));
 			return;
+		} else if (availability === undefined) {
+			setFeedBack(state => ({
+				...state,
+				statusNotSet: "Cant't Publish offer. Save offer as opened or comming soon!"
+			}))
+
+			return
 		} else if (loanOfferId === undefined || loanOfferId === null) {
-			// alert.error("Can't assign investors to non existant loan. Create a list instead");
 			setFeedBack((state) => ({
 				...state,
 				offerNotCreated: "Can't assign investors to nonexistent offer!",
 			}));
 			return;
 		} else {
-			const investorsId = investorsValue.map(
-				(investor) => investor.value
+			const investorsId = investorsInCategory.map(
+				(investor) => investor.id
 			);
 
 			const data = {
 				investor_ids: investorsId,
-				availability: status,
+				availability: availability,
 			};
 
 			// Assign investors
-			dispatch(AddInvestorsAction(loanOfferId, data)).then(() => {
-				// Publish offers
-				dispatch(publishOfferAction(loanOfferId));
-			});
+			dispatch(AddInvestorsAction({loanOfferId, data}));
+
+			// Publish offers
+			dispatch(publishOfferAction(loanOfferId));
+
+			if (componentMounted.current) {
+				// Show modal
+				if (serverError === undefined) publishSuccessModal();
+			}
+
+			setFeedBack((state) => ({
+				investorsNotAssigned: "",
+				offerNotCreated: "",
+				loanIsPublished: "",
+				statusNotSet: ""
+			}));
+
+			return () => componentMounted.current = false;
+		}
+	};
+
+	// Publish offer
+	const publishOffer = () => {
+		if (currentOffer !== null) {
+			const {id} = currentOffer;
+
+			// Pass offer reference to assigned investors
+			assignInvestors(id);
+
+			return
 		}
 
-		// Show modal
-		publishSuccessModal();
-	};
+		assignInvestors(32);
+	}
 
 	// Get categories ID
 	const getCategoriesIds = () => {
@@ -349,37 +349,53 @@ export default function PublishOffer({ children, ...props }) {
 			<OrderbookLayout PageNav={NavMenu}>
 				<div
 					id="loan-invest-dropdown"
-					class="bg-white px-16 py-10 shadow-md flex justify-start"
+					class="bg-white px-16 py-10 shadow-md flex items-start"
 				>
-					<div id="loan" className="dropdown-container">
-						Loans{" "}
-						<i
+					<div id="loan" className="dropdown-container underline mr-5">
+						View offers
+						{/*<i
 							className="fa fa-caret-down mr-5"
 							aria-hidden="true"
 						></i>
-						<div id="load-dropdown"></div>
+						<div id="load-dropdown"></div>*/}
 					</div>
-					<div id="investor" className="dropdown-container">
+					{" "}
+					{/*<div id="investor" className="dropdown-container">
 						Investor{" "}
 						<i className="fa fa-caret-down" aria-hidden="true"></i>
 						<div id="investor-dropdown"></div>
-					</div>
+					</div>*/}
 				</div>
 				<div id="orderbook-publish-offer">
 					<div id="offer-publication">
 						<div id="offer" className="mb-5">
-							<div className="flex justify-center items-center text-white">
+							<div className="flex flex-col justify-center items-center text-white">
 								{/*Feeback placement*/}
-								{feedBack.offerNotCreated !== "" && (
+								{feedBack.offerNotCreated !== "" ? (
 									<Danger
 										message={feedBack.offerNotCreated}
 									/>
-								)}
-								{feedBack.investorsNotAssigned !== "" && (
+								):null}
+								{feedBack.investorsNotAssigned !== "" ? (
 									<Danger
 										message={feedBack.investorsNotAssigned}
 									/>
-								)}
+								):null}
+								{feedBack.statusNotSet !== "" ? (
+									<Danger
+										message={feedBack.statusNotSet}
+									/>
+								): null}
+								{serverError.message !== "" ? (
+									<Danger
+										message={serverError.message.detail}
+									/>
+								):null}
+								{feedBack.loanIsPublished !== "" ? (
+									<Success 
+										message={feedBack.loanIsPublished} 
+									/>
+								): null}
 							</div>
 							<h3 className="text-3xl font-bold text-white mb-5">
 								Select investors
@@ -439,7 +455,7 @@ export default function PublishOffer({ children, ...props }) {
 																				onChange={(
 																					e
 																				) =>
-																					handleChange(
+																					handleCheckbox(
 																						e
 																					)
 																				}
@@ -478,7 +494,7 @@ export default function PublishOffer({ children, ...props }) {
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<div className="col-span-2 mb-5">
+							<div className="col-span-2 my-5">
 								<CustomSelect
 									options={loadInvestorsOptions}
 									isMulti
@@ -500,13 +516,15 @@ export default function PublishOffer({ children, ...props }) {
 						<div
 							id="save-as-checkboxes"
 							className="grid grid-cols-2 gap-4"
+							style={{justifyItems: "center"}}
 						>
 							<div className="col-span-2 sm:col-span-1 checkboxes">
 								<input
 									type="checkbox"
 									id="sava-as-open"
-									name="savaAsOpen"
-									onChange={(e) => handleChange(e)}
+									name="saveAsOpen"
+									value={state.saveAsOpen}
+									onChange={(e) => handleCheckbox(e)}
 									className="mr-2 rounded focus:ring-0"
 								/>
 								<label
@@ -522,7 +540,8 @@ export default function PublishOffer({ children, ...props }) {
 									type="checkbox"
 									id="save-as-now-coming"
 									name="saveAsComing"
-									onChange={(e) => handleChange(e)}
+									value={state.saveAsComing}
+									onChange={(e) => handleCheckbox(e)}
 									className="mr-2 rounded focus:ring-0"
 								/>
 								<label
@@ -549,7 +568,7 @@ export default function PublishOffer({ children, ...props }) {
 							title="Publish loan"
 							type="submit"
 							buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
-							handleClick={assignAndPublishInvestors}
+							handleClick={publishOffer}
 						/>
 					</div>
 
@@ -641,14 +660,14 @@ export default function PublishOffer({ children, ...props }) {
 								<Button
 									title="View orders"
 									link="/client/offers/"
-									buttonClass="view-orders mr-5"
+									buttonClass="view-orders mr-5  rounded w-full"
 								/>
 
-								<Button
+								{/*<Button
 									title="Go home"
 									link="/"
 									buttonClass="go-home create"
-								/>
+								/>*/}
 							</div>
 						</div>
 					</div>
