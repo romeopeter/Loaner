@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,10 +13,12 @@ import { setServerMessage } from "../../../redux/messageSlice";
 
 import {cp, bond} from "../loan-request-data/requestData"
 
-import { asyncCPLoanRequest, asyncBondLoanRequest} from "../../../redux/loanSlice";
+import { CPLoanOfferAction, bondLoanOfferAction} from "../../../redux/loanSlice";
 
 export default function LoanRequest() {
 	const pageName = "Loan request";
+
+	const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
 
 	const [formState, setFormState] = useState({
 		dealType: "",
@@ -77,6 +79,7 @@ export default function LoanRequest() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate()
 	const requestContainerRef = createRef();
+	const componentMounted = useRef(true);
 
 	const handleModal = () => {
 		requestContainerRef.current.classList.toggle("modal");
@@ -86,36 +89,34 @@ export default function LoanRequest() {
 		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
 
 		if (formState.dealType === "CP") {
-			dispatch(asyncCPLoanRequest(cp(formState, currentUser))).then((response) => {
-				setIsLoading(true);
+			const response = dispatch(CPLoanOfferAction(cp(formState, currentUser)));
 
-				// Check error.
-				if ("stack" in response) {
-					setIsLoading(false);
-					console.log("Loan not created");
-					return;
-				}
+			if (componentMounted.current) {
+				response.then(() => {
+					setIsLoading(true);
 
-				console.log("Loan created");
-				navigate("/client/offers/offer/publish");
-			});
+					console.log("Loan created");
+					navigate("/client/offers/offer/publish");
+				});
+			}
 		}
 
 		if (formState.dealType === "BOND") {
-			dispatch(asyncBondLoanRequest(bond(formState, currentUser))).then((response) => {
-				setIsLoading(true);
+			const response = dispatch(bondLoanOfferAction(bond(formState, currentUser)))
+			
+			if(componentMounted.current) {
+				response.then(() => {
+					setIsLoading(true);
 
-				// Check error.
-				if ("stack" in response) {
-					setIsLoading(false);
-					console.log("Loan not created");
-					return;
-				}
+					console.log("Loan created");
+					navigate("/client/offers/offer/publish");
 
-				console.log("Loan created");
-				navigate("/client/offers/offer/publish");
-			});
+					// Don't redirect failed request.
+				})
+			};
 		}
+
+		
 	};
 
 	return (
