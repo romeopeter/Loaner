@@ -24,6 +24,21 @@ export default function handleRequestError(errorResponse, dispatch) {
 		const errorResponseText = JSON.parse(errorResponse.responseText);
 		const { code, detail } = errorResponseText;
 
+		/* AUTHENTICATION ERRORS*/
+
+		// Email conflict
+		if (errorResponse.status === 409) {
+			if (errorResponseText.error) {
+				dispatch(
+					setServerMessage({
+						status: errorResponse.status,
+						messageType: "Email_Conflict",
+						detail: errorResponseText.error
+					})
+				);	
+			}
+		}
+
 		// Unauthorized access
 		if (errorResponse.status === 401) {
 			dispatch(
@@ -37,17 +52,15 @@ export default function handleRequestError(errorResponse, dispatch) {
 			return;
 		}
 
-		// A user with similar email exists.
-		if (errorResponse.status === 409) {
-			if (errorResponseText.error) {
-				dispatch(
-					setServerMessage({
-						status: errorResponse.status,
-						messageType: "Email_Conflict",
-						detail: errorResponseText.error
-					})
-				);	
-			}
+		/* LOAN REQUEST ERRORS */
+		
+		// Unprocessed entity
+		if (errorResponse.status === 422) {
+			dispatch(setServerMessage({
+				status: errorResponse.status,
+				messageType: code ? code : "Unprocessed_Entity",
+				detail: "This loan has been published before",
+			}));
 		}
 	}
 }
