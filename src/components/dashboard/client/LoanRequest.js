@@ -19,6 +19,7 @@ export default function LoanRequest() {
 	const pageName = "Loan request";
 
 	const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
+	const serverError = useSelector(state => state.message.server.message);
 
 	const [formState, setFormState] = useState({
 		dealType: "",
@@ -95,8 +96,10 @@ export default function LoanRequest() {
 				response.then(() => {
 					setIsLoading(true);
 
-					console.log("Loan created");
-					navigate("/client/offers/offer/publish");
+					if (serverError === undefined) {
+						console.log("Loan created");
+						navigate("/client/offers/offer/publish");
+					}
 				});
 			}
 		}
@@ -108,15 +111,14 @@ export default function LoanRequest() {
 				response.then(() => {
 					setIsLoading(true);
 
-					console.log("Loan created");
-					navigate("/client/offers/offer/publish");
-
-					// Don't redirect failed request.
+					if (serverError === undefined) {
+						console.log("Loan created");
+						navigate("/client/offers/offer/publish");
+					}
 				})
 			};
 		}
 
-		
 	};
 
 	return (
@@ -310,8 +312,8 @@ export default function LoanRequest() {
 											/>
 										</div>
 										<Button
-											type="button"
-											title="Publish"
+											type="submit"
+											// title="Publish"
 											buttonClass="w-full bg-green-600 rounded"
 											handleClick={() => handleSubmit()}
 										>
