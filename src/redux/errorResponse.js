@@ -37,6 +37,8 @@ export default function handleRequestError(errorResponse, dispatch) {
 					})
 				);	
 			}
+
+			return
 		}
 
 		// Unauthorized access
@@ -61,6 +63,34 @@ export default function handleRequestError(errorResponse, dispatch) {
 				messageType: code ? code : "Unprocessed_Entity",
 				detail: "This loan has been published before",
 			}));
+		}
+
+		// Bad request
+		if (errorResponse.status === 400) {
+			console.log(errorResponse);
+
+			const resUrl = errorResponse.responseURL;
+
+			const cpResUrl = "https://order-book-online.herokuapp.com/v1/loan_request/cp/";
+			const bondResUrl = "https://order-book-online.herokuapp.com/v1/loan_request/bond/";
+
+			if (resUrl === cpResUrl) {
+				dispatch(setServerMessage({
+					status: errorResponse.status,
+					messageType: code ? code : "Bad_Request",
+					detail: errorResponseText,
+				}));
+			}
+
+			if (resUrl === bondResUrl) {
+				dispatch(setServerMessage({
+					status: errorResponse.status,
+					messageType: code ? code : "Bad_Request",
+					detail: errorResponseText,
+				}));
+			}
+
+			return
 		}
 	}
 }
