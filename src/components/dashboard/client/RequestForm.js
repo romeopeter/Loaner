@@ -198,17 +198,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 				setState((state) => ({ ...state, isValidated: false }));
 				alert.error("Please fill all fields");
-				/*setState((state) => ({
-					...state,
-					emptyFields: "Please fill in the fields",
-				}));*/
-				return
 
+				return
 			}
 		}
 
 		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
+
+
+		/*NOTE: All validation should be specific field*/
 	};
 
 	/*
