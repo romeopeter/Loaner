@@ -1,4 +1,6 @@
 import React from 'react';
+import { CloseIcon } from '@chakra-ui/icons';
+
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
 
@@ -13,11 +15,16 @@ const Modal = ({ closeModal, state, notification, handleYes }) => {
             <div className='modal-body'>
                 {!notification.confirmation && (
                     <div>
-                        {state.successState ? (
-                            <p>Are you sure you want to approve this payment?</p>
-                        ) : (
-                            <p>Are you sure you want to reject this payment?</p>
-                        )}
+                        <div className='modal-head'>
+                            {state.successState ? (
+                                <h2>Are you sure you want to approve this payment?</h2>
+                            ) : (
+                                <h2>Are you sure you want to reject this payment?</h2>
+                            )}
+                            <button onClick={closeModal} className='close-button'>
+                                <CloseIcon />
+                            </button>
+                        </div>
                         <div style={{ marginTop: '20px' }}>
                             <button
                                 onClick={handleYes}

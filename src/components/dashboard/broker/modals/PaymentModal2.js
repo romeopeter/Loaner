@@ -8,24 +8,22 @@ const PaymentModal2 = ({ closePaymentModal, notification, openModalApproved, ope
         <div className={`modal ${className}`}>
             <div className='modal-overlay' onClick={closePaymentModal}></div>
 
-            <div className='modal-body'>
+            <div className='paymentmodal-body'>
                 <img className='paymentProof' alt='payment proof' src={paymentProof} />
                 <a href={paymentProof} download className='payment-modal-button'>
                     Download Payment Proof
                 </a>
                 <div>
-                    <div>
-                        {notification.isLoading === undefined && (
-                            <div>
-                                <button onClick={openModalApproved} className='payment-cta--approve'>
-                                    Approve Payment
-                                </button>
-                                <button onClick={openModalRejected} className='payment-cta--reject'>
-                                    Reject Payment
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                    {notification.isLoading === undefined && (
+                        <div style={{ marginTop: '20px' }}>
+                            <button onClick={openModalApproved} className='payment-cta--approve'>
+                                Approve Payment
+                            </button>
+                            <button onClick={openModalRejected} className='payment-cta--reject'>
+                                Reject Payment
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

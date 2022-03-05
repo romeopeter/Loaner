@@ -120,7 +120,7 @@ const BrokerDashboard = () => {
                                                 >
                                                     <img alt='' src={newOrder} />
                                                 </Center>
-                                                <Text fontSize='md'>New Order</Text>
+                                                <Text fontSize='md'>New Offer</Text>
                                             </Flex>
                                         </Link>
                                     </div>

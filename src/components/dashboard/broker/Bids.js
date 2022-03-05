@@ -1,44 +1,57 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // Temp to create deadlinks
-
-import React, { useState, useMemo } from 'react';
-import Axios from 'axios';
+import React, { useState, useMemo, useEffect } from 'react';
+// import axios from 'axios';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import BidsModal from '../broker/modals/BidsModal';
+import DeleteModal from '../broker/modals/DeleteModal';
 import DisagreeModal from './modals/DisagreeModal';
+import EditModal from './modals/EditModal';
+import SelectModal from './modals/SelectModal';
 import NavMenu from '../NavMenu';
 import Pagination from './pagination/Pagination';
 import { Link } from 'react-router-dom';
-import { DeleteIcon } from '@chakra-ui/icons';
 import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
-
 import { AllBidsData } from '../../../data/broker/AllClients';
-
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td, Center, Divider } from '@chakra-ui/react';
 
-let PageSize = 5;
+let PageSize = 10;
 const Bids = () => {
-    // pagination
+    // Fetched data
+    const [bidsData, setBidsData] = useState([]);
+    // Disagree modal state
+    const [disModal, setDisModal] = useState({ modal: false });
+    // Edit Modal
+    const [editModal, setEditModal] = useState({ modal: false });
+    //  Pagination state
     const [currentPage, setCurrentPage] = useState(1);
-
-    const currentTableData = useMemo(() => {
-        const firstPageIndex = (currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
-        return AllBidsData.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage]);
-    // ----------------------
-
-    const onCheckboxChange = (checkboxes) => {
-        // do something
-    };
+    //  delete modal state
+    const [deleteModal, setDeleteModal] = useState({ modal: false, data: undefined, isLoading: undefined });
+    // Approve & Reject modal success state
+    const [state, setState] = useState({ modal: false, successState: false });
+    // Select Filter state
+    const [selectFilter, setSelectFilter] = useState({ value: undefined, modal: false, successState: false });
+    // notification state
     const [notification, setNotification] = useState({
         confirmation: false,
         isLoading: undefined,
-        statusText: '',
         approved: undefined,
         rejected: undefined,
+        disagreed: undefined,
+        dataApproved: undefined,
+        dataRejected: undefined,
+        dataDisagree: undefined,
+        dataEditted: undefined,
     });
+
+    //  Call Fetched data
+    useEffect(() => {
+        setBidsData(AllBidsData);
+    }, []);
+
+    // ///////////////////////////////////////
+
     const handleYes = () => {
         setNotification({
             ...notification,
@@ -52,49 +65,107 @@ const Bids = () => {
                 confirmation: true,
                 isLoading: false,
             });
-        }, 3000);
+            updatedataApproved(notification.dataApproved);
+            updatedataRejected(notification.dataRejected);
+            updatedataApprovedSecond(notification.dataApproved);
+        }, 1000);
     };
 
-    // modal state
-    const [state, setState] = useState({ modal: false, successState: false });
+    // Handle status update
+    const updatedataApproved = (data) => {
+        if (data) return (data.status = 'Approved');
+    };
+    const updatedataApprovedSecond = (data) => {
+        if (data && data.status === 'Rejected') return (data.statusUpdated = 'Approved');
+    };
+    const updatedataRejected = (data) => {
+        if (data) return (data.status = 'Rejected');
+    };
+    const updatedataDisagree = (data) => {
+        if (data) return (data.status = 'Disagreed');
+    };
 
-    // Disagree modal state
-    const [disModal, setDisModal] = useState({ modal: false });
-
-    const openModalApproved = () => {
+    // Modals
+    const openModalApproved = (data) => {
         setState({ modal: true, successState: true });
-        setNotification({ ...notification, statusText: 'Approved', approved: true });
+        setNotification({ ...notification, approved: true, dataApproved: data });
     };
-    const openModalRejected = () => {
+    const openModalApprovedUpdated = (data) => {
+        setState({ modal: true, successState: true });
+        setNotification({ ...notification, approved: true, dataApproved: data });
+    };
+    const openModalRejected = (data) => {
         setState({ modal: true, successState: false });
-        setNotification({ ...notification, statusText: 'Rejected', rejected: true });
+        setNotification({ ...notification, rejected: true, dataRejected: data });
     };
-    const openModalDisagree = () => {
+    const openModalEdit = (data) => {
+        setEditModal({ modal: true });
+        setNotification({ ...notification, dataEditted: data });
+    };
+    const closeModalEdit = () => {
+        setEditModal({ modal: false });
+    };
+    const closeModal = () => {
+        setState({ ...state, modal: false });
+        setNotification({ ...notification, confirmation: false });
+    };
+    const openModalDisagree = (data) => {
         setDisModal({ modal: true });
+        setNotification({ ...notification, dataDisagree: data });
     };
     const closeModalDisagree = () => {
         setDisModal({ modal: false });
     };
-    const closeModal = () => {
-        setState({ ...state, modal: false });
+    const openDeleteModal = (data) => {
+        setDeleteModal({ modal: true, data: data });
     };
-
-    // disable for bid rejection
-    const disabled = notification.isLoading === false && notification.rejected;
+    const closeDeleteModal = () => {
+        setDeleteModal({ modal: false });
+    };
 
     //remove bid
     const remove = (data) => {
-        AllBidsData.filter((res) => res.id !== data.id);
+        let newData = bidsData.filter((res) => res.id !== data.id);
+        console.log(newData);
+        setBidsData(newData);
+    };
+    const handleDelete = () => {
+        setDeleteModal({ ...deleteModal, isLoading: true });
+        setTimeout(() => {
+            setDeleteModal({ modal: false, isLoading: false });
+            return remove(deleteModal.data);
+        }, 3000);
     };
 
-    const [bids, setBids] = useState([]);
-    // const some = () => {
-    //     Axios.get('https://order-book-online.herokuapp.com/v1/bids/').then((response) => {
-    //         console.log(response);
-    //     });
-    // };
+    const handleChange = (e) => {
+        e.preventDefault();
+        let value = e.target.value;
+        setSelectFilter({ value });
+    };
+    const [checkbox, setCheckbox] = useState([]);
+    const onCheckboxChange = (checkboxes) => {
+        setCheckbox(checkboxes);
 
-    // https://order-book-online.herokuapp.com/v1/bids/
+        // do something
+    };
+    // disables the select dropdown unless the user selects more than one item
+    const filtered = checkbox.filter((c) => c.checked);
+    const className = filtered.length < 2 ? 'disable' : '';
+
+    const handleApply = (e) => {
+        e.preventDefault();
+        setSelectFilter({ ...selectFilter, modal: true, successState: true });
+    };
+    const closeSelectModal = () => {
+        setSelectFilter({ ...selectFilter, modal: false });
+    };
+
+    // pagination
+    const currentTableData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return bidsData.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, bidsData]);
 
     return (
         <div>
@@ -126,15 +197,17 @@ const Bids = () => {
                         </div>
                     </div>
                     <div className='mid-nav'>
-                        <div className='mid-nav--dropdown'>
-                            <select>
+                        <form className='mid-nav--dropdown'>
+                            <select className={className} onChange={handleChange}>
                                 <option defaultValue={'Select action'}> Select action</option>
                                 <option value='approve all'>Approve all</option>
-                                <option value='reject'>Reject all</option>
+                                <option value='reject all'>Reject all</option>
                             </select>
 
-                            <button className='mid-nav-button'>Apply</button>
-                        </div>
+                            <button className={`${className} mid-nav-button`} onClick={handleApply}>
+                                Apply
+                            </button>
+                        </form>
                         <Link to='/broker/dashboard/bids/addnewbid'>
                             <button className='mid-nav--addNewBid'>Add New Bid</button>
                         </Link>
@@ -142,6 +215,7 @@ const Bids = () => {
                     <section style={{ paddingBottom: '10%' }}>
                         <Box>
                             <div className='tableScroll'>
+                                {bidsData.length < 1 && <p>There are currently no bids available</p>}
                                 <Table size='sm' colorScheme={'blackAlpha'}>
                                     <CheckboxGroup onChange={onCheckboxChange}>
                                         <Thead bg='#F0F0F0' h='80px'>
@@ -152,7 +226,6 @@ const Bids = () => {
                                             >
                                                 <Th></Th>
                                                 <Th>
-                                                    {' '}
                                                     <AllCheckerCheckbox className='broker-checkbox' />
                                                 </Th>
                                                 <Th className='border'>Name </Th>
@@ -164,6 +237,7 @@ const Bids = () => {
                                                 <Th></Th>
                                             </Tr>
                                         </Thead>
+
                                         <Tbody>
                                             {currentTableData.map((data, index) => {
                                                 return (
@@ -171,7 +245,7 @@ const Bids = () => {
                                                         <Td></Td>
                                                         <Td>
                                                             {' '}
-                                                            <Checkbox className='broker-checkbox' />
+                                                            <Checkbox data={data} className='broker-checkbox' />
                                                         </Td>
                                                         <Td className='border'>
                                                             <Flex>
@@ -189,89 +263,110 @@ const Bids = () => {
                                                         <Td className='border'>{data.tranche}</Td>
                                                         <Td className='border'>{data.duration}</Td>
                                                         <Td className='border'>{data.amount}</Td>
-                                                        {notification.isLoading === false ? (
-                                                            <Td className='border'>{notification.statusText}</Td>
-                                                        ) : (
-                                                            <Td className='border'>-</Td>
-                                                        )}
+
+                                                        {(() => {
+                                                            if (data && data.status && !data.statusUpdated) {
+                                                                return <Td className='border'>{data.status}</Td>;
+                                                            }
+                                                            if (data && selectFilter === 'approve all') {
+                                                                return <Td className='border'>{data.status}</Td>;
+                                                            }
+                                                            if (data && selectFilter === 'reject all') {
+                                                                return <Td className='border'>{data.status}</Td>;
+                                                            }
+                                                            if (data.statusUpdated) {
+                                                                return <Td className='border'>{data.statusUpdated}</Td>;
+                                                            } else {
+                                                                return <Td className='border'>-</Td>;
+                                                            }
+                                                        })()}
+
+                                                        {/**CTA BUTTONS */}
                                                         <Td className='cta-buttons'>
-                                                            {notification.isLoading === false &&
-                                                            notification.approved ? (
-                                                                <div>
-                                                                    <button
-                                                                        onClick={openModalApproved}
-                                                                        className='cta-buttons--approve'
-                                                                        disabled={true}
-                                                                    >
-                                                                        Approve
-                                                                    </button>
+                                                            {(() => {
+                                                                if (
+                                                                    data.status === 'Approved' ||
+                                                                    data.statusUpdated === 'Approved'
+                                                                ) {
+                                                                    return (
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                openModalEdit(data);
+                                                                            }}
+                                                                            style={{ marginRight: '10px' }}
+                                                                        >
+                                                                            Edit
+                                                                        </button>
+                                                                    );
+                                                                }
+                                                                if (data.status === 'Rejected') {
+                                                                    return (
+                                                                        <div>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalApprovedUpdated(data);
+                                                                                }}
+                                                                                className='cta-buttons--approve'
+                                                                            >
+                                                                                Approve
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalEdit(data);
+                                                                                }}
+                                                                                style={{ marginRight: '10px' }}
+                                                                            >
+                                                                                Edit
+                                                                            </button>
+                                                                        </div>
+                                                                    );
+                                                                } else {
+                                                                    return (
+                                                                        <div>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalApproved(data);
+                                                                                }}
+                                                                                className='cta-buttons--approve'
+                                                                            >
+                                                                                Approve
+                                                                            </button>
 
-                                                                    <button
-                                                                        onClick={openModalRejected}
-                                                                        className='cta-buttons--reject'
-                                                                        disabled={true}
-                                                                    >
-                                                                        Reject
-                                                                    </button>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalRejected(data);
+                                                                                }}
+                                                                                className='cta-buttons--reject'
+                                                                            >
+                                                                                Reject
+                                                                            </button>
 
-                                                                    <button style={{ marginRight: '10px' }}>
-                                                                        Edit
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={openModalDisagree}
-                                                                        disabled={true}
-                                                                        className='cta-buttons--disagree'
-                                                                    >
-                                                                        Disagree
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => remove(data)}
-                                                                        disabled={true}
-                                                                        className='cta-buttons--delete'
-                                                                    >
-                                                                        <DeleteIcon />
-                                                                    </button>
-                                                                </div>
-                                                            ) : (
-                                                                <div>
-                                                                    <button
-                                                                        onClick={openModalApproved}
-                                                                        className='cta-buttons--approve'
-                                                                    >
-                                                                        Approve
-                                                                    </button>
-
-                                                                    <button
-                                                                        onClick={openModalRejected}
-                                                                        className='cta-buttons--reject'
-                                                                        disabled={disabled}
-                                                                    >
-                                                                        Reject
-                                                                    </button>
-
-                                                                    <button
-                                                                        onClick={() => {
-                                                                            console.log(data.id);
-                                                                        }}
-                                                                        className='cta-buttons--edit'
-                                                                    >
-                                                                        Edit
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={openModalDisagree}
-                                                                        disabled={disabled}
-                                                                        className='cta-buttons--disagree'
-                                                                    >
-                                                                        Disagree
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => remove(data)}
-                                                                        className='cta-buttons--delete'
-                                                                    >
-                                                                        <DeleteIcon />
-                                                                    </button>
-                                                                </div>
-                                                            )}
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalEdit(data);
+                                                                                }}
+                                                                                className='cta-buttons--edit'
+                                                                            >
+                                                                                Edit
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    openModalDisagree(data);
+                                                                                }}
+                                                                                className='cta-buttons--disagree'
+                                                                            >
+                                                                                Disagree
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => openDeleteModal(data)}
+                                                                                className='cta-buttons--delete'
+                                                                            >
+                                                                                Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                            })()}
                                                         </Td>
                                                     </Tr>
                                                 );
@@ -283,7 +378,7 @@ const Bids = () => {
                             <Pagination
                                 className='pagination-bar'
                                 currentPage={currentPage}
-                                totalCount={AllBidsData.length}
+                                totalCount={bidsData.length}
                                 pageSize={PageSize}
                                 onPageChange={(page) => setCurrentPage(page)}
                             />
@@ -293,8 +388,32 @@ const Bids = () => {
                             state={state}
                             notification={notification}
                             handleYes={handleYes}
+                            bidsData={bidsData}
+                            selectFilter={selectFilter}
                         />
-                        <DisagreeModal disModal={disModal} closeModalDisagree={closeModalDisagree} />
+                        <DisagreeModal
+                            updatedataDisagree={updatedataDisagree}
+                            disModal={disModal}
+                            closeModalDisagree={closeModalDisagree}
+                            notification={notification}
+                        />
+                        <DeleteModal
+                            handleDelete={handleDelete}
+                            closeDeleteModal={closeDeleteModal}
+                            deleteModal={deleteModal}
+                        />
+                        <EditModal
+                            data={notification.dataEditted}
+                            closeModal={closeModalEdit}
+                            editModal={editModal}
+                            notification={notification}
+                        />
+                        <SelectModal
+                            selectFilter={selectFilter}
+                            closeSelectModal={closeSelectModal}
+                            bidsData={bidsData}
+                            checkbox={checkbox}
+                        />
                     </section>
                 </main>
             </OrderbookLayout>

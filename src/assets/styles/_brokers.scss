@@ -220,9 +220,9 @@
     &--reject {
         color: #d82c0d;
     }
-    &--delete {
-        color: rgb(206, 206, 63);
-    }
+    // &--delete {
+    //     // color: rgb(206, 206, 63);
+    // }
     &--edit,
     &--disagree {
         color: #555555;
@@ -234,6 +234,7 @@
         color: #838080;
         padding: 5px;
         cursor: not-allowed;
+        display: none;
     }
 }
 // Temp active filter link
@@ -299,31 +300,43 @@
 
 // ------------------------APPROVE AND REJECT PAYMENT PAGE
 .payment-cta {
+    &--approve,
+    &--reject {
+        padding: 6px;
+        color: #fff;
+        @media only screen and (max-width: 450px) {
+            padding: 4px;
+            font-size: 13px !important;
+        }
+    }
     &--approve {
         background: #008060;
-        color: #fff;
         margin-right: 20px;
-        padding: 8px;
+
+        @media only screen and (max-width: 750px) {
+            margin-right: 5px;
+        }
     }
     &--reject {
         background: #d82c0d;
-        color: #fff;
-        padding: 8px;
     }
 }
 
 // MODAL -----------------------
 
 .paymentProof {
-    height: 350px;
-    width: 350px;
-    padding: 25px;
+    max-height: 500px;
+    max-width: 100%;
+    margin: auto;
+    padding: 10px;
 }
 .payment-modal-button {
-    border: 1px solid black;
-    max-width: auto;
-    margin: 30px auto;
-    padding: 8px;
+    border: 1px solid #c4c4c4;
+    padding: 6px;
+    @media only screen and (max-width: 750px) {
+        padding: 4px;
+        font-size: 13px !important;
+    }
 }
 .modal {
     visibility: hidden;
@@ -354,6 +367,11 @@
         border-bottom: 1px solid #c4c4c4;
         padding-bottom: 20px;
         margin-bottom: 30px;
+        @media only screen and (max-width: 500px) {
+            h2 {
+                font-size: 14px !important;
+            }
+        }
 
         .close-button:hover {
             color: #c4c4c4;
@@ -385,7 +403,19 @@
     padding: 20px;
     overflow: hidden;
     background: white;
-    width: 50%;
+    width: 50vw;
+    margin: auto;
+    @media only screen and (max-width: 1000px) {
+        width: 90vw;
+    }
+}
+.paymentmodal-body {
+    padding: 20px;
+    overflow: hidden;
+    background: white;
+    z-index: 101;
+    max-width: 80%;
+    height: auto;
     margin: auto;
 }
 
@@ -430,10 +460,15 @@
 
 // -----------------------------CSVReader
 .csvReader {
-    max-width: 950px;
+    max-width: 1050px;
     margin: auto;
     padding: 20px;
     // ---------
+
+    &-table {
+        height: 400px;
+        border: 1px solid #555;
+    }
     h1 {
         text-align: center;
         font-weight: 700;
@@ -442,6 +477,8 @@
     }
 
     &-accept {
+        max-width: 70%;
+        margin: auto;
         border: 2px dashed #ccc;
         padding: 30px 0 30px 15px;
         border-radius: 8px;
@@ -489,6 +526,7 @@
 
 // ------------------------------Loader
 .loader {
+    margin: auto;
     border: 5px solid #f3f3f3;
     border-top: 5px solid #555;
     border-radius: 50%;
@@ -504,4 +542,8 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.disable {
+    pointer-events: none;
 }

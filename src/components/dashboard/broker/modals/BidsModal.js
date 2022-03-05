@@ -1,10 +1,11 @@
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
+import { CloseIcon } from '@chakra-ui/icons';
 
 const BidsModal = ({ closeModal, state, notification, handleYes }) => {
     const className = state.modal ? 'open' : '';
     const classSuccessState = state.successState ? 'h1Approved' : 'h1Rejected';
-    
+
     return (
         <div className={`modal ${className}`}>
             <div className='modal-overlay' onClick={closeModal}></div>
@@ -12,11 +13,16 @@ const BidsModal = ({ closeModal, state, notification, handleYes }) => {
             <div className='modal-body'>
                 {!notification.confirmation && (
                     <div>
-                        {state.successState ? (
-                            <p>Are you sure you want to approve this bid?</p>
-                        ) : (
-                            <p>Are you sure you want to reject this bid?</p>
-                        )}
+                        <div className='modal-head'>
+                            {state.successState ? (
+                                <h2>Are you sure you want to approve this bid?</h2>
+                            ) : (
+                                <h2>Are you sure you want to reject this bid?</h2>
+                            )}
+                            <button onClick={closeModal} className='close-button'>
+                                <CloseIcon />
+                            </button>
+                        </div>
                         <div style={{ marginTop: '20px' }}>
                             <button
                                 onClick={handleYes}

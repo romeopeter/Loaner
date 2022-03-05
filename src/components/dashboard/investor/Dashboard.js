@@ -11,7 +11,8 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
 // import setBgImage from "../../../utils/setBgImage";
-import InvestorHeader from "../../../assets/images/InvestorHeader.png";
+// missing InvestorHeader image from assets so i'm replacing to get passed the error
+import headerBanner from "../../../assets/images/headerBanner.png";
 import offerImage from "../../../assets/images/offerImage.png";
 import { offers } from "../../../fake-backend/investor/offers";
 
@@ -40,7 +41,7 @@ export default function AllOffers() {
 	};
 
 	const dashboardBanner = {
-		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${InvestorHeader})`,
+		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${headerBanner})`,
 	};
 
 	return (
