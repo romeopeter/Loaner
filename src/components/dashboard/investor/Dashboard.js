@@ -87,34 +87,34 @@ export default function AllOffers() {
 					>
 						<div className="actions action-1 border-r border-black">
 							<h2 className="font-bold">
-								<i
+								{/*<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
+								></i>*/}
 
-								<Link to="/investor/offers">My offers</Link>
+								<Link to="/investor/offers" className="quick-action-links">All offers</Link>
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
 							<h2 className="font-bold">
-								<i
+							{/*	<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
+								></i>*/}
 
-								<Link to="/investor/sucessful-bids">
+								<Link to="/investor/sucessful-bids" className="quick-action-links">
 									Successful offers
 								</Link>
 							</h2>
 						</div>
 						<div className="actions action-3">
 							<h2 className="font-bold">
-								<i
+								{/*<i
 									className="fa fa-thumbs-o-up"
 									aria-hidden="true"
-								></i>
+								></i>*/}
 
-								<Link to="/investor/bids/declined">
+								<Link to="/investor/bids/declined" className="quick-action-links">
 									Decline offers
 								</Link>
 							</h2>
@@ -173,14 +173,14 @@ export default function AllOffers() {
 											{item.status === "Offer open" && (
 												<Button
 													title={item.status}
-													link="/investor/dashboard/show-bid-offer"
+													link="/investor/dashboard/open-offer"
 													buttonClass="bg-gray-500 rounded-md offer-open"
 												/>
 											)}
 											{item.status === "Coming soon" && (
 												<Button
 													title={item.status}
-													link="/client/bid-coming-soon"
+													link="/investor/offer-coming-soon"
 													buttonClass="bg-gray-500 rounded-md coming-soon"
 												/>
 											)}

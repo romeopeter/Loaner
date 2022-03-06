@@ -26,15 +26,15 @@ import ShowBids from './dashboard/client/ShowBids';
 import ShowAllBids from './dashboard/client/ShowAllBids';
 
 import Dashboard from "./dashboard/investor/Dashboard";
-import BidComingSoon from "./dashboard/investor/BidComingSoon";
 import AllOffers from "./dashboard/investor/AllOffers";
-import ShowBidOffer from "./dashboard/investor/ShowBidOffer";
+import IncomingOffer from "./dashboard/investor/IncomingOffer";
+import ShowOpenOffer from "./dashboard/investor/ShowOpenOffer";
 import BidApproved from "./dashboard/investor/BidApproved";
 import BidRejected from "./dashboard/investor/BidRejected";
 import BAPaymentProof from "./dashboard/investor/BAPaymentProof";
 import BAPaymentDetail from "./dashboard/investor/BAPaymentDetail";
-import SuccessfulBids from "./dashboard/investor/SuccessfulBids";
-import DeclinedBids from "./dashboard/investor/DeclinedBids";
+import SuccessfulOffers from "./dashboard/investor/SuccessfulOffers";
+import DeclinedOffers from "./dashboard/investor/DeclinedOffers";
 
 import BrokerDashboard from './dashboard/broker/Dashboard';
 import NewClient from './dashboard/broker/NewClient';
@@ -87,14 +87,6 @@ function App() {
                     element={
                         <RequireAuth>
                             <ClientDashboard />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/client/bid-coming-soon'
-                    element={
-                        <RequireAuth>
-                            <BidComingSoon />
                         </RequireAuth>
                     }
                 />
@@ -175,11 +167,19 @@ function App() {
                         </RequireAuth>
                     }
                 />
-                <Route
-                    path='/investor/dashboard/show-bid-offer'
+                 <Route
+                    path='/investor/offer-coming-soon'
                     element={
                         <RequireAuth>
-                            <ShowBidOffer />
+                            <IncomingOffer />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/investor/dashboard/open-offer'
+                    element={
+                        <RequireAuth>
+                            <ShowOpenOffer />
                         </RequireAuth>
                     }
                 />
@@ -219,7 +219,7 @@ function App() {
                     path='/investor/sucessful-bids'
                     element={
                         <RequireAuth>
-                            <SuccessfulBids />
+                            <SuccessfulOffers />
                         </RequireAuth>
                     }
                 />
@@ -227,7 +227,7 @@ function App() {
                     path='/investor/bids/declined'
                     element={
                         <RequireAuth>
-                            <DeclinedBids />
+                            <DeclinedOffers />
                         </RequireAuth>
                     }
                 />

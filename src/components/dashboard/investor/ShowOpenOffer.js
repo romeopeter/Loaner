@@ -92,7 +92,7 @@ export default function SingleOffer() {
 		<>
 			<DocumentHead title={pageName} />
 			<OrderbookLayout PageNav={NavMenu}>
-				<section id="orderbook-investor-offers">
+				<section id="orderbook-open-offer">
 					<div
 						id="loan-invest-dropdown"
 						class="bg-white px-16 py-10 shadow-md flex justify-start w-full"

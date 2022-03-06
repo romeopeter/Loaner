@@ -32,7 +32,7 @@ export default function BidComingSoon() {
 		<>
 			<DocumentHead title={pageName} />
 			<OrderbookLayout>
-				<section id="orderbook-incoming-bid">
+				<section id="orderbook-incoming-offer">
 					<div
 						id="loan-invest-dropdown"
 						class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
