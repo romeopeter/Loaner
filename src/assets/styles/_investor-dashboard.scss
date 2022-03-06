@@ -27,10 +27,17 @@
 
 		#user-quick-action {
 			.actions {
+				width: 100% !important;
+
 				h2 {
 					.fa-thumbs-o-up {
 						width: 35px !important;
 						height: 35px !important;
+					}
+
+					.quick-action-links {
+						display: block;
+						width: 100%;
 					}
 				}
 			}
@@ -107,9 +114,14 @@
 			justify-content: center;
 			align-items: center;
 			padding-right: 40px;
+			width: 33%;
 
 			h2 {
 				font-size: 20px;
+
+				.quick-action-links {
+					text-decoration: underline;
+				}
 
 				.fa-thumbs-o-up {
 					width: 45px;

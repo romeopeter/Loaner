@@ -1,4 +1,5 @@
-#orderbook-investor-offers, #orderbook-incoming-bid {
+#orderbook-incoming-offer, 
+#orderbook-open-offer {
 	position: relative;
 
 	@include respond-below(sm) {
