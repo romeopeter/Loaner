@@ -34,9 +34,9 @@ const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => 
         }, 1000);
 
         // Not the best method but this sets isLoading back to undefined to render the form again
-        // setTimeout(() => {
-        //     setIsLoading(undefined);
-        // }, 8000);
+        setTimeout(() => {
+            setIsLoading(undefined);
+        }, 8000);
     };
     return (
         <div className={`modal ${className}`}>

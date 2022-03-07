@@ -1,5 +1,7 @@
 import React, { useState, createRef } from "react";
 
+import { useAlert } from "react-alert";
+
 import Button from "../../Button";
 
 export default function RequestForm({ requestFormState, showSummary }) {
@@ -8,6 +10,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 	const secondSlideRef = createRef();
 	const lastSlideSlideRef = createRef();
+	const alert = useAlert();
 
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
@@ -174,23 +177,37 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const handleValidation = (e) => {
 		e.preventDefault();
 
-		for (let props in formState.generalTerms) {
-			if (
-				formState.generalTerms[props] === "" ||
-				formState.generalTerms[props] === null
-			) {
-				setState((state) => ({ ...state, isValidated: false }));
-				setState((state) => ({
-					...state,
-					emptyFields: "Please fill in the fields",
-				}));
+		for (let prop in formState) {
 
-				return;
+			if(typeof formState[prop] === "object" && prop === "trancheSize") {
+				console.log("Tranche size object")
+			}
+
+			if(typeof formState[prop] === "object" && prop === "pricing") {
+				console.log("Pricing object")
+			}
+
+			if(typeof formState[prop] === "object" && prop === "timing") {
+				console.log("Timing object")
+			}
+
+			if (
+				formState[prop] === "" ||
+				formState[prop] === null
+			) {
+
+				setState((state) => ({ ...state, isValidated: false }));
+				alert.error("Please fill all fields");
+
+				return
 			}
 		}
 
 		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
+
+
+		/*NOTE: All validation should be specific field*/
 	};
 
 	/*
@@ -268,7 +285,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="guarantor"
 									id="guarantor"
-									placeholder="Guarantor"
+									placeholder="Enter guarantor name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.guarantor}
 									onChange={(e) =>
@@ -282,7 +299,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="dealName"
 									id="dealName"
-									placeholder="Deal name"
+									placeholder="Enter deal name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealName}
 									onChange={(e) =>
@@ -296,7 +313,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="projectName"
 									id="projectName"
-									placeholder="Project name"
+									placeholder="Enter project name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.projectName}
 									onChange={(e) =>
@@ -311,7 +328,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="dealOwner"
 									id="dealOwner"
-									placeholder="Deal owner"
+									placeholder="Enter deal owner name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealOwner}
 									onChange={(e) =>
@@ -326,7 +343,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="dealTeam"
 									id="dealTeam"
-									placeholder="Deal team"
+									placeholder="Enter deal team name"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealTeam}
 									onChange={(e) =>
@@ -378,7 +395,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										value={formState.status}
 										onChange={(e) => handleChange(e)}
 									>
-										<option defaultValue="">Status</option>
+										<option defaultValue="">Select loan status</option>
 										<option value="draft">Draft</option>
 										<option value="invitation">
 											Invitation
@@ -403,7 +420,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										type="text"
 										name="trancheName"
 										id="trancheName"
-										placeholder="Tranche name"
+										placeholder="Enter tranche name"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.trancheName}
 										onChange={(e) => handleChange(e)}
@@ -430,7 +447,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										}
 									>
 										<option defaultValue="">
-											Currency
+											Choose currency
 										</option>
 										<option value="NGN">NGN</option>
 										<option value="USD">USD</option>
@@ -441,7 +458,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										type="number"
 										name="faceValue"
 										id="face-value"
-										placeholder="Face value"
+										placeholder="Enter face value"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={formState.trancheSize.faceValue}
 										onChange={(e) =>
@@ -453,7 +470,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<input
 										name="discountValue"
 										type="number"
-										placeholder="Discount value"
+										placeholder="Enter discount value"
 										id="tranche-value"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={
@@ -469,7 +486,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										type="number"
 										name="par-value"
 										id="par-value"
-										placeholder="Par value"
+										placeholder="Enter par palue"
 										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										disabled={true}
 										style={{ cursor: "not-allowed" }}
@@ -490,7 +507,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										}
 									>
 										<option defaultValue="">
-											Min subscription
+											Choose minimum subscription
 										</option>
 										<option value="5000000">
 											NGN 5,000,000
@@ -571,7 +588,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												}
 											>
 												<option defaultValue="">
-													Coupon Type
+													Choose coupon type
 												</option>
 												<option value="fixed">
 													Fixed
@@ -586,7 +603,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<div className="col-span-1">
 											<input
 												type="number"
-												name="benchmark"
+												name="Enter benchmark"
 												id="benchmark"
 												placeholder="Benchmark"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
@@ -621,7 +638,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										}
 									>
 										<option defaultValue="">
-											Day Count
+											Choose loan day count
 										</option>
 										<option value="actual / actual">
 											Actual / Actual
@@ -646,7 +663,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										}
 									>
 										<option defaultValue="">
-											Offer type
+											Choose loan offer type
 										</option>
 										<option value="fixed price">
 											Fixed price
@@ -667,7 +684,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												type="number"
 												name="discountRate"
 												id="discount-rate"
-												placeholder="Discount rate"
+												placeholder="Enter discount rate"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
@@ -703,7 +720,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												type="number"
 												name="impliedYield"
 												id="implied-yield"
-												placeholder="Implied yield"
+												placeholder="Enter implied yield"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
@@ -745,7 +762,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												type="number"
 												name="discountRateRange"
 												id="discount-rate-range"
-												placeholder="Discount rate range"
+												placeholder="Enter discount rate range"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing.offerType
@@ -781,7 +798,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												type="number"
 												name="yield"
 												id="yield"
-												placeholder="Yield"
+												placeholder="Enter yield"
 												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing.offerType
@@ -831,7 +848,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												}
 											>
 												<option defaultValue="">
-													Coupon frequency
+													Choose coupon frequency
 												</option>
 												<option value="monthly">
 													Monthly
@@ -847,7 +864,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 										<div className="col-span-2">
 											<h5 className="font-md text-white mb-2">
-												Call option
+												Enter call option
 											</h5>
 											<div className="flex justify-start text-white">
 												<div className="form-check mr-2">
@@ -915,7 +932,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														formState.pricing
 															.callOption
 													}
-													placeholder="Call option"
+													placeholder="Enter call option"
 													onChange={(e) =>
 														handleChange(
 															e,
@@ -960,7 +977,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="offerStart"
 									id="offer-start"
-									placeholder="offer start"
+									placeholder="Enter offer start date"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.timing.offerStart}
 									onFocus={(e) => (e.target.type = "date")}
@@ -973,7 +990,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="offerEnd"
 									id="offer-end"
-									placeholder="Offer end"
+									placeholder="Enter Offer end data"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.timing.offerEnd}
 									onFocus={(e) => (e.target.type = "date")}
@@ -986,7 +1003,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="allotmentDate"
 									id="allotment-date"
-									placeholder="Allotment date"
+									placeholder="Enter allotment date"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.allotmentDate}
 									onFocus={(e) => (e.target.type = "date")}
@@ -999,7 +1016,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="settlementDate"
 									id="settlement-date"
-									placeholder="Settlement date"
+									placeholder="Enter settlement date"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.settlementDate}
 									onFocus={(e) => (e.target.type = "date")}
@@ -1015,7 +1032,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="maturityDate"
 									id="maturity-date"
-									placeholder="Maturity date"
+									placeholder="Enter maturity date"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.maturityDate}
 									onFocus={(e) => (e.target.type = "date")}
@@ -1029,7 +1046,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="useOfProceeds"
 									id="use-of-proceeds"
-									placeholder="Use of proceeds"
+									placeholder="Enter use of proceeds"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.useOfProceeds}
 									onChange={(e) => handleChange(e)}
@@ -1040,7 +1057,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									type="text"
 									name="taxConsideration"
 									id="tax-consideration"
-									placeholder="Tax consideration"
+									placeholder="Enter tax consideration"
 									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.taxConsideration}
 									onChange={(e) => handleChange(e)}
@@ -1056,7 +1073,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) => handleChange(e)}
 								>
 									<option defaultValue="">
-										Eligible investor
+										Choose eligible investor
 									</option>
 									<option value="all">All</option>
 									<option value="retail-investor-only">
@@ -1085,7 +1102,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											handleChange(e, "rating")
 										}
 									>
-										<option defaultValue="">Name</option>
+										<option defaultValue="">Choose rating name</option>
 										<option value="agusto">Agusto</option>
 										<option value="gcr">GCR</option>
 										<option value="fitch">Fitch</option>
@@ -1107,7 +1124,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											handleChange(e, "rating")
 										}
 									>
-										<option defaultValue="">Scale</option>
+										<option defaultValue="">Choose rating scale</option>
 										<option value="AAA">AAA</option>
 										<option value="AA">AA</option>
 										<option value="A">A</option>
@@ -1133,7 +1150,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				</div>
 
 				<Button
-					title="View summary"
+					title="View offer summary"
 					type="submit"
 					style={{
 						marginTop: "15rem",

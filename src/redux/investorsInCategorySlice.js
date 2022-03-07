@@ -46,6 +46,7 @@ export const investorsInCategorySlice = createSlice({
 			console.log("rejected");
 		},
 		[getInvestorsInCategoryAction.fulfilled]: (state, action) => {
+			console.log("Request fulfilled");
 			const payload = action.payload !== undefined && action.payload;
 			state.investors = payload;
 		},
@@ -58,6 +59,7 @@ export const investorsInCategorySlice = createSlice({
 			console.log("rejected");
 		},
 		[mergeInvestorsInCategoriesAction.fulfilled]: (state, action) => {
+			console.log("Request fulfilled");
 			const payload = action.payload !== undefined && action.payload;
 			state.investors = payload
 

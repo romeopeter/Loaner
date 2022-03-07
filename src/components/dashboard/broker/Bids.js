@@ -137,6 +137,7 @@ const Bids = () => {
         }, 3000);
     };
 
+    // Checkbox action
     const handleChange = (e) => {
         e.preventDefault();
         let value = e.target.value;
@@ -145,9 +146,8 @@ const Bids = () => {
     const [checkbox, setCheckbox] = useState([]);
     const onCheckboxChange = (checkboxes) => {
         setCheckbox(checkboxes);
-
-        // do something
     };
+    
     // disables the select dropdown unless the user selects more than one item
     const filtered = checkbox.filter((c) => c.checked);
     const className = filtered.length < 2 ? 'disable' : '';
@@ -166,6 +166,27 @@ const Bids = () => {
         const lastPageIndex = firstPageIndex + PageSize;
         return bidsData.slice(firstPageIndex, lastPageIndex);
     }, [currentPage, bidsData]);
+
+    // TABS
+    const [tabActive, setTabActive] = useState({ prorated: false, manual: false, ordered: false });
+    const prorated = () => {
+        setTabActive({ manual: false, ordered: false, prorated: true });
+        let newData = AllBidsData.filter((list) => list.id > 5);
+        setBidsData(newData);
+    };
+    const manualListing = () => {
+        setTabActive({ ordered: false, prorated: false, manual: true });
+        let newData = AllBidsData.filter((list) => list.id % 2 === 0);
+        setBidsData(newData);
+    };
+    const orderedListing = () => {
+        setTabActive({ manual: false, prorated: false, ordered: true });
+        let newData = AllBidsData.filter((list) => list.id < 5);
+        setBidsData(newData);
+    };
+    const proratedActive = tabActive.prorated ? 'active' : '';
+    const manualActive = tabActive.manual ? 'active' : '';
+    const orderedActive = tabActive.ordered ? 'active' : '';
 
     return (
         <div>
@@ -186,25 +207,29 @@ const Bids = () => {
                         <h1>Rice Value Chain Bid List</h1>
                         <div className='bids-heading--links'>
                             <Center className='bids-heading--mod'>
-                                <a className='active' href='#'>
+                                <button onClick={prorated} className={`${proratedActive}`}>
                                     Prorated
-                                </a>
+                                </button>
                                 <Divider orientation='vertical' />
-                                <a href='#'>Manual Listing</a>
+                                <button onClick={manualListing} className={`${manualActive}`}>
+                                    Manual Listing
+                                </button>
                                 <Divider orientation='vertical' />
-                                <a href='#'>Ordered Listing</a>
+                                <button onClick={orderedListing} className={`${orderedActive}`}>
+                                    Ordered Listing
+                                </button>
                             </Center>
                         </div>
                     </div>
                     <div className='mid-nav'>
-                        <form className='mid-nav--dropdown'>
-                            <select className={className} onChange={handleChange}>
+                        <form className={`${className} mid-nav--dropdown`}>
+                            <select onChange={handleChange}>
                                 <option defaultValue={'Select action'}> Select action</option>
                                 <option value='approve all'>Approve all</option>
                                 <option value='reject all'>Reject all</option>
                             </select>
 
-                            <button className={`${className} mid-nav-button`} onClick={handleApply}>
+                            <button className='mid-nav-button' onClick={handleApply}>
                                 Apply
                             </button>
                         </form>
@@ -261,8 +286,8 @@ const Bids = () => {
                                                             </Flex>
                                                         </Td>
                                                         <Td className='border'>{data.tranche}</Td>
-                                                        <Td className='border'>{data.duration}</Td>
-                                                        <Td className='border'>{data.amount}</Td>
+                                                        <Td className='border'>{data.duration} Days</Td>
+                                                        <Td className='border'>NGN {data.amount}</Td>
 
                                                         {(() => {
                                                             if (data && data.status && !data.statusUpdated) {

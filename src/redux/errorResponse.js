@@ -24,6 +24,23 @@ export default function handleRequestError(errorResponse, dispatch) {
 		const errorResponseText = JSON.parse(errorResponse.responseText);
 		const { code, detail } = errorResponseText;
 
+		/* AUTHENTICATION ERRORS*/
+
+		// Email conflict
+		if (errorResponse.status === 409) {
+			if (errorResponseText.error) {
+				dispatch(
+					setServerMessage({
+						status: errorResponse.status,
+						messageType: "Email_Conflict",
+						detail: errorResponseText.error
+					})
+				);	
+			}
+
+			return
+		}
+
 		// Unauthorized access
 		if (errorResponse.status === 401) {
 			dispatch(
@@ -37,17 +54,43 @@ export default function handleRequestError(errorResponse, dispatch) {
 			return;
 		}
 
-		// A user with similar email exists.
-		if (errorResponse.status === 409) {
-			if (errorResponseText.error) {
-				dispatch(
-					setServerMessage({
-						status: errorResponse.status,
-						messageType: "Email_Conflict",
-						detail: errorResponseText.error
-					})
-				);	
+		/* LOAN REQUEST ERRORS */
+		
+		// Unprocessed entity
+		if (errorResponse.status === 422) {
+			dispatch(setServerMessage({
+				status: errorResponse.status,
+				messageType: code ? code : "Unprocessed_Entity",
+				detail: "This loan has been published before",
+			}));
+		}
+
+		// Bad request
+		if (errorResponse.status === 400) {
+			console.log(errorResponse);
+
+			const resUrl = errorResponse.responseURL;
+
+			const cpResUrl = "https://order-book-online.herokuapp.com/v1/loan_request/cp/";
+			const bondResUrl = "https://order-book-online.herokuapp.com/v1/loan_request/bond/";
+
+			if (resUrl === cpResUrl) {
+				dispatch(setServerMessage({
+					status: errorResponse.status,
+					messageType: code ? code : "Bad_Request",
+					detail: errorResponseText,
+				}));
 			}
+
+			if (resUrl === bondResUrl) {
+				dispatch(setServerMessage({
+					status: errorResponse.status,
+					messageType: code ? code : "Bad_Request",
+					detail: errorResponseText,
+				}));
+			}
+
+			return
 		}
 	}
 }

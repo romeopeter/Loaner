@@ -46,7 +46,8 @@ import AllLoans from './dashboard/broker/AllLoans';
 import Bids from './dashboard/broker/Bids';
 import AddNewBid from './dashboard/broker/AddNewBid';
 import Payment from './dashboard/broker/Payment';
-import LoanOffer from './dashboard/broker/LoanOffer';
+import LoanOfferDraft from './dashboard/broker/LoanOfferDraft';
+import LoanOfferPublished from './dashboard/broker/LoanOfferPublished';
 import SelectInvestor from './dashboard/broker/SelectInvestor';
 import NewClientSave from './dashboard/broker/NewClientSave';
 import UploadInvestor from './dashboard/broker/UploadInvestor';
@@ -341,10 +342,18 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/loan-offer/'
+                    path='/broker/dashboard/loan-offer-draft/:id'
                     element={
                         <RequireAuth>
-                            <LoanOffer />
+                            <LoanOfferDraft />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path='/broker/dashboard/loan-offer-published/:id'
+                    element={
+                        <RequireAuth>
+                            <LoanOfferPublished />
                         </RequireAuth>
                     }
                 />

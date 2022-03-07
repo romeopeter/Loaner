@@ -6,15 +6,15 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
     return (
         <div className={`modal ${className}`}>
             <div className='modal-overlay' onClick={closeModal}></div>
-            <div className='modal-body'>
+            <div className='modal-body' style={{ width: 'auto' }}>
                 <div
                     className=''
                     style={{
                         borderBottom: 'none',
-                        marginBottom: '0px',
-                        padding: '5px',
+                        marginBottom: '10px',
+
                         fontWeight: '100',
-                        textAlign: 'justify',
+                        textAlign: 'center',
                     }}
                 >
                     {(() => {
@@ -22,7 +22,7 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
                             return <p className='loader'></p>;
                         } else if (responsedata.status || responsedata.error) {
                             return (
-                                <p style={{ color: '#555', fontSize: '14px' }}>
+                                <p style={{ color: '#333', fontSize: '14px' }}>
                                     {responsedata.status || responsedata.error}
                                 </p>
                             );
@@ -33,11 +33,12 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
                     <button
                         onClick={closeModal}
                         style={{
-                            padding: '3px 7px',
+                            padding: '0px 7px',
                             margin: 'auto',
-                            background: '#555',
-                            color: '#fff',
-                            borderRadius: '4px',
+                            border: '1px solid #333',
+                            color: '#555',
+                            borderRadius: '2px',
+                            fontSize: '14px',
                         }}
                     >
                         Okay

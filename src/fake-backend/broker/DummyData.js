@@ -11,14 +11,14 @@ const Brokerdata = [
         tranche: 'Tranche 2',
         tenure: '90days',
         size: 'NGN 5 billion',
-        status: 'Published',
+        status: 'Draft',
     },
     {
         offerName: 'Rice Value Chain',
         tranche: 'Tranche 3',
         tenure: '90days',
         size: 'NGN 5 billion',
-        status: 'Published',
+        status: 'Draft',
     },
     {
         offerName: 'Rice Value Chain',
@@ -39,7 +39,7 @@ const Brokerdata = [
         tranche: 'Tranche 6',
         tenure: '90days',
         size: 'NGN 5 billion',
-        status: 'Published',
+        status: 'Draft',
     },
     {
         offerName: 'Rice Value Chain',
@@ -60,7 +60,7 @@ const Brokerdata = [
         tranche: 'Tranche 9',
         tenure: '90days',
         size: 'NGN 5 billion',
-        status: 'Published',
+        status: 'Draft',
     },
     {
         offerName: 'Rice Value Chain',
@@ -74,7 +74,7 @@ const Brokerdata = [
         tranche: 'Tranche 11',
         tenure: '90days',
         size: 'NGN 5 billion',
-        status: 'Published',
+        status: 'Draft',
     },
     {
         offerName: 'Rice Value Chain',
