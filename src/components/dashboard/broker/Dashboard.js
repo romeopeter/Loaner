@@ -193,13 +193,9 @@ const BrokerDashboard = () => {
                                                     </Td>
 
                                                     {data.tranche_id.eligible_investors.length > 0 ? (
-                                                        <Td>
-                                                            <button style={{ color: '#008060' }}>Published</button>
-                                                        </Td>
+                                                        <Td style={{ color: '#008060' }}>Published</Td>
                                                     ) : (
-                                                        <Td>
-                                                            <button style={{ color: '#D82C0D' }}>Draft</button>
-                                                        </Td>
+                                                        <Td style={{ color: '#D82C0D' }}>Draft</Td>
                                                     )}
                                                     {data.tranche_id.eligible_investors.length > 0 ? (
                                                         <Td>

@@ -36,9 +36,9 @@ const Bids = () => {
     const [notification, setNotification] = useState({
         confirmation: false,
         isLoading: undefined,
-        approved: undefined,
-        rejected: undefined,
-        disagreed: undefined,
+        // approved: undefined,
+        // rejected: undefined,
+        // disagreed: undefined,
         dataApproved: undefined,
         dataRejected: undefined,
         dataDisagree: undefined,
@@ -141,20 +141,22 @@ const Bids = () => {
     const handleChange = (e) => {
         e.preventDefault();
         let value = e.target.value;
-        setSelectFilter({ value });
+        value === 'Select action' ? setSelectFilter({ value: undefined }) : setSelectFilter({ value });
     };
     const [checkbox, setCheckbox] = useState([]);
     const onCheckboxChange = (checkboxes) => {
         setCheckbox(checkboxes);
     };
-    
+
     // disables the select dropdown unless the user selects more than one item
     const filtered = checkbox.filter((c) => c.checked);
     const className = filtered.length < 2 ? 'disable' : '';
 
     const handleApply = (e) => {
         e.preventDefault();
-        setSelectFilter({ ...selectFilter, modal: true, successState: true });
+        if (selectFilter.value === undefined) {
+            setSelectFilter({ modal: false });
+        } else setSelectFilter({ ...selectFilter, modal: true, successState: true });
     };
     const closeSelectModal = () => {
         setSelectFilter({ ...selectFilter, modal: false });
