@@ -98,7 +98,7 @@ export default function LoanRequest() {
 
                     if (serverError === undefined) {
                         console.log("Loan created");
-                        navigate("/client/offers/offer/publish");
+                        navigate("/broker/dashboard/loan-offer/select-investor");
                     }
                 });
             }
@@ -113,7 +113,7 @@ export default function LoanRequest() {
 
                     if (serverError === undefined) {
                         console.log("Loan created");
-                        navigate("/client/offers/offer/publish");
+                        navigate("/broker/dashboard/loan-offer/select-investor");
                     }
                 })
             };
