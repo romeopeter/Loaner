@@ -1,218 +1,675 @@
-import React from 'react';
+import React, { createRef, useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { components } from "react-select";
+import { useAlert } from "react-alert";
+
+import CustomSelect from "./CustomSelect";
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
+import Button from "../../Button";
 import NavMenu from '../NavMenu';
 import { Link } from 'react-router-dom';
 
 import {
-    Flex,
-    Box,
-    FormControl,
-    Select,
-    Heading,
-    Button,
-    Checkbox,
-    useDisclosure,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalBody,
-    Text,
-    ButtonGroup,
-} from '@chakra-ui/react';
+    getInvestorsInCategoryAction,
+    mergeInvestorsInCategoriesAction,
+} from "../../../redux/investorsInCategorySlice";
 
-const SelectInvestor = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { isList, onListOpen, onListClose } = useDisclosure();
+import { getInvestorsCategoriesAction } from "../../../redux/investorCategorySlice";
+
+import {
+    AddInvestorsAction,
+    publishOfferAction,
+} from "../../../redux/loanSlice.js";
+
+import { saveInvestorListAction } from "../../../redux/investorListSlice";
+
+import { Danger, Success } from "../../alert";
+
+export default function PublishOffer({ children, ...props }) {
+    const pageName = "Publish offer";
+
+    const saveListModalRef = createRef();
+    const componentMounted = useRef(true);
+    const publishSuccessModalRef = createRef();
+    const alert = useAlert();
+    const dispatch = useDispatch();
+
+    const currentUserObj = useSelector((state) => state.auth.user);
+    const investorsInCategory = useSelector(
+        (state) => state.investorsInCategory.investors
+    );
+    const investorCategories = useSelector(
+        (state) => state.investorsCategories.categories
+    );
+    const currentOffer = useSelector(state => state.loan.currentOffer);
+    const serverError = useSelector(state => state.message.server)
+
+    const [state, setState] = useState({
+        investorSelected: null,
+        categoryCheckbox: [],
+        saveAsOpen: false,
+        saveAsComing: false,
+        favouriteListName: "",
+        favouriteListDescription: "",
+        menuIsOpen: false,
+    });
+    const [investorCatCount, setInvestorCatCount] = useState(5);
+    const [categoriesIds, setCategoriesIds] = useState([]);
+    const [feedBack, setFeedBack] = useState({
+        investorsNotAssigned: "",
+        offerNotCreated: "",
+        loanIsPublished: "",
+        statusNotSet: ""
+    });
+
+    useEffect(() => {
+        // Get all investors categories
+        dispatch(getInvestorsCategoriesAction());
+        dispatch(getInvestorsInCategoryAction());
+    }, []);
+
+    useEffect(() => {
+        // Invoke function to get all categories IDs
+        getCategoriesIds();
+    }, [state.categoryCheckbox]);
+
+    useEffect(() => {
+        // Invoke function to generate request based on categories clicked
+        genMultiInvestorsRequests();
+    }, [categoriesIds]);
+
+    const handleInvestorChange = (selected) => {
+        setState((state) => {
+            return {
+                ...state,
+                investorSelected: selected,
+            };
+        });
+    };
+
+    const handleCheckbox = (e) => {
+        const target = e.target;
+        const name = e.target.name;
+        const value = e.target.value;
+
+        if (target.type === "checkbox") {
+            if (name === "saveAsOpen" || name === "saveAsComing") {
+                setState((state) => ({ ...state, [name]: target.checked }));
+            }
+
+            if (name === "categoryCheckbox") {
+                setState((state) => ({
+                    ...state,
+                    [name]: [...state[name], value],
+                }));
+            }
+        } else {
+            if (name === "saveAsOpen" || name === "saveAsComing") {
+                setState((state) => ({ ...state, [name]: !target.checked }));
+            }
+
+            if (name === "categoryCheckbox") {
+                if (state[name] !== null && state[name].length > 0) {
+                    const result = state[name].filter((data) => data !== value);
+                    setState((state) => ({ ...state, [name]: result }));
+
+                    return;
+                }
+
+                setState((state) => ({ ...state, [name]: [] }));
+            }
+        }
+    };
+
+    // Save list modal trigger
+    const FavouriteListModal = () => {
+        saveListModalRef.current.classList.add("accept-modal");
+    };
+    const removeFavouriteListModal = () => {
+        saveListModalRef.current.classList.remove("accept-modal");
+    };
+
+    // Publish successful modal trigger
+    const publishSuccessModal = () => {
+        publishSuccessModalRef.current.classList.add("accept-modal");
+    };
+
+    /*Save list as favourite*/
+    const saveFavouriteList = () => {
+        const investorValues = state.investorSelected;
+        const categoryValues = state.categoryCheckbox;
+
+        // const clientInvestorsList = {};
+        const serverInvestorsList = {};
+
+        if (state.favouriteListName === "") {
+            alert.error("List must have a title");
+        } else {
+            // Investors list sent to server to save
+            const investorsIds = investorsInCategory.map(
+                (investor) => investor.id
+            );
+            
+            let availability;
+
+            if (state.saveAsOpen) availability = "open";
+            if (state.saveAsComing) availability = "Coming soon";
+
+            serverInvestorsList.name = state.favouriteListName;
+            serverInvestorsList.descripption = state.favouriteListDescription;
+            serverInvestorsList.investor_ids = investorsIds;
+            serverInvestorsList.status = availability;
+            serverInvestorsList.user = currentUserObj.user.id;
+
+            dispatch(saveInvestorListAction(serverInvestorsList)).then(() => {
+                alert.success("List created");
+            });
+
+            // Removes save list modal
+            removeFavouriteListModal();
+        }
+    };
+
+    // Assign and Publish investors
+    const assignInvestors = (loanOfferId) => {
+        const investorsValue = state.investorSelected;
+        let availability;
+
+        if (state.saveAsOpen) availability = "open";
+        if (state.saveAsComing) availability = "Coming soon";
+
+        if (investorsValue === null) {
+            setFeedBack((state) => ({
+                ...state,
+                investorsNotAssigned:
+                    "Can't publish offer. Investors not assigned!",
+            }));
+            return;
+        } else if (availability === undefined) {
+            setFeedBack(state => ({
+                ...state,
+                statusNotSet: "Cant't Publish offer. Save offer as opened or comming soon!"
+            }))
+
+            return
+        } else if (loanOfferId === undefined || loanOfferId === null) {
+            setFeedBack((state) => ({
+                ...state,
+                offerNotCreated: "Can't assign investors to nonexistent offer!",
+            }));
+            return;
+        } else {
+            const investorsId = investorsInCategory.map(
+                (investor) => investor.id
+            );
+
+            const data = {
+                investor_ids: investorsId,
+                availability: availability,
+            };
+
+            // Assign investors
+            dispatch(AddInvestorsAction({loanOfferId, data}));
+
+            // Publish offers
+            dispatch(publishOfferAction(loanOfferId));
+
+            if (componentMounted.current) {
+                // Show modal
+                if (serverError === undefined) publishSuccessModal();
+            }
+
+            setFeedBack((state) => ({
+                investorsNotAssigned: "",
+                offerNotCreated: "",
+                loanIsPublished: "",
+                statusNotSet: ""
+            }));
+
+            return () => componentMounted.current = false;
+        }
+    };
+
+    // Publish offer
+    const publishOffer = () => {
+        if (currentOffer !== null) {
+            const {id} = currentOffer;
+
+            // Pass offer reference to assigned investors
+            assignInvestors(id);
+
+            return
+        }
+
+        assignInvestors(32);
+    }
+
+    // Get categories ID
+    const getCategoriesIds = () => {
+        const IDs =
+            state.categoryCheckbox.length > 0
+                ? state.categoryCheckbox.map((category) => {
+                        return Number(category.split("_")[1]);
+                  })
+                : [];
+
+        setCategoriesIds((state) => [...IDs]);
+    };
+
+    /* React-select customization start */
+    const allOption = {
+        label: "Select all",
+        value: "*",
+    };
+
+    const Option = (props) => {
+        return (
+            <div>
+                <components.Option {...props}>
+                    <input
+                        type="checkbox"
+                        checked={props.isSelected}
+                        className="rounded"
+                        onChange={() => null}
+                    />{" "}
+                    <label>{props.label}</label>
+                </components.Option>
+            </div>
+        );
+    };
+
+    const ValueContainer = ({ children, ...props }) => {
+        const currentValues = props.getValue();
+        let toBeRendered = children;
+
+        if (currentValues.some((val) => val.value === allOption.value)) {
+            toBeRendered = [[children[0][0]], children[1]];
+        }
+
+        return (
+            <components.ValueContainer {...props}>
+                {toBeRendered}
+            </components.ValueContainer>
+        );
+    };
+
+    const MultiValue = (props) => {
+        let labelToBeDisplayed = `${props.data.label}, `;
+
+        if (props.data.label === allOption.label) {
+            labelToBeDisplayed = "All investors selected";
+        }
+
+        return (
+            <components.MultiValue {...props}>
+                <span>{labelToBeDisplayed}</span>
+            </components.MultiValue>
+        );
+    };
+
+    const loadAllInvestorsOptionsFunc = () => {
+        if (investorsInCategory.length > 0) {
+            return investorsInCategory.map((investor) => {
+                const label = `${investor.user.first_name} ${investor.user.last_name}`;
+                const value = investor.user.id;
+                return { value, label };
+            });
+        }
+
+        return [];
+    };
+
+    const loadInvestorsOptions = loadAllInvestorsOptionsFunc();
+
+    // Generate multi request
+    const genMultiInvestorsRequests = () => {
+        const multiRequests = categoriesIds.map((id, index) => {
+            const API_URL =
+                "https://order-book-online.herokuapp.com/v1/investor_category";
+            return `${API_URL}/${
+                id !== undefined && id
+            }/?display_investors=True`;
+        });
+        dispatch(mergeInvestorsInCategoriesAction(multiRequests));
+    };
+    /* React-select customization ends */
+
+    // Captialize first letter of alphabets characters
+    const capFirstLetter = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
 
     return (
         <>
-            <DocumentHead title='New Client' />
+            <DocumentHead title={pageName} />
             <OrderbookLayout PageNav={NavMenu}>
-                <div id='loan-invest-dropdown' className='bg-white px-16 py-10 shadow-md flex justify-start'>
-                    <div id='loan' className='dropdown-container mr-5'>
-                        Clients <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='load-dropdown'></div>
+                <div
+                    id="loan-invest-dropdown"
+                    class="bg-white px-16 py-10 shadow-md flex items-start"
+                >
+                    <div id="loan" className="dropdown-container underline mr-5">
+                        View offers
+                        {/*<i
+                            className="fa fa-caret-down mr-5"
+                            aria-hidden="true"
+                        ></i>
+                        <div id="load-dropdown"></div>*/}
                     </div>
-                    <div id='loan' className='dropdown-container mr-5'>
-                        Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='load-dropdown'></div>
+                    {" "}
+                    {/*<div id="investor" className="dropdown-container">
+                        Investor{" "}
+                        <i className="fa fa-caret-down" aria-hidden="true"></i>
+                        <div id="investor-dropdown"></div>
+                    </div>*/}
+                </div>
+                <div id="orderbook-publish-offer">
+                    <div id="offer-publication">
+                        <div id="offer" className="mb-5">
+                            <div className="flex flex-col justify-center items-center text-white">
+                                {/*Feeback placement*/}
+                                {feedBack.offerNotCreated !== "" ? (
+                                    <Danger
+                                        message={feedBack.offerNotCreated}
+                                    />
+                                ):null}
+                                {feedBack.investorsNotAssigned !== "" ? (
+                                    <Danger
+                                        message={feedBack.investorsNotAssigned}
+                                    />
+                                ):null}
+                                {feedBack.statusNotSet !== "" ? (
+                                    <Danger
+                                        message={feedBack.statusNotSet}
+                                    />
+                                ): null}
+                                {serverError.message !== "" ? (
+                                    <Danger
+                                        message={serverError.message.detail}
+                                    />
+                                ):null}
+                                {feedBack.loanIsPublished !== "" ? (
+                                    <Success 
+                                        message={feedBack.loanIsPublished} 
+                                    />
+                                ): null}
+                            </div>
+                            <h3 className="text-3xl font-bold text-white mb-5">
+                                Select investors
+                            </h3>
+                            <div
+                                id="the-offer"
+                                className="flex justify-center items-center p-5"
+                            >
+                                <div className="grid grid-cols-12 gap-4 w-full ">
+                                    {/*<div
+                                        id="select-all-investors"
+                                        className="checkboxes col-span-12 sm:col-span-3 border-r border-white sm:border-black"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            name="categoryCheckbox"
+                                            className="mr-2 rounded"
+                                            onChange={(e) => selectAllInvestors(e)}
+                                        />
+                                        <label htmlFor="select-all-investors">
+                                            Select all investors
+                                        </label>
+                                    </div>*/}
+                                    <div className="col-span-12 sm:col-span-12">
+                                        <div id="select-category">
+                                            <span
+                                                id="cat-title"
+                                                className="font-bold text-xl"
+                                            >
+                                                Select category:
+                                            </span>
+                                            <div
+                                                id="categories"
+                                                className="flex justify-start flex-wrap"
+                                            >
+                                                {investorCategories.length > 0
+                                                    ? investorCategories.map(
+                                                            (
+                                                                category,
+                                                                index
+                                                            ) => {
+                                                                if (
+                                                                    index <=
+                                                                    investorCatCount
+                                                                ) {
+                                                                    return (
+                                                                        <div
+                                                                            key={
+                                                                                category.id
+                                                                            }
+                                                                            className="checkboxes category-checkbox"
+                                                                        >
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                name="categoryCheckbox"
+                                                                                value={`${category.name}_${category.id}`}
+                                                                                onChange={(
+                                                                                    e
+                                                                                ) =>
+                                                                                    handleCheckbox(
+                                                                                        e
+                                                                                    )
+                                                                                }
+                                                                                className="mr-2 rounded"
+                                                                            />
+                                                                            <label htmlFor="category-checkbox">
+                                                                                {capFirstLetter(
+                                                                                    category.name
+                                                                                ).replace(
+                                                                                    "-",
+                                                                                    " & "
+                                                                                )}
+                                                                            </label>
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                            }
+                                                      )
+                                                    : null}
+                                                {investorCatCount <= 5 ? (
+                                                    <Button
+                                                        title="view more"
+                                                        buttonClass="view-more font-bold"
+                                                        handleClick={() =>
+                                                            setInvestorCatCount(
+                                                                investorCategories.length
+                                                            )
+                                                        }
+                                                    />
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="col-span-2 my-5">
+                                <CustomSelect
+                                    options={loadInvestorsOptions}
+                                    isMulti
+                                    closeMenuOnSelect={false}
+                                    hideSelectedOptions={false}
+                                    components={{
+                                        Option,
+                                        MultiValue,
+                                        ValueContainer,
+                                    }}
+                                    placeholder="Select investors"
+                                    onChange={(e) => handleInvestorChange(e)}
+                                    allowSelectAll={true}
+                                    value={state.investorSelected}
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            id="save-as-checkboxes"
+                            className="grid grid-cols-2 gap-4"
+                            style={{justifyItems: "center"}}
+                        >
+                            <div className="col-span-2 sm:col-span-1 checkboxes">
+                                <input
+                                    type="checkbox"
+                                    id="sava-as-open"
+                                    name="saveAsOpen"
+                                    value={state.saveAsOpen}
+                                    onChange={(e) => handleCheckbox(e)}
+                                    className="mr-2 rounded focus:ring-0"
+                                />
+                                <label
+                                    htmlFor="sava-as-open"
+                                    className="text-white text-xl"
+                                >
+                                    Do you want to save and send as now open
+                                </label>
+                            </div>
+
+                            <div className="col-span-2 sm:col-span-1 checkboxes">
+                                <input
+                                    type="checkbox"
+                                    id="save-as-now-coming"
+                                    name="saveAsComing"
+                                    value={state.saveAsComing}
+                                    onChange={(e) => handleCheckbox(e)}
+                                    className="mr-2 rounded focus:ring-0"
+                                />
+                                <label
+                                    htmlFor="save-as-now-coming"
+                                    className="text-white text-xl"
+                                >
+                                    Do you want to save and send as now coming
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div id='investor' className='dropdown-container'>
-                        Investor <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='investor-dropdown'></div>
+                    <div
+                        id="offer-button"
+                        className="col-span-12 py-10 px-5 sm:px-0 flex flex-col sm:flex-row justify-center sm:justify-end"
+                    >
+                        <Button
+                            title="Save list as favourite"
+                            type="submit"
+                            buttonClass="save-list bg-gray-400 mb-5 sm:mb-0 sm:mr-5 py-5 text-center"
+                            handleClick={FavouriteListModal}
+                        />
+
+                        <Button
+                            title="Publish loan"
+                            type="submit"
+                            buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
+                            handleClick={publishOffer}
+                        />
+                    </div>
+
+                    {/*Save list modal*/}
+                    <div
+                        id="save-list-modal"
+                        className="h-60"
+                        ref={saveListModalRef}
+                    >
+                        <div id="modal-content" className="">
+                            <h4 className="font-bold text-2xl self-start my-5">
+                                New list
+                            </h4>
+
+                            <div className="grid grid-cols-2 gap-4 mb-10">
+                                <div className="col-span-2">
+                                    <input
+                                        type="text"
+                                        name="favouriteListName"
+                                        value={state.favouriteListName}
+                                        onChange={(e) =>
+                                            setState((state) => ({
+                                                ...state,
+                                                [e.target.name]: e.target.value,
+                                            }))
+                                        }
+                                        placeholder="Title"
+                                        className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
+                                    />
+                                </div>
+                                <div className="col-span-2">
+                                    <input
+                                        type="text"
+                                        name="favouriteListDescription"
+                                        value={state.favouriteListDescription}
+                                        onChange={(e) =>
+                                            setState((state) => ({
+                                                ...state,
+                                                [e.target.name]: e.target.value,
+                                            }))
+                                        }
+                                        placeholder="Description (optional)"
+                                        className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
+                                    />
+                                </div>
+                            </div>
+
+                            <div
+                                id="modal-buttons"
+                                className="flex justify-end pr-5"
+                            >
+                                <Button
+                                    title="Cancel"
+                                    buttonClass="cancel mr-5"
+                                    handleClick={removeFavouriteListModal}
+                                />
+
+                                <Button
+                                    title="Create"
+                                    buttonClass="create"
+                                    handleClick={saveFavouriteList}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/*Publish succesful Modal*/}
+                    <div
+                        id="publish-success-modal"
+                        className="h-40"
+                        ref={publishSuccessModalRef}
+                    >
+                        <div id="modal-content" className="">
+                            <h4 className="font-bold text-2xl text-center my-5">
+                                Congratulations
+                            </h4>
+
+                            <p
+                                className="text-center mb-5 font-bold"
+                                id="message"
+                            >
+                                Your loan offer has been published
+                            </p>
+
+                            <div
+                                id="modal-buttons"
+                                className="flex justify-center pr-5"
+                            >
+                                <Button
+                                    title="View orders"
+                                    link="/client/offers/"
+                                    buttonClass="view-orders mr-5  rounded w-full"
+                                />
+
+                                {/*<Button
+                                    title="Go home"
+                                    link="/"
+                                    buttonClass="go-home create"
+                                />*/}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <main>
-                    <Flex flexDirection={'column'} bg='#555' px={['4.2%']} py={[10]}>
-                        <Heading as='h1' size='lg' mb='10' color={'#fff'}>
-                            Select Investors
-                        </Heading>
-                        <Flex bg='#fff' flexDirection={['column', 'row']} p={[4]}>
-                            <Flex
-                                borderRight={'1px solid #333'}
-                                textAlign={'center'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                p={[2]}
-                            >
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Select all investors</p>
-                            </Flex>
-                            <Box textAlign={'center'} p={[2]}>
-                                <p style={{ fontSize: '16px', fontWeight: 'bold' }}>Select category</p>
-                            </Box>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Ethics</p>
-                            </Flex>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Beverages &amp; Alcohol</p>
-                            </Flex>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Agriculture &amp; Food</p>
-                            </Flex>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Healthcare</p>
-                            </Flex>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Building Construction</p>
-                            </Flex>
-                        </Flex>
-                        <FormControl mt={['10']}>
-                            <Select
-                                bgColor={'#C4C4C4'}
-                                w={['50%', '30%']}
-                                borderRadius={'0'}
-                                border={'none'}
-                                placeholder='Select Investor'
-                            >
-                                <option value='option1'>John Doe </option>
-                                <option value='option2'>John Doe</option>
-                                <option value='option3'>John Doe</option>
-                            </Select>
-                        </FormControl>
-                        <Flex color={'#fff'} flexDirection={['column', 'row']} mt={[10]}>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Do you want to save and send as now open?</p>
-                            </Flex>
-                            <Flex textAlign={'center'} justifyContent={'center'} alignItems={'center'} p={[2]}>
-                                <Checkbox outline={'1px solid #333'} align={'center'} borderRadius={'2px'} mr={'4'} />{' '}
-                                <p style={{ fontSize: '16px' }}>Do you want to save and send as coming soon?</p>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-
-                    <Flex minH={['15vh']} mt={[10]} p={[10]} justifyContent={'flex-end'}>
-                        <Button
-                            mr={[10]}
-                            py={['6']}
-                            px={[6, 10]}
-                            bg={'#C4C4C4'}
-                            color={'#000'}
-                            _hover={{ bg: '#C4C4C4' }}
-                            borderRadius={'0'}
-                            onClick={onListOpen}
-                        >
-                            Save list as Favourite
-                        </Button>
-                        <Button
-                            py={['6']}
-                            px={[6, 10]}
-                            bg={'#008060'}
-                            color={'#fff'}
-                            _hover={{ bg: '#008060' }}
-                            borderRadius={'0'}
-                            onClick={onOpen}
-                        >
-                            Publish Loan
-                        </Button>
-                    </Flex>
-                    <Modal
-                        size='sm'
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        blockScrollOnMount={false}
-                        isCentered
-                        borderRadius={['0px']}
-                    >
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalBody width={'70%'} margin={'auto'} pb={[8]}>
-                                <ModalHeader>Congratulations</ModalHeader>
-                                <Text>Your loan has been published</Text>
-                                <Flex justifyContent={'center'} alignItems={'center'}>
-                                    <ButtonGroup>
-                                        <Button
-                                            borderRadius={['0']}
-                                            mt={[6]}
-                                            as={Link}
-                                            to='/broker/dashboard/loan-offer/'
-                                            variant='ghost'
-                                            bg={'#c4c4c4'}
-                                            color={'#000'}
-                                            _hover={{ bg: '#c4c4c4' }}
-                                        >
-                                            View Offers
-                                        </Button>
-                                        <Button
-                                            borderRadius={['0']}
-                                            mt={[6]}
-                                            as={Link}
-                                            to='/broker/dashboard'
-                                            variant='ghost'
-                                            bg={'#008060'}
-                                            color={'#fff'}
-                                            _hover={{ bg: '#008060' }}
-                                        >
-                                            Go home
-                                        </Button>
-                                    </ButtonGroup>
-                                </Flex>
-                            </ModalBody>
-                        </ModalContent>
-                    </Modal>
-                    <Modal
-                        size='sm'
-                        isList={isList}
-                        onClose={onListClose}
-                        blockScrollOnMount={false}
-                        isCentered
-                        borderRadius={['0px']}
-                    >
-                        <ModalOverlay />
-                        <ModalContent>
-                            <ModalBody width={'70%'} margin={'auto'} pb={[8]}>
-                                <ModalHeader>Add List to favourites</ModalHeader>
-                                <Flex justifyContent={'center'} alignItems={'center'}>
-                                    <ButtonGroup>
-                                        <Button
-                                            borderRadius={['0']}
-                                            mt={[6]}
-                                            as={Link}
-                                            to='/broker/dashboard'
-                                            variant='ghost'
-                                            bg={'#008060'}
-                                            color={'#fff'}
-                                            _hover={{ bg: '#008060' }}
-                                        >
-                                            + New list
-                                        </Button>
-                                    </ButtonGroup>
-                                </Flex>
-                            </ModalBody>
-                        </ModalContent>
-                    </Modal>
-                </main>
             </OrderbookLayout>
         </>
     );
-};
-
-export default SelectInvestor;
+}
