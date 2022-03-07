@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderbookLayout from "../../OrderbookLayout";
-import RequestForm from "./RequestForm";
+import RequestForm from "./OfferForm";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
 
