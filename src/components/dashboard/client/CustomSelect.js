@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Select from "react-select";
 
 function CustomSelect(props) {
-
 	if (props.allowSelectAll) {
 		return (
 			<Select
