@@ -1,209 +1,219 @@
-#orderbook-investor-offers, #orderbook-incoming-bid {
-	position: relative;
+/*Shared styles with */
 
-	@include respond-below(sm) {
+
+
+/*#### SMALL SCREENS #####*/
+@include respond-below(md) {
+	#orderbook-investor-bids {
+		display: flex;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
 		padding: 0 !important;
 
-		#offer {
-			#header {
-				margin-bottom: 2em !important;
-				padding: 1em 0 0 1em !important;
-			}
+		h1,
+		h3,
+		p {
+			text-align: center;
 		}
 
-		.accept-modal, .reject-modal {
-			#modal-content {
-				width: 80% !important;
+		h3 {
+			font-size: 25px !important;
+			margin: 10px 0px !important;
+		}
+
+		p {
+			padding: 10px !important;
+			font-size: 18.5px !important;
+		}
+	}
+
+	#user-quick-action {
+		.actions {
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
+				}
 			}
 		}
 	}
 
-	@include respond-below(md) {
-		#the-offer {
-			.grid {
-				#offer-description {
-					padding: 20px !important;
-				}
+	#notifications-container {
+		width: 90%;
 
-				#loan-summary {
-					overflow-x: scroll !important;
+		#notifications {
+			width: 100% !important;
+
+			.notification {
+				div {
+					a {
+						font-size: 16px !important;
+					}
+
+					small {
+						font-size: 13px !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+@include respond-below(sm) {
+	#user-quick-action {
+		height: 300px !important;
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		padding: 0 30px !important;
+
+		.actions {
+			border: none !important;
+			padding-right: 0 !important;
+
+			h2 {
+				font-size: 15px !important;
+
+				.fa-thumbs-o-up {
+					width: 35px !important;
+					height: 35px !important;
 				}
 			}
 		}
 	}
 
-	#offer {
-		#header {
-			font-size: 30px;
-			color: $white;
+	#notifications-container {
+		width: 100% !important;
+
+		#notifications {
+			.notification {
+				display: block !important;
+
+				.badge {
+					width: 40px !important;
+					height: 40px !important;
+					border-radius: 20px !important;
+					font-size: 25px !important;
+				}
+			}
+		}
+	}
+
+	#offer-status {
+		overflow-x: scroll !important;
+	}
+}
+
+/*##### LARGE SCREEN #####*/
+
+#orderbook-investor-all-offers,
+#orderbook-investor-successful-offers {
+
+	#bids,#declined-bids {
+		background: $grey;
+	
+		.header {
+			margin-left: 75px;
 			font-weight: bold;
-			margin-bottom: 3em;
+			color: $white;
+			// font-size: 35px;
+			padding: 30px 0;
 		}
+			
+		
+		table {
 
-		#the-offer {
-			background: $white;
+			overflow-x: auto;
 
-			.grid {
-				#offer-header {
-					background: $grey;
-					padding: 0 35px;
-
-					img {
-					}
-
-					h3 {
-						text-decoration: underline;
-						margin-top: 10px;
-					}
-
-					#schedule-payment {
-						p {
-							font-weight: 400;
-							font-size: 15px;
-							margin: 5px 0;
-						}
-
-						.grid {
-							div {
-								background: lightgray;
-								text-align: center;
-								padding: 8px;
-								font-weight: bold;
-							}
-						}
-
-						#address {
-							margin-top: 20px;
-
-							address {
-								font-family: $body-font;
-								font-style: normal;
-
-								p {
-									span {
-										margin-right: 10px;
-									}
-								}
-							}
-						}
-					}
-				}
-
-				#offer-description {
-					// font-size: 17px;
-
-					#description {
-						font-size: 18px;
-						height: 300px;
-						overflow-y: auto;
-
-						&::-webkit-scrollbar {
-		  					width: 10px;
-						}
-
-						/* Track */
-						&::-webkit-scrollbar-track {
-						  background: #f1f1f1; 
-						}
-						 
-						/* Handle */
-						&::-webkit-scrollbar-thumb {
-						  background: #888;
-						  border-radius: 10px; 
-						}
-					}
-				}
-
-				#offer-pitch {
-					background: $primary-dark;
-					color: $white;
-
-					p {
-						font-size: 16px;
+			thead {
+				tr {
+					th {
+						padding: 0.5rem;
 					}
 				}
 			}
-		}
-	}
 
-	#offer-table {
-		table {
-			background: #e5e5e5;
 			tbody {
 				tr {
 					td {
-						text-align: center !important;
-						padding: 10px;
-						border-right: none !important;
+						padding: 1rem;
+						text-align: center;
+						border-top: 1px solid $grey;
+						border-right: 1px solid $grey;
+						border-bottom: 1px solid $grey;
+
+						p {
+							font-size: 17px;
+						    text-align: left;
+						    max-width: 650px;
+						    width: 650px;
+						    display: inline-block;
+						}
+
+						button {
+							height: 37px !important;
+
+							&:hover {
+								color: $black;
+							}
+
+							&.declined-button {
+								color: rgba(255, 0, 0, 0.7);
+							}
+						}
+
+						&.offer-status-name {
+							text-align: left;
+						}
+
+						&.bid-name {
+							img {
+								display: inline-block;
+								margin: 0 10px;
+    							height: 40px;
+    							width: 40px;
+    							border-radius: 20px;
+							}
+
+							span {
+								text-decoration: underline;
+								font-weight: bold;
+							}
+						}
+					}
+
+					&:hover {
+						background: #e5e5e5;
 					}
 				}
 			}
 		}
-	}
 
-	#offer-signature {
-		a {
-			font-family: $header-font;
-		}
+		#paginate-bids {
+			padding: 20px;
 
-		div {
-			span {
-				font-family: $signature-font;
-				font-size: 25px;
-				text-align: center;
-			}
-			h4 {
-				font-size: 20px;
-			}
-		}
-	}
+			.pagination {
+				display: flex;
+				justify-content: flex-end;
 
-	#offer-buttons {
-		background: #e5e5e5;
-
-		button {
-			width: 200px;
-		}
-	}
-
-	#offer-modal {
-		display: none;
-
-		&.accept-modal, &.reject-modal {
-			display: block;
-			position: fixed;
-			z-index: 1;
-			left: 0;
-			top: 0;
-			width: 100%; /* Full width */
-			height: 100%; /* Full height */
-			overflow: auto; /* Enable scroll if needed */
-			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-
-			#modal-content {
-				background: $white;
-				padding: 20px;
-				width: 40%;
-				height: 40%;
-				margin: 15% auto;
-
-				.close {
-					color: #aaa;
-					font-size: 28px;
+				li {
+					color: $black;
+					font-family: $body-font;
+					font-size: 17px;
 					font-weight: bold;
-					display: block;
-					text-align: right;
+					height: 45px;
+					width: 45px;
+					border-radius: 22.5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
 
-					&:hover,
-					&:focus {
-						color: black;
-						text-decoration: none;
-						cursor: pointer;
+					&.selected {
+						background: $black;
+						color: $white;
 					}
-				}
-
-				button {
-					width: 200px;
 				}
 			}
 		}

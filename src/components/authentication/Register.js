@@ -171,7 +171,7 @@ export default function Register() {
 		}
 	}
 
-	const ErrorComoponent = () => (
+	const ErrorComponent = () => (
 		<>
 			<div className="mb-5">
 				{networkErrorMessage !== null ?(
@@ -243,7 +243,7 @@ export default function Register() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									{/*Request error messages*/}
-									<ErrorComoponent />
+									<ErrorComponent />
 
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Nice to meet you.

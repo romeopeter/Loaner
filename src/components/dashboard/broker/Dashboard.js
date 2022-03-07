@@ -22,7 +22,14 @@ const BrokerDashboard = () => {
             .get('https://order-book-online.herokuapp.com/v1/loan_request/')
             .then((response) => setLoanRequest(response.data));
     }, []);
-    console.log(loanRequest);
+
+    // Dropdown
+    const [isOpen, setOpen] = useState({ client: false, investor: false });
+    const toggleDropdownClient = () =>
+        isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
+    const toggleDropdownInvestor = () =>
+        isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
+
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -56,15 +63,31 @@ const BrokerDashboard = () => {
             <OrderbookLayout PageNav={NavMenu} className='broker'>
                 <header id='orderbook-header' className='broker-orderbook-header'>
                     <Flex flexDirection={['column']} className='broker-header'>
-                        <div id='loan-invest-dropdown' className=' bg-white px-16 py-10 shadow-md flex justify-start'>
-                            <div id='loan' className='dropdown-container mr-5'>
-                                <Link to='/broker/dashboard/allclients'>Clients </Link>
-                                <i className='fa fa-caret-down' aria-hidden='true'></i>
-                                <div id='load-dropdown'></div>
+                        <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
+                            <div className='dropdownbroker'>
+                                <div className='dropdownbroker-header' onClick={toggleDropdownClient}>
+                                    <h2 className='mr-2'>Clients</h2>
+                                    <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
+                                </div>
+                                <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
+                                    <Link to='/broker/dashboard/new-client' className='dropdownbroker-item '>
+                                        New Client{' '}
+                                    </Link>
+                                    <Link to='/broker/dashboard/allclients' className='dropdownbroker-item '>
+                                        Manage Clients{' '}
+                                    </Link>
+                                </div>
                             </div>
-                            <div id='loan' className='dropdown-container mr-5'>
-                                Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
-                                <div id='load-dropdown'></div>
+                            <div className='dropdownbroker'>
+                                <div className='dropdownbroker-header' onClick={toggleDropdownInvestor}>
+                                    <h2 className='mr-2'>Investors</h2>
+                                    <i className={`fa fa-caret-down ${isOpen.investor && 'open'}`}></i>
+                                </div>
+                                <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
+                                    <Link to='/broker/dashboard/uploadInvestor' className='dropdownbroker-item '>
+                                        Upload Investors{' '}
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                         <div className='grid grid-cols-1 gap-x-6'>

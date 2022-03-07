@@ -1,0 +1,265 @@
+#orderbook-incoming-offer, 
+#orderbook-open-offer {
+	position: relative;
+
+	@include respond-below(sm) {
+		padding: 0 !important;
+
+		#offer {
+			#header {
+				margin-bottom: 2em !important;
+				padding: 1em 0 0 1em !important;
+			}
+		}
+
+		.accept-modal, .reject-modal {
+			#modal-content {
+				width: 80% !important;
+			}
+		}
+	}
+
+	@include respond-below(md) {
+		#the-offer {
+			.grid {
+				#offer-description {
+					padding: 20px !important;
+				}
+
+				#loan-summary {
+					overflow-x: scroll !important;
+				}
+			}
+		}
+	}
+
+	#offer {
+		#header {
+			font-size: 30px;
+			color: $white;
+			font-weight: bold;
+			margin-bottom: 3em;
+		}
+
+		#the-offer {
+			background: $white;
+
+			.grid {
+				#offer-header {
+					background: $grey;
+					padding: 0 35px;
+
+					img {
+					}
+
+					h3 {
+						text-decoration: underline;
+						margin-top: 10px;
+					}
+
+					#schedule-payment {
+						p {
+							font-weight: 400;
+							font-size: 15px;
+							margin: 5px 0;
+						}
+
+						.grid {
+							div {
+								background: lightgray;
+								text-align: center;
+								padding: 8px;
+								font-weight: bold;
+							}
+						}
+
+						#address {
+							margin-top: 20px;
+
+							address {
+								font-family: $body-font;
+								font-style: normal;
+
+								p {
+									span {
+										margin-right: 10px;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				#offer-description {
+					// font-size: 17px;
+
+					#description {
+						font-size: 18px;
+						height: 300px;
+						overflow-y: auto;
+
+						&::-webkit-scrollbar {
+		  					width: 10px;
+						}
+
+						/* Track */
+						&::-webkit-scrollbar-track {
+						  background: #f1f1f1; 
+						}
+						 
+						/* Handle */
+						&::-webkit-scrollbar-thumb {
+						  background: #888;
+						  border-radius: 10px; 
+						}
+					}
+				}
+
+				#offer-pitch {
+					background: $primary-dark;
+					color: $white;
+
+					p {
+						font-size: 16px;
+					}
+				}
+			}
+		}
+	}
+
+	#offer-table {
+		table {
+			background: #e5e5e5;
+			tbody {
+				tr {
+					td {
+						text-align: center !important;
+						padding: 10px;
+						border-right: none !important;
+					}
+				}
+			}
+		}
+	}
+
+	#offer-signature {
+		a {
+			font-family: $header-font;
+		}
+
+		div {
+			span {
+				font-family: $signature-font;
+				font-size: 25px;
+				text-align: center;
+			}
+			h4 {
+				font-size: 20px;
+			}
+		}
+	}
+
+	#offer-btns {
+		background: #e5e5e5;
+
+		button {
+			width: 200px;
+			font-size: 20px;
+
+			&.place-bid {
+				border: 2px solid black;
+				color: black;
+				font-family: $body-font;
+			}
+		}
+	}
+
+	#place-bid {
+		#bid-fields {
+
+			#offer-terms {
+				label {
+					font-family: $body-font;
+					font-size: 18px;
+				}
+			}
+
+			#bid-value {
+				padding-top: 15px;
+				padding-bottom: 15px;
+				&::placeholder {
+					color: black;
+					font-weight: bolder;
+					font-size: 18px;
+					font-family: $body-font;
+				}
+			}
+		
+			#bid-action-btns {
+				button {
+					width: 200px;
+					font-size: 20px;
+
+					&.edit-offer {
+						border: 2px solid black;
+						color: black;
+						font-family: $body-font;
+					}
+
+					&.publish-offer {
+						background: #008060;
+					}	
+				}
+			}
+		}
+	}
+
+	#offer-modal {
+		display: none;
+
+		&.accept-modal, &.reject-modal {
+			display: block;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%; /* Full width */
+			height: 100%; /* Full height */
+			overflow: auto; /* Enable scroll if needed */
+			background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+			#modal-content {
+				background: $white;
+				padding: 20px;
+				width: 40%;
+				height: 45%;
+				margin: 15% auto;
+
+				p {
+					font-family: $header-font;
+					font-size: 17px !important;
+				}
+
+				.close {
+					color: #aaa;
+					font-size: 28px;
+					font-weight: bold;
+					display: block;
+					text-align: right;
+
+					&:hover,
+					&:focus {
+						color: black;
+						text-decoration: none;
+						cursor: pointer;
+					}
+				}
+
+				button {
+					width: 200px;
+					background: #008060;
+				}
+			}
+		}
+	}
+}

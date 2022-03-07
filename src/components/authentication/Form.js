@@ -104,12 +104,12 @@ export default function Form( props ) {
 							Select title
 						</option>
 
-						<option value="Mr">Mr</option>
+						<option value="Mr.">Mr</option>
 						<option value="Miss">Miss</option>
-						<option value="Mrs">Mrs</option>
-						<option value="Ms">Ms</option>
-						<option value="Dr">Dr</option>
-						<option value="Other">Other</option>
+						<option value="Mrs.">Mrs</option>
+						{/*<option value="Ms">Ms</option>*/}
+						{/*<option value="Dr.">Dr</option>
+						<option value="Other">Other</option>*/}
 					</select>
 				</div>
 

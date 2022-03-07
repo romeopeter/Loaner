@@ -1,0 +1,66 @@
+/*Part of the styles for this partial is shared with other
+component in the _investor-offers.scss partial*/
+
+#orderbook-investor-all-offers {
+	#table-container {
+		&::-webkit-scrollbar {
+			width: 5px;
+		}
+
+		/* Track */
+		&::-webkit-scrollbar-track {
+		  background: #f1f1f1; 
+		}
+		 
+		/* Handle */
+		&::-webkit-scrollbar-thumb {
+		  background: #888;
+		  border-radius: 10px; 
+		}
+
+		/* Handle on hover */
+		&::-webkit-scrollbar-thumb:hover {
+		  background: #555; 
+		}
+
+		#table-action {
+			#select-table-action,
+			.action-btn {
+				width: 160px !important;
+			}
+
+			#select-table-action {
+				height: 45px;
+				padding-left: 1rem;
+			}
+			.action-btn {
+			}
+		}
+
+		table {
+			thead {
+				th:nth-child(2) {
+					column-span: 1;
+				}
+			}
+			tbody {
+				tr {
+					td {
+						button {
+							&.open {
+								color: lightgreen !important;
+							}
+							&.coming-soon {
+								color: #d82c0d !important;
+							}
+						}
+					}
+
+					&:hover {
+						background: none !important;
+					}
+				}
+			}
+		}
+	}
+}
