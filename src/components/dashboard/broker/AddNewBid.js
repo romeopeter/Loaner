@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -6,17 +7,19 @@ import Select from 'react-dropdown-select';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
-import { Grid } from '@chakra-ui/react';
+import Arrow from '../../../assets/images/Arrow.png';
+import { Grid, GridItem } from '@chakra-ui/react';
 
 const AddNewBid = () => {
     let navigate = useNavigate();
 
     const [active, setActive] = useState(false);
 
+    // STATE FOR TOGGLE SHOW AND HIDE
     const handleState = () => {
-        setActive(true);
+        setActive(active ? false : true);
     };
-
+    // TEMP OPTIONS FOR SELECT SEARCH DROPDOWN
     const options = [
         { id: 1, label: 'Investor1' },
         { id: 2, label: 'Investor2' },
@@ -33,73 +36,153 @@ const AddNewBid = () => {
             <OrderbookLayout PageNav={NavMenu}>
                 <div className='NewBid'>
                     <div className='NewBid--form'>
-                        <Grid>
-                            {!active && (
-                                <div>
-                                    <h1>Select Investor </h1>
-                                    <Grid templateColumns='92% 8%'>
-                                        <Select
-                                            valueField='id'
-                                            className='NewBid--form-input'
-                                            options={options}
-                                            onChange={(value) => console.log(value)}
-                                        />
-                                        <button
-                                            onClick={() => {
-                                                navigate('/broker/dashboard/allbids');
-                                            }}
-                                        >
-                                            +
-                                        </button>
-                                    </Grid>
+                        <Link to='/broker/dashboard/bids/'>
+                            <img alt='' src={Arrow} style={{ background: '#c4c4c4', padding: '12px' }} />
+                        </Link>
 
-                                    <h2>OR</h2>
-                                    <button value={active} onClick={handleState} className='buttonMod'>
-                                        Add New Investor{' '}
-                                    </button>
-                                </div>
-                            )}
+                        <div style={{ padding: '20px' }}>
+                            {/**Form 1 --- Select Investors */}
+                            <Formik
+                                initialValues={{
+                                    bidValue: '',
+                                    select: '',
+                                }}
+                                validationSchema={Yup.object({
+                                    bidValue: Yup.string().required('*Required'),
+                                })}
+                                onSubmit={(values) => {
+                                    navigate('/broker/dashboard/bids', { replace: true });
+                                    // send to api
+                                    console.log(values);
+                                }}
+                            >
+                                {() => (
+                                    <Form>
+                                        {/**Toggle state to show/hide */}
+                                        {!active && (
+                                            <div>
+                                                <h2>Add Bid Value</h2>
+                                                {/**Bid Value */}
+                                                <Grid>
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='bidValue'
+                                                        component='div'
+                                                    />
+                                                    <Field
+                                                        className='NewBid--form-input'
+                                                        type='number'
+                                                        name='bidValue'
+                                                        placeholder='Bid Value'
+                                                    />
+                                                </Grid>
 
-                            {active && (
-                                <div>
-                                    <Formik
-                                        initialValues={{
-                                            firstName: '',
-                                            lastName: '',
-                                            email: '',
-                                            password: '',
-                                            organisation: '',
-                                            confirmPassword: '',
-                                        }}
-                                        validationSchema={Yup.object({
-                                            firstName: Yup.string()
-                                                .max(15, 'Must be 15 characters or less')
-                                                .required('*Required'),
-                                            lastName: Yup.string()
-                                                .max(20, 'Must be 20 characters or less')
-                                                .required('*Required'),
-                                            email: Yup.string().email('Invalid email address').required('*Required'),
-                                            password: Yup.string().required('*Password is required').min(6),
-                                            confirmPassword: Yup.string()
-                                                .required('*Please retype your password.')
-                                                .oneOf([Yup.ref('password'), null], '*Your passwords do not match.'),
-                                        })}
-                                        onSubmit={(values) => {
-                                            console.log(values);
-
-                                            navigate('/broker/dashboard/allbids', { replace: true });
-
-                                            // send to api
-                                        }}
-                                    >
-                                        {() => (
-                                            <Form>
-                                                <h1 style={{ marginBottom: '20px' }}>Add New Investor</h1>
-                                                <ErrorMessage
-                                                    style={{ color: '#D82C0D' }}
-                                                    name='firstName'
-                                                    component='div'
-                                                />
+                                                {/**Select search dropdown */}
+                                                <h2>Select Investor </h2>
+                                                <Grid>
+                                                    {' '}
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='select'
+                                                        component='div'
+                                                    />
+                                                    <Select
+                                                        name='select'
+                                                        type='text'
+                                                        valueField='id'
+                                                        className='NewBid--form-input'
+                                                        options={options}
+                                                    />
+                                                </Grid>
+                                                <h2>
+                                                    Or{' '}
+                                                    <span
+                                                        onClick={handleState}
+                                                        style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                                                    >
+                                                        {' '}
+                                                        Add New Investor
+                                                    </span>
+                                                </h2>
+                                                <Grid>
+                                                    <GridItem colEnd={6}>
+                                                        <button onClick={() => {}} type='submit'>
+                                                            Submit
+                                                        </button>
+                                                    </GridItem>
+                                                </Grid>
+                                            </div>
+                                        )}
+                                    </Form>
+                                )}
+                            </Formik>
+                            {/**Form 2 --- Add New Investors */}
+                            <Formik
+                                initialValues={{
+                                    firstName: '',
+                                    lastName: '',
+                                    email: '',
+                                    password: '',
+                                    organisation: '',
+                                    confirmPassword: '',
+                                    bidValue: '',
+                                }}
+                                validationSchema={Yup.object({
+                                    firstName: Yup.string()
+                                        .max(15, 'Must be 15 characters or less')
+                                        .required('*Required'),
+                                    lastName: Yup.string()
+                                        .max(20, 'Must be 20 characters or less')
+                                        .required('*Required'),
+                                    email: Yup.string().email('Invalid email address').required('*Required'),
+                                    password: Yup.string().required('*Password is required').min(6),
+                                    confirmPassword: Yup.string()
+                                        .required('*Please retype your password.')
+                                        .oneOf([Yup.ref('password'), null], '*Your passwords do not match.'),
+                                    organisation: Yup.string().required('*Required'),
+                                    bidValue: Yup.string().required('*Required'),
+                                })}
+                                onSubmit={(values) => {
+                                    navigate('/broker/dashboard/allbids', { replace: true });
+                                    // send to api
+                                    console.log(values);
+                                }}
+                            >
+                                {() => (
+                                    <Form>
+                                        {/**Toggle state to show/hide */}
+                                        {active && (
+                                            <div>
+                                                {/**Bid Value */}
+                                                <h2>Add Bid Value</h2>
+                                                <Grid>
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='bidValue'
+                                                        component='div'
+                                                    />
+                                                    <Field
+                                                        className='NewBid--form-input'
+                                                        type='number'
+                                                        name='bidValue'
+                                                        placeholder='Bid Value'
+                                                    />
+                                                </Grid>
+                                                <h2>Add New Investor</h2>
+                                                {/*Error message for first and last name */}
+                                                <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='firstName'
+                                                        component='div'
+                                                    />
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='lastName'
+                                                        component='div'
+                                                    />
+                                                </Grid>
+                                                {/*first and last name*/}
                                                 <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                                                     <Field
                                                         className='NewBid--form-input'
@@ -115,6 +198,7 @@ const AddNewBid = () => {
                                                         name='lastName'
                                                     />
                                                 </Grid>
+                                                {/*Email*/}
                                                 <Grid>
                                                     <ErrorMessage
                                                         style={{ color: '#D82C0D' }}
@@ -128,7 +212,13 @@ const AddNewBid = () => {
                                                         className='NewBid--form-input'
                                                     />
                                                 </Grid>
+                                                {/*Organisation*/}
                                                 <Grid>
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='organisation'
+                                                        component='div'
+                                                    />
                                                     <Field
                                                         type='text'
                                                         name='organisation'
@@ -136,24 +226,26 @@ const AddNewBid = () => {
                                                         className='NewBid--form-input'
                                                     />
                                                 </Grid>
-                                                <Grid>
+                                                {/*Error message for password and confirm password */}
+                                                <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                                                     <ErrorMessage
                                                         style={{ color: '#D82C0D' }}
                                                         name='password'
                                                         component='div'
                                                     />
+                                                    <ErrorMessage
+                                                        style={{ color: '#D82C0D' }}
+                                                        name='confirmPassword'
+                                                        component='div'
+                                                    />
+                                                </Grid>
+                                                {/*Password and confirm password */}
+                                                <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                                                     <Field
                                                         type='password'
                                                         name='password'
                                                         placeholder='Password'
                                                         className='NewBid--form-input'
-                                                    />
-                                                </Grid>
-                                                <Grid>
-                                                    <ErrorMessage
-                                                        style={{ color: '#D82C0D' }}
-                                                        name='confirmPassword'
-                                                        component='div'
                                                     />
                                                     <Field
                                                         className='NewBid--form-input'
@@ -162,15 +254,30 @@ const AddNewBid = () => {
                                                         placeholder='Confirm Password'
                                                     />
                                                 </Grid>
+                                                <h2>
+                                                    Or{' '}
+                                                    <span
+                                                        onClick={handleState}
+                                                        style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                                                    >
+                                                        {' '}
+                                                        Select Investor
+                                                    </span>
+                                                </h2>
+                                                {/*cta */}
                                                 <Grid>
-                                                    <button type='submit'>Submit</button>
+                                                    <GridItem colEnd={6}>
+                                                        <button onClick={() => {}} type='submit'>
+                                                            Submit
+                                                        </button>
+                                                    </GridItem>
                                                 </Grid>
-                                            </Form>
+                                            </div>
                                         )}
-                                    </Formik>
-                                </div>
-                            )}
-                        </Grid>
+                                    </Form>
+                                )}
+                            </Formik>
+                        </div>
                     </div>
                 </div>
             </OrderbookLayout>

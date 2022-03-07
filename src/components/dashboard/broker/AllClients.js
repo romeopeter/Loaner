@@ -3,7 +3,6 @@ import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
 
-import { Link } from "react-router-dom";
 import AllClientsData from '../../../fake-backend/broker/AllClients';
 
 import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
@@ -56,7 +55,7 @@ const AllClients = () => {
                             <div className='tableScroll'>
                                 <Table size='sm' colorScheme={'blackAlpha'}>
                                     <CheckboxGroup onChange={onCheckboxChange}>
-                                        <Thead bg='#C4C4C4' h='80px'>
+                                        <Thead bg='#F0F0F0' h='80px'>
                                             <Tr
                                                 // key={index}
                                                 fontWeight={'extrabold'}
@@ -90,7 +89,7 @@ const AllClients = () => {
                                                                     w='50px'
                                                                     h='50px'
                                                                     borderRadius={'50%'}
-                                                                    bg={'#C4C4C4'}
+                                                                    bg={'#555555'}
                                                                     // m={['auto']}
                                                                     mr={[4]}
                                                                 ></Box>
