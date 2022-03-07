@@ -247,13 +247,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                     return
                 }
-
+/*
                 if (formState[prop]["value"] === "") {
                     alert.error("Minimum subscription field can not be empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
-                }
+                }*/
 
                 if (formState[prop]["faceValue"] === "") {
                     alert.error("Face value field can not be empty!");
