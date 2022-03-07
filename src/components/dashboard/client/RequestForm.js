@@ -16,7 +16,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		submitButtonIsDisabled: true,
 		secondSlideIn: false,
 		lastSlideIn: false,
-		isValidated: true,
+		isValidated: false,
 		emptyFields: "",
 	});
 
@@ -179,22 +179,97 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 		for (let prop in formState) {
 
+			if (prop === "dealType" && formState[prop] === "") {
+				alert.error("Deal type can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "guarantor" && formState[prop] === "") {
+				alert.error("Guarantor can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "dealName" && formState[prop] === "") {
+				alert.error("Deal name can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "projectName" && formState[prop] === "") {
+				alert.error("Project name can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "dealOwner" && formState[prop] === "") {
+				alert.error("Deal Owner field can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "dealTeam" && formState[prop] === "") {
+				alert.error("Deal team field can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "status" && formState[prop] === "") {
+				alert.error("Status field can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
+			if (prop === "trancheName" && formState[prop] === "") {
+				alert.error("Tranche name field can not be empty!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			} else if (typeof formState[prop] === "number") {
+				alert.error("Tranche name can not contain number!");
+				setState((state) => ({ ...state, isValidated: true }));
+
+				return
+			}
+
 			if(typeof formState[prop] === "object" && prop === "trancheSize") {
-				console.log("Tranche size object")
+				if (formState[prop]["currency"] === "") {
+					alert.error("Currency field can not be empty!");
+					setState((state) => ({ ...state, isValidated: true }));
+
+					return
+				}
+
+				if (formState[prop]["value"] === "") {
+					alert.error("Minimum subscription field can not be empty!");
+					setState((state) => ({ ...state, isValidated: true }));
+
+					return
+				}
+
+				if (formState[prop]["faceValue"] === "") {
+					alert.error("Face value field can not be empty!");
+					setState((state) => ({ ...state, isValidated: true }));
+
+					return
+				}
 			}
 
 			if(typeof formState[prop] === "object" && prop === "pricing") {
-				console.log("Pricing object")
 			}
 
 			if(typeof formState[prop] === "object" && prop === "timing") {
-				console.log("Timing object")
 			}
 
-			if (
-				formState[prop] === "" ||
-				formState[prop] === null
-			) {
+			if (formState[prop] === "") {
 
 				setState((state) => ({ ...state, isValidated: false }));
 				alert.error("Please fill all fields");
@@ -220,6 +295,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		state.lastSlideIn === true && formState.dealType === "BOND";
 	const secondSlideWillShow =
 		state.lastSlideIn === false && formState.dealType === "BOND";
+
+	const formErrorStyle = {border: state.isValidated ? "2px solid #f25858 !important" : "none"};
 
 	return (
 		<>
@@ -255,7 +332,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+									required
+									style={{border: "2px solid #f25858"}}
 								>
 									<option defaultValue="">
 										Select deal type
