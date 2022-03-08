@@ -1,431 +1,54 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
+import React, {useEffect} from "react";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import jwt_decode from 'jwt-decode';
 
-import LandingPage from './LandingPage';
-import NotFound from './NotFound';
+import AppRoutes from "./AppRoutes";
 
-import Login from './authentication/Login';
-import RequireAuth from './authentication/RequireAuth';
-import Register from './authentication/Register';
-import AccountSettings from './dashboard/client/AccountSettings';
-
-import CurrentDeals from './dashboard/CurrentDeals';
-import ArchivedDeals from './dashboard/ArchivedDeals';
-import SingleTrancheDeal from './dashboard/SingleTrancheDeal';
-import MultipleTrancheDeal from './dashboard/MultipleTrancheDeal';
-
-import ClientDashboard from './dashboard/client/ClientDashboard';
-import LoanRequest from './dashboard/client/LoanRequest';
-import Offers from './dashboard/client/Offers';
-import ShowOffer from './dashboard/client/ShowOffer';
-import EditOffer from './dashboard/client/EditOffer';
-import PublishOffer from './dashboard/client/PublishOffer';
-import ViewInvestor from './dashboard/client/ViewInvestor';
-import ShowBids from './dashboard/client/ShowBids';
-import ShowAllBids from './dashboard/client/ShowAllBids';
-
-import Dashboard from './dashboard/investor/Dashboard';
-import AllOffers from './dashboard/investor/AllOffers';
-import IncomingOffer from './dashboard/investor/IncomingOffer';
-import ShowOpenOffer from './dashboard/investor/ShowOpenOffer';
-import BidApproved from './dashboard/investor/BidApproved';
-import BidRejected from './dashboard/investor/BidRejected';
-import BAPaymentProof from './dashboard/investor/BAPaymentProof';
-import BAPaymentDetail from './dashboard/investor/BAPaymentDetail';
-import SuccessfulOffers from './dashboard/investor/SuccessfulOffers';
-import DeclinedOffers from './dashboard/investor/DeclinedOffers';
-
-import BrokerDashboard from './dashboard/broker/Dashboard';
-import NewClient from './dashboard/broker/NewClient';
-import AllClients from './dashboard/broker/AllClients';
-import CreateOffer from './dashboard/broker/CreateOffer';
-import NewOfferTiming from './dashboard/broker/NewOfferTiming';
-import LoanSummary from './dashboard/broker/LoanSummary';
-import AllLoans from './dashboard/broker/AllLoans';
-import Bids from './dashboard/broker/Bids';
-import AddNewBid from './dashboard/broker/AddNewBid';
-import Payment from './dashboard/broker/Payment';
-import LoanOfferDraft from './dashboard/broker/LoanOfferDraft';
-import LoanOfferPublished from './dashboard/broker/LoanOfferPublished';
-import SelectInvestor from './dashboard/broker/SelectInvestor';
-import NewClientSave from './dashboard/broker/NewClientSave';
-import UploadInvestor from './dashboard/broker/UploadInvestor';
-
-import AdminCurrencies from './dashboard/admin/AdminCurrencies';
-import AdminCompanies from './dashboard/admin/AdminCompanies';
-import AdminTranche from './dashboard/admin/AdminTranche';
-import AdminPreference from './dashboard/admin/AdminPreferenc';
-import AdminProfile from './dashboard/admin/AdminProfileSettings';
-import PrivacyPolicy from './dashboard/admin/PrivacyPolicy';
-import Terms from './dashboard/admin/Terms';
+import signOutAsync from "../redux/authSlice";
+import setClientMessage from "../redux/messageSlice.js";
 
 function App() {
-    return (
-        <ChakraProvider>
-            <Routes>
-                <Route path='*' element={<NotFound />} />
-                <Route path='/' element={<LandingPage />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/register' element={<Register />} />
+    const userObj = JSON.parse(localStorage.getItem("USER"));
+    const decodeToken = jwt_decode;
+    const dispatch = useDispatch;
+    const navigate = useNavigate();
 
-                {/*Profile/AccountSettings*/}
-                <Route
-                    path='/account-settings'
-                    element={
-                        <RequireAuth>
-                            <AccountSettings />
-                        </RequireAuth>
-                    }
-                />
+    // Set default endpoint URL and Authorization key
+    axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
+    axios.defaults.headers.post["Content-Type"] = "application/json";
+    axios.defaults.headers.common["Authorization"] = undefined;
 
-                <Route path='/current-deals' element={<CurrentDeals />} />
-                <Route path='/archived-deals' element={<ArchivedDeals />} />
-                <Route path='single-tranche-deal' element={<SingleTrancheDeal />} />
-                <Route path='/multiple-tranche-deal' element={<MultipleTrancheDeal />} />
+    if (userObj !== null && userObj !== false) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${userObj.tokens.access}`;
+    }
 
-                {/*Client dashboard*/}
-                <Route
-                    path='/client/dashboard'
-                    element={
-                        <RequireAuth>
-                            <ClientDashboard />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/client/new-loan'
-                    element={
-                        <RequireAuth>
-                            <LoanRequest />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/client/offers'
-                    element={
-                        <RequireAuth>
-                            <Offers />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/client/offers/offer'
-                    element={
-                        <RequireAuth>
-                            <ShowOffer />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/client/offers/offer/edit'
-                    element={
-                        <RequireAuth>
-                            <EditOffer />
-                        </RequireAuth>
-                    }
-                />
 
-                <Route
-                    path='/client/offers/offer/publish'
-                    element={
-                        <RequireAuth>
-                            <PublishOffer />
-                        </RequireAuth>
-                    }
-                />
+    useEffect(() => {
+        // Check token expiration
+        if (userObj !== null && typeof userObj === "object") {
+            let {tokens: { access }} = userObj;
+            const decodedToken = decodeToken(access);
+            const currentDate = new Date();
 
-                <Route
-                    path='/client/offers/offer/view-investors'
-                    element={
-                        <RequireAuth>
-                            <ViewInvestor />
-                        </RequireAuth>
-                    }
-                />
+            if (decodedToken.exp * 1000 < currentDate.getTime()) {
+                dispatch(signOutAsync).then(() => {
+                    dispatch(setClientMessage({
+                        status: null,
+                        messageType: "token_expired", 
+                        message: "Token expired", 
+                        detail: "Login token is expired. Please sign in"
+                    }));
 
-                <Route
-                    path='/client/offers/offer/show-bids'
-                    element={
-                        <RequireAuth>
-                            <ShowBids />
-                        </RequireAuth>
-                    }
-                />
+                    // Redirect to login page
+                    navigate("/login")
+                });
+            }
+        }
+    }, [])
 
-                {/*Investor Dashboard*/}
-                <Route
-                    path='/investor/dashboard'
-                    element={
-                        <RequireAuth>
-                            <Dashboard />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/offers'
-                    element={
-                        <RequireAuth>
-                            <AllOffers />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/offer-coming-soon'
-                    element={
-                        <RequireAuth>
-                            <IncomingOffer />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/dashboard/open-offer'
-                    element={
-                        <RequireAuth>
-                            <ShowOpenOffer />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/dashboard/bid-approved'
-                    element={
-                        <RequireAuth>
-                            <BidApproved />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/dashboard/bid-rejected'
-                    element={
-                        <RequireAuth>
-                            <BidRejected />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/dashboard/payment-proof'
-                    element={
-                        <RequireAuth>
-                            <BAPaymentProof />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/dashboard/payment-detail'
-                    element={
-                        <RequireAuth>
-                            <BAPaymentDetail />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/sucessful-bids'
-                    element={
-                        <RequireAuth>
-                            <SuccessfulOffers />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/investor/bids/declined'
-                    element={
-                        <RequireAuth>
-                            <DeclinedOffers />
-                        </RequireAuth>
-                    }
-                />
-
-                <Route
-                    path='/client/offers/offer/show-all-bids'
-                    element={
-                        <RequireAuth>
-                            <ShowAllBids />
-                        </RequireAuth>
-                    }
-                />
-
-                {/*Broker dashboard*/}
-                <Route
-                    path='/broker/dashboard'
-                    element={
-                        <RequireAuth>
-                            <BrokerDashboard />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/new-client'
-                    element={
-                        <RequireAuth>
-                            <NewClient />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/new-client-save'
-                    element={
-                        <RequireAuth>
-                            <NewClientSave />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/allclients'
-                    element={
-                        <RequireAuth>
-                            <AllClients />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/create-offer'
-                    element={
-                        <RequireAuth>
-                            <CreateOffer />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/new-offer-timing'
-                    element={
-                        <RequireAuth>
-                            <NewOfferTiming />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/new-offer/summary'
-                    element={
-                        <RequireAuth>
-                            <LoanSummary />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/allloans/'
-                    element={
-                        <RequireAuth>
-                            <AllLoans />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/bids/'
-                    element={
-                        <RequireAuth>
-                            <Bids />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/bids/addnewbid/'
-                    element={
-                        <RequireAuth>
-                            <AddNewBid />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/uploadInvestor/'
-                    element={
-                        <RequireAuth>
-                            <UploadInvestor />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/bids/payment/'
-                    element={
-                        <RequireAuth>
-                            <Payment />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/loan-offer-draft/:id'
-                    element={
-                        <RequireAuth>
-                            <LoanOfferDraft />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/loan-offer-published/:id'
-                    element={
-                        <RequireAuth>
-                            <LoanOfferPublished />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/broker/dashboard/loan-offer/select-investor'
-                    element={
-                        <RequireAuth>
-                            <SelectInvestor />
-                        </RequireAuth>
-                    }
-                />
-
-                {/*Admin Dashboard*/}
-                <Route
-                    path='/admin/currencies'
-                    element={
-                        <RequireAuth>
-                            <AdminCurrencies />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/companies'
-                    element={
-                        <RequireAuth>
-                            <AdminCompanies />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/tranche'
-                    element={
-                        <RequireAuth>
-                            <AdminTranche />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/preference'
-                    element={
-                        <RequireAuth>
-                            <AdminPreference />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/profile-settings'
-                    element={
-                        <RequireAuth>
-                            <AdminProfile />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/privacy'
-                    element={
-                        <RequireAuth>
-                            <PrivacyPolicy />
-                        </RequireAuth>
-                    }
-                />
-                <Route
-                    path='/admin/terms'
-                    element={
-                        <RequireAuth>
-                            <Terms />
-                        </RequireAuth>
-                    }
-                />
-            </Routes>
-        </ChakraProvider>
-    );
+    return (<AppRoutes />);
 }
 
 export default App;

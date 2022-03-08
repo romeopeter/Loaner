@@ -1,14 +1,17 @@
-import React, { createRef, useState, useEffect, useRef } from 'react';
+/*
+    Also called the assigning-invetor component/page
+*/
+
+import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
 import CustomSelect from "./CustomSelect";
-import OrderbookLayout from '../../OrderbookLayout';
-import DocumentHead from '../../DocumentHead';
+import OrderbookLayout from "../../OrderbookLayout";
+import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
-import NavMenu from '../NavMenu';
-import { Link } from 'react-router-dom';
+import NavMenu from "../NavMenu";
 
 import {
     getInvestorsInCategoryAction,
@@ -189,7 +192,7 @@ export default function PublishOffer({ children, ...props }) {
         } else if (availability === undefined) {
             setFeedBack(state => ({
                 ...state,
-                statusNotSet: "Cant't Publish offer. Save offer as opened or comming soon!"
+                statusNotSet: "Cant't Publish offer. Offer is not saved as opened or comming soon!"
             }))
 
             return
@@ -213,11 +216,13 @@ export default function PublishOffer({ children, ...props }) {
             dispatch(AddInvestorsAction({loanOfferId, data}));
 
             // Publish offers
-            dispatch(publishOfferAction(loanOfferId));
+            // dispatch(publishOfferAction(loanOfferId));
 
             if (componentMounted.current) {
                 // Show modal
-                if (serverError === undefined) publishSuccessModal();
+                if (serverError !== "" || serverError !== null) {
+                    publishSuccessModal()
+                };
             }
 
             setFeedBack((state) => ({
@@ -383,11 +388,11 @@ export default function PublishOffer({ children, ...props }) {
                                         message={feedBack.statusNotSet}
                                     />
                                 ): null}
-                                {serverError.message !== "" ? (
+                                {/*{serverError.message.messageTyoe !== "network_error" ? (
                                     <Danger
                                         message={serverError.message.detail}
                                     />
-                                ):null}
+                                ):null}*/}
                                 {feedBack.loanIsPublished !== "" ? (
                                     <Success 
                                         message={feedBack.loanIsPublished} 
@@ -655,16 +660,16 @@ export default function PublishOffer({ children, ...props }) {
                                 className="flex justify-center pr-5"
                             >
                                 <Button
-                                    title="View orders"
+                                    title="View offers"
                                     link="/client/offers/"
                                     buttonClass="view-orders mr-5  rounded w-full"
                                 />
 
-                                {/*<Button
-                                    title="Go home"
+                                <Button
+                                    title="View offer"
                                     link="/"
-                                    buttonClass="go-home create"
-                                />*/}
+                                    buttonClass="go-home rounded create"
+                                />
                             </div>
                         </div>
                     </div>

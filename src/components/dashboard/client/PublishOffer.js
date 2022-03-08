@@ -192,7 +192,7 @@ export default function PublishOffer({ children, ...props }) {
 		} else if (availability === undefined) {
 			setFeedBack(state => ({
 				...state,
-				statusNotSet: "Cant't Publish offer. Save offer as opened or comming soon!"
+				statusNotSet: "Cant't Publish offer. Offer is not saved as opened or comming soon!"
 			}))
 
 			return
@@ -220,7 +220,9 @@ export default function PublishOffer({ children, ...props }) {
 
 			if (componentMounted.current) {
 				// Show modal
-				if (serverError === undefined) publishSuccessModal();
+				if (serverError !== "" || serverError !== null) {
+					publishSuccessModal()
+				};
 			}
 
 			setFeedBack((state) => ({
@@ -245,7 +247,7 @@ export default function PublishOffer({ children, ...props }) {
 			return
 		}
 
-		assignInvestors(32);
+		assignInvestors();
 	}
 
 	// Get categories ID
@@ -386,11 +388,11 @@ export default function PublishOffer({ children, ...props }) {
 										message={feedBack.statusNotSet}
 									/>
 								): null}
-								{serverError.message !== "" ? (
+								{/*{serverError.message.messageTyoe !== "network_error" ? (
 									<Danger
 										message={serverError.message.detail}
 									/>
-								):null}
+								):null}*/}
 								{feedBack.loanIsPublished !== "" ? (
 									<Success 
 										message={feedBack.loanIsPublished} 

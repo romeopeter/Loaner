@@ -9,12 +9,7 @@ export const messageSlice = createSlice({
 	name: "message",
 	initialState: {
 		server: { message: "" },
-		client: {
-			emailAddress: "",
-			phoneNumber: "",
-			dateOfBirth: "",
-			password: "",
-		},
+		client: null,
 	},
 	reducers: {
 		setServerMessage: (state, action) => {
@@ -22,26 +17,13 @@ export const messageSlice = createSlice({
 		},
 		setClientMessage: (state, action) => {
 
-			const {field, message} = action.payload;
-
-			if (field === "emailAddress") {
-				state.client.emailAddress = message;
-			}		
-
-			if (field === "phoneNumber") {
-				state.client.phoneNumber = message;
-			}
-
-			if (field === "dateOfBirth") {
-				state.client.dateOfBirth = message;
-			}
-
-			if (field === "password") {
-				state.client.password = message;
-			}
+			state.client = action.payload;
 		},
-		clearMessage: (state, action) => {
-			state.message = "";
+		clearServerMessage: (state, action) => {
+			state.message.server.message = "";
+		},
+		clearClientMessage: (state, action) => {
+			state.message.client = null;
 		},
 	},
 });

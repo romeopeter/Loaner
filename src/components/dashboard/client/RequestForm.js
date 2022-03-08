@@ -180,8 +180,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		for (let prop in formState) {
 
 			if (prop === "dealType" && formState[prop] === "") {
-				alert.error("Deal type can not be empty!");
 				setState((state) => ({ ...state, isValidated: true }));
+				alert.error("Deal type can not be empty!");
 
 				return
 			}
@@ -248,8 +248,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					return
 				}
 
-				if (formState[prop]["value"] === "") {
-					alert.error("Minimum subscription field can not be empty!");
+				if (formState[prop]["minSubscription"] === "") {
+					alert.error("Minimum subscription is empty!");
 					setState((state) => ({ ...state, isValidated: true }));
 
 					return
@@ -260,29 +260,54 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					setState((state) => ({ ...state, isValidated: true }));
 
 					return
+				} else if (formState[prop]["faceValue"] === 0) {
+					alert.error("Face value field be zero!");
+					setState((state) => ({ ...state, isValidated: true }));
+				}
+
+				if (formState[prop]["DiscountValue"] === "") {
+					alert.error("Face value field can not be empty!");
+					setState((state) => ({ ...state, isValidated: true }));
+
+					return
+				} else if (formState[prop]["DiscountValue"] === 0) {
+					alert.error("Discount value can not be zero!");
+					setState((state) => ({ ...state, isValidated: true }));
+
+					return
 				}
 			}
 
 			if(typeof formState[prop] === "object" && prop === "pricing") {
+				if (formState[prop]["dayCount"] === "") {
+					setState((state) => ({ ...state, isValidated: false }));
+					alert.error("Day count can not be empty!");
+
+					return
+				}
 			}
 
 			if(typeof formState[prop] === "object" && prop === "timing") {
 			}
 
-			if (formState[prop] === "") {
+			// Field specific to deal type of bond
+			if (formState[prop] === "BOND") {
+				if (typeof formState[prop] === "object" && prop === "pricing") {
+					
+					if (formState[prop]["couponType"] === "") {
+						setState((state) => ({ ...state, isValidated: false }));
+						alert.error("Coupon type can not be empty!");
 
-				setState((state) => ({ ...state, isValidated: false }));
-				alert.error("Please fill all fields");
-
-				return
+						return
+					} else if (formState[prop]["couponType"] === "floating") {
+						// if (formState[prop]["benchmark"] )
+					}
+				}
 			}
 		}
 
 		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
-
-
-		/*NOTE: All validation should be specific field*/
 	};
 
 	/*
@@ -323,17 +348,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 
 						<div className="grid grid-cols-1 gap-4">
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1" style={formErrorStyle}>
 								<select
 									name="dealType"
 									id="dealType"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealType}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
 									required
-									style={{border: "2px solid #f25858"}}
 								>
 									<option defaultValue="">
 										Select deal type
@@ -343,11 +367,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</select>
 							</div>
 
-							{/*<div className="col-span-12">
+							{/*<div className="col-span-12 mt-1">
 								<select
 									name="issuer"
 									id="issuer"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									disabled={true}
 									style={{ cursor: "not-allowed" }}
 									// required
@@ -358,13 +382,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</select>
 							</div>*/}
 
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="guarantor"
 									id="guarantor"
 									placeholder="Enter guarantor name"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.guarantor}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
@@ -372,13 +396,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									// required
 								/>
 							</div>
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="dealName"
 									id="dealName"
 									placeholder="Enter deal name"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
@@ -386,13 +410,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									// required
 								/>
 							</div>
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="projectName"
 									id="projectName"
 									placeholder="Enter project name"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.projectName}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
@@ -401,13 +425,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="dealOwner"
 									id="dealOwner"
 									placeholder="Enter deal owner name"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealOwner}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
@@ -416,13 +440,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="dealTeam"
 									id="dealTeam"
 									placeholder="Enter deal team name"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.dealTeam}
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
@@ -465,11 +489,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						{/*Tranche terms*/}
 						<div id="tranche-terms">
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									<select
 										name="status"
 										id="status"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.status}
 										onChange={(e) => handleChange(e)}
 									>
@@ -493,13 +517,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									<input
 										type="text"
 										name="trancheName"
 										id="trancheName"
 										placeholder="Enter tranche name"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.trancheName}
 										onChange={(e) => handleChange(e)}
 									/>
@@ -514,11 +538,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									<select
 										name="currency"
 										id="currency"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={formState.trancheSize.currency}
 										onChange={(e) =>
 											handleChange(e, "trancheSize")
@@ -531,26 +555,26 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="USD">USD</option>
 									</select>
 								</div>
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<input
 										type="number"
 										name="faceValue"
 										id="face-value"
 										placeholder="Enter face value"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={formState.trancheSize.faceValue}
 										onChange={(e) =>
 											handleChange(e, "trancheSize")
 										}
 									/>
 								</div>
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<input
 										name="discountValue"
 										type="number"
 										placeholder="Enter discount value"
 										id="tranche-value"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={
 											formState.trancheSize.discountValue
 										}
@@ -559,23 +583,23 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										}
 									/>
 								</div>
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<input
 										type="number"
 										name="par-value"
 										id="par-value"
 										placeholder="Enter par palue"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										disabled={true}
 										style={{ cursor: "not-allowed" }}
 									/>
 								</div>
 
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<select
 										name="minSubscription"
 										id="min-subscription"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 										value={
 											formState.trancheSize
 												.minSubscription
@@ -612,13 +636,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									{hiddenFieldTrigger.customMinimumSub ? (
 										<input
 											type="number"
 											id="custom-min-subscription"
 											name="custom-min-subscription"
-											className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 											value={
 												formState.trancheSize
 													.minSubscription
@@ -653,11 +677,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							<div className="grid grid-cols-2 gap-4">
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<select
 												id="coupon-type"
 												name="couponType"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing.couponType
 												}
@@ -678,13 +702,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</div>
 
 
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<input
 												type="number"
 												name="Enter benchmark"
 												id="benchmark"
 												placeholder="Benchmark"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												disabled={formState.pricing.couponType === "floating" ? false : true}
 												style={{
 													backgroundColor: formState.pricing.couponType === "floating" ? "#d1d5db" : "#888",
@@ -705,11 +729,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</>
 								) : null}
 
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<select
 										name="dayCount"
 										id="day-count"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.pricing.dayCount}
 										onChange={(e) =>
 											handleChange(e, "pricing")
@@ -730,11 +754,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</option>
 									</select>
 								</div>
-								<div className="col-span-1">
+								<div className="col-span-1 mt-1">
 									<select
 										name="offerType"
 										id="offer-type"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 										value={formState.pricing.offerType.name}
 										onChange={(e) =>
 											handleOfferTypeChange(e)
@@ -757,13 +781,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								{formState.pricing.offerType.name ===
 								"fixed price" ? (
 									<>
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<input
 												type="number"
 												name="discountRate"
 												id="discount-rate"
 												placeholder="Enter discount rate"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
 														.fixedPrice.rate
@@ -793,13 +817,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												}
 											/>
 										</div>
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<input
 												type="number"
 												name="impliedYield"
 												id="implied-yield"
 												placeholder="Enter implied yield"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 												value={
 													formState.pricing.offerType
 														.fixedPrice.yield
@@ -835,13 +859,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								{formState.pricing.offerType.name ===
 								"book build" ? (
 									<>
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<input
 												type="number"
 												name="discountRateRange"
 												id="discount-rate-range"
 												placeholder="Enter discount rate range"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing.offerType
 														.fixedPrice.rate
@@ -871,13 +895,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												}
 											/>
 										</div>
-										<div className="col-span-1">
+										<div className="col-span-1 mt-1">
 											<input
 												type="number"
 												name="yield"
 												id="yield"
 												placeholder="Enter yield"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing.offerType
 														.fixedPrice.yield
@@ -912,11 +936,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-2">
+										<div className="col-span-2 mt-1">
 											<select
 												id="coupon-frequency"
 												name="couponFrequency"
-												className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 												value={
 													formState.pricing
 														.couponFrequency
@@ -999,13 +1023,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</div>
 										</div>
 
-										<div className="col-span-2">
+										<div className="col-span-2 mt-1">
 											{hiddenFieldTrigger.showCallOption ? (
 												<input
 													type="text"
 													name="callOption"
 													id="call-option"
-													className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
 													value={
 														formState.pricing
 															.callOption
@@ -1050,52 +1074,52 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<div className="col-span-1">
+							<div className="col-span-1 mt-1">
 								<input
 									type="text"
 									name="offerStart"
 									id="offer-start"
 									placeholder="Enter offer start date"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.timing.offerStart}
 									onFocus={(e) => (e.target.type = "date")}
 									onBlur={(e) => (e.target.type = "text")}
 									onChange={(e) => handleChange(e, "timing")}
 								/>
 							</div>
-							<div className="col-span-1">
+							<div className="col-span-1 mt-1">
 								<input
 									type="text"
 									name="offerEnd"
 									id="offer-end"
 									placeholder="Enter Offer end data"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
 									value={formState.timing.offerEnd}
 									onFocus={(e) => (e.target.type = "date")}
 									onBlur={(e) => (e.target.type = "text")}
 									onChange={(e) => handleChange(e, "timing")}
 								/>
 							</div>
-							<div className="col-span-1">
+							<div className="col-span-1 mt-1">
 								<input
 									type="text"
 									name="allotmentDate"
 									id="allotment-date"
 									placeholder="Enter allotment date"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.allotmentDate}
 									onFocus={(e) => (e.target.type = "date")}
 									onBlur={(e) => (e.target.type = "text")}
 									onChange={(e) => handleChange(e, "timing")}
 								/>
 							</div>
-							<div className="col-span-1">
+							<div className="col-span-1 mt-1">
 								<input
 									type="text"
 									name="settlementDate"
 									id="settlement-date"
 									placeholder="Enter settlement date"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.settlementDate}
 									onFocus={(e) => (e.target.type = "date")}
 									onBlur={(e) => (e.target.type = "text")}
@@ -1105,13 +1129,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 
 						<div className="grid grid-cols-1 gap-4 mt-5">
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="maturityDate"
 									id="maturity-date"
 									placeholder="Enter maturity date"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.timing.maturityDate}
 									onFocus={(e) => (e.target.type = "date")}
 									onBlur={(e) => (e.target.type = "text")}
@@ -1119,34 +1143,34 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 							<hr className="border-1 border-gray-500 col-span-12" />
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="useOfProceeds"
 									id="use-of-proceeds"
 									placeholder="Enter use of proceeds"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.useOfProceeds}
 									onChange={(e) => handleChange(e)}
 								/>
 							</div>
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<input
 									type="text"
 									name="taxConsideration"
 									id="tax-consideration"
 									placeholder="Enter tax consideration"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.taxConsideration}
 									onChange={(e) => handleChange(e)}
 								/>
 							</div>
 
-							<div className="col-span-12">
+							<div className="col-span-12 mt-1">
 								<select
 									name="eligibleInvestors"
 									id="eligible-investor"
-									className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 									value={formState.eligibleInvestors}
 									onChange={(e) => handleChange(e)}
 								>
@@ -1170,11 +1194,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<p className="py-2">Ratings</p>
 							</div>
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									<select
 										name="name"
 										id="name"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 										value={formState.rating.name}
 										onChange={(e) =>
 											handleChange(e, "rating")
@@ -1192,11 +1216,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-2">
+								<div className="col-span-2 mt-1">
 									<select
 										name="scale"
 										id="scale"
-										className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
 										value={formState.rating.scale}
 										onChange={(e) =>
 											handleChange(e, "rating")
