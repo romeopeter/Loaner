@@ -10,20 +10,29 @@ import DocumentHead from '../../DocumentHead';
 import newOrder from '../../../assets/images/newOrder.png';
 import newClient from '../../../assets/images/newClient.png';
 import Pagination from './pagination/Pagination';
+import bidRejected from '../../../assets/images/bidRejected.png';
 
 // import Brokerdata from '../../../fake-backend/broker/DummyData';
 
 import { Flex, Box, Button, Center, Text, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 let PageSize = 10;
 const BrokerDashboard = () => {
+    // Used in pagination
     const [loanRequest, setLoanRequest] = useState([]);
+    // Used for conditional rendering
+    const [getValue, setGetValue] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+
     useEffect(() => {
         axios
-            .get('https://order-book-online.herokuapp.com/v1/loan_request/')
-            .then((response) => setLoanRequest(response.data))
-            .catch((err) => console.log(err));
+            .get('/v1/loan_request/')
+            .then((response) => {
+                setLoanRequest(response.data);
+                setGetValue(response);
+            })
+            .catch((err) => setErrorMessage(err));
     }, []);
-    console.log(loanRequest);
+
     // Dropdown
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
@@ -161,11 +170,48 @@ const BrokerDashboard = () => {
                         </div>
                     </Flex>
                 </header>
-                <section style={{ paddingBottom: '10%' }}>
-                    {loanRequest.length === 0 ? (
-                        <p className='loader' style={{ margin: '100px auto' }}></p>
+                <section>
+                    {!getValue ? (
+                        <div style={{ margin: '120px 20px' }}>
+                            {(() => {
+                                if (errorMessage) {
+                                    return (
+                                        <div>
+                                            <p
+                                                className='responseMessage'
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-around',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <img
+                                                    alt=''
+                                                    src={bidRejected}
+                                                    style={{ height: '20px', width: '20px' }}
+                                                />
+                                                Something went wrong, please try again.{' '}
+                                            </p>
+                                        </div>
+                                    );
+                                } else if (getValue) {
+                                    if (loanRequest.length === 0 && getValue.statusText === 'OK') {
+                                        return (
+                                            <p className='responseMessage'>There are no loan requests at this time</p>
+                                        );
+                                    }
+                                } else {
+                                    return (
+                                        <div className='loader-div'>
+                                            <p className='loader'></p>
+                                            <p>Please Wait</p>
+                                        </div>
+                                    );
+                                }
+                            })()}
+                        </div>
                     ) : (
-                        <Box>
+                        <Box style={{ paddingBottom: '10%' }}>
                             <Text className='myOffers ml-6' px={['28']} py={['6']}>
                                 My offers
                             </Text>
@@ -179,7 +225,7 @@ const BrokerDashboard = () => {
                                             fontSize={['1.9em']}
                                         >
                                             <Th></Th>
-                                            <Th></Th>
+
                                             <Th></Th>
                                             <Th>Name</Th>
                                             <Th>Tranche Status </Th>
@@ -195,7 +241,7 @@ const BrokerDashboard = () => {
                                             return (
                                                 <Tr key={index}>
                                                     <Td></Td>
-                                                    <Td></Td>
+
                                                     <Td textAlign={'center !important'}>
                                                         {' '}
                                                         <Box
@@ -262,3 +308,13 @@ const BrokerDashboard = () => {
 };
 
 export default BrokerDashboard;
+
+// {errorMessage ? (
+//     <p>Something Went Wrong</p>
+// ) : (
+// <div className='loader-div'>
+//     <p className='loader'></p>
+//     <p>Please Wait</p>
+// </div>
+// )}
+// {loanRequest.length === 0 && <p>No loan Requests at this time</p>}

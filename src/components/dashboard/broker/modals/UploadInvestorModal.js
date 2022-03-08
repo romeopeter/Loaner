@@ -19,7 +19,12 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
                 >
                     {(() => {
                         if (responsedata.isLoading) {
-                            return <p className='loader'></p>;
+                            return (
+                                <div className='loader-div' style={{ boxShadow: 'none', padding: '0px' }}>
+                                    <p className='loader'></p>
+                                    <p>Please Wait</p>
+                                </div>
+                            );
                         } else if (responsedata.status || responsedata.error) {
                             return (
                                 <p style={{ color: '#333', fontSize: '14px' }}>

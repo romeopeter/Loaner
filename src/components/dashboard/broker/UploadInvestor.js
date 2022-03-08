@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Table, Thead, Tbody, Tr, Th, Td, TableCaption } from '@chakra-ui/react';
 import UploadInvestorModal from '../broker/modals/UploadInvestorModal';
@@ -44,7 +44,7 @@ const UploadInvestor = () => {
             user_list: apidata,
         };
         axios
-            .post('https://order-book-online.herokuapp.com/v1/registration/sign_up/in_bulk/', userObject)
+            .post('/v1/registration/sign_up/in_bulk/', userObject)
             .then((response) => {
                 response.statusText === 'Created' &&
                     setResponsedata({ ...response, modal: true, status: 'Upload Successful!' });
