@@ -20,9 +20,17 @@ const BrokerDashboard = () => {
     useEffect(() => {
         axios
             .get('https://order-book-online.herokuapp.com/v1/loan_request/')
-            .then((response) => setLoanRequest(response.data));
+            .then((response) => setLoanRequest(response.data))
+            .catch((err) => console.log(err));
     }, []);
     console.log(loanRequest);
+    // Dropdown
+    const [isOpen, setOpen] = useState({ client: false, investor: false });
+    const toggleDropdownClient = () =>
+        isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
+    const toggleDropdownInvestor = () =>
+        isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
+
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -56,15 +64,31 @@ const BrokerDashboard = () => {
             <OrderbookLayout PageNav={NavMenu} className='broker'>
                 <header id='orderbook-header' className='broker-orderbook-header'>
                     <Flex flexDirection={['column']} className='broker-header'>
-                        <div id='loan-invest-dropdown' className=' bg-white px-16 py-10 shadow-md flex justify-start'>
-                            <div id='loan' className='dropdown-container mr-5'>
-                                <Link to='/broker/dashboard/allclients'>Clients </Link>
-                                <i className='fa fa-caret-down' aria-hidden='true'></i>
-                                <div id='load-dropdown'></div>
+                        <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
+                            <div className='dropdownbroker'>
+                                <div className='dropdownbroker-header' onClick={toggleDropdownClient}>
+                                    <h2 className='mr-2'>Clients</h2>
+                                    <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
+                                </div>
+                                <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
+                                    <Link to='/broker/dashboard/new-client' className='dropdownbroker-item '>
+                                        New Client{' '}
+                                    </Link>
+                                    <Link to='/broker/dashboard/allclients' className='dropdownbroker-item '>
+                                        Manage Clients{' '}
+                                    </Link>
+                                </div>
                             </div>
-                            <div id='loan' className='dropdown-container mr-5'>
-                                Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
-                                <div id='load-dropdown'></div>
+                            <div className='dropdownbroker'>
+                                <div className='dropdownbroker-header' onClick={toggleDropdownInvestor}>
+                                    <h2 className='mr-2'>Investors</h2>
+                                    <i className={`fa fa-caret-down ${isOpen.investor && 'open'}`}></i>
+                                </div>
+                                <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
+                                    <Link to='/broker/dashboard/uploadInvestor' className='dropdownbroker-item '>
+                                        Upload Investors{' '}
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                         <div className='grid grid-cols-1 gap-x-6'>
@@ -137,34 +161,37 @@ const BrokerDashboard = () => {
                         </div>
                     </Flex>
                 </header>
-                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }}>
-                    <Box>
-                        <Text className='myOffers ml-6' px={['28']} py={['6']}>
-                            My offers
-                        </Text>
-                        <div className='tableScroll'>
-                            <Table size='sm' colorScheme={'blackAlpha'}>
-                                <Thead>
-                                    <Tr
-                                        // key={index}
-                                        fontWeight={'extrabold'}
-                                        fontSize={['1.9em']}
-                                    >
-                                        <Th></Th>
-                                        <Th></Th>
-                                        <Th></Th>
-                                        <Th>Name</Th>
-                                        <Th>Tranche Status </Th>
-                                        <Th>Tenure</Th>
-                                        <Th>Size</Th>
-                                        <Th>Status</Th>
-                                        <Th>Action</Th>
-                                        <Th></Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody className='body'>
-                                    {currentTableData &&
-                                        currentTableData.map((data, index) => {
+                <section style={{ paddingBottom: '10%' }}>
+                    {loanRequest.length === 0 ? (
+                        <p className='loader' style={{ margin: '100px auto' }}></p>
+                    ) : (
+                        <Box>
+                            <Text className='myOffers ml-6' px={['28']} py={['6']}>
+                                My offers
+                            </Text>
+
+                            <div className='tableScroll'>
+                                <Table size='sm' colorScheme={'blackAlpha'}>
+                                    <Thead>
+                                        <Tr
+                                            // key={index}
+                                            fontWeight={'extrabold'}
+                                            fontSize={['1.9em']}
+                                        >
+                                            <Th></Th>
+                                            <Th></Th>
+                                            <Th></Th>
+                                            <Th>Name</Th>
+                                            <Th>Tranche Status </Th>
+                                            <Th>Tenure</Th>
+                                            <Th>Size</Th>
+                                            <Th>Status</Th>
+                                            <Th>Action</Th>
+                                            <Th></Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody className='body'>
+                                        {currentTableData.map((data, index) => {
                                             return (
                                                 <Tr key={index}>
                                                     <Td></Td>
@@ -193,13 +220,9 @@ const BrokerDashboard = () => {
                                                     </Td>
 
                                                     {data.tranche_id.eligible_investors.length > 0 ? (
-                                                        <Td>
-                                                            <button style={{ color: '#008060' }}>Published</button>
-                                                        </Td>
+                                                        <Td style={{ color: '#008060' }}>Published</Td>
                                                     ) : (
-                                                        <Td>
-                                                            <button style={{ color: '#D82C0D' }}>Draft</button>
-                                                        </Td>
+                                                        <Td style={{ color: '#D82C0D' }}>Draft</Td>
                                                     )}
                                                     {data.tranche_id.eligible_investors.length > 0 ? (
                                                         <Td>
@@ -220,19 +243,18 @@ const BrokerDashboard = () => {
                                                 </Tr>
                                             );
                                         })}
-                                </Tbody>
-                            </Table>
-                        </div>
-                        <Pagination
-                            className='pagination-bar'
-                            currentPage={currentPage}
-                            totalCount={loanRequest.length}
-                            pageSize={PageSize}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    </Box>
-
-                    {/* scrollable table */}
+                                    </Tbody>
+                                </Table>
+                            </div>
+                            <Pagination
+                                className='pagination-bar'
+                                currentPage={currentPage}
+                                totalCount={loanRequest.length}
+                                pageSize={PageSize}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
+                        </Box>
+                    )}
                 </section>
             </OrderbookLayout>
         </div>

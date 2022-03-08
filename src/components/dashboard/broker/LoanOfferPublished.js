@@ -19,37 +19,61 @@ const LoanOfferPublished = () => {
     useEffect(() => {
         setBidsData(AllBidsData);
     }, []);
+    const [isOpen, setOpen] = useState({ client: false, investor: false });
+    const toggleDropdownClient = () =>
+        isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
+    const toggleDropdownInvestor = () =>
+        isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
 
     return (
         <div>
             <DocumentHead title={pageName} />
             <OrderbookLayout PageNav={NavMenu}>
-                <div id='loan-invest-dropdown' className='bg-white px-16 py-10 shadow-md flex justify-start'>
-                    <div id='loan' className='dropdown-container'>
-                        Loan <i className='fa fa-caret-down mr-5' aria-hidden='true'></i>
-                        <div id='load-dropdown'></div>
+                <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
+                    <div className='dropdownbroker'>
+                        <div className='dropdownbroker-header' onClick={toggleDropdownClient}>
+                            <h2 className='mr-2'>Clients</h2>
+                            <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
+                        </div>
+                        <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
+                            <Link to='/broker/dashboard/new-client' className='dropdownbroker-item '>
+                                New Client{' '}
+                            </Link>
+                            <Link to='/broker/dashboard/allclients' className='dropdownbroker-item '>
+                                Manage Clients{' '}
+                            </Link>
+                        </div>
                     </div>
-                    <div id='investor' className='dropdown-container'>
-                        Investor <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='investor-dropdown'></div>
+                    <div className='dropdownbroker'>
+                        <div className='dropdownbroker-header' onClick={toggleDropdownInvestor}>
+                            <h2 className='mr-2'>Investors</h2>
+                            <i className={`fa fa-caret-down ${isOpen.investor && 'open'}`}></i>
+                        </div>
+                        <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
+                            <Link to='/broker/dashboard/uploadInvestor' className='dropdownbroker-item '>
+                                Upload Investors{' '}
+                            </Link>
+                        </div>
                     </div>
                 </div>
-                <section id='orderbook-show-bids'>
+                <section id='orderbook-show-bids' style={{ padding: '60px' }}>
                     <div id='offer'>
-                        <h3 id='header'>Rice Value Chain</h3>
+                        <h3 id='header' style={{ marginBottom: '0px' }}>
+                            Rice Value Chain
+                        </h3>
                         <div id='the-offer'>
                             <div className='mb-8'>
                                 <Link to='/broker/dashboard/'>
                                     <img alt='' src={Arrow} style={{ background: '#c4c4c4', padding: '12px' }} />
                                 </Link>
                             </div>
-                            <div className='grid grid-cols-12 gap-4'>
+                            <div className='grid grid-cols-12 '>
                                 <div id='offer-header' className='col-span-12 lg:col-span-4'>
                                     <img src={offerImage} alt='' className='w-full' />
                                     <h3>Rice Value Chain ( Project Finance )</h3>
                                     <div id='schedule-payment' className='hidden md:block'>
                                         <p>Payment Schedule</p>
-                                        <div className='grid grid-cols-12 gap-4'>
+                                        <div className='grid grid-cols-12 gap-4' style={{ fontSize: '13px' }}>
                                             <div className='col-span-6'>Sep 2022 - 9%</div>
                                             <div className='col-span-6'>Dec 2022 - 9%</div>
                                             <div className='col-span-12'>Mar 2022 - 9%</div>
@@ -71,14 +95,11 @@ const LoanOfferPublished = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='px-5 md:px-5 col-span-12 lg:col-span-8'>
-                                    <h1 style={{ fontWeight: '700' }} className='mb-5'>
+                                <div className='px-5  col-span-12 lg:col-span-8'>
+                                    <p style={{ fontWeight: '700', fontSize: '18px' }} className=' sm:mt-5'>
                                         Description
-                                    </h1>
-                                    <p
-                                        id='offer-description'
-                                        style={{ textAlign: 'justify', height: '250px !important' }}
-                                    >
+                                    </p>
+                                    <p style={{ textAlign: 'justify', height: '250px !important', fontSize: '15px' }}>
                                         Rice is the most consumed commodity. Total global rice expenditure in 2020 was
                                         $350 billion. To put in perspective, total global crude oil in 2020 was just
                                         four times that amount at $1.3 trillion. Rice is the most consumed commodity.
@@ -123,7 +144,7 @@ const LoanOfferPublished = () => {
                                             <p style={{ fontSize: '17px', fontWeight: 'bold' }}>180 Days</p>
                                         </Box>
                                     </Flex>
-                                    <Flex flexDirection={['column', 'row']} my={[8]} pb={[6]}>
+                                    <Flex flexDirection={['column', 'row']} className='lg:mb-5'>
                                         <Box>
                                             <p style={{ fontSize: '15px' }}>Size</p>
                                             <p style={{ fontSize: '17px', fontWeight: 'bold' }}>NGN 5 billion</p>

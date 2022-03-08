@@ -1,98 +1,92 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import LandingPage from "./LandingPage";
-import NotFound from "./NotFound";
+import LandingPage from './LandingPage';
+import NotFound from './NotFound';
 
-import Login from "./authentication/Login";
-import RequireAuth from "./authentication/RequireAuth";
-import Register from "./authentication/Register";
-import Profile from "./dashboard/client/ProfileSettings";
+import Login from './authentication/Login';
+import RequireAuth from './authentication/RequireAuth';
+import Register from './authentication/Register';
+import AccountSettings from './dashboard/client/AccountSettings';
 
-import CurrentDeals from "./dashboard/CurrentDeals";
-import ArchivedDeals from "./dashboard/ArchivedDeals";
-import SingleTrancheDeal from "./dashboard/SingleTrancheDeal";
-import MultipleTrancheDeal from "./dashboard/MultipleTrancheDeal";
+import CurrentDeals from './dashboard/CurrentDeals';
+import ArchivedDeals from './dashboard/ArchivedDeals';
+import SingleTrancheDeal from './dashboard/SingleTrancheDeal';
+import MultipleTrancheDeal from './dashboard/MultipleTrancheDeal';
 
-import ClientDashboard from "./dashboard/client/ClientDashboard";
-import LoanRequest from "./dashboard/client/LoanRequest";
-import Offers from "./dashboard/client/Offers";
-import ShowOffer from "./dashboard/client/ShowOffer";
-import EditOffer from "./dashboard/client/EditOffer";
-import PublishOffer from "./dashboard/client/PublishOffer";
-import ViewInvestor from "./dashboard/client/ViewInvestor";
-import ShowBids from "./dashboard/client/ShowBids";
-import ShowAllBids from "./dashboard/client/ShowAllBids";
+import ClientDashboard from './dashboard/client/ClientDashboard';
+import LoanRequest from './dashboard/client/LoanRequest';
+import Offers from './dashboard/client/Offers';
+import ShowOffer from './dashboard/client/ShowOffer';
+import EditOffer from './dashboard/client/EditOffer';
+import PublishOffer from './dashboard/client/PublishOffer';
+import ViewInvestor from './dashboard/client/ViewInvestor';
+import ShowBids from './dashboard/client/ShowBids';
+import ShowAllBids from './dashboard/client/ShowAllBids';
 
-import Dashboard from "./dashboard/investor/Dashboard";
-import AllOffers from "./dashboard/investor/AllOffers";
-import IncomingOffer from "./dashboard/investor/IncomingOffer";
-import ShowOpenOffer from "./dashboard/investor/ShowOpenOffer";
-import BidApproved from "./dashboard/investor/BidApproved";
-import BidRejected from "./dashboard/investor/BidRejected";
-import BAPaymentProof from "./dashboard/investor/BAPaymentProof";
-import BAPaymentDetail from "./dashboard/investor/BAPaymentDetail";
-import SuccessfulOffers from "./dashboard/investor/SuccessfulOffers";
-import DeclinedOffers from "./dashboard/investor/DeclinedOffers";
+import Dashboard from './dashboard/investor/Dashboard';
+import AllOffers from './dashboard/investor/AllOffers';
+import IncomingOffer from './dashboard/investor/IncomingOffer';
+import ShowOpenOffer from './dashboard/investor/ShowOpenOffer';
+import BidApproved from './dashboard/investor/BidApproved';
+import BidRejected from './dashboard/investor/BidRejected';
+import BAPaymentProof from './dashboard/investor/BAPaymentProof';
+import BAPaymentDetail from './dashboard/investor/BAPaymentDetail';
+import SuccessfulOffers from './dashboard/investor/SuccessfulOffers';
+import DeclinedOffers from './dashboard/investor/DeclinedOffers';
 
-import BrokerDashboard from "./dashboard/broker/Dashboard";
-import NewClient from "./dashboard/broker/NewClient";
-import AllClients from "./dashboard/broker/AllClients";
-import CreateOffer from "./dashboard/broker/CreateOffer";
-import NewOfferTiming from "./dashboard/broker/NewOfferTiming";
-import LoanSummary from "./dashboard/broker/LoanSummary";
-import AllLoans from "./dashboard/broker/AllLoans";
-import Bids from "./dashboard/broker/Bids";
-import AddNewBid from "./dashboard/broker/AddNewBid";
-import Payment from "./dashboard/broker/Payment";
-import LoanOfferDraft from "./dashboard/broker/LoanOfferDraft";
-import LoanOfferPublished from "./dashboard/broker/LoanOfferPublished";
-import SelectInvestor from "./dashboard/broker/SelectInvestor";
-import NewClientSave from "./dashboard/broker/NewClientSave";
-import UploadInvestor from "./dashboard/broker/UploadInvestor";
+import BrokerDashboard from './dashboard/broker/Dashboard';
+import NewClient from './dashboard/broker/NewClient';
+import AllClients from './dashboard/broker/AllClients';
+import CreateOffer from './dashboard/broker/CreateOffer';
+import NewOfferTiming from './dashboard/broker/NewOfferTiming';
+import LoanSummary from './dashboard/broker/LoanSummary';
+import AllLoans from './dashboard/broker/AllLoans';
+import Bids from './dashboard/broker/Bids';
+import AddNewBid from './dashboard/broker/AddNewBid';
+import Payment from './dashboard/broker/Payment';
+import LoanOfferDraft from './dashboard/broker/LoanOfferDraft';
+import LoanOfferPublished from './dashboard/broker/LoanOfferPublished';
+import SelectInvestor from './dashboard/broker/SelectInvestor';
+import NewClientSave from './dashboard/broker/NewClientSave';
+import UploadInvestor from './dashboard/broker/UploadInvestor';
 
-import AdminCurrencies from "./dashboard/admin/AdminCurrencies";
-import AdminCompanies from "./dashboard/admin/AdminCompanies";
-import AdminTranche from "./dashboard/admin/AdminTranche";
-import AdminPreference from "./dashboard/admin/AdminPreferenc";
-import AdminProfile from "./dashboard/admin/AdminProfileSettings";
-import PrivacyPolicy from "./dashboard/admin/PrivacyPolicy";
-import Terms from "./dashboard/admin/Terms";
+import AdminCurrencies from './dashboard/admin/AdminCurrencies';
+import AdminCompanies from './dashboard/admin/AdminCompanies';
+import AdminTranche from './dashboard/admin/AdminTranche';
+import AdminPreference from './dashboard/admin/AdminPreferenc';
+import AdminProfile from './dashboard/admin/AdminProfileSettings';
+import PrivacyPolicy from './dashboard/admin/PrivacyPolicy';
+import Terms from './dashboard/admin/Terms';
 
 function App() {
     return (
         <ChakraProvider>
             <Routes>
-                <Route path="*" element={<NotFound />} />
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path='*' element={<NotFound />} />
+                <Route path='/' element={<LandingPage />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
 
-                {/*Profile*/}
+                {/*Profile/AccountSettings*/}
                 <Route
-                    path="/profile"
+                    path='/account-settings'
                     element={
                         <RequireAuth>
-                            <Profile />
+                            <AccountSettings />
                         </RequireAuth>
                     }
                 />
 
-                <Route path="/current-deals" element={<CurrentDeals />} />
-                <Route path="/archived-deals" element={<ArchivedDeals />} />
-                <Route
-                    path="single-tranche-deal"
-                    element={<SingleTrancheDeal />}
-                />
-                <Route
-                    path="/multiple-tranche-deal"
-                    element={<MultipleTrancheDeal />}
-                />
+                <Route path='/current-deals' element={<CurrentDeals />} />
+                <Route path='/archived-deals' element={<ArchivedDeals />} />
+                <Route path='single-tranche-deal' element={<SingleTrancheDeal />} />
+                <Route path='/multiple-tranche-deal' element={<MultipleTrancheDeal />} />
 
                 {/*Client dashboard*/}
                 <Route
-                    path="/client/dashboard"
+                    path='/client/dashboard'
                     element={
                         <RequireAuth>
                             <ClientDashboard />
@@ -100,7 +94,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/client/new-loan"
+                    path='/client/new-loan'
                     element={
                         <RequireAuth>
                             <LoanRequest />
@@ -108,7 +102,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/client/offers"
+                    path='/client/offers'
                     element={
                         <RequireAuth>
                             <Offers />
@@ -116,7 +110,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/client/offers/offer"
+                    path='/client/offers/offer'
                     element={
                         <RequireAuth>
                             <ShowOffer />
@@ -124,7 +118,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/client/offers/offer/edit"
+                    path='/client/offers/offer/edit'
                     element={
                         <RequireAuth>
                             <EditOffer />
@@ -133,7 +127,7 @@ function App() {
                 />
 
                 <Route
-                    path="/client/offers/offer/publish"
+                    path='/client/offers/offer/publish'
                     element={
                         <RequireAuth>
                             <PublishOffer />
@@ -142,7 +136,7 @@ function App() {
                 />
 
                 <Route
-                    path="/client/offers/offer/view-investors"
+                    path='/client/offers/offer/view-investors'
                     element={
                         <RequireAuth>
                             <ViewInvestor />
@@ -151,7 +145,7 @@ function App() {
                 />
 
                 <Route
-                    path="/client/offers/offer/show-bids"
+                    path='/client/offers/offer/show-bids'
                     element={
                         <RequireAuth>
                             <ShowBids />
@@ -161,7 +155,7 @@ function App() {
 
                 {/*Investor Dashboard*/}
                 <Route
-                    path="/investor/dashboard"
+                    path='/investor/dashboard'
                     element={
                         <RequireAuth>
                             <Dashboard />
@@ -169,7 +163,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/offers"
+                    path='/investor/offers'
                     element={
                         <RequireAuth>
                             <AllOffers />
@@ -177,7 +171,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/offer-coming-soon"
+                    path='/investor/offer-coming-soon'
                     element={
                         <RequireAuth>
                             <IncomingOffer />
@@ -185,7 +179,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/dashboard/open-offer"
+                    path='/investor/dashboard/open-offer'
                     element={
                         <RequireAuth>
                             <ShowOpenOffer />
@@ -193,7 +187,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/dashboard/bid-approved"
+                    path='/investor/dashboard/bid-approved'
                     element={
                         <RequireAuth>
                             <BidApproved />
@@ -201,7 +195,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/dashboard/bid-rejected"
+                    path='/investor/dashboard/bid-rejected'
                     element={
                         <RequireAuth>
                             <BidRejected />
@@ -209,7 +203,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/dashboard/payment-proof"
+                    path='/investor/dashboard/payment-proof'
                     element={
                         <RequireAuth>
                             <BAPaymentProof />
@@ -217,7 +211,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/dashboard/payment-detail"
+                    path='/investor/dashboard/payment-detail'
                     element={
                         <RequireAuth>
                             <BAPaymentDetail />
@@ -225,7 +219,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/sucessful-bids"
+                    path='/investor/sucessful-bids'
                     element={
                         <RequireAuth>
                             <SuccessfulOffers />
@@ -233,7 +227,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/investor/bids/declined"
+                    path='/investor/bids/declined'
                     element={
                         <RequireAuth>
                             <DeclinedOffers />
@@ -242,7 +236,7 @@ function App() {
                 />
 
                 <Route
-                    path="/client/offers/offer/show-all-bids"
+                    path='/client/offers/offer/show-all-bids'
                     element={
                         <RequireAuth>
                             <ShowAllBids />
@@ -252,7 +246,7 @@ function App() {
 
                 {/*Broker dashboard*/}
                 <Route
-                    path="/broker/dashboard"
+                    path='/broker/dashboard'
                     element={
                         <RequireAuth>
                             <BrokerDashboard />
@@ -260,7 +254,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/new-client"
+                    path='/broker/dashboard/new-client'
                     element={
                         <RequireAuth>
                             <NewClient />
@@ -268,7 +262,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/new-client-save"
+                    path='/broker/dashboard/new-client-save'
                     element={
                         <RequireAuth>
                             <NewClientSave />
@@ -276,7 +270,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/allclients"
+                    path='/broker/dashboard/allclients'
                     element={
                         <RequireAuth>
                             <AllClients />
@@ -284,7 +278,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/create-offer"
+                    path='/broker/dashboard/create-offer'
                     element={
                         <RequireAuth>
                             <CreateOffer />
@@ -292,7 +286,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/new-offer-timing"
+                    path='/broker/dashboard/new-offer-timing'
                     element={
                         <RequireAuth>
                             <NewOfferTiming />
@@ -300,7 +294,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/new-offer/summary"
+                    path='/broker/dashboard/new-offer/summary'
                     element={
                         <RequireAuth>
                             <LoanSummary />
@@ -308,7 +302,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/allloans/"
+                    path='/broker/dashboard/allloans/'
                     element={
                         <RequireAuth>
                             <AllLoans />
@@ -316,7 +310,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/bids/"
+                    path='/broker/dashboard/bids/'
                     element={
                         <RequireAuth>
                             <Bids />
@@ -324,7 +318,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/bids/addnewbid/"
+                    path='/broker/dashboard/bids/addnewbid/'
                     element={
                         <RequireAuth>
                             <AddNewBid />
@@ -332,7 +326,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/uploadInvestor/"
+                    path='/broker/dashboard/uploadInvestor/'
                     element={
                         <RequireAuth>
                             <UploadInvestor />
@@ -340,7 +334,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/bids/payment/"
+                    path='/broker/dashboard/bids/payment/'
                     element={
                         <RequireAuth>
                             <Payment />
@@ -348,7 +342,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/loan-offer-draft/:id"
+                    path='/broker/dashboard/loan-offer-draft/:id'
                     element={
                         <RequireAuth>
                             <LoanOfferDraft />
@@ -356,7 +350,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/loan-offer-published/:id"
+                    path='/broker/dashboard/loan-offer-published/:id'
                     element={
                         <RequireAuth>
                             <LoanOfferPublished />
@@ -364,7 +358,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/broker/dashboard/loan-offer/select-investor"
+                    path='/broker/dashboard/loan-offer/select-investor'
                     element={
                         <RequireAuth>
                             <SelectInvestor />
@@ -374,7 +368,7 @@ function App() {
 
                 {/*Admin Dashboard*/}
                 <Route
-                    path="/admin/currencies"
+                    path='/admin/currencies'
                     element={
                         <RequireAuth>
                             <AdminCurrencies />
@@ -382,7 +376,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/companies"
+                    path='/admin/companies'
                     element={
                         <RequireAuth>
                             <AdminCompanies />
@@ -390,7 +384,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/tranche"
+                    path='/admin/tranche'
                     element={
                         <RequireAuth>
                             <AdminTranche />
@@ -398,7 +392,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/preference"
+                    path='/admin/preference'
                     element={
                         <RequireAuth>
                             <AdminPreference />
@@ -406,7 +400,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/profile-settings"
+                    path='/admin/profile-settings'
                     element={
                         <RequireAuth>
                             <AdminProfile />
@@ -414,7 +408,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/privacy"
+                    path='/admin/privacy'
                     element={
                         <RequireAuth>
                             <PrivacyPolicy />
@@ -422,7 +416,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/admin/terms"
+                    path='/admin/terms'
                     element={
                         <RequireAuth>
                             <Terms />

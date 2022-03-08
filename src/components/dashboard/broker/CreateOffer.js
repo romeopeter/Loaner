@@ -1,73 +1,73 @@
-import React, { useState, createRef, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, createRef, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import OrderbookLayout from "../../OrderbookLayout";
-import RequestForm from "./OfferForm";
-import DocumentHead from "../../DocumentHead";
-import NavMenu from "../NavMenu";
+import OrderbookLayout from '../../OrderbookLayout';
+import RequestForm from './OfferForm';
+import DocumentHead from '../../DocumentHead';
+import NavMenu from '../NavMenu';
 
-import Button from "../../Button";
+import Button from '../../Button';
 
-import { setServerMessage } from "../../../redux/messageSlice";
+import { setServerMessage } from '../../../redux/messageSlice';
 
-import {cp, bond} from "../loan-request-data/requestData"
+import { cp, bond } from '../loan-request-data/requestData';
 
-import { CPLoanOfferAction, bondLoanOfferAction} from "../../../redux/loanSlice";
+import { CPLoanOfferAction, bondLoanOfferAction } from '../../../redux/loanSlice';
 
 export default function LoanRequest() {
-    const pageName = "Loan request";
+    const pageName = 'Loan request';
 
-    const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
-    const serverError = useSelector(state => state.message.server.message);
+    const currentOfferIsUpdated = useSelector((state) => state.loan.currentOffer);
+    const serverError = useSelector((state) => state.message.server.message);
 
     console.log(currentOfferIsUpdated);
 
     const [formState, setFormState] = useState({
-        dealType: "",
+        dealType: '',
         // issuer: "",
-        guarantor: "",
-        dealName: "",
-        projectName: "",
-        dealOwner: "",
-        dealTeam: "",
-        status: "",
-        trancheName: "",
+        guarantor: '',
+        dealName: '',
+        projectName: '',
+        dealOwner: '',
+        dealTeam: '',
+        status: '',
+        trancheName: '',
         trancheSize: {
-            currency: "NGN",
-            value: "",
-            faceValue: "",
-            discountValue:"",
+            currency: 'NGN',
+            value: '',
+            faceValue: '',
+            discountValue: '',
             parValue: 1000,
-            minSubscription: "",
+            minSubscription: '',
         },
         pricing: {
-            dayCount: "",
-            couponType: "",
-            benchmark: "",
-            couponFrequency: "",
-            callOption:"",
+            dayCount: '',
+            couponType: '',
+            benchmark: '',
+            couponFrequency: '',
+            callOption: '',
             offerType: {
-                name: "",
+                name: '',
                 fixedPrice: {
-                    rate: "", // Can be discount rate or rate range
-                    yield: "", // Can be implied yield or yield type
-                }
+                    rate: '', // Can be discount rate or rate range
+                    yield: '', // Can be implied yield or yield type
+                },
             },
         },
         timing: {
-            offerStart: "",
-            offerEnd: "",
-            allotmentDate: "",
-            settlementDate: "",
-            maturityDate: "",
+            offerStart: '',
+            offerEnd: '',
+            allotmentDate: '',
+            settlementDate: '',
+            maturityDate: '',
         },
-        useOfProceeds: "",
-        taxConsideration: "",
-        eligibleInvestors: "",
+        useOfProceeds: '',
+        taxConsideration: '',
+        eligibleInvestors: '',
         rating: {
-            name: "",
-            scale: "",
+            name: '',
+            scale: '',
         },
     });
 
@@ -75,23 +75,23 @@ export default function LoanRequest() {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const { user } = JSON.parse(localStorage.getItem("USER"));
+    const { user } = JSON.parse(localStorage.getItem('USER'));
 
     const userFullName = `${user.first_name} ${user.last_name}`;
 
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const requestContainerRef = createRef();
     const componentMounted = useRef(true);
 
     const handleModal = () => {
-        requestContainerRef.current.classList.toggle("modal");
+        requestContainerRef.current.classList.toggle('modal');
     };
 
     const handleSubmit = () => {
-        const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
+        const { user: currentUser } = JSON.parse(localStorage.getItem('USER'));
 
-        if (formState.dealType === "CP") {
+        if (formState.dealType === 'CP') {
             const response = dispatch(CPLoanOfferAction(cp(formState, currentUser)));
 
             if (componentMounted.current) {
@@ -110,10 +110,10 @@ export default function LoanRequest() {
             }
         }
 
-        if (formState.dealType === "BOND") {
-            const response = dispatch(bondLoanOfferAction(bond(formState, currentUser)))
-            
-            if(componentMounted.current) {
+        if (formState.dealType === 'BOND') {
+            const response = dispatch(bondLoanOfferAction(bond(formState, currentUser)));
+
+            if (componentMounted.current) {
                 response.then(() => {
                     setIsLoading(true);
 
@@ -125,47 +125,50 @@ export default function LoanRequest() {
                         console.log("Loan created");
                         navigate("/broker/dashboard/loan-offer/select-investor");
                     }
-                })
-            };
+                });
+            }
         }
-
     };
-
+    // Dropdown
+    const [isOpen, setOpen] = useState({ client: false, investor: false });
+    const toggleDropdownClient = () =>
+        isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
+    const toggleDropdownInvestor = () =>
+        isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
     return (
         <>
             <DocumentHead title={pageName} />
             <OrderbookLayout PageNav={NavMenu}>
-                <section id="orderbook-loan-request">
-                    <div
-                        id="loan-invest-dropdown"
-                        className="bg-white px-16 py-10 shadow-md flex justify-start"
-                    >
-                        <div id="loan" className="dropdown-container mr-5">
-                            Loan{" "}
-                            <i
-                                className="fa fa-caret-down"
-                                aria-hidden="true"
-                            ></i>
-                            <div id="load-dropdown"></div>
+                <section id='orderbook-loan-request'>
+                    <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
+                        <div className='dropdownbroker'>
+                            <div className='dropdownbroker-header' onClick={toggleDropdownClient}>
+                                <h2 className='mr-2'>Clients</h2>
+                                <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
+                            </div>
+                            <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
+                                <Link to='/broker/dashboard/new-client' className='dropdownbroker-item '>
+                                    New Client{' '}
+                                </Link>
+                                <Link to='/broker/dashboard/allclients' className='dropdownbroker-item '>
+                                    Manage Clients{' '}
+                                </Link>
+                            </div>
                         </div>
-                        <div id="investor" className="dropdown-container">
-                            Investor{" "}
-                            <i
-                                className="fa fa-caret-down"
-                                aria-hidden="true"
-                            ></i>
-                            <div id="investor-dropdown"></div>
+                        <div className='dropdownbroker'>
+                            <div className='dropdownbroker-header' onClick={toggleDropdownInvestor}>
+                                <h2 className='mr-2'>Investors</h2>
+                                <i className={`fa fa-caret-down ${isOpen.investor && 'open'}`}></i>
+                            </div>
+                            <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
+                                <Link to='/broker/dashboard/uploadInvestor' className='dropdownbroker-item '>
+                                    Upload Investors{' '}
+                                </Link>
+                            </div>
                         </div>
                     </div>
-                    <div
-                        id="loan-request-container"
-                        className=""
-                        ref={requestContainerRef}
-                    >
-                        <div
-                            id="request-loan-form"
-                            className="loan-request-flex-item"
-                        >
+                    <div id='loan-request-container' className='' ref={requestContainerRef}>
+                        <div id='request-loan-form' className='loan-request-flex-item'>
                             <RequestForm
                                 requestFormState={{ formState, setFormState }}
                                 showSummary={{
@@ -175,35 +178,24 @@ export default function LoanRequest() {
                                 }}
                             />
                         </div>
-                        <div
-                            id="loan-summary"
-                            className="bg-white loan-request-flex-item modal-content"
-                        >
+                        <div id='loan-summary' className='bg-white loan-request-flex-item modal-content'>
                             {!summaryState ? (
-                                <div id="summary-intro" className="mt-20 ml-20">
-                                    <h2 className="text-2xl font-bold mb-5">
-                                        Loan Offer Summary
-                                    </h2>
-                                    <p className="font-bold">
-                                        View your loan summary here.
-                                    </p>
+                                <div id='summary-intro' className='mt-20 ml-20'>
+                                    <h2 className='text-2xl font-bold mb-5'>Loan Offer Summary</h2>
+                                    <p className='font-bold'>View your loan summary here.</p>
                                 </div>
                             ) : (
-                                <div id="summary-table" className="mt-20 mx-10">
+                                <div id='summary-table' className='mt-20 mx-10'>
                                     <span
-                                        class="md:hidden modal-close"
-                                        onClick={() =>
-                                            requestContainerRef.current.classList.remove(
-                                                "modal"
-                                            )
-                                        }
+                                        class='md:hidden modal-close'
+                                        onClick={() => requestContainerRef.current.classList.remove('modal')}
                                     >
                                         &times;
                                     </span>
-                                    <h2 className="text-md text-center sm:text-left sm:text-2xl font-bold mb-5">
+                                    <h2 className='text-md text-center sm:text-left sm:text-2xl font-bold mb-5'>
                                         Loan Offer Summary
                                     </h2>
-                                    <table className="table-fixed w-full h-auto">
+                                    <table className='table-fixed w-full h-auto'>
                                         <thead>
                                             <tr>
                                                 <th></th>
@@ -215,18 +207,19 @@ export default function LoanRequest() {
                                             <tr>
                                                 <td>
                                                     <small>Name</small>
-                                                    <span>
-                                                        {userFullName &&
-                                                            userFullName}
-                                                    </span>
+                                                    <span>{userFullName && userFullName}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <small>Type of offer</small>
                                                     <span>
-                                                        {(formState.dealType !== "" && formState.dealType === "CP") && "Commercial paper"}
-                                                        {(formState.dealType !== "" && formState.dealType === "BOND") && "Bond"}
+                                                        {formState.dealType !== '' &&
+                                                            formState.dealType === 'CP' &&
+                                                            'Commercial paper'}
+                                                        {formState.dealType !== '' &&
+                                                            formState.dealType === 'BOND' &&
+                                                            'Bond'}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -234,25 +227,16 @@ export default function LoanRequest() {
                                                 <td>
                                                     <small>Loan amount</small>
                                                     <span>
-                                                        {formState.trancheSize.currency}{" "}
-                                                        {formState.trancheSize
-                                                            .minSubscription !==
-                                                            "" &&
-                                                            formState
-                                                                .trancheSize
-                                                                .minSubscription
-                                                        }
+                                                        {formState.trancheSize.currency}{' '}
+                                                        {formState.trancheSize.minSubscription !== '' &&
+                                                            formState.trancheSize.minSubscription}
                                                     </span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <small>Tranche</small>
-                                                    <span>
-                                                        {formState.trancheName !==
-                                                            "" &&
-                                                            formState.trancheName}
-                                                    </span>
+                                                    <span>{formState.trancheName !== '' && formState.trancheName}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -265,72 +249,54 @@ export default function LoanRequest() {
                                                 <td>
                                                     <small>Size</small>
                                                     <span>
-                                                        {formState.trancheSize
-                                                            .minSubscription !==
-                                                            "" &&
-                                                            formState
-                                                                .trancheSize
-                                                                .minSubscription}
+                                                        {formState.trancheSize.minSubscription !== '' &&
+                                                            formState.trancheSize.minSubscription}
                                                     </span>
                                                 </td>
                                             </tr>
-                                            <tr id="summary-dates-row">
-                                                <td className="border-r border-black">
+                                            <tr id='summary-dates-row'>
+                                                <td className='border-r border-black'>
                                                     <small>Offer opens</small>
                                                     <span>
-                                                        {formState.timing
-                                                            .offerStart !==
-                                                            "" &&
-                                                            formState.timing
-                                                                .offerStart}
+                                                        {formState.timing.offerStart !== '' &&
+                                                            formState.timing.offerStart}
                                                     </span>
                                                 </td>
-                                                <td className="border-r border-black">
+                                                <td className='border-r border-black'>
                                                     <small>Offer closes</small>
                                                     <span>
-                                                        {formState.timing
-                                                            .offerEnd !== "" &&
-                                                            formState.timing
-                                                                .offerEnd}
+                                                        {formState.timing.offerEnd !== '' && formState.timing.offerEnd}
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <small>
-                                                        Settlement date
-                                                    </small>
+                                                    <small>Settlement date</small>
                                                     <span>
-                                                        {formState.timing
-                                                            .settlementDate !==
-                                                            "" &&
-                                                            formState.timing
-                                                                .settlementDate}
+                                                        {formState.timing.settlementDate !== '' &&
+                                                            formState.timing.settlementDate}
                                                     </span>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
 
-                                    <div
-                                        id="loan-summary-buttons"
-                                        className="my-10"
-                                    >
-                                        <div className="grid grid-cols-2 gap-3 mt-5 mb-5">
+                                    <div id='loan-summary-buttons' className='my-10'>
+                                        <div className='grid grid-cols-2 gap-3 mt-5 mb-5'>
                                             <Button
-                                                type="button"
-                                                title="Save as draft"
-                                                buttonClass="col-span-2 bg-gray-400 rounded"
+                                                type='button'
+                                                title='Save as draft'
+                                                buttonClass='col-span-2 bg-gray-400 rounded'
                                             />
                                         </div>
                                         <Button
-                                            type="submit"
+                                            type='submit'
                                             // title="Publish"
-                                            buttonClass="w-full bg-green-600 rounded"
+                                            buttonClass='w-full bg-green-600 rounded'
                                             handleClick={() => handleSubmit()}
                                         >
-                                            Create loan{" "}
+                                            Create loan{' '}
                                             {isLoading ? (
                                                 <i
-                                                    className="fa fa-spinner fa-pulse fa-3x fa-fw"
+                                                    className='fa fa-spinner fa-pulse fa-3x fa-fw'
                                                     style={{ fontSize: 20 }}
                                                 ></i>
                                             ) : null}
