@@ -96,10 +96,16 @@ export default function LoanRequest() {
 				response.then(() => {
 					setIsLoading(true);
 
-					if (serverError === undefined) {
-						console.log("Loan created");
-						navigate("/client/offers/offer/publish");
-					}
+					if (serverError.messageType === "network_error") {
+                        setIsLoading(false);
+
+                        handleSubmit();
+                    }
+
+					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
+                        console.log("Loan created");
+                        navigate("/broker/dashboard/loan-offer/select-investor");
+                    }
 				});
 			}
 		}
@@ -111,10 +117,16 @@ export default function LoanRequest() {
 				response.then(() => {
 					setIsLoading(true);
 
-					if (serverError === undefined) {
-						console.log("Loan created");
-						navigate("/client/offers/offer/publish");
-					}
+					if (serverError.messageType === "network_error") {
+                        setIsLoading(false);
+
+                        handleSubmit();
+                    }
+
+					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
+                        console.log("Loan created");
+                        navigate("/broker/dashboard/loan-offer/select-investor");
+                    }
 				})
 			};
 		}
