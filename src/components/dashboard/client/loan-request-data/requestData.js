@@ -13,11 +13,11 @@ function cp(formState, currentUser) {
 				size: {
 					minimum_subscription: {
 						currency: formState.trancheSize.currency,
-						amount: formState.trancheSize.minSubscription,
+						amount: Number(formState.trancheSize.minSubscription).toFixed(2),
 					},
 					value: {
-						face_value: formState.trancheSize.faceValue,
-						discount_value: formState.trancheSize.discountValue,
+						face_value: Number(formState.trancheSize.faceValue).toFixed(2),
+						discount_value: Number(formState.trancheSize.discountValue).toFixed(2),
 						value: formState.trancheSize.parValue
 					},
 					currency: formState.trancheSize.currency,
