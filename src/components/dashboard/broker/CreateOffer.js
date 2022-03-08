@@ -21,6 +21,8 @@ export default function LoanRequest() {
     const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
     const serverError = useSelector(state => state.message.server.message);
 
+    console.log(currentOfferIsUpdated);
+
     const [formState, setFormState] = useState({
         dealType: "",
         // issuer: "",
@@ -96,7 +98,11 @@ export default function LoanRequest() {
                 response.then(() => {
                     setIsLoading(true);
 
-                    if (serverError === undefined) {
+                    if (serverError.messageType === "network_error") {
+                        handleSubmit();
+                    }
+
+                    if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
                         console.log("Loan created");
                         navigate("/broker/dashboard/loan-offer/select-investor");
                     }
@@ -111,7 +117,11 @@ export default function LoanRequest() {
                 response.then(() => {
                     setIsLoading(true);
 
-                    if (serverError === undefined) {
+                    if (serverError.messageType === "network_error") {
+                        handleSubmit();
+                    }
+
+                    if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
                         console.log("Loan created");
                         navigate("/broker/dashboard/loan-offer/select-investor");
                     }
