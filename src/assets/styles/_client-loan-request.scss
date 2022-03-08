@@ -109,6 +109,7 @@
 							.form-field {
 								border: none !important;
 								padding: 20px;
+								height: 100%;
 
 								&:focus {
 									border: none !important;
@@ -176,6 +177,7 @@
 							small {
 								display: block;
 							}
+							
 							span {
 								font-weight: bold;
 							}
