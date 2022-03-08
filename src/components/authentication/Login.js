@@ -6,6 +6,7 @@ import { useAlert } from "react-alert";
 import { signInAction } from "../../redux/authSlice";
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
+import {Danger, Success, Info} from "../alert"
 
 import setBgImage from "../../utils/setBgImage";
 import phoneLady from "../../assets/images/phoneLady.jpg";
@@ -19,7 +20,8 @@ export default function Login() {
 	const dispatch = useDispatch();
 
 	const { isLoggedIn, user } = useSelector((state) => state.auth);
-	const { message } = useSelector((state) => state.message.server);
+	const { message: serverMessage } = useSelector((state) => state.message.server);
+	const {client: clientMessage}  = useSelector(state => state.message);
 
 	const [form, setForm] = useState({
 		emailAddress: "",
@@ -109,19 +111,19 @@ export default function Login() {
 	let networkErrorMessage = null;
 	let confirmEmailMessage = null;
 	let noUserMessage = null;
+	let tokenExpired = null;
 
-	if (typeof message === "object") {
-		if (message.messageType === acountCreated) confirmEmailMessage = message.detail;
-		if (message.messageType === noActiveAccount) noUserMessage = message.detail;
-		if (message.messageType === networkError) {
-			networkErrorMessage = message.detail;
+	if (typeof serverMessage === "object") {
+		if (serverMessage.messageType === acountCreated) confirmEmailMessage = serverMessage.detail;
+		if (serverMessage.messageType === noActiveAccount) noUserMessage = serverMessage.detail;
+		if (serverMessage.messageType === networkError) {
+			networkErrorMessage = serverMessage.detail;
+		}
+	}
 
-			/*setForm((state) => {
-				return {
-					...state,
-					isLoading: false,
-				};
-			});*/
+	if (clientMessage !== null && typeof clientMessage === "object") {
+		if (clientMessage.messageType === "token_expired") {
+			tokenExpired = clientMessage.detail;
 		}
 	}
 
@@ -138,28 +140,20 @@ export default function Login() {
 		};
 	}
 
-	const ErrorComoponent = () => (
+	// Shows alerts from server and client
+	const ShowAlerts = () => (
 		<>
 			<div className="mb-5">
-				{networkErrorMessage !== null ?(
-					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-						{networkErrorMessage}
-					</div>
-				):null}
+				{networkErrorMessage !== null ?(<Danger message={networkErrorMessage} />):null}
 			</div>
 			<div className="mb-5">
-				{confirmEmailMessage !== null ?(
-					<div className="text-black text-center bg-green-100 p-2 rounded border border-1 border-green-400">
-						{confirmEmailMessage}
-					</div>
-				):null}
+				{confirmEmailMessage !== null ?(<Danger message={confirmEmailMessage} />):null}
 			</div>
 			<div className="mb-5">
-				{noUserMessage !== null ?(
-					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-						{noUserMessage}
-					</div>
-				):null}
+				{tokenExpired !== null ?(<Info message={tokenExpired} />):null}
+			</div>
+			<div className="mb-5">
+				{noUserMessage !== null ?(<Success message={noUserMessage} />):null}
 			</div>
 		</>
 	)
@@ -213,7 +207,7 @@ export default function Login() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									{/*Request error messages*/}
-									<ErrorComoponent />
+									<ShowAlerts />
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Welcome back
 									</h2>
