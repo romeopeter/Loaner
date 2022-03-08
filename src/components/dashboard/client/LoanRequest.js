@@ -98,7 +98,7 @@ export default function LoanRequest() {
 
 					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
                         console.log("Loan created");
-                        navigate("/broker/dashboard/loan-offer/select-investor");
+                        navigate("/client/offers/offer/publish");
                     } else {
                     	
                     	if (serverError) {
@@ -124,7 +124,7 @@ export default function LoanRequest() {
 
 					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
                         console.log("Loan created");
-                        navigate("/broker/dashboard/loan-offer/select-investor");
+                        navigate("/client/offers/offer/publish");
                     } else {
 
                     	if (serverError) {
