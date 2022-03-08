@@ -20,9 +20,10 @@ const BrokerDashboard = () => {
     useEffect(() => {
         axios
             .get('https://order-book-online.herokuapp.com/v1/loan_request/')
-            .then((response) => setLoanRequest(response.data));
+            .then((response) => setLoanRequest(response.data))
+            .catch((err) => console.log(err));
     }, []);
-
+    console.log(loanRequest);
     // Dropdown
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
@@ -160,34 +161,37 @@ const BrokerDashboard = () => {
                         </div>
                     </Flex>
                 </header>
-                <section style={{ backgroundColor: '#E5E5E5', paddingBottom: '10%' }}>
-                    <Box>
-                        <Text className='myOffers ml-6' px={['28']} py={['6']}>
-                            My offers
-                        </Text>
-                        <div className='tableScroll'>
-                            <Table size='sm' colorScheme={'blackAlpha'}>
-                                <Thead>
-                                    <Tr
-                                        // key={index}
-                                        fontWeight={'extrabold'}
-                                        fontSize={['1.9em']}
-                                    >
-                                        <Th></Th>
-                                        <Th></Th>
-                                        <Th></Th>
-                                        <Th>Name</Th>
-                                        <Th>Tranche Status </Th>
-                                        <Th>Tenure</Th>
-                                        <Th>Size</Th>
-                                        <Th>Status</Th>
-                                        <Th>Action</Th>
-                                        <Th></Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody className='body'>
-                                    {currentTableData &&
-                                        currentTableData.map((data, index) => {
+                <section style={{ paddingBottom: '10%' }}>
+                    {loanRequest.length === 0 ? (
+                        <p className='loader' style={{ margin: '100px auto' }}></p>
+                    ) : (
+                        <Box>
+                            <Text className='myOffers ml-6' px={['28']} py={['6']}>
+                                My offers
+                            </Text>
+
+                            <div className='tableScroll'>
+                                <Table size='sm' colorScheme={'blackAlpha'}>
+                                    <Thead>
+                                        <Tr
+                                            // key={index}
+                                            fontWeight={'extrabold'}
+                                            fontSize={['1.9em']}
+                                        >
+                                            <Th></Th>
+                                            <Th></Th>
+                                            <Th></Th>
+                                            <Th>Name</Th>
+                                            <Th>Tranche Status </Th>
+                                            <Th>Tenure</Th>
+                                            <Th>Size</Th>
+                                            <Th>Status</Th>
+                                            <Th>Action</Th>
+                                            <Th></Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody className='body'>
+                                        {currentTableData.map((data, index) => {
                                             return (
                                                 <Tr key={index}>
                                                     <Td></Td>
@@ -239,19 +243,18 @@ const BrokerDashboard = () => {
                                                 </Tr>
                                             );
                                         })}
-                                </Tbody>
-                            </Table>
-                        </div>
-                        <Pagination
-                            className='pagination-bar'
-                            currentPage={currentPage}
-                            totalCount={loanRequest.length}
-                            pageSize={PageSize}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    </Box>
-
-                    {/* scrollable table */}
+                                    </Tbody>
+                                </Table>
+                            </div>
+                            <Pagination
+                                className='pagination-bar'
+                                currentPage={currentPage}
+                                totalCount={loanRequest.length}
+                                pageSize={PageSize}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
+                        </Box>
+                    )}
                 </section>
             </OrderbookLayout>
         </div>
