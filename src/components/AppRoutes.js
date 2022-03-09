@@ -8,7 +8,7 @@ import NotFound from "./NotFound";
 import Login from "./authentication/Login";
 import RequireAuth from "./authentication/RequireAuth";
 import Register from "./authentication/Register";
-import Profile from "./dashboard/client/ProfileSettings";
+import AccountSettings from "./dashboard/client/AccountSettings";
 
 import CurrentDeals from "./dashboard/CurrentDeals";
 import ArchivedDeals from "./dashboard/ArchivedDeals";
@@ -70,12 +70,12 @@ export default function AppRoutes() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
 
-					{/*Profile*/}
+					{/*Account settings*/}
 					<Route
 						path="/profile"
 						element={
 							<RequireAuth>
-								<Profile />
+								<AccountSettings />
 							</RequireAuth>
 						}
 					/>
