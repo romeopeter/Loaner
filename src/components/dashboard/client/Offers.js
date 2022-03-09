@@ -9,266 +9,39 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
+import { getOffersAction } from '../../../redux/loanSlice';
+
 import offerImage from "../../../assets/images/offerImage.png";
 
 export default function Offers() {
 	const pageName = "Offers";
 
 	const dispatch = useDispatch();
-	const offers = useSelector((state) => state.loan.offers);
+	const currentUserObj = useSelector((state) => state.auth);
+    const authToken = currentUserObj.user.tokens;
+	const offersArr = useSelector((state) => state.loan.offers);
 
-	// Mock offer data
-	const [mockData, setMockData] = useState([
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Pea value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Bean value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Cocoa value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Yam value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Carrot value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
+	useEffect(() => {
 
-		{
-			offerTitle: "Corn value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Okra value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Potatoe value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Apple value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Lettuce value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Cabbage value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-		{
-			offerTitle: "Rice value chain (Project Finance)",
-			offerImageURL: "https://cloudinary/jdfd-34-zf-3423/slfjnsjfnsd",
-			offerDescription:
-				"Rice is the most consumed commodity. Total global rice expenditure in 2020 was $350 billion. To put in perspective, totoal global crude oil in 2020 was just four times that amount at $1.3 trillion.",
-		},
-	]);
+		// Get Offers
+        if (offersArr.length === 0) {
+            dispatch(getOffersAction())
+        }
+	}, [])
 
-	/*useEffect(() => {
-		return () => {
-			effect
-		};
-	}, [input])*/
-	
-	// Parameters
-	const eachPage = 6;
 
+	// Pagination
 	const [paginateState, setPaginateState] = useState({
-		list: offers.length > 0 && offers,
-		perPage: eachPage,
+		list: offersArr.length > 0 ? offersArr: offersArr,
+		perPage: 6,
 		page: 0,
-		pages: Math.floor(offers.length / eachPage)
+		pages: Math.floor(offersArr.length / 6)
 	})
 
-	const {page, perPage, pages, list} = paginateState;
-	let items = list.slice(page * perPage, (page + 1) * perPage);
 
+	const {page, perPage, pages, list} = paginateState;
+	let offerItems = list !== false && list.slice(page * perPage, (page + 1) * perPage);
+	
 	const handlePageClick = (event) => {
 	 let page = event.selected;
 	 setPaginateState(state => ({...state, page: page}));
@@ -299,9 +72,9 @@ export default function Offers() {
 
 						<div id="the-offers">
 							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center place-content-center gap-20">
-								{offers.length > 0 && items.map((offer) => (
+								{offerItems !== false ? offerItems.map((offer) => (
 									<div
-										id={offer.id}
+										key={offer.id}
 										className="offer"
 									>
 										<div className="offer-title">
@@ -323,6 +96,7 @@ export default function Offers() {
 												link="/client/offers/offer/edit"
 												buttonClass="h-2 p-2 bg-grey"
 											/>
+
 											<Button
 												title="Publish"
 												link="/client/offers/offer/publish"
@@ -330,7 +104,7 @@ export default function Offers() {
 											/>
 										</div>
 									</div>
-								))}
+								)):"Loading offers..."}
 							</div>
 						</div>
 					</div>
