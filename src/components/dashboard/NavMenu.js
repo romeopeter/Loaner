@@ -165,7 +165,7 @@ export default function NavMenu() {
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
-                                        <Link to={`/${role}/new-loan`}>Create loan offer</Link>
+                                        <Link to={`/${role}/dashboard/create-offer`}>Create loan offer</Link>
                                     </div>
                                     <hr className='hidden md:block' />
                                     <div id='account' className='menu-nav-container'>
