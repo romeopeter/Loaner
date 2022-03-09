@@ -15,7 +15,7 @@ const LoanOfferDraft = () => {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        axios.get('https://order-book-online.herokuapp.com/v1/loan_request/').then((response) => {
+        axios.get('/v1/loan_request/').then((response) => {
             let index = response.data.findIndex((loan) => loan.id === parseInt(id));
             setData(response.data[index]);
         });

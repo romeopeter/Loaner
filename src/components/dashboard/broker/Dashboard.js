@@ -31,6 +31,8 @@ const BrokerDashboard = () => {
                 setGetValue(response);
             })
             .catch((err) => setErrorMessage(err));
+
+        window.scroll(0, 0);
     }, []);
 
     // Dropdown
@@ -42,7 +44,6 @@ const BrokerDashboard = () => {
 
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
-
     const currentTableData = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
@@ -204,7 +205,7 @@ const BrokerDashboard = () => {
                                     return (
                                         <div className='loader-div'>
                                             <p className='loader'></p>
-                                            <p>Please Wait</p>
+                                            <p>Fetching Offers</p>
                                         </div>
                                     );
                                 }
