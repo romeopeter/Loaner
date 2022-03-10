@@ -83,12 +83,12 @@ export default function NavMenu() {
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
-                                        <Link to='/profile'>Profile</Link>
+                                        {/*<Link to='/profile'>Profile</Link>*/}
                                         <Link to='/client/new-loan'>Create loan offer</Link>
                                     </div>
                                     <hr className='hidden md:block' />
                                     <div id='account' className='menu-nav-container'>
-                                        <Link to='/user/client/account-settings'>Account Settings</Link>
+                                        <Link to='/account-settings'>Account Settings</Link>
                                         <span onClick={() => handleSignOut()}>Sign out</span>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@ export default function NavMenu() {
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
                                     </div>
                                     <div id='account' className='menu-nav-container'>
-                                        <Link to='/user/client/account-settings'>Account Settings</Link>
+                                        <Link to='/account-settings'>Account Settings</Link>
                                         <span onClick={() => handleSignOut()}>Sign out</span>
                                     </div>
                                 </div>
