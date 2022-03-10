@@ -126,7 +126,7 @@ const BrokerDashboard = () => {
                                     _hover={{ bg: '#002276' }}
                                     borderRadius={'0'}
                                     as={Link}
-                                    to='/profile'
+                                    to='/account-settings'
                                 >
                                     Update my profile
                                 </Button>
