@@ -72,7 +72,7 @@ export default function AppRoutes() {
 
 					{/*Account settings*/}
 					<Route
-						path="/profile"
+						path="/account-settings"
 						element={
 							<RequireAuth>
 								<AccountSettings />
