@@ -13,6 +13,8 @@ import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
 
+import { Danger, Success } from "../../alert";
+import { saveInvestorListAction } from "../../../redux/investorListSlice";
 import {
     getInvestorsInCategoryAction,
     mergeInvestorsInCategoriesAction,
@@ -25,9 +27,6 @@ import {
     publishOfferAction,
 } from "../../../redux/loanSlice.js";
 
-import { saveInvestorListAction } from "../../../redux/investorListSlice";
-
-import { Danger, Success } from "../../alert";
 
 export default function PublishOffer({ children, ...props }) {
     const pageName = "Publish offer";
@@ -661,7 +660,7 @@ export default function PublishOffer({ children, ...props }) {
                             >
                                 <Button
                                     title="View offers"
-                                    link="/client/offers/"
+                                    link="/broker/dashboard/allloans/"
                                     buttonClass="view-orders mr-5  rounded w-full"
                                 />
 
