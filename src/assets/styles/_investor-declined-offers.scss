@@ -1,0 +1,37 @@
+/**
+ * Component shares styles with other components in the _investor-offers.scss partial
+ * */
+
+// Styles specific to component
+#orderbook-investor-declined-offers {
+	#declined-offers {
+
+		#table-container {
+			table {
+				tr:hover {
+					background: none !important;
+				}
+			}
+			
+			&::-webkit-scrollbar {
+		 	 width: 10px;
+			}
+
+			/* Track */
+			&::-webkit-scrollbar-track {
+			  background: #f1f1f1; 
+			}
+			 
+			/* Handle */
+			&::-webkit-scrollbar-thumb {
+			  background: #888;
+			  border-radius: 10px; 
+			}
+
+			/* Handle on hover */
+			&::-webkit-scrollbar-thumb:hover {
+			  background: #555; 
+			}
+		}
+	}
+}
