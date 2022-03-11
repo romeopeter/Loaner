@@ -22,20 +22,7 @@ component in the _investor-offers.scss partial*/
 		&::-webkit-scrollbar-thumb:hover {
 		  background: #555; 
 		}
-
-		#table-action {
-			#select-table-action,
-			.action-btn {
-				width: 160px !important;
-			}
-
-			#select-table-action {
-				height: 45px;
-				padding-left: 1rem;
-			}
-			.action-btn {
-			}
-		}
+		
 
 		table {
 			thead {
