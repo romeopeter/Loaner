@@ -1,7 +1,5 @@
 /*Shared styles with */
 
-
-
 /*#### SMALL SCREENS #####*/
 @include respond-below(md) {
 	#orderbook-investor-bids {
@@ -109,11 +107,13 @@
 /*##### LARGE SCREEN #####*/
 
 #orderbook-investor-all-offers,
-#orderbook-investor-successful-offers {
-
-	#bids,#declined-bids {
+#orderbook-investor-successful-offers,
+#orderbook-investor-declined-offers {
+	#offers,
+	#Succesful-offers,
+	#declined-offers {
 		background: $grey;
-	
+
 		.header {
 			margin-left: 75px;
 			font-weight: bold;
@@ -121,77 +121,91 @@
 			// font-size: 35px;
 			padding: 30px 0;
 		}
-			
-		
-		table {
 
-			overflow-x: auto;
+		#table-container {
+			#table-action {
+				#select-table-action,
+				.action-btn {
+					width: 160px !important;
+				}
 
-			thead {
-				tr {
-					th {
-						padding: 0.5rem;
-					}
+				#select-table-action {
+					height: 45px;
+					padding-left: 1rem;
+				}
+				.action-btn {
 				}
 			}
 
-			tbody {
-				tr {
-					td {
-						padding: 1rem;
-						text-align: center;
-						border-top: 1px solid $grey;
-						border-right: 1px solid $grey;
-						border-bottom: 1px solid $grey;
+			table {
+				overflow-x: auto;
 
-						p {
-							font-size: 17px;
-						    text-align: left;
-						    max-width: 650px;
-						    width: 650px;
-						    display: inline-block;
-						}
-
-						button {
-							height: 37px !important;
-
-							&:hover {
-								color: $black;
-							}
-
-							&.declined-button {
-								color: rgba(255, 0, 0, 0.7);
-							}
-						}
-
-						&.offer-status-name {
-							text-align: left;
-						}
-
-						&.bid-name {
-							img {
-								display: inline-block;
-								margin: 0 10px;
-    							height: 40px;
-    							width: 40px;
-    							border-radius: 20px;
-							}
-
-							span {
-								text-decoration: underline;
-								font-weight: bold;
-							}
+				thead {
+					tr {
+						th {
+							padding: 0.5rem;
 						}
 					}
+				}
 
-					&:hover {
-						background: #e5e5e5;
+				tbody {
+					tr {
+						td {
+							padding: 1rem;
+							text-align: center;
+							border-top: 1px solid $grey;
+							border-right: 1px solid $grey;
+							border-bottom: 1px solid $grey;
+
+							p {
+								font-size: 17px;
+								text-align: left;
+								max-width: 650px;
+								width: 650px;
+								display: inline-block;
+							}
+
+							button {
+								height: 37px !important;
+
+								&:hover {
+									color: $black;
+								}
+
+								&.declined-button {
+									color: rgba(255, 0, 0, 0.7);
+								}
+							}
+
+							&.offer-status-name {
+								text-align: left;
+							}
+
+							&.offer-name {
+								img {
+									display: inline-block;
+									margin: 0 10px;
+									height: 40px;
+									width: 40px;
+									border-radius: 20px;
+								}
+
+								span {
+									text-decoration: underline;
+									font-weight: bold;
+								}
+							}
+						}
+
+						&:hover {
+							background: #e5e5e5;
+						}
 					}
 				}
 			}
 		}
 
-		#paginate-bids {
+		#paginate-offers {
 			padding: 20px;
 
 			.pagination {
