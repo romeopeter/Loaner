@@ -11,12 +11,12 @@ import offerImage from "../../../assets/images/offerImage.png";
 import setBgImage from "../../../utils/setBgImage";
 import headerBanner from "../../../assets/images/headerBanner.png";
 
-import {successfulBids} from "../../../fake-backend/investor/successfulBids"
+import { successfulBids } from "../../../fake-backend/investor/successfulBids";
 
 export default function InvestorDashboard() {
 	const pageName = "Investor";
 
-	const [offerStatus, setOfferStatus] = useState("open")
+	const [offerStatus, setOfferStatus] = useState("open");
 
 	// Pagination
 	const eachPage = 9;
@@ -45,43 +45,72 @@ export default function InvestorDashboard() {
 					class="bg-white px-16 py-10 shadow-md flex justify-start w-full"
 				>
 					<Link
-						to="/investor/dashboard"
+						to="/investor/offers"
 						id="home"
-						className="dropdown-container mr-5"
+						className="dropdown-container mr-5 underline"
 					>
 						Offers
 					</Link>
-					<Link
-						to="/"
-						id="offers"
-						className="dropdown-container"
-					>
+					<Link to="/" id="offers" className="dropdown-container">
 						Payment
 					</Link>
 				</div>
 				<section id="orderbook-investor-all-offers">
-					<div id="bids">
-						<div id="offer-tabs" className="flex flex-col sm:flex-row justify-start items-center">
-							<h3 className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60 pt-2" onClick={() => setOfferStatus("open")}>
-								<span>Open offers</span>
+					<div id="offers">
+						<div
+							id="offer-tabs"
+							className="flex flex-col sm:flex-row justify-start items-center"
+						>
+							<h3
+								className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60 pt-2"
+								onClick={() => setOfferStatus("open")}
+							>
+								<span
+									className={
+										offerStatus === "open"
+											? "text-white"
+											: "text-gray-400"
+									}
+								>
+									Open offers
+								</span>
 							</h3>
-							<h3 className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60" onClick={() => setOfferStatus("coming soon")}>
-								<span className="text-gray-400">Coming soon</span>
+							<h3
+								className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60"
+								onClick={() => setOfferStatus("coming soon")}
+							>
+								<span
+									className={
+										offerStatus === "coming soon"
+											? "text-white"
+											: "text-gray-400"
+									}
+								>
+									Coming soon
+								</span>
 							</h3>
 						</div>
 						<div id="table-container" style={{ overflowX: "auto" }}>
-							<div id="table-action" className="bg-white py-5 px-2 w-full">
-								<select 
-									name="table-action" 
-									id="select-table-action" 
+							<div
+								id="table-action"
+								className="bg-white py-5 px-2 w-full"
+							>
+								<select
+									name="table-action"
+									id="select-table-action"
 									className="mr-2 mt-1 focus:ring-white focus:border-black border-2 border-black"
 								>
-									<option defaultValue="value 1">Select action</option>
+									<option defaultValue="value 1">
+										Select action
+									</option>
 									<option value="value 1">Option 1</option>
 									<option value="vallue 2">Option 2</option>
 									<option value="value 3">Option 3</option>
 								</select>
-								<Button title="Apply" buttonClass="bg-gray-500 action-btn" />
+								<Button
+									title="Apply"
+									buttonClass="bg-gray-500 action-btn"
+								/>
 							</div>
 							<table className="bg-white table-auto w-full">
 								<thead className="bg-gray-300">
@@ -93,14 +122,16 @@ export default function InvestorDashboard() {
 										/>
 										<span>Name</span>
 									</th>
-									<th className="pl-5 py-5" colspan="2">Description</th>
+									<th className="pl-5 py-5" colspan="2">
+										Description
+									</th>
 								</thead>
 								<tbody>
 									{items.map((item, index) => {
 										if (item.status === offerStatus) {
 											return (
 												<tr key={index}>
-													<td className="bid-name">
+													<td className="offer-name">
 														<input
 															type="checkbox"
 															name="checkbox"
@@ -111,15 +142,24 @@ export default function InvestorDashboard() {
 															alt=""
 															className="rounded h-10 w-10"
 														/>
-														<span>{item.bidName}</span>
+														<span>
+															{item.bidName}
+														</span>
 													</td>
 													<td>
-														<p>{item.bidDescription}</p>
+														<p>
+															{
+																item.bidDescription
+															}
+														</p>
 													</td>
 													<td>
 														<Button
 															title="View details"
-															buttonClass={`action-btn ${offerStatus.replace(" ","-")}`}
+															buttonClass={`action-btn ${offerStatus.replace(
+																" ",
+																"-"
+															)}`}
 														/>
 													</td>
 												</tr>
@@ -129,7 +169,7 @@ export default function InvestorDashboard() {
 								</tbody>
 							</table>
 						</div>
-						<div id="paginate-bids" className="bg-white">
+						<div id="paginate-offers" className="bg-white">
 							<ReactPaginate
 								previousLabel={"<"}
 								nextLabel={">"}
