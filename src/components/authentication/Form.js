@@ -207,7 +207,7 @@ export default function Form( props ) {
 					</div>
 				</div>
 
-				<div className="col-span-12">
+				{/*<div className="col-span-12">
 					<input
 						// type="text"
 						type="date"
@@ -221,7 +221,7 @@ export default function Form( props ) {
 						// onBlur={(e) => (e.target.type = "text")}
 						onChange={(e) => handleChange(e)}
 					/>
-				</div>
+				</div>*/}
 
 				<div className="col-span-12">
 					<input
