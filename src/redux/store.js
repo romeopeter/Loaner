@@ -5,14 +5,18 @@ import loanReducer from "./loanSlice"
 import investorListReducer from "./investorListSlice"
 import investorsCategoriesReducer from "./investorCategorySlice"
 import investorsInCategoryReducer from "./investorsInCategorySlice"
+import investorReducer from "./investorSlice"
+import bidReducer from "./bidSlice"
 
 export default configureStore({
   reducer: {
     auth: authReducer,
     message: messageReducer,
     loan: loanReducer,
+    investor: investorReducer,
     investorsCategories: investorsCategoriesReducer,
     investorsList: investorListReducer,
     investorsInCategory: investorsInCategoryReducer,
+    bid: bidReducer
   }
 })
