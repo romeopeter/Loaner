@@ -30,8 +30,7 @@ export default function ClientDashboard() {
     const authToken = authUser.tokens;
     const offers = useSelector((state) => state.loan.offers);
 
-    useEffect(() => {
-        // Get request
+    useEffect(function getAllOffers() {
         if (authToken.access !== null && authToken.access !== undefined) {
             dispatch(getOffersAction());
         }
