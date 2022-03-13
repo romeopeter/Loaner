@@ -53,8 +53,11 @@ const getInvestorsInCategory = () => {
 };
 
 const getInvestorsInCategories = (id) => {
-    return axios.get(`/v1/investor/${id}`);
+    return axios.get(`/v1/investor/${id}/`);
 };
+const getInvestorAllOffers = (id) => {
+    return axios.get(`/v1/investor/${id}/loan_requests/`)
+}
 
 // INVESTOR CATEGORY ASSIGN
 const mergeInvestorsInCategories = (requestsArr) => {
@@ -72,3 +75,4 @@ export { loanRequestCP, loanRequestBond, getOffers, loanRequestAddInvestor, loan
 export { saveInvestorsList, getInvestorsList, getInvestor };
 export { getInvestorsCategories, createInvestorsCategories, getInvestorsCategory };
 export { getInvestorsInCategory, getInvestorsInCategories, mergeInvestorsInCategories, assignInvestorsToCategories };
+export { getInvestorAllOffers };
