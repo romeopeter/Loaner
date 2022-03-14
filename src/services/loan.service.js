@@ -1,20 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 
 // LOAN REQUEST
 const getOffers = () => {
-    return axios.get('/v1/loan_request/').catch((error) => console.log(error));
+    return axios.get("/v1/loan_request/").catch((error) => console.log(error));
 };
 
 const loanRequestCP = (data) => {
-    return axios.post('/v1/loan_request/cp/', data).catch((error) => error);
+    return axios.post("/v1/loan_request/cp/", data).catch((error) => error);
 };
 
 const loanRequestBond = (data) => {
-    return axios.post('/v1/loan_request/bonds/', data).catch((error) => error);
+    return axios.post("/v1/loan_request/bonds/", data).catch((error) => error);
 };
 
 const loanRequestAddInvestor = (id, data) => {
-    return axios.post(`/v1/loan_request/${id}/add_investors/`, data).catch((error) => error);
+    return axios
+        .put(`/v1/loan_request/add_investors/${id}`, data)
+        .catch((error) => error);
 };
 
 const loanRequestPublish = (id) => {
@@ -23,41 +25,51 @@ const loanRequestPublish = (id) => {
 
 // INVESTOR LIST
 const saveInvestorsList = (data) => {
-    return axios.post('/v1/lists/investors/', data).catch((error) => error);
+    return axios.post("/v1/lists/investors/", data).catch((error) => error);
 };
 
 const getInvestorsList = () => {
-    return axios.get('/v1/lists/investors/').catch((error) => console.log(error));
+    return axios
+        .get("/v1/lists/investors/")
+        .catch((error) => console.log(error));
 };
 
 const getInvestor = (id) => {
-    return axios.get(`/v1/list/investors/${id}/`).catch((error) => console.log(error));
+    return axios
+        .get(`/v1/list/investors/${id}/`)
+        .catch((error) => console.log(error));
 };
 
 // INVESTOR CATEGORY
 const getInvestorsCategories = () => {
-    return axios.get('/v1/investor_category/').catch((error) => console.log(error));
+    return axios
+        .get("/v1/investor_category/")
+        .catch((error) => console.log(error));
 };
 
 const createInvestorsCategories = () => {
-    return axios.post('/v1/investor_category/').catch((error) => console.log(error));
+    return axios
+        .post("/v1/investor_category/")
+        .catch((error) => console.log(error));
 };
 
 const getInvestorsCategory = (id) => {
-    return axios.get(`/v1/investor_category/${id}/`).catch((error) => console.log(error));
+    return axios
+        .get(`/v1/investor_category/${id}/`)
+        .catch((error) => console.log(error));
 };
 
 // INVESTOR
 const getInvestorsInCategory = () => {
-    return axios.get('/v1/investor/').catch((error) => console.log(error));
+    return axios.get("/v1/investor/").catch((error) => console.log(error));
 };
 
 const getInvestorsInCategories = (id) => {
     return axios.get(`/v1/investor/${id}/`);
 };
 const getInvestorAllOffers = (id) => {
-    return axios.get(`/v1/investor/${id}/loan_requests/`)
-}
+    return axios.get(`/v1/investor/${id}/loan_requests/`);
+};
 
 // INVESTOR CATEGORY ASSIGN
 const mergeInvestorsInCategories = (requestsArr) => {
@@ -68,11 +80,48 @@ const mergeInvestorsInCategories = (requestsArr) => {
 };
 
 const assignInvestorsToCategories = () => {
-    return axios.post('/v1/investor_category_assign/').catch((error) => console.log(error));
+    return axios
+        .post("/v1/investor_category_assign/")
+        .catch((error) => console.log(error));
 };
 
-export { loanRequestCP, loanRequestBond, getOffers, loanRequestAddInvestor, loanRequestPublish };
+// INVESTOR BIDS
+const getBids = () => {
+    return axios.get("/v1/bids/").catch((error) => console.log(error));
+};
+
+const getBid = (id) => {
+    return axios.get(`/v1/bids/${id}`).catch((error) => console.log(error));
+};
+
+const createBid = (data) => {
+    return axios.post("/v1/bids/", data).catch((error) => console.log(error));
+};
+
+const updateBids = (id) => {
+    return axios
+        .put(`/v1/payments/${id}/`)
+        .catch((error) => console.log(error));
+};
+
+export {
+    loanRequestCP,
+    loanRequestBond,
+    getOffers,
+    loanRequestAddInvestor,
+    loanRequestPublish,
+};
 export { saveInvestorsList, getInvestorsList, getInvestor };
-export { getInvestorsCategories, createInvestorsCategories, getInvestorsCategory };
-export { getInvestorsInCategory, getInvestorsInCategories, mergeInvestorsInCategories, assignInvestorsToCategories };
-export { getInvestorAllOffers };
+export {
+    getInvestorsCategories,
+    createInvestorsCategories,
+    getInvestorsCategory,
+};
+export {
+    getInvestorsInCategory,
+    getInvestorsInCategories,
+    mergeInvestorsInCategories,
+    assignInvestorsToCategories,
+    getInvestorAllOffers,
+};
+export { getBids, getBid, createBid, updateBids };
