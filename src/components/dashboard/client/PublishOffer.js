@@ -108,6 +108,7 @@ export default function PublishOffer({ children, ...props }) {
 				}));
 			}
 		} else {
+			
 			if (name === "saveAsOpen" || name === "saveAsComing") {
 				setState((state) => ({ ...state, [name]: !target.checked }));
 			}
@@ -533,7 +534,7 @@ export default function PublishOffer({ children, ...props }) {
 									htmlFor="sava-as-open"
 									className="text-white text-xl"
 								>
-									Do you want to save and send as now open
+									Mark as now open
 								</label>
 							</div>
 
@@ -550,7 +551,7 @@ export default function PublishOffer({ children, ...props }) {
 									htmlFor="save-as-now-coming"
 									className="text-white text-xl"
 								>
-									Do you want to save and send as now coming
+									Mark as now coming
 								</label>
 							</div>
 						</div>
