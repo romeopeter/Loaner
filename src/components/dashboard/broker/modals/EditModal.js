@@ -1,15 +1,13 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
+import axios from 'axios';
 
 const EditModal = ({ closeModal, editModal, data, notification }) => {
     const className = editModal.modal ? 'open' : '';
     const [update, setUpdate] = useState({ duration: '', amount: '' });
     const [isLoading, setIsLoading] = useState(undefined);
+    // const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
-    const onDurationChange = (e) => {
-        const duration = e.target.value;
-        setUpdate({ ...update, duration: duration });
-    };
     const onAmountChange = (e) => {
         const amount = e.target.value;
         setUpdate({ ...update, amount: amount });
@@ -17,16 +15,21 @@ const EditModal = ({ closeModal, editModal, data, notification }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        data.duration = update.duration;
-        data.amount = update.amount;
+
         setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000);
-        // Not the best method but this sets isLoading back to undefined to render the form again
-        setTimeout(() => {
-            setIsLoading(undefined);
-        }, 8000);
+        console.log(update.duration);
+        const detail = {
+            amount: update.amount,
+        };
+
+        axios.patch(`/v1/bids/${data.id}/`, detail).then((response) => {
+            console.log(response);
+            response.statusText === 'OK' && setIsLoading(false);
+
+            setTimeout(() => {
+                setIsLoading(undefined);
+            }, 3000);
+        });
     };
 
     return (
@@ -46,17 +49,12 @@ const EditModal = ({ closeModal, editModal, data, notification }) => {
                             {data && (
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div>
-                                        <h2>{data.clientName}</h2>
-                                        <h2>{data.tranche}</h2>
+                                        <h2>
+                                            Investor - {data.owner.first_name} {data.owner.last_name}
+                                        </h2>
                                     </div>
-                                    <input
-                                        style={{ margin: '20px 0px' }}
-                                        placeholder={data.duration}
-                                        onChange={onDurationChange}
-                                        type='text'
-                                        required
-                                    />
-                                    <input placeholder={data.amount} onChange={onAmountChange} type='text' required />
+
+                                    <input placeholder={data.amount} onChange={onAmountChange} type='number' required />
                                     <button
                                         style={{
                                             padding: '7px 20px ',

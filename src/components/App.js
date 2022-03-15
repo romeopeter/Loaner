@@ -310,7 +310,7 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/bids/'
+                    path='/broker/dashboard/bids/:id'
                     element={
                         <RequireAuth>
                             <Bids />
@@ -318,7 +318,7 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/bids/addnewbid/'
+                    path='/broker/dashboard/bids/addnewbid/:id'
                     element={
                         <RequireAuth>
                             <AddNewBid />

@@ -1,8 +1,7 @@
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
-import { CloseIcon } from '@chakra-ui/icons';
 
-const BidsModal = ({ closeModal, state, notification, handleYes }) => {
+const BidsModal = ({ closeModal, state, notification, updatedataApproved, updatedataRejected }) => {
     const className = state.modal ? 'open' : '';
     const classSuccessState = state.successState ? 'h1Approved' : 'h1Rejected';
 
@@ -19,13 +18,11 @@ const BidsModal = ({ closeModal, state, notification, handleYes }) => {
                             ) : (
                                 <h2>Are you sure you want to reject this bid?</h2>
                             )}
-                            <button onClick={closeModal} className='close-button'>
-                                <CloseIcon />
-                            </button>
+                            <button onClick={closeModal} className='close-button'></button>
                         </div>
                         <div style={{ marginTop: '20px' }}>
                             <button
-                                onClick={handleYes}
+                                onClick={notification.dataApproved ? updatedataApproved : updatedataRejected}
                                 style={{ background: '#e5e5e5', width: '50px', padding: '7px', marginRight: '20px' }}
                             >
                                 Yes
@@ -40,7 +37,7 @@ const BidsModal = ({ closeModal, state, notification, handleYes }) => {
                     </div>
                 )}
                 {notification.confirmation && notification.isLoading ? <p className='loader'></p> : null}
-                {notification.confirmation && !notification.isLoading ? (
+                {notification.confirmation && notification.isLoading === false ? (
                     <div>
                         {state.successState ? (
                             <img alt='approved' className='img' src={bidApproved} />
@@ -54,9 +51,15 @@ const BidsModal = ({ closeModal, state, notification, handleYes }) => {
                         )}
 
                         {state.successState ? (
-                            <p>You have approved JJ bid offer.</p>
+                            <p>
+                                You have approved {notification.dataApproved.owner.first_name}{' '}
+                                {notification.dataApproved.owner.last_name}'s bid offer.
+                            </p>
                         ) : (
-                            <p>You have rejected JJ bid offer.</p>
+                            <p>
+                                You have rejected {notification.dataRejected.owner.first_name}{' '}
+                                {notification.dataRejected.owner.last_name}'s bid offer.
+                            </p>
                         )}
 
                         <button className='modal-button ' onClick={closeModal}>

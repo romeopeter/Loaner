@@ -1,4 +1,9 @@
 // -----------------------DASHBOARD
+.backArrow {
+    display: inline !important;
+    background: #c4c4c4;
+    padding: 12px;
+}
 .broker {
     &-cta {
         background: #555555;
@@ -418,14 +423,14 @@
     padding: 20px;
     overflow: hidden;
     background: white;
-    width: 50vw;
+    width: 40vw;
     margin: auto;
     border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     -ms-border-radius: 8px;
     -o-border-radius: 8px;
-    @media only screen and (max-width: 1000px) {
+    @media only screen and (max-width: 800px) {
         width: 90vw;
     }
 }
@@ -570,12 +575,13 @@
 }
 .loader {
     margin: auto;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #555;
+    border: 3px solid #fff;
+    border-top: 3px solid #002276;
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    animation: spin 2s linear infinite;
+    animation: spin 1s linear infinite;
+    -webkit-animation: spin 1s linear infinite;
 }
 
 @keyframes spin {

@@ -1,30 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { CloseIcon } from '@chakra-ui/icons';
 
-const DisagreeModal = ({ closeModalDisagree, disModal, updatedataDisagree, notification }) => {
-    const [isLoading, setIsLoading] = useState(undefined);
+const DisagreeModal = ({ closeModalDisagree, disModal, disagreeForm }) => {
     let className = disModal.modal ? 'open' : '';
-
-    const submit = (values) => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-            updatedataDisagree(notification.dataDisagree);
-        }, 1000);
-        // Not the best method but this sets isLoading back to undefined to render the form again
-        setTimeout(() => {
-            setIsLoading(undefined);
-        }, 8000);
-        // send values to api
-    };
 
     return (
         <div className={`modal ${className}`}>
             <div className='modal-overlay' onClick={closeModalDisagree}></div>
             <div className='modal-body'>
-                {isLoading === undefined ? (
+                {disModal.isLoading === undefined && (
                     <div>
                         <div className='modal-head'>
                             <h2>Why do you want to disagree?</h2>
@@ -37,7 +23,7 @@ const DisagreeModal = ({ closeModalDisagree, disModal, updatedataDisagree, notif
                             validationSchema={Yup.object({
                                 textArea: Yup.string().min(5, 'Must be more than 5 characters').required('**Required'),
                             })}
-                            onSubmit={submit}
+                            onSubmit={(values) => disagreeForm(values)}
                         >
                             <Form>
                                 <ErrorMessage name='textArea' />
@@ -65,28 +51,27 @@ const DisagreeModal = ({ closeModalDisagree, disModal, updatedataDisagree, notif
                             </Form>
                         </Formik>
                     </div>
-                ) : (
-                    <div>
-                        {isLoading ? (
-                            <div className='loader'></div>
-                        ) : (
-                            <div style={{ padding: '0px' }}>
-                                <h2>Submitted!</h2>
-                                <button
-                                    onClick={closeModalDisagree}
-                                    style={{
-                                        padding: '3px 10px',
-                                        background: '#555',
-                                        color: '#fff',
-                                        marginTop: '20px',
-                                    }}
-                                >
-                                    Okay
-                                </button>
-                            </div>
-                        )}
-                    </div>
                 )}
+
+                <div>
+                    {disModal.isLoading && <div className='loader'></div>}
+                    {disModal.isLoading === false && (
+                        <div style={{ padding: '0px' }}>
+                            <h2>Submitted!</h2>
+                            <button
+                                onClick={closeModalDisagree}
+                                style={{
+                                    padding: '3px 10px',
+                                    background: '#555',
+                                    color: '#fff',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Okay
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
