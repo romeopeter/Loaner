@@ -92,6 +92,24 @@ export default function SingleOffer() {
 		setState((state) => ({ ...state, [name]: value }));
 	};
 
+	const handleRejectOffer = () => {
+		if (state.showBidFields) {
+			setState((state) => ({
+				...state,
+				showBidFields: false,
+			}));
+		}
+
+		// Show Icon for rejected user
+		setState((state) => ({
+			...state,
+			showIcon: true,
+		}));
+
+		// Show modal for rejected offer
+		setModalState((state) => ({ ...state, bidIsRejected: true }));
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -150,24 +168,6 @@ export default function SingleOffer() {
 				setModalState((state) => ({ ...state, bidIsAccepted: true }));
 			}
 		}
-	};
-
-	const handleRejectOffer = () => {
-		if (state.showBidFields) {
-			setState((state) => ({
-				...state,
-				showBidFields: false,
-			}));
-		}
-
-		// Show Icon for rejected user
-		setState((state) => ({
-			...state,
-			showIcon: true,
-		}));
-
-		// Show modal for rejected offer
-		setModalState((state) => ({ ...state, bidIsRejected: true }));
 	};
 
 	return (
