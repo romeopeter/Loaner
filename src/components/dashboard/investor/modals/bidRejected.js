@@ -1,5 +1,6 @@
 import React from "react";
 import rejected from "../icons/rejected.png";
+import Button from "../../../Button";
 
 export default function bidRejected() {
 
@@ -17,7 +18,7 @@ export default function bidRejected() {
 						src={rejected}
 						alt="rejected-icon-mark"
 						style={{ width: "2rem", height: "2rem" }}
-						className={!state.showIcon ? "hidden" : "block"}
+						// className={!state.showIcon ? "hidden" : "block"}
 					/>
 				</div>
 				<h4 className="font-bold text-lg" style={{ color: "#ef4444" }}>
