@@ -26,25 +26,32 @@ function App() {
 
 
     useEffect(() => {
-        // Check token expiration
         if (userObj !== null && typeof userObj === "object") {
-            let {tokens: { access }} = userObj;
-            const decodedToken = decodeToken(access);
-            const currentDate = new Date();
 
-            if (decodedToken.exp * 1000 < currentDate.getTime()) {
-                dispatch(signOutAsync).then(() => {
-                    dispatch(setClientMessage({
-                        status: null,
-                        messageType: "token_expired", 
-                        message: "Token expired", 
-                        detail: "Login token is expired. Please sign in"
-                    }));
+            async function checkTokenExpiration() {
+                let {tokens: { access }} = userObj;
+                const decodedToken = decodeToken(access);
+                const currentDate = new Date();
 
-                    // Redirect to login page
-                    navigate("/login")
-                });
+                if (decodedToken.exp * 1000 < currentDate.getTime()) {
+                    const req = await dispatch(signOutAsync);
+
+                    if (req.meta.requestStatus === "fulfilled") {
+                        const sendMessage = await dispatch(setClientMessage({
+                            status: null,
+                            messageType: "token_expired", 
+                            message: "Token expired", 
+                            detail: "Login token is expired. Please sign in"
+                        }));
+
+                        if (sendMessage.meta.requestStatus === "fulfilled") {
+                            // Redirect to login page
+                            navigate("/login")
+                        }
+                    }
+                }
             }
+            checkTokenExpiration()
         }
     }, [])
 
