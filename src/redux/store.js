@@ -7,6 +7,7 @@ import investorsCategoriesReducer from "./investorCategorySlice"
 import investorsInCategoryReducer from "./investorsInCategorySlice"
 import investorReducer from "./investorSlice"
 import bidReducer from "./bidSlice"
+import paymentReducer from "./paymentSlice";
 
 export default configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export default configureStore({
     investorsCategories: investorsCategoriesReducer,
     investorsList: investorListReducer,
     investorsInCategory: investorsInCategoryReducer,
-    bid: bidReducer
+    bid: bidReducer,
+    payment: paymentReducer
   }
 })
