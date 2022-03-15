@@ -29,8 +29,6 @@ export const getAllOffersStatusAction = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const response = await getAllOffersStatus(reqArr);
 
-        console.log(response);
-
         handleRequestError(response, dispatch);
 
         return response;
@@ -66,7 +64,6 @@ export const bidSlice = createSlice({
             console.log("rejected")
         },
         [getAllOffersStatusAction.fulfilled]: (state, action) => {
-            console.log(action.payload);
             const payload = action.payload !== undefined && action.payload;
             state.allBidsStatus = payload;
         }
