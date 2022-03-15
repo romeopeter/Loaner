@@ -1,7 +1,7 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useState, useEffect } from "react";
 
 import { Link, useNavigate, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import ReactPaginate from "react-paginate";
 
@@ -14,24 +14,58 @@ import NavMenu from "../NavMenu";
 // missing InvestorHeader image from assets so i'm replacing to get passed the error
 import headerBanner from "../../../assets/images/headerBanner.png";
 import offerImage from "../../../assets/images/offerImage.png";
+
+/* Data call modules */
+import {getInvestorAllOffersAction} from "../../../redux/investorSlice";
 import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
 	const pageName = "Investor";
 
-	const currentUserObj = useSelector((state) => state.auth);
-	const { user: currentUser } = currentUserObj.user;
+	const currentUserObj = useSelector((state) => state.auth.user);
+	const allOffers = useSelector(state => state.investor.allOffers);
+	const dispatch = useDispatch();
 
-	// Parameters
-	const eachPage = 9;
+	const { user: currentUser } = currentUserObj;
+	const {tokens: userTokens } = currentUserObj;
+	const {id: investorId} = currentUser["investor_details"];
 
 	const [paginateState, setPaginateState] = useState({
-		list: offers.length > 0 && offers,
-		perPage: eachPage,
+		list: [],
+		perPage: 0,
 		page: 0,
-		pages: Math.floor(offers.length / eachPage),
+		pages: 0,
 	});
 
+	useEffect(async function getAllInvestorOffers() {
+		if (userTokens.access !== undefined || userTokens.access !== null) {
+			const req = await dispatch(getInvestorAllOffersAction(investorId));
+
+			if (req.meta.requestStatus === "fulfilled") {
+				const offersPayload = req.payload;
+
+				setPaginateState(state => {
+					return {
+						...state,
+						list: offersPayload,
+						perPage: 9,
+						pages: Math.floor(req.payload.length / 9),
+					}
+				});
+			}
+		}
+	}, [])
+
+
+	// Call endpoint to get all bid status for each offer
+	/*useEffect(() => {
+		return () => {
+			effect
+		};
+	}, [])*/
+	
+
+	/*Paginatiion starts*/
 	const { page, perPage, pages, list } = paginateState;
 	let items = list.slice(page * perPage, (page + 1) * perPage);
 
@@ -39,9 +73,20 @@ export default function AllOffers() {
 		let page = event.selected;
 		setPaginateState((state) => ({ ...state, page: page }));
 	};
+	/*Paginatiion ends*/
 
 	const dashboardBanner = {
 		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${headerBanner})`,
+	};
+
+	const trancheTenure = (offerStart, offerEnds) => {
+		const offerStartDate = new Date(offerStart);
+		const offerEndDate = new Date(offerEnds);
+		let tenure = "120 days";
+
+		console.log(offerStart, offerEnds);
+
+		return tenure;
 	};
 
 	return (
@@ -137,7 +182,7 @@ export default function AllOffers() {
 							</thead>
 
 							<tbody>
-								{items.map((item, index) => (
+								{items.length > 0 ? items.map((item, index) => (
 									<tr key={index}>
 										<td className="offer-title">
 											<input
@@ -151,30 +196,30 @@ export default function AllOffers() {
 												className="h-10 w-10 rounded mx-2"
 												id="offer-image"
 											/>
-											<span>{item.name}</span>
+											<span>{item.deal_name}</span>
 										</td>
-										<td>{item.tranche}</td>
-										<td>{item.tenor}</td>
-										<td>{item.size}</td>
+										<td>{item.tranche_id.name}</td>
+										<td>{trancheTenure(item.tranche_id.timing.offer_start, item.tranche_id.timing.offer_end)}</td>
+										<td>{Math.round(item.tranche_id.size.minimum_subscription.amount)}</td>
 										<td>
-											{item.status === "Bid Approved" && (
+											{item.status === "approved" && (
 												<Button
 													title={item.status}
 													link="/investor/dashboard/bid-approved"
 													buttonClass="bg-green-600 rounded-md bid-approved"
 												/>
 											)}
-											{item.status === "Bid Rejected" && (
+											{item.status === "rejected" && (
 												<Button
 													title={item.status}
 													link="/investor/dashboard/bid-rejected"
 													buttonClass="bg-red-600 rounded-md bid-rejected"
 												/>
 											)}
-											{item.status === "Offer open" && (
+											{item.availability === "open" && (
 												<Button
-													title={item.status}
-													link="/investor/dashboard/open-offer"
+													title={item.availability}
+													link={`/investor/dashboard/offers/${item.id}/`}
 													buttonClass="bg-gray-500 rounded-md offer-open"
 												/>
 											)}
@@ -187,22 +232,24 @@ export default function AllOffers() {
 											)}
 										</td>
 									</tr>
-								))}
+								)):(<tr className="text-3xl text-center w-full py-5">Loading...</tr>)}
 							</tbody>
 						</table>
 
 						<hr className="border-1 border-white mt-10" />
 
 						{/*Pagination*/}
-						<div id="paginate-offer-status">
-							<ReactPaginate
-								previousLabel={"<"}
-								nextLabel={">"}
-								pageCount={pages}
-								containerClassName={"pagination"}
-								onPageChange={(e) => handlePageClick(e)}
-							/>
-						</div>
+						{pages >= 1 ? (
+							<div id="paginate-offer-status">
+								<ReactPaginate
+									previousLabel={"<"}
+									nextLabel={">"}
+									pageCount={pages}
+									containerClassName={"pagination"}
+									onPageChange={(e) => handlePageClick(e)}
+								/>
+							</div>
+						) : null }
 					</div>
 				</section>
 			</OrderbookLayout>
