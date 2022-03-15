@@ -37,6 +37,7 @@ function App() {
                     const req = await dispatch(signOutAsync);
 
                     if (req.meta.requestStatus === "fulfilled") {
+                        
                         const sendMessage = await dispatch(setClientMessage({
                             status: null,
                             messageType: "token_expired", 
