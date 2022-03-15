@@ -23,4 +23,4 @@ const getAllOffersStatus = (requestsArr) => {
     .then(responses => responses.map(res => res.data)).catch(error => error);
 }
 
-export { getBids, getBid, createBid, updateBids, getAllOffersStatus };
+export { getBids, getBid, createBid, updateBids, getAllOffersStatus };git 
