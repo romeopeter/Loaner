@@ -14,7 +14,7 @@ import offerImage from "../../../assets/images/offerImage.png";
 import {successfulBids} from "../../../fake-backend/investor/successfulBids"
 
 export default function SuccessfulBids() {
-	const pageName = "Bids";
+	const pageName = "Successful offers";
 
 	// Pagination
 	const eachPage = 9;

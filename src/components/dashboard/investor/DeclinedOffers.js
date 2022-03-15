@@ -13,7 +13,7 @@ import offerImage from "../../../assets/images/offerImage.png";
 import { declinedBids } from "../../../fake-backend/investor/declinedBids";
 
 export default function DeclinedBids() {
-	const pageName = "Declined bids";
+	const pageName = "Declined offers";
 
 	const eachPage = 9;
 
@@ -43,28 +43,42 @@ export default function DeclinedBids() {
 					<Link
 						to="/investor/dashboard"
 						id="home"
-						className="dropdown-container mr-5"
+						className="dropdown-container mr-5 underline"
 					>
 						Home
 					</Link>
 					<Link
-						to="/investor/offers/offer"
+						to="/investor/offers"
 						id="offers"
-						className="dropdown-container"
+						className="dropdown-container underline"
 					>
-						Offers
+						View offers
 					</Link>
 				</div>
-				<section id="orderbook-investor-bids">
-					<div id="declined-bids">
-						<h3 id="header">Declined offers</h3>
-						<div style={{ overflowX: "auto" }}>
+				<section id="orderbook-investor-declined-offers">
+					<div id="declined-offers">
+						<h3 id="header" className="py-10 text-lg sm:text-2xl pl-5 text-white">Declined offers</h3>
+						<div id="table-container" style={{ overflowX: "auto" }}>
+							<div id="table-action" className="bg-white py-5 px-2 w-full">
+								<select 
+									name="table-action" 
+									id="select-table-action" 
+									className="mr-2 mt-1 focus:ring-white focus:border-black border-2 border-black"
+								>
+									<option defaultValue="value 1">Select action</option>
+									<option value="value 1">Option 1</option>
+									<option value="vallue 2">Option 2</option>
+									<option value="value 3">Option 3</option>
+								</select>
+								<Button title="Apply" buttonClass="bg-gray-500 action-btn" />
+							</div>
+							
 							<table className="bg-white table-auto w-full">
 								<tbody>
 									{
 										items.map((item, index) => {
 											return (<tr key={index}>
-												<td className="bid-name">
+												<td className="offer-name">
 													<input type="checkbox" name="checkbox" className="checkbox rounded" />
 													<img src={offerImage} alt=""  className="rounded h-10 w-10" />
 													<span>{item.bidName}</span>
@@ -81,7 +95,7 @@ export default function DeclinedBids() {
 								</tbody>
 							</table>
 						</div>
-						<div id="paginate-bids" className="bg-white">
+						<div id="paginate-offers" className="bg-white">
 							<ReactPaginate previousLabel={'<'} nextLabel={'>'} pageCount={pages} containerClassName={'pagination'} onPageChange={(e) => handlePageClick(e)} />
 						</div>
 					</div>
