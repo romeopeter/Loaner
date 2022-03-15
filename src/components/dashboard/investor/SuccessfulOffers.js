@@ -50,7 +50,7 @@ export default function SuccessfulBids() {
 						Home
 					</Link>
 					<Link
-						to="/investor/offers/offer"
+						to="/investor/offers"
 						id="offers"
 						className="dropdown-container"
 					>
@@ -58,9 +58,23 @@ export default function SuccessfulBids() {
 					</Link>
 				</div>
 				<section id="orderbook-investor-successful-offers">
-					<div id="bids">
-						<h3 id="header">Succesful offers</h3>
-						<div style={{ overflowX: "auto" }}>
+					<div id="Succesful-offers">
+						<h3 id="header" className="py-10 text-lg sm:text-2xl pl-5 text-white">Succesful offers</h3>
+						<div id="table-container" style={{ overflowX: "auto" }}>
+							<div id="table-action" className="bg-white py-5 px-2 w-full">
+								<select 
+									name="table-action" 
+									id="select-table-action" 
+									className="mr-2 mt-1 focus:ring-white focus:border-black border-2 border-black"
+								>
+									<option defaultValue="value 1">Select action</option>
+									<option value="value 1">Option 1</option>
+									<option value="vallue 2">Option 2</option>
+									<option value="value 3">Option 3</option>
+								</select>
+								<Button title="Apply" buttonClass="bg-gray-500 action-btn" />
+							</div>
+
 							<table className="bg-white table-auto w-full">
 								<tbody>
 									{items.map((item, index) => {
