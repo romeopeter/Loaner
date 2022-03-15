@@ -3,8 +3,9 @@ import {
     getBids, 
     getBid, 
     createBid, 
-    updateBids
-} from "../services/loan.service.js";
+    updateBids,
+    getAllOffersStatus
+} from "../services/bid.service.js";
 import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse";
 
@@ -18,17 +19,34 @@ export const createBidAction = createAsyncThunk(
         // Catch error
         handleRequestError(res, dispatch);
 
-        if (res.status === 200) return res.data
+        if (res.status === 200) console.log(res)
     }
 );
+
+export const getAllOffersStatusAction = createAsyncThunk(
+    "bid/getAllOffersStatusAction",
+    async (reqArr, thunkAPI) => {
+        const dispatch = thunkAPI.dispatch;
+        const response = await getAllOffersStatus(reqArr);
+
+        console.log(response);
+
+        handleRequestError(response, dispatch);
+
+        return response;
+    }
+)
 
 export const bidSlice = createSlice({
     name: "bid",
     initialState: {
         bid: null,
         allBids: null,
+        allBidsStatus: null
     },
     extraReducers: {
+
+        // CREATE BID
         [createBidAction.pending]: (state, action) => {
             console.log("Pending");
         },
@@ -39,6 +57,19 @@ export const bidSlice = createSlice({
             const payload = action.payload !== undefined && action.payload;
             state.bid = payload;
         },
+
+        // GET OFFERS STATUS
+        [getAllOffersStatusAction.pending]: (state, action) => {
+            console.log("pending")
+        },
+        [getAllOffersStatusAction.rejected]: (state, action) => {
+            console.log("rejected")
+        },
+        [getAllOffersStatusAction.fulfilled]: (state, action) => {
+            console.log(action.payload);
+            const payload = action.payload !== undefined && action.payload;
+            state.allBidsStatus = payload;
+        }
     }
  
 });
