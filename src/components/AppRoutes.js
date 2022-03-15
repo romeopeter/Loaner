@@ -28,7 +28,7 @@ import ShowAllBids from "./dashboard/client/ShowAllBids";
 import Dashboard from "./dashboard/investor/Dashboard";
 import AllOffers from "./dashboard/investor/AllOffers";
 import IncomingOffer from "./dashboard/investor/IncomingOffer";
-import ShowOpenOffer from "./dashboard/investor/ShowOpenOffer";
+import ShowSingleOffer from "./dashboard/investor/ShowSingleOffer";
 import BidApproved from "./dashboard/investor/BidApproved";
 import BidRejected from "./dashboard/investor/BidRejected";
 import BAPaymentProof from "./dashboard/investor/BAPaymentProof";
@@ -186,10 +186,10 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/dashboard/open-offer"
+						path="/investor/dashboard/offers/:offerId/"
 						element={
 							<RequireAuth>
-								<ShowOpenOffer />
+								<ShowSingleOffer />
 							</RequireAuth>
 						}
 					/>
