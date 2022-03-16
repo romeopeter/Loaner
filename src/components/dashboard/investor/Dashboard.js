@@ -17,6 +17,7 @@ import offerImage from "../../../assets/images/offerImage.png";
 
 /* Data call modules */
 import {getInvestorAllOffersAction} from "../../../redux/investorSlice";
+import {getAllOffersStatusAction} from "../../../redux/bidSlice";
 import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
@@ -24,6 +25,7 @@ export default function AllOffers() {
 
 	const currentUserObj = useSelector((state) => state.auth.user);
 	const allOffers = useSelector(state => state.investor.allOffers);
+	const allBidsStatus = useSelector(state => state.bid.allBidsStatus);
 	const dispatch = useDispatch();
 
 	const { user: currentUser } = currentUserObj;
@@ -56,13 +58,11 @@ export default function AllOffers() {
 		}
 	}, [])
 
+	useEffect(function getOffersStatusById() {
+		const offersId = paginateState.list.map(offer => `/v1/bids/?loan_request_id=${offer.id}`) 
 
-	// Call endpoint to get all bid status for each offer
-	/*useEffect(() => {
-		return () => {
-			effect
-		};
-	}, [])*/
+		if (offersId.length > 0) dispatch(getAllOffersStatusAction(offersId));
+	}, [paginateState.list])
 	
 
 	/*Paginatiion starts*/
@@ -75,18 +75,40 @@ export default function AllOffers() {
 	};
 	/*Paginatiion ends*/
 
-	const dashboardBanner = {
-		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${headerBanner})`,
-	};
-
 	const trancheTenure = (offerStart, offerEnds) => {
 		const offerStartDate = new Date(offerStart);
 		const offerEndDate = new Date(offerEnds);
 		let tenure = "120 days";
 
-		console.log(offerStart, offerEnds);
-
 		return tenure;
+	};
+
+	const checkBidStatus = (offer, offerIndex) => {
+
+		if (allBidsStatus !==  null && allBidsStatus !==  false) {
+			const bid = allBidsStatus[offerIndex];
+			let bidStatus = "Loading...";
+
+			if (bid !== undefined && bid.length > 0) {
+				let bidObj = bid[0]
+
+				console.log(bidObj["current_status"]);
+
+				if (bidObj["current_status"] === "rejected" || bidObj["current_status"] === "approved") {
+					bidStatus = bidObj["current_status"];
+				}
+
+				if (bidObj["current_status"] === null) bidStatus = "pending";
+			}
+
+			if (bid !== undefined && bid.length === 0) bidStatus = offer.availability;
+
+			return bidStatus
+		}
+	};
+
+	const dashboardBanner = {
+		backgroundImage: `linear-gradient(to right, rgba(255, 250, 237, 0.979), rgba(252, 251, 249, 0.096)), url(${headerBanner})`,
 	};
 
 	return (
@@ -182,8 +204,8 @@ export default function AllOffers() {
 							</thead>
 
 							<tbody>
-								{items.length > 0 ? items.map((item, index) => (
-									<tr key={index}>
+								{items.length > 0 ? items.map((item, itemIndex) => (
+									<tr key={itemIndex}>
 										<td className="offer-title">
 											<input
 												type="checkbox"
@@ -202,30 +224,37 @@ export default function AllOffers() {
 										<td>{trancheTenure(item.tranche_id.timing.offer_start, item.tranche_id.timing.offer_end)}</td>
 										<td>{Math.round(item.tranche_id.size.minimum_subscription.amount)}</td>
 										<td>
-											{item.status === "approved" && (
+											{checkBidStatus(item, itemIndex) === "approved" && (
 												<Button
-													title={item.status}
+													title={checkBidStatus(item, itemIndex)}
 													link="/investor/dashboard/bid-approved"
 													buttonClass="bg-green-600 rounded-md bid-approved"
 												/>
 											)}
-											{item.status === "rejected" && (
+											{checkBidStatus(item, itemIndex) === "rejected" && (
 												<Button
-													title={item.status}
+													title={checkBidStatus(item, itemIndex)}
 													link="/investor/dashboard/bid-rejected"
 													buttonClass="bg-red-600 rounded-md bid-rejected"
 												/>
 											)}
-											{item.availability === "open" && (
+											{checkBidStatus(item, itemIndex) === "pending" && (
 												<Button
-													title={item.availability}
-													link={`/investor/dashboard/offers/${item.id}/`}
-													buttonClass="bg-gray-500 rounded-md offer-open"
+													title={checkBidStatus(item, itemIndex)}
+													buttonClass="bg-yellow-400 rounded-md offer-open"
+													buttonDisabled={true}
 												/>
 											)}
-											{item.status === "Coming soon" && (
+											{checkBidStatus(item, itemIndex) === "open" && (
 												<Button
-													title={item.status}
+													title={checkBidStatus(item, itemIndex)}
+													link={`/investor/dashboard/offers/${item.id}/`}
+													buttonClass="bg-blue-500 rounded-md offer-open"
+												/>
+											)}
+											{checkBidStatus(item, itemIndex) === "Coming soon" && (
+												<Button
+													title={checkBidStatus(item, itemIndex)}
 													link="/investor/offer-coming-soon"
 													buttonClass="bg-gray-500 rounded-md coming-soon"
 												/>
