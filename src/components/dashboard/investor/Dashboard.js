@@ -94,7 +94,7 @@ export default function AllOffers() {
 
 				console.log(bidObj["current_status"]);
 
-				if (bidObj["current_status"] === "rejected" || bidObj["current_status"] === "approved") {
+				if (bidObj["current_status"] === "disagreed" || bidObj["current_status"] === "approved") {
 					bidStatus = bidObj["current_status"];
 				}
 
@@ -231,9 +231,10 @@ export default function AllOffers() {
 													buttonClass="bg-green-600 rounded-md bid-approved"
 												/>
 											)}
-											{checkBidStatus(item, itemIndex) === "rejected" && (
+											{checkBidStatus(item, itemIndex) === "disagreed" && (
 												<Button
-													title={checkBidStatus(item, itemIndex)}
+													title="Rejected"
+													// title={checkBidStatus(item, itemIndex)}
 													link="/investor/dashboard/bid-rejected"
 													buttonClass="bg-red-600 rounded-md bid-rejected"
 												/>
