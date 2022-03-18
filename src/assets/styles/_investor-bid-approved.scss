@@ -17,7 +17,7 @@
 	}
 
 	#bid-container {
-		height: 550px;
+		height: auto !important;
 
 		#go-back-arrow {
 			display: inline-block;
@@ -63,6 +63,21 @@
 			#upload-label {
 				font-family: $body-font;
 				height: 100%;
+				max-width: 300px;
+			}
+
+			#upload-success {
+				button {
+					&.view-offers {
+						a {color: $black !important;}
+						border: 2px solid black !important;
+					}
+
+					&.go-home {
+						color: $white;
+						background: green;
+					}
+				}
 			}
 		}
 	}
