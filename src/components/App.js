@@ -6,13 +6,13 @@ import jwt_decode from 'jwt-decode';
 
 import AppRoutes from "./AppRoutes";
 
-import signOutAsync from "../redux/authSlice";
+import {signOutAsync} from "../redux/authSlice";
 import setClientMessage from "../redux/messageSlice.js";
 
 function App() {
     const userObj = JSON.parse(localStorage.getItem("USER"));
     const decodeToken = jwt_decode;
-    const dispatch = useDispatch;
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // Set default endpoint URL and Authorization key
@@ -24,6 +24,8 @@ function App() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${userObj.tokens.access}`;
     }
 
+    // Write preflight request to check expired token
+
 
     useEffect(() => {
         if (userObj !== null && typeof userObj === "object") {
@@ -34,22 +36,14 @@ function App() {
                 const currentDate = new Date();
 
                 if (decodedToken.exp * 1000 < currentDate.getTime()) {
-                    const req = await dispatch(signOutAsync);
+                    dispatch(setClientMessage({
+                        status: null,
+                        messageType: "token_not_valid", 
+                        message: "Token is invalid or expired", 
+                        detail: "Login token is expired. Please sign in"
+                    }));
 
-                    if (req.meta.requestStatus === "fulfilled") {
-                        
-                        const sendMessage = await dispatch(setClientMessage({
-                            status: null,
-                            messageType: "token_expired", 
-                            message: "Token expired", 
-                            detail: "Login token is expired. Please sign in"
-                        }));
-
-                        if (sendMessage.meta.requestStatus === "fulfilled") {
-                            // Redirect to login page
-                            navigate("/login")
-                        }
-                    }
+                    const req = await dispatch(signOutAsync());
                 }
             }
             checkTokenExpiration()

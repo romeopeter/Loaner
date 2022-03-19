@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../../../Button";
 
-export default function bidAccepted() {
+export default function BidAccepted() {
 
 	return (
 		<div id="offer-modal" className="h-60 accept-modal">

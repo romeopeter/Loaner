@@ -5,7 +5,7 @@ const getPayments = () => {
 }
 
 const getPayment = (ID) => {
-	return axios.get(`/v1/payments/${ID}/`).catch(error => error);
+	return axios.get(`/v1/payments/${ID}`).catch(error => error);
 }
 
 const makePayment = () => {

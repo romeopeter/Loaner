@@ -90,5 +90,5 @@ export const signUpAsync = (data) => (dispatch) => {
 };
 
 export const signOutAsync = () => (dispatch) => {
-	dispatch(signOutAction());
+	return dispatch(signOutAction());
 };
