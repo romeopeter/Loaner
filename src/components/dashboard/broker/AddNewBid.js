@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -7,28 +8,88 @@ import Select from 'react-dropdown-select';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
+import PostModal from '../broker/modals/PostModal';
 import Arrow from '../../../assets/images/Arrow.png';
 import { Grid, GridItem } from '@chakra-ui/react';
 
 const AddNewBid = () => {
+    const { id } = useParams();
     let navigate = useNavigate();
 
     const [active, setActive] = useState(false);
+    const [investors, setInvestors] = useState(null);
+    const [select, setSelect] = useState(null);
+    const [responsedata, setResponsedata] = useState({
+        status: undefined,
+        isLoading: undefined,
+        error: undefined,
+        modal: false,
+        selectError: false,
+    });
 
     // STATE FOR TOGGLE SHOW AND HIDE
     const handleState = () => {
         setActive(active ? false : true);
     };
-    // TEMP OPTIONS FOR SELECT SEARCH DROPDOWN
-    const options = [
-        { id: 1, label: 'Investor1' },
-        { id: 2, label: 'Investor2' },
-        { id: 3, label: 'Investor3' },
-        { id: 4, label: 'Investor4' },
-        { id: 5, label: 'Investor5' },
-        { id: 6, label: 'Investor6' },
-        { id: 7, label: 'Investor7' },
-    ];
+
+    // OPTIONS FOR SELECT SEARCH DROPDOWN
+    const options = [];
+
+    investors &&
+        investors.map((data) => {
+            let values;
+            values = { id: data.user.id, label: ` ${data.user.first_name} ${data.user.last_name}` };
+            return options.push(values);
+        });
+    const closeModal = () => {
+        setResponsedata({ ...responsedata, modal: false });
+
+        setTimeout(() => {
+            setResponsedata({ error: undefined });
+        }, 1000)
+    };
+    useEffect(() => {
+        let isMounted = true;
+        axios
+            .get(`/v1/loan_request/${id}/investors/`)
+            .then((response) => {
+                console.log(response);
+                isMounted && setInvestors(response.data)
+            })
+            .catch((err) => err && setResponsedata({ ...responsedata, selectError: true }));
+
+        window.scroll(0, 0);
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const handleSubmit = (values) => {
+        setResponsedata({ ...responsedata, isLoading: true, modal: true });
+        const bidObject = {
+            amount: values.bidValue,
+            owner: select[0].id,
+            loan_request: id,
+        };
+        axios
+            .post('v1/bids/', bidObject)
+            .then((response) => {
+
+                response.statusText === 'OK' &&
+                    setResponsedata({ ...responsedata, modal: true, status: 'Bid Added Successfully!' });
+            })
+            .catch(
+                (err) =>
+                    err &&
+                    setResponsedata({
+                        ...responsedata,
+                        modal: true,
+                        error: 'Something went wrong, Please try again.',
+                    })
+            );
+        values.bidValue = '';
+
+    };
 
     return (
         <>
@@ -36,8 +97,8 @@ const AddNewBid = () => {
             <OrderbookLayout PageNav={NavMenu}>
                 <div className='NewBid'>
                     <div className='NewBid--form'>
-                        <Link to='/broker/dashboard/bids/'>
-                            <img alt='' src={Arrow} style={{ background: '#c4c4c4', padding: '12px' }} />
+                        <Link to={`/broker/dashboard/bids/${id}`}>
+                            <img alt='' src={Arrow} className='backArrow' />
                         </Link>
 
                         <div style={{ padding: '20px' }}>
@@ -51,9 +112,7 @@ const AddNewBid = () => {
                                     bidValue: Yup.string().required('*Required'),
                                 })}
                                 onSubmit={(values) => {
-                                    navigate('/broker/dashboard/bids', { replace: true });
-                                    // send to api
-                                    console.log(values);
+                                    handleSubmit(values);
                                 }}
                             >
                                 {() => (
@@ -87,11 +146,16 @@ const AddNewBid = () => {
                                                         component='div'
                                                     />
                                                     <Select
+
                                                         name='select'
                                                         type='text'
                                                         valueField='id'
+                                                        loading={responsedata.selectError}
+                                                        required={true}
                                                         className='NewBid--form-input'
                                                         options={options}
+                                                        onChange={(values) => setSelect(values)}
+                                                        style={{ paddingLeft: '15px' }}
                                                     />
                                                 </Grid>
                                                 <h2>
@@ -106,7 +170,7 @@ const AddNewBid = () => {
                                                 </h2>
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => {}} type='submit'>
+                                                        <button onClick={() => { }} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>
@@ -267,7 +331,7 @@ const AddNewBid = () => {
                                                 {/*cta */}
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => {}} type='submit'>
+                                                        <button onClick={() => { }} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>
@@ -279,6 +343,7 @@ const AddNewBid = () => {
                             </Formik>
                         </div>
                     </div>
+                    <PostModal responsedata={responsedata} closeModal={closeModal} />
                 </div>
             </OrderbookLayout>
         </>

@@ -1,6 +1,8 @@
 import React from 'react';
+import bidRejected from '../../../../assets/images/bidRejected.png';
+import bidApproved from '../../../../assets/images/bidApproved.png';
 
-const DisagreeModal = ({ responsedata, closeModal }) => {
+const PostModal = ({ responsedata, closeModal }) => {
     const className = responsedata.modal ? 'open' : '';
 
     return (
@@ -27,8 +29,20 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
                             );
                         } else if (responsedata.status || responsedata.error) {
                             return (
-                                <p style={{ color: '#333', fontSize: '14px' }}>
-                                    {responsedata.status || responsedata.error}
+                                <p
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
+                                        fontSize: '14px',
+                                    }}
+                                >
+                                    <img
+                                        alt=''
+                                        src={responsedata.error ? bidRejected : bidApproved}
+                                        style={{ height: '30px', width: '30px', marginRight: '10px' }}
+                                    />
+                                    {responsedata.error ? responsedata.error : responsedata.status}
                                 </p>
                             );
                         }
@@ -38,12 +52,10 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
                     <button
                         onClick={closeModal}
                         style={{
-                            padding: '0px 7px',
-                            margin: 'auto',
-                            border: '1px solid #333',
-                            color: '#555',
-                            borderRadius: '2px',
-                            fontSize: '14px',
+                            padding: '8px 30px',
+                            color: '#fff',
+                            borderRadius: '4px',
+                            background: 'rgba(0, 0, 0, 0.5)',
                         }}
                     >
                         Okay
@@ -54,4 +66,4 @@ const DisagreeModal = ({ responsedata, closeModal }) => {
     );
 };
 
-export default DisagreeModal;
+export default PostModal;

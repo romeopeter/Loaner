@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Table, Thead, Tbody, Tr, Th, Td, TableCaption } from '@chakra-ui/react';
-import UploadInvestorModal from '../broker/modals/UploadInvestorModal';
+import PostModal from '../broker/modals/PostModal';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
@@ -144,19 +144,10 @@ const UploadInvestor = () => {
                         </div>
                     )}
                 </CSVReader>
-                <UploadInvestorModal responsedata={responsedata} closeModal={closeModal} />
+                <PostModal responsedata={responsedata} closeModal={closeModal} />
             </OrderbookLayout>
         </div>
     );
 };
 
 export default UploadInvestor;
-// useEffect(() => {
-//     axios
-//         .get('https://order-book-online.herokuapp.com/v1/users/')
-
-//         .then((response) => {
-//             console.log(response);
-//         })
-//         .catch((err) => console.log(err));
-// }, []);

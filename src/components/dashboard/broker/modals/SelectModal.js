@@ -1,42 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
+import axios from 'axios';
 import { CloseIcon } from '@chakra-ui/icons';
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
 
-const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => {
+const SelectModal = ({ closeSelectModal, selectFilter, setSelectFilter, checkbox }) => {
     const className = selectFilter.modal ? 'open' : '';
     const classSuccessState = selectFilter.value === 'approve all' ? 'h1Approved' : 'h1Rejected';
 
-    const [isLoading, setIsLoading] = useState(undefined);
-
     const handleChange = () => {
-        setIsLoading(true);
+        setSelectFilter({ ...selectFilter, isLoading: true });
 
-        setTimeout(() => {
-            checkbox.forEach((e) => {
-                if (e.checked && selectFilter.value === 'approve all') {
-                    bidsData.forEach((d) => {
-                        if (d.id === e.data.id) {
-                            d.status = 'Approved';
-                        }
-                    });
-                }
-                if (e.checked && selectFilter.value === 'reject all') {
-                    bidsData.forEach((d) => {
-                        if (d.id === e.data.id) {
-                            d.status = 'Rejected';
-                        }
-                    });
-                }
-            });
+        checkbox.forEach((e) => {
+            if (e && selectFilter.value === 'approve all') {
+                const detail = {
+                    status: {
+                        name: 'approved',
+                        message: 'Please take heed to this',
+                    },
+                };
 
-            setIsLoading(false);
-        }, 1000);
+                axios.patch(`v1/bids/${e.id}/`, detail).then((res) => {
+                    res.statusText === 'OK' && setSelectFilter({ ...selectFilter, isLoading: false });
+                });
+            } else if (e && selectFilter.value === 'reject all') {
+                const detail = {
+                    status: {
+                        name: 'rejected',
+                        message: 'Rejected',
+                    },
+                };
 
-        // Not the best method but this sets isLoading back to undefined to render the form again
-        setTimeout(() => {
-            setIsLoading(undefined);
-        }, 8000);
+                axios.patch(`v1/bids/${e.id}/`, detail).then((res) => {
+                    res.statusText === 'OK' && setSelectFilter({ ...selectFilter, isLoading: false });
+                });
+            }
+        });
     };
     return (
         <div className={`modal ${className}`}>
@@ -44,7 +43,7 @@ const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => 
 
             <div className='modal-body'>
                 {(() => {
-                    if (isLoading === undefined) {
+                    if (selectFilter.isLoading === undefined) {
                         return (
                             <div>
                                 <div className='modal-head'>
@@ -55,9 +54,7 @@ const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => 
                                         </div>
                                     )}
 
-                                    <button onClick={closeSelectModal} className='close-button'>
-                                        <CloseIcon />
-                                    </button>
+                                    <button onClick={closeSelectModal} className='close-button'></button>
                                 </div>
                                 <div style={{ marginTop: '20px' }}>
                                     <button
@@ -81,10 +78,10 @@ const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => 
                             </div>
                         );
                     }
-                    if (isLoading) {
+                    if (selectFilter.isLoading) {
                         return <div className='loader'></div>;
                     }
-                    if (!isLoading) {
+                    if (!selectFilter.isLoading) {
                         return (
                             <div>
                                 {selectFilter.value === 'approve all' ? (
@@ -93,9 +90,11 @@ const SelectModal = ({ closeSelectModal, selectFilter, bidsData, checkbox }) => 
                                     <img alt='rejected' className='img' src={bidRejected} />
                                 )}
                                 {selectFilter.value === 'approve all' ? (
-                                    <h1 className={`${classSuccessState}`}>You have Approved the Bids</h1>
+                                    <div>
+                                        <h1 className={`${classSuccessState}`}>Approved</h1>
+                                    </div>
                                 ) : (
-                                    <h1 className={`${classSuccessState}`}>You have Rejected the Bids</h1>
+                                    <h1 className={`${classSuccessState}`}>Rejected</h1>
                                 )}
 
                                 <button className='modal-button ' onClick={closeSelectModal}>

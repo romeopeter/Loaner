@@ -26,7 +26,6 @@ function App() {
 
     // Write preflight request to check expired token
 
-
     useEffect(() => {
         if (userObj !== null && typeof userObj === "object") {
 
@@ -51,6 +50,7 @@ function App() {
     }, [])
 
     return (<AppRoutes />);
+
 }
 
 export default App;

@@ -11,7 +11,6 @@ import { Flex, Box, Button } from '@chakra-ui/react';
 
 const LoanOfferDraft = () => {
     let { id } = useParams();
-    console.log(id);
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -22,6 +21,7 @@ const LoanOfferDraft = () => {
         window.scroll(0, 0);
     }, [id]);
     console.log(data);
+
     // Dropdown
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
@@ -71,7 +71,7 @@ const LoanOfferDraft = () => {
                             <div id='the-offer'>
                                 <div className='mb-8'>
                                     <Link to='/broker/dashboard/'>
-                                        <img alt='' src={Arrow} style={{ background: '#c4c4c4', padding: '12px' }} />
+                                        <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>
                                 <div className='grid grid-cols-12 '>

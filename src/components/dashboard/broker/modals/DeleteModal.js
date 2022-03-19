@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CloseIcon } from '@chakra-ui/icons';
+// import { CloseIcon } from '@chakra-ui/icons';
 
 const DeleteModal = ({ deleteModal, handleDelete, closeDeleteModal }) => {
     const className = deleteModal.modal ? 'open' : '';
@@ -13,7 +13,7 @@ const DeleteModal = ({ deleteModal, handleDelete, closeDeleteModal }) => {
                 <div className='modal-head'>
                     <h2>Are you sure you want to delete this bid?</h2>
                     <button onClick={closeDeleteModal} className='close-button'>
-                        <CloseIcon />
+
                     </button>
                 </div>
                 {deleteModal.isLoading && <p className='loader'></p>}
