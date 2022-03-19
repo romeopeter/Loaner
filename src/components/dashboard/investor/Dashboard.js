@@ -18,6 +18,7 @@ import offerImage from "../../../assets/images/offerImage.png";
 /* Data call modules */
 import {getInvestorAllOffersAction} from "../../../redux/investorSlice";
 import {getAllOffersStatusAction} from "../../../redux/bidSlice";
+import {setCurrentBid} from "../../../redux/bidSlice";
 import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
@@ -91,8 +92,6 @@ export default function AllOffers() {
 
 			if (bid !== undefined && bid.length > 0) {
 				let bidObj = bid[0]
-
-				console.log(bidObj["current_status"]);
 
 				if (bidObj["current_status"] === "disagreed" || bidObj["current_status"] === "approved") {
 					bidStatus = bidObj["current_status"];
@@ -227,7 +226,7 @@ export default function AllOffers() {
 											{checkBidStatus(item, itemIndex) === "approved" && (
 												<Button
 													title={checkBidStatus(item, itemIndex)}
-													link="/investor/dashboard/bid-approved"
+													link={`/investor/dashboard/offers/${item.id}/bid-approved`}
 													buttonClass="bg-green-600 rounded-md bid-approved"
 												/>
 											)}
@@ -235,7 +234,7 @@ export default function AllOffers() {
 												<Button
 													title="Rejected"
 													// title={checkBidStatus(item, itemIndex)}
-													link="/investor/dashboard/bid-rejected"
+													link={`/investor/dashboard/offers/${item.id}/bid-rejected`}
 													buttonClass="bg-red-600 rounded-md bid-rejected"
 												/>
 											)}
