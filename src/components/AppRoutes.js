@@ -194,7 +194,7 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/dashboard/bid-approved"
+						path="/investor/dashboard/offers/:offerId/bid-approved"
 						element={
 							<RequireAuth>
 								<BidApproved />
@@ -202,7 +202,7 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/dashboard/bid-rejected"
+						path="/investor/dashboard/offers/:offerId/bid-rejected"
 						element={
 							<RequireAuth>
 								<BidRejected />
