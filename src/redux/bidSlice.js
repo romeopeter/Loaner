@@ -42,6 +42,11 @@ export const bidSlice = createSlice({
         allBids: null,
         allBidsStatus: null
     },
+    reducers: {
+        setCurrentBid: (state, action) => {
+            state.bid = action.payload;
+        }
+    },
     extraReducers: {
 
         // CREATE BID
@@ -71,4 +76,5 @@ export const bidSlice = createSlice({
  
 });
 
+export const { setCurrentBid } = bidSlice.actions;
 export default bidSlice.reducer;
