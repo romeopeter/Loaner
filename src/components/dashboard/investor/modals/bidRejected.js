@@ -2,7 +2,7 @@ import React from "react";
 import rejected from "../icons/rejected.png";
 import Button from "../../../Button";
 
-export default function bidRejected() {
+export default function BidRejected() {
 
 	return (
 		<div id="offer-modal" className="h-60 reject-modal">
