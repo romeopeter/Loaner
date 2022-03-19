@@ -122,7 +122,7 @@ export default function Login() {
 	}
 
 	if (clientMessage !== null && typeof clientMessage === "object") {
-		if (clientMessage.messageType === "token_expired") {
+		if (clientMessage.messageType === "token_not_valid") {
 			tokenExpired = clientMessage.detail;
 		}
 	}
