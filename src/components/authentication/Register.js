@@ -98,7 +98,7 @@ export default function Register() {
 			email: emailAddress,
 			role,
 			title,
-			date_of_birth: dateOfBirth,
+			// date_of_birth: dateOfBirth,
 			first_name: firstName,
 			last_name: lastName,
 			phone_number,
@@ -107,7 +107,7 @@ export default function Register() {
 			confirm_password: confirmPassword,
 		};
 
-		for (let props in data) {
+		/*for (let props in data) {
 			if (data[props] === "" || data[props] === null) {
 				setForm((state) => ({ ...state, isLoading: false }));
 
@@ -115,7 +115,7 @@ export default function Register() {
 
 				return;
 			}
-		}
+		}*/
 
 		if (form.password !== "" && form.password.length < 6) {
 			setForm((state) => ({ ...state, isLoading: false }));
