@@ -147,7 +147,7 @@ export default function Login() {
 				{networkErrorMessage !== null ?(<Danger message={networkErrorMessage} />):null}
 			</div>
 			<div className="mb-5">
-				{confirmEmailMessage !== null ?(<Danger message={confirmEmailMessage} />):null}
+				{confirmEmailMessage !== null ?(<Success message={confirmEmailMessage} />):null}
 			</div>
 			<div className="mb-5">
 				{tokenExpired !== null ?(<Info message={tokenExpired} />):null}
