@@ -1,12 +1,12 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const EditModal = ({ closeModal, editModal, data, notification }) => {
     const className = editModal.modal ? 'open' : '';
     const [update, setUpdate] = useState({ duration: '', amount: '' });
     const [isLoading, setIsLoading] = useState(undefined);
-    // const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
 
     const onAmountChange = (e) => {
         const amount = e.target.value;

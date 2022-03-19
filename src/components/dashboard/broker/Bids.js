@@ -13,7 +13,7 @@ import bidRejected from '../../../assets/images/bidRejected.png';
 import NavMenu from '../NavMenu';
 import Pagination from './pagination/Pagination';
 import { Link, useParams } from 'react-router-dom';
-import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
+// import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
 import { AllBidsData } from '../../../data/broker/AllClients';
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td, Center, Divider } from '@chakra-ui/react';
 
@@ -31,6 +31,8 @@ const Bids = () => {
     // Fetched data
     const [bidsData, setBidsData] = useState([]);
     const [dataState, setDataState] = useState({ isLoading: true, error: undefined });
+    // Checkbox
+    const [checkedBid, setCheckedBid] = useState([]);
     // Disagree modal state
     const [disModal, setDisModal] = useState({ modal: false, isLoading: undefined, error: undefined });
     // Edit Modal
@@ -42,10 +44,13 @@ const Bids = () => {
     // Approve & Reject modal success state
     const [state, setState] = useState({ modal: false, successState: false });
     // Select Filter state
-    const [selectFilter, setSelectFilter] = useState({ value: undefined, modal: false, successState: false });
+    const [selectFilter, setSelectFilter] = useState({
+        value: undefined,
+        modal: false,
+        isLoading: undefined,
+    });
     // notification state
     const [notification, setNotification] = useState({
-        confirmation: false,
         isLoading: undefined,
         dataApproved: undefined,
         dataRejected: undefined,
@@ -58,7 +63,6 @@ const Bids = () => {
         let data = notification.dataApproved;
         setNotification({
             ...notification,
-            confirmation: true,
             isLoading: true,
         });
         const detail = {
@@ -70,15 +74,14 @@ const Bids = () => {
         data &&
             axios
                 .patch(`v1/bids/${data.id}/`, detail)
-                .then(
-                    (res) =>
-                        res.statusText === 'OK' &&
+                .then((res) => {
+                    console.log(res);
+                    res.data.current_status &&
                         setNotification({
                             ...notification,
-                            confirmation: true,
                             isLoading: false,
-                        })
-                )
+                        });
+                })
                 .catch((err) => err && setNotification({ ...notification, isLoading: true }));
     }, [notification]);
 
@@ -87,7 +90,7 @@ const Bids = () => {
         let data = notification.dataRejected;
         setNotification({
             ...notification,
-            confirmation: true,
+
             isLoading: true,
         });
         const detail = {
@@ -99,15 +102,15 @@ const Bids = () => {
         data &&
             axios
                 .patch(`v1/bids/${data.id}/`, detail)
-                .then(
-                    (res) =>
-                        res.statusText === 'OK' &&
+                .then((res) => {
+                    console.log(res);
+                    res.data.current_status &&
                         setNotification({
                             ...notification,
-                            confirmation: true,
+
                             isLoading: false,
-                        })
-                )
+                        });
+                })
                 .catch((err) => err && setNotification({ ...notification, isLoading: true }));
     }, [notification]);
 
@@ -134,20 +137,6 @@ const Bids = () => {
         },
         [notification.dataDisagree, disModal]
     );
-
-    console.log(bidsData);
-
-    //  Call Fetched data
-    useEffect(() => {
-        axios
-            .get(`v1/bids/`)
-            .then((response) => {
-                setBidsData(response.data.reverse());
-                response.statusText === 'OK' && setDataState({ error: '', isLoading: false });
-            })
-            .catch((e) => setDataState({ error: 'Something Went Wrong', isLoading: false }));
-    }, [updatedataApproved, updatedataRejected, disagreeForm, deleteModal, editModal, id]);
-
     // delete bid
     const handleDelete = () => {
         setDeleteModal({ ...deleteModal, isLoading: true });
@@ -157,27 +146,62 @@ const Bids = () => {
             .then((response) => response.status === 204 && setDeleteModal({ modal: false, isLoading: false }));
     };
 
-    // Checkbox action
+    // console.log(bidsData);
+
+    const handleApply = useCallback(
+        (e) => {
+            e.preventDefault();
+            if (selectFilter.value === undefined) {
+                setSelectFilter({ modal: false });
+            } else setSelectFilter({ ...selectFilter, modal: true, successState: true });
+        },
+        [selectFilter]
+    );
+
+    // Checkbox action start
     const handleChange = (e) => {
         e.preventDefault();
         let value = e.target.value;
         value === 'Select action' ? setSelectFilter({ value: undefined }) : setSelectFilter({ value });
     };
-    const [checkbox, setCheckbox] = useState([]);
-    const onCheckboxChange = (checkboxes) => {
-        setCheckbox(checkboxes);
+
+    const handleCheck = (e, data) => {
+        const { name, checked } = e.target;
+
+        if (checked) {
+            if (name === 'allSelect') {
+                setCheckedBid(bidsData);
+            } else {
+                setCheckedBid([...checkedBid, data]);
+            }
+        } else {
+            if (name === 'allSelect') {
+                setCheckedBid([]);
+            } else {
+                let temp = checkedBid.filter((item) => item.id !== data.id);
+                setCheckedBid(temp);
+            }
+        }
     };
 
-    // disables the select dropdown unless the user selects more than one item
-    const filtered = checkbox.filter((c) => c.checked);
-    const className = filtered.length < 2 ? 'disable' : '';
+    const className = checkedBid.length < 2 ? 'disable' : '';
 
-    const handleApply = (e) => {
-        e.preventDefault();
-        if (selectFilter.value === undefined) {
-            setSelectFilter({ modal: false });
-        } else setSelectFilter({ ...selectFilter, modal: true, successState: true });
-    };
+    let disableApproved;
+    bidsData.some((bid) => {
+        return (disableApproved = bid.current_status === 'approved');
+    });
+    // checbox action end
+
+    //  Call Fetched data
+    useEffect(() => {
+        axios
+            .get(`v1/bids/?loan_request_id=${id}`)
+            .then((response) => {
+                setBidsData(response.data);
+                response.statusText === 'OK' && setDataState({ error: '', isLoading: false });
+            })
+            .catch((e) => setDataState({ error: 'Something Went Wrong', isLoading: false }));
+    }, [updatedataApproved, updatedataRejected, disagreeForm, deleteModal, editModal, id, handleApply]);
 
     // pagination
     const currentTableData = useMemo(() => {
@@ -225,7 +249,17 @@ const Bids = () => {
     };
     const closeModal = () => {
         setState({ ...state, modal: false });
-        setNotification({ ...notification, confirmation: false });
+
+        setTimeout(() => {
+            setNotification({
+                ...notification,
+                dataApproved: undefined,
+                dataRejected: undefined,
+                isLoading: undefined,
+            });
+        }, 1000);
+
+        setCheckedBid([]);
     };
     const openModalDisagree = (data) => {
         setDisModal({ modal: true });
@@ -242,6 +276,11 @@ const Bids = () => {
     };
     const closeSelectModal = () => {
         setSelectFilter({ ...selectFilter, modal: false });
+
+        setTimeout(() => {
+            setSelectFilter({ isLoading: undefined, value: undefined });
+        }, 1000);
+        setCheckedBid([]);
     };
 
     return (
@@ -277,7 +316,7 @@ const Bids = () => {
                 </div>
                 <main className='bids'>
                     <div className='bids-heading'>
-                        <h1> {bidsData.length > 1 && bidsData[0].loan_request.tranche_name}</h1>
+                        <h1> {bidsData.length > 0 && bidsData[0].loan_request.tranche_name}</h1>
 
                         <div className='bids-heading--links'>
                             <Center className='bids-heading--mod'>
@@ -303,14 +342,19 @@ const Bids = () => {
                                 <option value='reject all'>Reject all</option>
                             </select>
 
-                            <button className='mid-nav-button' onClick={handleApply}>
+                            <button className='mid-nav-button' title='Select an action to apply' onClick={handleApply}>
                                 Apply
                             </button>
                         </div>
 
-                        <Link to={`/broker/dashboard/bids/addnewbid/${id}`}>
-                            <button className='mid-nav--addNewBid'>Add New Bid</button>
-                        </Link>
+                        <div style={{ display: 'flex' }}>
+                            <Link to={`/broker/dashboard/bids/payment/${id}`}>
+                                <button className='mid-nav--viewPayment'>View Paymemt</button>
+                            </Link>
+                            <Link to={`/broker/dashboard/bids/addnewbid/${id}`} style={{ marginLeft: '20px' }}>
+                                <button className='mid-nav--addNewBid'>Add New Bid</button>
+                            </Link>
+                        </div>
                     </div>
                     <section style={{ paddingBottom: '10%' }}>
                         <Box>
@@ -346,196 +390,224 @@ const Bids = () => {
                                                     margin: '100px auto',
                                                 }}
                                             >
-                                                There are currently no bids available.
+                                                There are currently no bids for this loan request.
                                                 <br /> Add a new bid.
                                             </p>
                                         );
                                     } else {
                                         return (
                                             <Table size='sm' colorScheme={'blackAlpha'}>
-                                                <CheckboxGroup onChange={onCheckboxChange}>
-                                                    <Thead bg='#F0F0F0' h='80px'>
-                                                        <Tr
-                                                            // key={index}
-                                                            fontWeight={'extrabold'}
-                                                            fontSize={['1.9em']}
-                                                        >
-                                                            <Th></Th>
-                                                            <Th>
-                                                                <AllCheckerCheckbox className='broker-checkbox' />
-                                                            </Th>
-                                                            <Th className='border'>Name </Th>
+                                                <Thead bg='#F0F0F0' h='80px'>
+                                                    <Tr
+                                                        // key={index}
+                                                        fontWeight={'extrabold'}
+                                                        fontSize={['1.9em']}
+                                                    >
+                                                        <Th></Th>
+                                                        <Th>
+                                                            <input
+                                                                type='checkbox'
+                                                                className={`broker-checkbox  `}
+                                                                name='allSelect'
+                                                                disabled={disableApproved}
+                                                                checked={checkedBid?.length === bidsData?.length}
+                                                                onChange={(e) => handleCheck(e, bidsData)}
+                                                            />
+                                                        </Th>
+                                                        <Th className='border'>Name </Th>
 
-                                                            <Th className='border'>Tranche</Th>
-                                                            <Th className='border'>Duration</Th>
-                                                            <Th className='border'>Amount</Th>
-                                                            <Th className='border'>Status</Th>
-                                                            <Th></Th>
-                                                        </Tr>
-                                                    </Thead>
+                                                        <Th className='border'>Tranche</Th>
+                                                        <Th className='border'>Duration</Th>
+                                                        <Th className='border'>Amount</Th>
+                                                        <Th className='border'>Status</Th>
+                                                        <Th>Actions</Th>
+                                                    </Tr>
+                                                </Thead>
 
-                                                    <Tbody>
-                                                        {currentTableData.map((data, index) => {
-                                                            return (
-                                                                <Tr key={data.id}>
-                                                                    <Td></Td>
-                                                                    <Td>
-                                                                        {' '}
-                                                                        <Checkbox
-                                                                            data={data}
-                                                                            className='broker-checkbox'
-                                                                        />
-                                                                    </Td>
-                                                                    <Td className='border'>
-                                                                        <Flex>
-                                                                            <Box
-                                                                                w='40px'
-                                                                                h='40px'
-                                                                                borderRadius={'50%'}
-                                                                                bg={'#555555'}
-                                                                                // m={['auto']}
-                                                                                mr={[4]}
-                                                                            ></Box>
+                                                <Tbody>
+                                                    {currentTableData.map((data, index) => {
+                                                        return (
+                                                            <Tr key={data.id}>
+                                                                <Td></Td>
+                                                                <Td>
+                                                                    {' '}
+                                                                    <input
+                                                                        name={data.id}
+                                                                        type='checkbox'
+                                                                        className='broker-checkbox'
+                                                                        disabled={data.current_status === 'approved'}
+                                                                        // checked when checkedBid contains checked object/filed/row
+                                                                        checked={
+                                                                            data.current_status !== 'approved' &&
+                                                                            checkedBid.some(
+                                                                                (item) => item?.id === data.id
+                                                                            )
+                                                                        }
+                                                                        onChange={(e) => handleCheck(e, data)}
+                                                                    />
+                                                                </Td>
+                                                                <Td className='border'>
+                                                                    <Flex>
+                                                                        <Box
+                                                                            w='40px'
+                                                                            h='40px'
+                                                                            borderRadius={'50%'}
+                                                                            bg={'#555555'}
+                                                                            // m={['auto']}
+                                                                            mr={[4]}
+                                                                        ></Box>
 
-                                                                            <Flex alignSelf={'center'}>
-                                                                                {data.owner.first_name}{' '}
-                                                                                {data.owner.last_name}
-                                                                            </Flex>
+                                                                        <Flex alignSelf={'center'}>
+                                                                            {data.owner.first_name}{' '}
+                                                                            {data.owner.last_name}
                                                                         </Flex>
-                                                                    </Td>
-                                                                    <Td className='border'>{data.tranche}</Td>
-                                                                    <Td className='border'>
-                                                                        {data.loan_request.duration} Days
-                                                                    </Td>
-                                                                    <Td className='border'>NGN {data.amount}</Td>
+                                                                    </Flex>
+                                                                </Td>
+                                                                <Td className='border'>{data.tranche}</Td>
+                                                                <Td className='border'>
+                                                                    {data.loan_request.duration} Days
+                                                                </Td>
+                                                                <Td className='border'>NGN {data.amount}</Td>
 
+                                                                {(() => {
+                                                                    if (data && data.current_status) {
+                                                                        const approved =
+                                                                            data.current_status === 'approved'
+                                                                                ? 'cta-status--approved'
+                                                                                : '';
+                                                                        const rejected =
+                                                                            data.current_status === 'rejected'
+                                                                                ? 'cta-status--rejected'
+                                                                                : '';
+                                                                        return (
+                                                                            <Td
+                                                                                className={`border ${approved} ${rejected}`}
+                                                                            >
+                                                                                {data.current_status
+                                                                                    .charAt(0)
+                                                                                    .toUpperCase() +
+                                                                                    data.current_status.slice(1)}
+                                                                            </Td>
+                                                                        );
+                                                                    } else {
+                                                                        return <Td className='border'>-</Td>;
+                                                                    }
+                                                                })()}
+
+                                                                {/**CTA BUTTONS */}
+                                                                <Td className='cta-buttons'>
                                                                     {(() => {
-                                                                        if (data && data.status) {
+                                                                        if (
+                                                                            data.current_status &&
+                                                                            data.current_status === 'approved'
+                                                                        ) {
                                                                             return (
-                                                                                <Td className='border'>
-                                                                                    {data.status[0].name}
-                                                                                </Td>
+                                                                                <div>
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalEdit(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--edit'
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() =>
+                                                                                            openDeleteModal(data)
+                                                                                        }
+                                                                                        className='cta-buttons--delete'
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                </div>
+                                                                            );
+                                                                        }
+                                                                        if (
+                                                                            data.current_status &&
+                                                                            data.current_status === 'rejected'
+                                                                        ) {
+                                                                            return (
+                                                                                <div>
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalApproved(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--approve'
+                                                                                    >
+                                                                                        Approve
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalEdit(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--edit'
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() =>
+                                                                                            openDeleteModal(data)
+                                                                                        }
+                                                                                        className='cta-buttons--delete'
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                </div>
                                                                             );
                                                                         } else {
-                                                                            return <Td className='border'>-</Td>;
+                                                                            return (
+                                                                                <div>
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalApproved(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--approve'
+                                                                                    >
+                                                                                        Approve
+                                                                                    </button>
+
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalRejected(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--reject'
+                                                                                    >
+                                                                                        Reject
+                                                                                    </button>
+
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalEdit(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--edit'
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            openModalDisagree(data);
+                                                                                        }}
+                                                                                        className='cta-buttons--disagree'
+                                                                                    >
+                                                                                        Disagree
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() =>
+                                                                                            openDeleteModal(data)
+                                                                                        }
+                                                                                        className='cta-buttons--delete'
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                </div>
+                                                                            );
                                                                         }
                                                                     })()}
-
-                                                                    {/**CTA BUTTONS */}
-                                                                    <Td className='cta-buttons'>
-                                                                        {(() => {
-                                                                            if (
-                                                                                data.status &&
-                                                                                data.status[0].name === 'approved'
-                                                                            ) {
-                                                                                return (
-                                                                                    <div>
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalEdit(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--edit'
-                                                                                        >
-                                                                                            Edit
-                                                                                        </button>
-                                                                                        <button
-                                                                                            onClick={() =>
-                                                                                                openDeleteModal(data)
-                                                                                            }
-                                                                                            className='cta-buttons--delete'
-                                                                                        >
-                                                                                            Delete
-                                                                                        </button>
-                                                                                    </div>
-                                                                                );
-                                                                            }
-                                                                            if (
-                                                                                data.status &&
-                                                                                data.status[0].name === 'rejected'
-                                                                            ) {
-                                                                                return (
-                                                                                    <div>
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalApproved(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--approve'
-                                                                                        >
-                                                                                            Approve
-                                                                                        </button>
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalEdit(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--edit'
-                                                                                        >
-                                                                                            Edit
-                                                                                        </button>
-                                                                                        <button
-                                                                                            onClick={() =>
-                                                                                                openDeleteModal(data)
-                                                                                            }
-                                                                                            className='cta-buttons--delete'
-                                                                                        >
-                                                                                            Delete
-                                                                                        </button>
-                                                                                    </div>
-                                                                                );
-                                                                            } else {
-                                                                                return (
-                                                                                    <div>
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalApproved(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--approve'
-                                                                                        >
-                                                                                            Approve
-                                                                                        </button>
-
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalRejected(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--reject'
-                                                                                        >
-                                                                                            Reject
-                                                                                        </button>
-
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalEdit(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--edit'
-                                                                                        >
-                                                                                            Edit
-                                                                                        </button>
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                openModalDisagree(data);
-                                                                                            }}
-                                                                                            className='cta-buttons--disagree'
-                                                                                        >
-                                                                                            Disagree
-                                                                                        </button>
-                                                                                        <button
-                                                                                            onClick={() =>
-                                                                                                openDeleteModal(data)
-                                                                                            }
-                                                                                            className='cta-buttons--delete'
-                                                                                        >
-                                                                                            Delete
-                                                                                        </button>
-                                                                                    </div>
-                                                                                );
-                                                                            }
-                                                                        })()}
-                                                                    </Td>
-                                                                </Tr>
-                                                            );
-                                                        })}
-                                                    </Tbody>
-                                                </CheckboxGroup>
+                                                                </Td>
+                                                            </Tr>
+                                                        );
+                                                    })}
+                                                </Tbody>
                                             </Table>
                                         );
                                     }
@@ -577,9 +649,10 @@ const Bids = () => {
                         />
                         <SelectModal
                             selectFilter={selectFilter}
+                            setSelectFilter={setSelectFilter}
                             closeSelectModal={closeSelectModal}
                             bidsData={bidsData}
-                            checkbox={checkbox}
+                            checkbox={checkedBid}
                         />
                     </section>
                 </main>

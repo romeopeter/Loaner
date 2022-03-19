@@ -13,7 +13,7 @@ const Modal = ({ closeModal, state, notification, handleYes }) => {
             <div className='modal-overlay' onClick={closeModal}></div>
 
             <div className='modal-body'>
-                {!notification.confirmation && (
+                {notification.isLoading === undefined && (
                     <div>
                         <div className='modal-head'>
                             {state.successState ? (
@@ -42,8 +42,8 @@ const Modal = ({ closeModal, state, notification, handleYes }) => {
                     </div>
                 )}
 
-                {notification.confirmation && notification.isLoading ? <p className='loader'></p> : null}
-                {notification.confirmation && !notification.isLoading ? (
+                {notification.isLoading ? <p className='loader'></p> : null}
+                {notification.isLoading === false ? (
                     <>
                         {state.successState ? (
                             <div>

@@ -4,6 +4,9 @@
     background: #c4c4c4;
     padding: 12px;
 }
+.display {
+    visibility: hidden;
+}
 .broker {
     &-cta {
         background: #555555;
@@ -23,12 +26,16 @@
     &-checkbox {
         height: 20px;
         width: 20px;
-        background: #e5e5e5;
+        // background: #e5e5e5;
         border-radius: 3px;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
         -ms-border-radius: 3px;
         -o-border-radius: 3px;
+        &:disabled {
+            background: #e5e5e5;
+            border: none;
+        }
     }
 
     &-header {
@@ -174,7 +181,7 @@
     padding: 20px 50px;
     width: auto;
     @media only screen and (max-width: 750px) {
-        padding: 20px 20px;
+        padding: 20px auto;
         display: block;
     }
 
@@ -188,16 +195,19 @@
         }
         select,
         button {
-            padding: 6px;
-            width: 140px;
+            padding: 4px;
+            width: 120px;
+            font-size: 14px;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            -ms-border-radius: 3px;
+            -o-border-radius: 3px;
         }
         button {
             background: #555;
             color: #fff;
             margin-left: 20px;
-            @media only screen and (max-width: 750px) {
-                margin-left: 10px;
-            }
         }
     }
     select {
@@ -212,49 +222,59 @@
         width: 300px;
         background: #c4c4c4;
     }
-    &--addNewBid {
-        background: #555;
+    &--addNewBid,
+    &--viewPayment {
+        background: #002276;
         color: #fff;
-        padding: 7px;
-        width: 140px;
+        padding: 4px;
+        width: 120px;
+        font-size: 14px;
         @media only screen and (max-width: 750px) {
             margin-top: 10px;
-            width: 130px;
         }
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+}
+.cta-status {
+    &--approved {
+        color: #008060;
+    }
+    &--rejected {
+        color: #d82c0d;
     }
 }
 .cta-buttons {
     &--approve,
     &--reject,
     &--edit,
-    &--disagree {
-        border-right: 1px solid #555;
+    &--disagree,
+    &--delete {
+        //border-right: 1px solid #555;
         margin-right: 10px;
-        padding-right: 10px;
+        padding: 4px;
+        transition: 0.3s;
+        background: #555;
+        color: #fff;
+        font-size: 13px;
+        width: 70px;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -ms-border-radius: 3px;
+        -o-border-radius: 3px;
     }
 
-    &--approve {
-        color: #008060;
-    }
-
-    &--reject {
-        color: #d82c0d;
-    }
-    // &--delete {
-    //     // color: rgb(206, 206, 63);
-    // }
-    &--edit,
-    &--disagree {
-        color: #555555;
-    }
-    button:disabled,
-    button[disabled] {
-        border: none;
-        background-color: #cccccc;
-        color: #838080;
-        padding: 5px;
-        cursor: not-allowed;
-        display: none;
+    &--approve:hover,
+    &--reject:hover,
+    &--edit:hover,
+    &--disagree:hover,
+    &--delete:hover {
+        background: #c4c4c4;
+        color: #333;
     }
 }
 // Temp active filter link
@@ -379,6 +399,11 @@
         margin: auto;
         padding: 10px;
         font-weight: 700;
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        -ms-border-radius: 4px;
+        -o-border-radius: 4px;
     }
     &-head {
         font-weight: 700;
@@ -455,13 +480,14 @@
         margin-bottom: 12px;
     }
     p {
+        font-size: 17px !important;
         @media only screen and (max-width: 750px) {
             font-size: 14px !important;
         }
     }
     h1 {
         margin-top: 10px;
-        font-size: 24px;
+        font-size: 22px;
         @media only screen and (max-width: 750px) {
             font-size: 18px;
         }
@@ -473,8 +499,8 @@
         color: #d82c0d;
     }
     .img {
-        height: 60px;
-        width: 60px;
+        height: 55px;
+        width: 55px;
         margin: auto;
         @media only screen and (max-width: 650px) {
             height: 40px;

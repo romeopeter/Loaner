@@ -38,24 +38,31 @@ const AddNewBid = () => {
     investors &&
         investors.map((data) => {
             let values;
-            values = { id: data.user.id, label: `${data.user.title} ${data.user.first_name} ${data.user.last_name}` };
+            values = { id: data.user.id, label: ` ${data.user.first_name} ${data.user.last_name}` };
             return options.push(values);
         });
     const closeModal = () => {
         setResponsedata({ ...responsedata, modal: false });
+
+        setTimeout(() => {
+            setResponsedata({ error: undefined });
+        }, 1000)
     };
     useEffect(() => {
         let isMounted = true;
         axios
-            .get('/v1/investor/')
-            .then((response) => isMounted && setInvestors(response.data))
+            .get(`/v1/loan_request/${id}/investors/`)
+            .then((response) => {
+                console.log(response);
+                isMounted && setInvestors(response.data)
+            })
             .catch((err) => err && setResponsedata({ ...responsedata, selectError: true }));
 
         window.scroll(0, 0);
         return () => {
             isMounted = false;
         };
-    }, [responsedata]);
+    }, []);
 
     const handleSubmit = (values) => {
         setResponsedata({ ...responsedata, isLoading: true, modal: true });
@@ -67,7 +74,7 @@ const AddNewBid = () => {
         axios
             .post('v1/bids/', bidObject)
             .then((response) => {
-                console.log(response.data);
+
                 response.statusText === 'OK' &&
                     setResponsedata({ ...responsedata, modal: true, status: 'Bid Added Successfully!' });
             })
@@ -81,6 +88,7 @@ const AddNewBid = () => {
                     })
             );
         values.bidValue = '';
+
     };
 
     return (
@@ -105,8 +113,6 @@ const AddNewBid = () => {
                                 })}
                                 onSubmit={(values) => {
                                     handleSubmit(values);
-
-                                    // navigate('/broker/dashboard/bids', { replace: true });
                                 }}
                             >
                                 {() => (
@@ -140,13 +146,16 @@ const AddNewBid = () => {
                                                         component='div'
                                                     />
                                                     <Select
+
                                                         name='select'
                                                         type='text'
                                                         valueField='id'
                                                         loading={responsedata.selectError}
+                                                        required={true}
                                                         className='NewBid--form-input'
                                                         options={options}
                                                         onChange={(values) => setSelect(values)}
+                                                        style={{ paddingLeft: '15px' }}
                                                     />
                                                 </Grid>
                                                 <h2>
@@ -161,7 +170,7 @@ const AddNewBid = () => {
                                                 </h2>
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => {}} type='submit'>
+                                                        <button onClick={() => { }} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>
@@ -322,7 +331,7 @@ const AddNewBid = () => {
                                                 {/*cta */}
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => {}} type='submit'>
+                                                        <button onClick={() => { }} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>

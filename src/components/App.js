@@ -334,7 +334,7 @@ function App() {
                     }
                 />
                 <Route
-                    path='/broker/dashboard/bids/payment/'
+                    path='/broker/dashboard/bids/payment/:id'
                     element={
                         <RequireAuth>
                             <Payment />

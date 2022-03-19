@@ -10,7 +10,7 @@ const BidsModal = ({ closeModal, state, notification, updatedataApproved, update
             <div className='modal-overlay' onClick={closeModal}></div>
 
             <div className='modal-body'>
-                {!notification.confirmation && (
+                {notification.isLoading === undefined && (
                     <div>
                         <div className='modal-head'>
                             {state.successState ? (
@@ -22,7 +22,7 @@ const BidsModal = ({ closeModal, state, notification, updatedataApproved, update
                         </div>
                         <div style={{ marginTop: '20px' }}>
                             <button
-                                onClick={notification.dataApproved ? updatedataApproved : updatedataRejected}
+                                onClick={(notification.dataApproved) ? updatedataApproved : updatedataRejected}
                                 style={{ background: '#e5e5e5', width: '50px', padding: '7px', marginRight: '20px' }}
                             >
                                 Yes
@@ -36,8 +36,8 @@ const BidsModal = ({ closeModal, state, notification, updatedataApproved, update
                         </div>
                     </div>
                 )}
-                {notification.confirmation && notification.isLoading ? <p className='loader'></p> : null}
-                {notification.confirmation && notification.isLoading === false ? (
+                {notification.isLoading ? <p className='loader'></p> : null}
+                {notification.isLoading === false ? (
                     <div>
                         {state.successState ? (
                             <img alt='approved' className='img' src={bidApproved} />

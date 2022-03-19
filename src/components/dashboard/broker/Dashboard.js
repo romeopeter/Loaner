@@ -27,6 +27,7 @@ const BrokerDashboard = () => {
         axios
             .get('/v1/loan_request/')
             .then((response) => {
+                console.log(response.data)
                 setLoanRequest(response.data.reverse());
                 setGetValue(response);
             })

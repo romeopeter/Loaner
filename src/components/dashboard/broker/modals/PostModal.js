@@ -42,7 +42,7 @@ const PostModal = ({ responsedata, closeModal }) => {
                                         src={responsedata.error ? bidRejected : bidApproved}
                                         style={{ height: '30px', width: '30px', marginRight: '10px' }}
                                     />
-                                    {responsedata.status || responsedata.error}
+                                    {responsedata.error ? responsedata.error : responsedata.status}
                                 </p>
                             );
                         }

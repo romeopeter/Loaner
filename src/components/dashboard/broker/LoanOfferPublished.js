@@ -7,7 +7,6 @@ import DocumentHead from '../../DocumentHead';
 // import Button from '../../Button';
 import NavMenu from '../NavMenu';
 import offerImage from '../../../assets/images/offerImage.png';
-import { AllBidsData } from '../../../data/broker/AllClients';
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 const LoanOfferPublished = () => {
@@ -20,15 +19,23 @@ const LoanOfferPublished = () => {
         axios.get('/v1/loan_request/').then((response) => {
             let index = response.data.findIndex((loan) => loan.id === parseInt(id));
             setData(response.data[index]);
+
+
         });
+
+        axios.get(`v1/bids/?loan_request_id=${id}`).then((res) => {
+            console.log(res.data)
+            setBidsData(res.data)
+        })
         window.scroll(0, 0);
     }, [id]);
     console.log(data);
 
-    //  Call Fetched data
-    useEffect(() => {
-        setBidsData(AllBidsData);
-    }, []);
+    // //  Call Fetched data
+    // useEffect(() => {
+    //     setBidsData(AllBidsData);
+
+    // }, []);
 
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
@@ -251,9 +258,9 @@ const LoanOfferPublished = () => {
                                                             {(() => {
                                                                 if (bidsData.length === 0) {
                                                                     return (
-                                                                        <p className='responseMessage'>
-                                                                            There are currently no bids available
-                                                                        </p>
+                                                                        <Tr className='responseMessage'>
+                                                                            <Td>There are currently no bids available</Td>
+                                                                        </Tr>
                                                                     );
                                                                 } else {
                                                                     const list = bidsData;
@@ -274,7 +281,7 @@ const LoanOfferPublished = () => {
                                                                                             mr={[4]}
                                                                                         ></Box>
                                                                                         <Flex alignSelf={'center'}>
-                                                                                            {data.clientName}
+                                                                                            {data.owner.first_name} {data.owner.last_name}
                                                                                         </Flex>
                                                                                     </Flex>
                                                                                 </Td>
@@ -282,7 +289,7 @@ const LoanOfferPublished = () => {
                                                                                     {data.tranche}
                                                                                 </Td>
                                                                                 <Td className='border'>
-                                                                                    {data.duration}
+                                                                                    {data.loan_request.duration} Days
                                                                                 </Td>
                                                                                 <Td className='border'>
                                                                                     {data.amount}
