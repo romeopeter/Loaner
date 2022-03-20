@@ -31,11 +31,12 @@
 					button {
 						&.view-offers {
 							background: #008060;
+							a {color: $white !important;}
 						}
 
 						&.go-home {
 							border: 2px solid black;
-							color: $black;
+							a {color: $black !important;}
 						}
 					}
 				}
