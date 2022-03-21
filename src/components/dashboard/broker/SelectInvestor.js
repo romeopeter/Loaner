@@ -246,7 +246,7 @@ export default function PublishOffer({ children, ...props }) {
             return
         }
 
-        assignInvestors(32);
+        // assignInvestors(32);
     }
 
     // Get categories ID
