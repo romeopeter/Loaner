@@ -56,17 +56,23 @@ export default function BidApproved() {
 
 			if (approvedOffer !== undefined) setOffer(approvedOffer);
 		}
-	}, [allOffers])
+	}, [allOffers,investorId,urlParams.offerId,dispatch])
 
 	useEffect(function getBid() {
-		if (allOffers !== null && allBidsStatus !== null) {
+		if (allBidsStatus !== null) {
 
-			allOffers.forEach((_, offerIndex) => {
-				const bids = allBidsStatus[offerIndex][0]
+			const offerId = urlParams.offerId;
 
-				if (bids !== undefined && bids["owner"]["id"] === investorId) {
+			allBidsStatus.forEach(bid => {
+
+				if (bid !== undefined && bid.length > 0) {
+					const offerBid = bid[0];
+					const bidMatchedOffer = offerBid["loan_request"]["id"] === Number(offerId);
+
+					if (bidMatchedOffer) setBid(offerBid);
+
 				}
-			});
+			})
 		}
 	});
 
@@ -87,17 +93,21 @@ export default function BidApproved() {
 			if (popFileFormat !== "jpg" && popFileFormat !== "pdf") {
 				updateFileState({formatIsWrong: true})
 			} else {
-				// updateFileState({formatIsWrong: false, fileIsUploaded: true});
-				const popFileUrl = URL.createObjectURL(popFile)
-				const amount = offer["tranche_id"]["size"]["minimum_subscription"]["amount"];
+				updateFileState({formatIsWrong: false, fileIsUploaded: true});
+				
+				const popFileUrl = URL.createObjectURL(popFile);
+				// const bidAmount = offer["tranche_id"]["size"]["minimum_subscription"]["amount"];
+				const bidAmount = bid !== null && bid["amount"];
+				const bidStatus = bid !== null && bid["current_status"];
+				const bidId = bid !== null && bid.id;
 
 				// Send data
 				const reqData = {
 					pop_file_name: popFileName,
 					pop_fifle_url: popFileUrl,
-					amount: amount,
-					status: "",
-					bid: 0
+					amount: bidAmount,
+					status: bidStatus,
+					bid: bidId
 				}
 
 				console.log(reqData);
@@ -147,6 +157,18 @@ export default function BidApproved() {
 										</div>
 										<div id="upload-success" className={fileState.fileIsUploaded ? "block": "hidden"}>
 											<p className="text-center text-green-700 mb-5">Your file has been successfully uploaded.</p>
+
+											{/*Show uploaded file*/}
+											<div id="show-pop-file" className="mt-5">
+												<ul>
+													<li className="border-t-2">
+														<div className="flex justify-evenly">
+															<span className="font-bold text-gray-500">pop.jpg</span>
+															<span className="font-bold text-red-300 hover:text-red-500 text-xl cursor-pointer">&times;</span>
+														</div>
+													</li>
+												</ul>
+											</div>
 
 											<div className="flex flex-col sm:flex-row justify-evenly items-center">
 												{/*White background, black borders*/}
