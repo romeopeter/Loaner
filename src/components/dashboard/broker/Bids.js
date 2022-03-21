@@ -13,8 +13,7 @@ import bidRejected from '../../../assets/images/bidRejected.png';
 import NavMenu from '../NavMenu';
 import Pagination from './pagination/Pagination';
 import { Link, useParams } from 'react-router-dom';
-// import { AllCheckerCheckbox, Checkbox, CheckboxGroup } from '@createnl/grouped-checkboxes';
-import { AllBidsData } from '../../../data/broker/AllClients';
+// import { AllBidsData } from '../../../data/broker/AllClients';
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td, Center, Divider } from '@chakra-ui/react';
 
 let PageSize = 10;
@@ -75,7 +74,6 @@ const Bids = () => {
             axios
                 .patch(`v1/bids/${data.id}/`, detail)
                 .then((res) => {
-                    console.log(res);
                     res.data.current_status &&
                         setNotification({
                             ...notification,
@@ -114,6 +112,7 @@ const Bids = () => {
                 .catch((err) => err && setNotification({ ...notification, isLoading: true }));
     }, [notification]);
 
+    // handle disagree form
     const disagreeForm = useCallback(
         (values) => {
             setDisModal({ isLoading: true, ...disModal });
@@ -190,6 +189,7 @@ const Bids = () => {
     bidsData.some((bid) => {
         return (disableApproved = bid.current_status === 'approved');
     });
+
     // checbox action end
 
     //  Call Fetched data
@@ -219,12 +219,12 @@ const Bids = () => {
     };
     const manualListing = () => {
         setTabActive({ ordered: false, prorated: false, manual: true });
-        let newData = AllBidsData.filter((list) => list.id % 2 === 0);
+        let newData = bidsData.filter((list) => list.id % 2 === 0);
         setBidsData(newData);
     };
     const orderedListing = () => {
         setTabActive({ manual: false, prorated: false, ordered: true });
-        let newData = AllBidsData.filter((list) => list.id < 5);
+        let newData = bidsData.filter((list) => list.id < 5);
         setBidsData(newData);
     };
     const proratedActive = tabActive.prorated ? 'active' : '';
@@ -234,11 +234,11 @@ const Bids = () => {
     // Modals
     const openModalApproved = (data) => {
         setState({ modal: true, successState: true });
-        setNotification({ ...notification, approved: true, dataApproved: data });
+        setNotification({ ...notification, dataApproved: data });
     };
     const openModalRejected = (data) => {
         setState({ modal: true, successState: false });
-        setNotification({ ...notification, rejected: true, dataRejected: data });
+        setNotification({ ...notification, dataRejected: data });
     };
     const openModalEdit = (data) => {
         setEditModal({ modal: true });
@@ -285,7 +285,7 @@ const Bids = () => {
 
     return (
         <div>
-            <DocumentHead title='New Client' />
+            <DocumentHead title='Bids' />
             <OrderbookLayout PageNav={NavMenu}>
                 <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
                     <div className='dropdownbroker'>
@@ -349,7 +349,9 @@ const Bids = () => {
 
                         <div style={{ display: 'flex' }}>
                             <Link to={`/broker/dashboard/bids/payment/${id}`}>
-                                <button className='mid-nav--viewPayment'>View Paymemt</button>
+                                <button disabled={!disableApproved} className='mid-nav--viewPayment'>
+                                    View Paymemt
+                                </button>
                             </Link>
                             <Link to={`/broker/dashboard/bids/addnewbid/${id}`} style={{ marginLeft: '20px' }}>
                                 <button className='mid-nav--addNewBid'>Add New Bid</button>
@@ -390,7 +392,7 @@ const Bids = () => {
                                                     margin: '100px auto',
                                                 }}
                                             >
-                                                There are currently no bids for this loan request.
+                                                No bids available.
                                                 <br /> Add a new bid.
                                             </p>
                                         );
