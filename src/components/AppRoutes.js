@@ -218,7 +218,7 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/dashboard/payment-detail"
+						path="/investor/dashboard/offers/:offerId/payment-detail"
 						element={
 							<RequireAuth>
 								<BAPaymentDetail />
