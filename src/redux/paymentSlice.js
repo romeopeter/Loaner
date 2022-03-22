@@ -1,17 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { makePayment } from "../services/payment.service.js";
+import { uploadPayment } from "../services/payment.service.js";
 import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse";
 
-const makePaymentAction = createAsyncThunk("payment/makePaymentAction", async (thunkAPI) => {});
+export const uploadPaymentAction = createAsyncThunk(
+	"payment/uploadPaymentAction", 
+	async (data, thunkAPI) => {
+		const dispatch = thunkAPI.dispatch
+		const res = await uploadPayment(data);
+
+		// Handle error
+		handleRequestError(res, dispatch);
+
+		if (res.status === 200) return res.data;
+	}
+);
 
 export const paymentSlice = createSlice({
 	name: "paymentSlice",
-	initialState: {},
+	initialState: {
+		uploadPaymentResponse: null
+	},
 	extraReducers: {
-		[makePaymentAction.pending]: (state, action) => {},
-		[makePaymentAction.rejected]: (state, action) => {},
-		[makePaymentAction.fulfilled]: (state, action) => {},
+		[uploadPaymentAction.pending]: (state, action) => {},
+		[uploadPaymentAction.rejected]: (state, action) => {},
+		[uploadPaymentAction.fulfilled]: (state, action) => {
+			const payload = action.payload !== undefined && action.payload;
+			state.uploadPaymentResponse = payload;
+		},
 	}
 });
 
