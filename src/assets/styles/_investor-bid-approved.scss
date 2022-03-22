@@ -67,6 +67,28 @@
 			}
 
 			#upload-success {
+				#show-pop-file {
+					ul {
+						li {
+							button {
+								height: 35px !important;
+								
+								&.payment-not-approved {
+									color: $white !important;
+								}
+								&.payment-approved {
+									a {
+										color: $white;
+									}
+								}
+								&.payment-pending {
+									color: $white;
+								}
+							}
+						}
+					}
+				}
+
 				button {
 					&.view-offers {
 						a {color: $black !important;}
