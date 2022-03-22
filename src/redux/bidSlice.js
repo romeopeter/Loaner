@@ -19,9 +19,19 @@ export const createBidAction = createAsyncThunk(
         // Catch error
         handleRequestError(res, dispatch);
 
-        if (res.status === 200) console.log(res)
+        if (res.status === 200) console.log(res);
     }
 );
+
+export const getBidAction = createAsyncThunk("bid/getBidAction", async (offerId, thunkAPI) => {
+    const dispatch = thunkAPI.dispatch;
+    const res = await getBid(offerId);
+
+    // Catch error
+    handleRequestError(res, dispatch);
+
+    if (res.status === 200) return res.data;
+});
 
 export const getAllOffersStatusAction = createAsyncThunk(
     "bid/getAllOffersStatusAction",
@@ -63,15 +73,27 @@ export const bidSlice = createSlice({
 
         // GET OFFERS STATUS
         [getAllOffersStatusAction.pending]: (state, action) => {
-            console.log("pending")
+            console.log("pending");
         },
         [getAllOffersStatusAction.rejected]: (state, action) => {
-            console.log("rejected")
+            console.log("rejected");
         },
         [getAllOffersStatusAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.allBidsStatus = payload;
-        }
+        },
+
+        // GET BID
+        [getBidAction.pending]: (state, action) => {
+            console.log("Pending");
+        },
+        [getBidAction.rejected]: (state, action) => {
+            console.log("rejected");
+        },
+        [getBidAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state.bid = payload;
+        },
     }
  
 });
