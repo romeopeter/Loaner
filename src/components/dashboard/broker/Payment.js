@@ -3,20 +3,31 @@
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Pagination from './pagination/Pagination';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import PaymentModal1 from './modals/PaymentModal1';
 import PaymentModal2 from './modals/PaymentModal2';
+import bidRejected from '../../../assets/images/bidRejected.png';
 import NavMenu from '../NavMenu';
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 let PageSize = 10;
 
 const Payment = () => {
+    // Dropdown
+    const [isOpen, setOpen] = useState({ client: false, investor: false });
+    const toggleDropdownClient = () =>
+        isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
+    const toggleDropdownInvestor = () =>
+        isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
+
     let { id } = useParams();
+
     const [paymentData, setPaymentData] = useState([]);
+    const [approvedBidsData, setApprovedBidsData] = useState([]);
+    const [dataState, setDataState] = useState({ isLoading: true, error: undefined });
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [state, setState] = useState({
@@ -25,10 +36,9 @@ const Payment = () => {
         successState: undefined,
     });
     const [notification, setNotification] = useState({
-        confirmation: false,
         isLoading: undefined,
-        status: false,
-        statusText: undefined,
+        dataApproved: undefined,
+        dataRejected: undefined,
     });
     const [selectFilter, setSelectFilter] = useState({
         value: undefined,
@@ -41,17 +51,9 @@ const Payment = () => {
     const currentTableData = useMemo(() => {
         const firstPageIndex = (currentPage - 1) * PageSize;
         const lastPageIndex = firstPageIndex + PageSize;
-        return paymentData.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage, paymentData]);
+        return approvedBidsData.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage, approvedBidsData]);
     // ----------------------
-
-    const handleYes = () => {
-        setNotification({ ...notification, confirmation: true, isLoading: true, status: false });
-
-        setTimeout(() => {
-            setNotification({ ...notification, confirmation: true, isLoading: false, status: true });
-        }, 2000);
-    };
 
     // --------------------------------------make one general state
 
@@ -62,18 +64,22 @@ const Payment = () => {
         setState({ ...state, paymentModal: false });
     };
 
-    const openModalApproved = () => {
+    const openModalApproved = (data) => {
         setState({ modal: true, successState: true, paymentModal: false });
-        setNotification({ statusText: 'Approved' });
+        setNotification({ dataApproved: data });
+        console.log(data);
     };
 
-    const openModalRejected = () => {
+    const openModalRejected = (data) => {
         setState({ modal: true, successState: false, paymentModal: false });
-        setNotification({ statusText: 'Rejected' });
+        setNotification({ dataRejected: data });
     };
 
     const closeModal = () => {
         setState({ ...state, modal: false });
+        setTimeout(() => {
+            setNotification({ ...notification, isLoading: undefined });
+        }, 1000);
     };
 
     const handleApply = useCallback(
@@ -98,7 +104,7 @@ const Payment = () => {
 
         if (checked) {
             if (name === 'allSelect') {
-                setCheckedBid(paymentData);
+                setCheckedBid(approvedBidsData);
             } else {
                 setCheckedBid([...checkedBid, data]);
             }
@@ -115,35 +121,90 @@ const Payment = () => {
     const className = checkedBid.length < 2 ? 'disable' : '';
 
     let disableApproved;
-    paymentData.some((bid) => {
-        return (disableApproved = bid.current_status === 'approved');
+    approvedBidsData.some((bid) => {
+        return (disableApproved = bid.payment_status === 'approved');
     });
     // checbox action end
 
+    // Handle status update approved
+    const updatedataApproved = useCallback(() => {
+        let data = notification.dataApproved;
+        setNotification({
+            ...notification,
+            isLoading: true,
+        });
+        const detail = {
+            amount: data.amount,
+            bid: data.id,
+            status: 'approved',
+        };
+        data &&
+            axios
+                .patch(`v1/payments/${data.id}/`, detail)
+                .then((res) => {
+                    res.data.current_status &&
+                        setNotification({
+                            ...notification,
+                            isLoading: false,
+                        });
+                })
+                .catch((err) => err && setNotification({ ...notification, isLoading: true }));
+    }, [notification]);
+
     useEffect(() => {
-        axios.get(`/v1/bids/?loan_request_id=${id}&status=approved`).then((res) => {
+        axios
+            .get(`/v1/bids/?loan_request_id=${id}&status=approved`)
+            .then((res) => {
+                setApprovedBidsData(res.data);
+                res.statusText === 'OK' && setDataState({ error: '', isLoading: false });
+            })
+            .catch((e) => setDataState({ error: 'Something Went Wrong', isLoading: false }));
+
+        // payment request
+        axios.get('/v1/payments/').then((res) => {
             setPaymentData(res.data);
         });
     }, [id, handleApply]);
+    console.log(approvedBidsData);
     console.log(paymentData);
 
     return (
         <div>
-            <DocumentHead title='New Client' />
+            <DocumentHead title='Payments' /> 
             <OrderbookLayout PageNav={NavMenu}>
-                <div id='loan-invest-dropdown' className='bg-white px-16 py-10 shadow-md flex justify-start'>
-                    <div id='loan' className='dropdown-container mr-5'>
-                        Clients <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='load-dropdown'></div>
+                <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
+                    <div className='dropdownbroker'>
+                        <div className='dropdownbroker-header' onClick={toggleDropdownClient}>
+                            <h2 className='mr-2'>Clients</h2>
+                            <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
+                        </div>
+                        <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
+                            <Link to='/broker/dashboard/new-client' className='dropdownbroker-item '>
+                                New Client{' '}
+                            </Link>
+                            <Link to='/broker/dashboard/allclients' className='dropdownbroker-item '>
+                                Manage Clients{' '}
+                            </Link>
+                        </div>
                     </div>
-                    <div id='loan' className='dropdown-container mr-5'>
-                        Loans <i className='fa fa-caret-down' aria-hidden='true'></i>
-                        <div id='load-dropdown'></div>
+                    <div className='dropdownbroker'>
+                        <div className='dropdownbroker-header' onClick={toggleDropdownInvestor}>
+                            <h2 className='mr-2'>Investors</h2>
+                            <i className={`fa fa-caret-down ${isOpen.investor && 'open'}`}></i>
+                        </div>
+                        <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
+                            <Link to='/broker/dashboard/uploadInvestor' className='dropdownbroker-item '>
+                                Upload Investors{' '}
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <main className='bids'>
-                    <div className='bids-heading' style={{ height: '80px' }}>
-                        <h1>Rice Value Chain </h1>
+                    <div className='bids-heading'>
+                        <h1 style={{ padding: '30px' }}>
+                            {' '}
+                            {approvedBidsData.length > 0 && approvedBidsData[0].loan_request.tranche_name}
+                        </h1>
                     </div>
                     <div className='mid-nav'>
                         <div className={`${className} mid-nav--dropdown`}>
@@ -169,124 +230,169 @@ const Payment = () => {
                     <section style={{ paddingBottom: '10%' }}>
                         <Box>
                             <div className='tableScroll'>
-                                <Table size='sm' colorScheme={'blackAlpha'}>
-                                    <Thead bg='#F0F0F0' h='80px'>
-                                        <Tr
-                                            // key={index}
-                                            fontWeight={'extrabold'}
-                                            fontSize={['1.9em']}
-                                        >
-                                            <Th></Th>
-                                            <Th>
-                                                <input
-                                                    type='checkbox'
-                                                    className={`broker-checkbox`}
-                                                    name='allSelect'
-                                                    disabled={disableApproved}
-                                                    checked={checkedBid?.length === paymentData?.length}
-                                                    onChange={(e) => handleCheck(e, paymentData)}
+                                {(() => {
+                                    if (dataState.isLoading) {
+                                        return <p className='loader' style={{ margin: '100px auto' }}></p>;
+                                    } else if (dataState.error) {
+                                        return (
+                                            <p
+                                                className='responseMessage'
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-around',
+                                                    alignItems: 'center',
+                                                    margin: '100px auto',
+                                                }}
+                                            >
+                                                <img
+                                                    alt=''
+                                                    src={bidRejected}
+                                                    style={{ height: '30px', width: '30px' }}
                                                 />
-                                            </Th>
-                                            <Th>Name </Th>
-                                            <Th>Amount</Th>
-                                            <Th>Bid Status</Th>
-                                            <Th>Payment Status</Th>
-                                            <Th>Payment Proof</Th>
-                                            <Th></Th>
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {currentTableData.map((data, index) => {
-                                            return (
-                                                <Tr key={index}>
-                                                    <Td></Td>
-                                                    <Td>
-                                                        {' '}
-                                                        <input
-                                                            name={data.id}
-                                                            type='checkbox'
-                                                            className='broker-checkbox'
-                                                            disabled={data.current_status === 'approved'}
-                                                            // checked when checkedBid contains checked object/filed/row
-                                                            checked={
-                                                                data.current_status !== 'approved' &&
-                                                                checkedBid.some((item) => item?.id === data.id)
-                                                            }
-                                                            onChange={(e) => handleCheck(e, data)}
-                                                        />
-                                                    </Td>
-                                                    <Td>
-                                                        <Flex>
-                                                            <Box
-                                                                w='40px'
-                                                                h='40px'
-                                                                borderRadius={'50%'}
-                                                                bg={'#555555'}
-                                                                // m={['auto']}
-                                                                mr={[4]}
-                                                            ></Box>
-                                                            <Flex alignSelf={'center'}>
-                                                                {data.owner.first_name} {data.owner.last_name}
-                                                            </Flex>
-                                                        </Flex>
-                                                    </Td>
+                                                Something went wrong, please try again.{' '}
+                                            </p>
+                                        );
+                                    } else {
+                                        return (
+                                            <Table size='sm' colorScheme={'blackAlpha'}>
+                                                <Thead bg='#F0F0F0' h='80px'>
+                                                    <Tr
+                                                        // key={index}
+                                                        fontWeight={'extrabold'}
+                                                        fontSize={['1.9em']}
+                                                    >
+                                                        <Th></Th>
+                                                        <Th>
+                                                            <input
+                                                                type='checkbox'
+                                                                className={`broker-checkbox`}
+                                                                name='allSelect'
+                                                                disabled={disableApproved}
+                                                                checked={
+                                                                    checkedBid?.length === approvedBidsData?.length
+                                                                }
+                                                                onChange={(e) => handleCheck(e, approvedBidsData)}
+                                                            />
+                                                        </Th>
+                                                        <Th>Name </Th>
+                                                        <Th>Amount</Th>
+                                                        <Th>Bid Status</Th>
+                                                        <Th>Payment Status</Th>
+                                                        <Th>Payment Proof</Th>
+                                                        <Th></Th>
+                                                    </Tr>
+                                                </Thead>
+                                                <Tbody>
+                                                    {currentTableData.map((data, index) => {
+                                                        return (
+                                                            <Tr key={index}>
+                                                                <Td></Td>
+                                                                <Td>
+                                                                    {' '}
+                                                                    <input
+                                                                        name={data.id}
+                                                                        type='checkbox'
+                                                                        className='broker-checkbox'
+                                                                        disabled={data.payment_status === 'approved'}
+                                                                        // checked when checkedBid contains checked object/filed/row
+                                                                        checked={
+                                                                            data.payment_status !== 'approved' &&
+                                                                            checkedBid.some(
+                                                                                (item) => item?.id === data.id
+                                                                            )
+                                                                        }
+                                                                        onChange={(e) => handleCheck(e, data)}
+                                                                    />
+                                                                </Td>
+                                                                <Td>
+                                                                    <Flex>
+                                                                        <Box
+                                                                            w='40px'
+                                                                            h='40px'
+                                                                            borderRadius={'50%'}
+                                                                            bg={'#555555'}
+                                                                            // m={['auto']}
+                                                                            mr={[4]}
+                                                                        ></Box>
+                                                                        <Flex alignSelf={'center'}>
+                                                                            {data.owner.first_name}{' '}
+                                                                            {data.owner.last_name}
+                                                                        </Flex>
+                                                                    </Flex>
+                                                                </Td>
 
-                                                    <Td>{data.amount}</Td>
-                                                    <Td cursor={'pointer'}>
-                                                        {data.current_status.charAt(0).toUpperCase() +
-                                                            data.current_status.slice(1)}
-                                                    </Td>
+                                                                <Td>{data.amount}</Td>
+                                                                <Td cursor={'pointer'}>
+                                                                    {data.current_status.charAt(0).toUpperCase() +
+                                                                        data.current_status.slice(1)}
+                                                                </Td>
 
-                                                    {data.paymentStatus === 'Payment made' ? (
-                                                        <Td color={'#008060'}>{data.paymentStatus}</Td>
-                                                    ) : (
-                                                        <Td>{data.paymentStatus}</Td>
-                                                    )}
+                                                                {(() => {
+                                                                    if (data.payment_status === 'approved') {
+                                                                        return (
+                                                                            <Td color={'#008060'}>
+                                                                                {data.paymentStatus}
+                                                                            </Td>
+                                                                        );
+                                                                    } else if (data.payment_status === 'rejected') {
+                                                                        return (
+                                                                            <Td color={'#d82c0d'}>
+                                                                                {data.paymentStatus}
+                                                                            </Td>
+                                                                        );
+                                                                    } else {
+                                                                        return <Td color={'#eed202'}>Pending</Td>;
+                                                                    }
+                                                                })()}
+                                                                {data.payment_status ? (
+                                                                    <Td
+                                                                        style={{
+                                                                            textDecoration: 'underline',
+                                                                            cursor: 'pointer',
+                                                                            color: '#1C6CA6',
+                                                                        }}
+                                                                        onClick={openPaymentModal}
+                                                                    >
+                                                                        View Payment
+                                                                    </Td>
+                                                                ) : (
+                                                                    <Td>-</Td>
+                                                                )}
 
-                                                    {data.paymentStatus === 'Payment made' ? (
-                                                        <Td
-                                                            style={{
-                                                                textDecoration: 'underline',
-                                                                cursor: 'pointer',
-                                                                color: '#1C6CA6',
-                                                            }}
-                                                            onClick={openPaymentModal}
-                                                        >
-                                                            View Payment
-                                                        </Td>
-                                                    ) : (
-                                                        <Td>-</Td>
-                                                    )}
+                                                                {notification.status ? (
+                                                                    <Td>{notification.statusText}</Td>
+                                                                ) : (
+                                                                    <Td className='payment-cta'>
+                                                                        <button
+                                                                            onClick={() => openModalApproved(data)}
+                                                                            className='payment-cta--approve'
+                                                                        >
+                                                                            Approve Payment
+                                                                        </button>
 
-                                                    {notification.status ? (
-                                                        <Td>{notification.statusText}</Td>
-                                                    ) : (
-                                                        <Td className='payment-cta'>
-                                                            <button
-                                                                onClick={openModalApproved}
-                                                                className='payment-cta--approve'
-                                                            >
-                                                                Approve Payment
-                                                            </button>
-
-                                                            <button
-                                                                onClick={openModalRejected}
-                                                                className='payment-cta--reject'
-                                                            >
-                                                                Reject Payment
-                                                            </button>
-                                                        </Td>
-                                                    )}
-                                                </Tr>
-                                            );
-                                        })}
-                                    </Tbody>
-                                </Table>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                openModalRejected(data);
+                                                                            }}
+                                                                            className='payment-cta--reject'
+                                                                        >
+                                                                            Reject Payment
+                                                                        </button>
+                                                                    </Td>
+                                                                )}
+                                                            </Tr>
+                                                        );
+                                                    })}
+                                                </Tbody>
+                                            </Table>
+                                        );
+                                    }
+                                })()}
                             </div>
                             <Pagination
                                 className='pagination-bar'
                                 currentPage={currentPage}
-                                totalCount={paymentData.length}
+                                totalCount={approvedBidsData.length}
                                 pageSize={PageSize}
                                 onPageChange={(page) => setCurrentPage(page)}
                             />
@@ -294,8 +400,8 @@ const Payment = () => {
                         <PaymentModal1
                             closeModal={closeModal}
                             state={state}
-                            handleYes={handleYes}
                             notification={notification}
+                            updatedataApproved={updatedataApproved}
                         />
                         <PaymentModal2
                             state={state}

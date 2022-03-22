@@ -70,7 +70,7 @@ const LoanOfferDraft = () => {
                             </h3>
                             <div id='the-offer'>
                                 <div className='mb-8'>
-                                    <Link to='/broker/dashboard/'>
+                                    <Link to='/broker/dashboard/allloans/'>
                                         <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>

@@ -19,17 +19,13 @@ const LoanOfferPublished = () => {
         axios.get('/v1/loan_request/').then((response) => {
             let index = response.data.findIndex((loan) => loan.id === parseInt(id));
             setData(response.data[index]);
-
-
         });
 
         axios.get(`v1/bids/?loan_request_id=${id}`).then((res) => {
-            console.log(res.data)
-            setBidsData(res.data)
-        })
+            setBidsData(res.data);
+        });
         window.scroll(0, 0);
     }, [id]);
-    console.log(data);
 
     // //  Call Fetched data
     // useEffect(() => {
@@ -84,7 +80,7 @@ const LoanOfferPublished = () => {
                             </h3>
                             <div id='the-offer'>
                                 <div className='mb-8'>
-                                    <Link to='/broker/dashboard/'>
+                                    <Link to='/broker/dashboard/allloans/'>
                                         <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>
@@ -259,7 +255,9 @@ const LoanOfferPublished = () => {
                                                                 if (bidsData.length === 0) {
                                                                     return (
                                                                         <Tr className='responseMessage'>
-                                                                            <Td>There are currently no bids available</Td>
+                                                                            <Td>
+                                                                                There are currently no bids available
+                                                                            </Td>
                                                                         </Tr>
                                                                     );
                                                                 } else {
@@ -269,7 +267,6 @@ const LoanOfferPublished = () => {
                                                                     return items.map((data, index) => {
                                                                         return (
                                                                             <Tr key={data.id}>
-                                                                                {console.log(data)}
                                                                                 <Td className='border'>
                                                                                     <Flex>
                                                                                         <Box
@@ -281,7 +278,8 @@ const LoanOfferPublished = () => {
                                                                                             mr={[4]}
                                                                                         ></Box>
                                                                                         <Flex alignSelf={'center'}>
-                                                                                            {data.owner.first_name} {data.owner.last_name}
+                                                                                            {data.owner.first_name}{' '}
+                                                                                            {data.owner.last_name}
                                                                                         </Flex>
                                                                                     </Flex>
                                                                                 </Td>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
 import NavMenu from '../NavMenu';
@@ -7,12 +7,16 @@ import { Link } from 'react-router-dom';
 import { Flex, Box, FormControl, FormLabel, Input, Select, Heading, Button } from '@chakra-ui/react';
 
 const NewClient = () => {
+    useEffect(() => {
+        window.scroll(0, 0);
+    }, []);
     // Dropdown
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
         isOpen.client ? setOpen({ ...isOpen, client: false }) : setOpen({ investor: false, client: true });
     const toggleDropdownInvestor = () =>
         isOpen.investor ? setOpen({ ...isOpen, investor: false }) : setOpen({ client: false, investor: true });
+
     return (
         <>
             <DocumentHead title='New Client' />
