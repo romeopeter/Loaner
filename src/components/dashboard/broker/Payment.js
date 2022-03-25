@@ -285,8 +285,6 @@ const Payment = () => {
                                                 </Thead>
                                                 <Tbody>
                                                     {currentTableData.map((data, index) => {
-                                                        let status = false;
-
                                                         return (
                                                             <Tr key={index}>
                                                                 <Td></Td>
