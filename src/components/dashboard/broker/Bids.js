@@ -200,7 +200,12 @@ const Bids = () => {
                 setBidsData(response.data);
                 response.statusText === 'OK' && setDataState({ error: '', isLoading: false });
             })
-            .catch((e) => setDataState({ error: 'Something Went Wrong', isLoading: false }));
+            .catch((e) => {
+                console.log(e);
+                if (e.message === 'Network Error') {
+                    setDataState({ error: 'Network Error', isLoading: false });
+                } else setDataState({ error: 'Something went wrong, please try again.', isLoading: false });
+            });
     }, [updatedataApproved, updatedataRejected, disagreeForm, deleteModal, editModal, id, handleApply]);
 
     // pagination
@@ -282,7 +287,7 @@ const Bids = () => {
         }, 1000);
         setCheckedBid([]);
     };
-
+    console.log(bidsData);
     return (
         <div>
             <DocumentHead title='Bids' />
@@ -366,21 +371,13 @@ const Bids = () => {
                                         return <p className='loader' style={{ margin: '100px auto' }}></p>;
                                     } else if (dataState.error) {
                                         return (
-                                            <p
-                                                className='responseMessage'
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-around',
-                                                    alignItems: 'center',
-                                                    margin: '100px auto',
-                                                }}
-                                            >
+                                            <p className='responseMessage'>
                                                 <img
                                                     alt=''
                                                     src={bidRejected}
                                                     style={{ height: '30px', width: '30px' }}
                                                 />
-                                                Something went wrong, please try again.{' '}
+                                                {dataState.error}
                                             </p>
                                         );
                                     } else if (bidsData.length === 0) {
@@ -392,8 +389,7 @@ const Bids = () => {
                                                     margin: '100px auto',
                                                 }}
                                             >
-                                                No bids available.
-                                                <br /> Add a new bid.
+                                                No bids available. Add a new bid.
                                             </p>
                                         );
                                     } else {

@@ -70,7 +70,7 @@ const LoanOfferDraft = () => {
                             </h3>
                             <div id='the-offer'>
                                 <div className='mb-8'>
-                                    <Link to='/broker/dashboard/allloans/'>
+                                    <Link to='/broker/dashboard/all-offers/'>
                                         <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>
@@ -225,6 +225,8 @@ const LoanOfferDraft = () => {
                                                 mx={[0, 10]}
                                                 mt={['10px']}
                                                 w={'120px'}
+                                                as={Link}
+                                                to='/broker/dashboard/all-offers/'
                                             >
                                                 Save draft
                                             </Button>

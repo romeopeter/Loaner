@@ -52,7 +52,7 @@ const PostModal = ({ responsedata, closeModal }) => {
                     <button
                         onClick={closeModal}
                         style={{
-                            padding: '8px 30px',
+                            padding: '5px 15px',
                             color: '#fff',
                             borderRadius: '4px',
                             background: 'rgba(0, 0, 0, 0.5)',

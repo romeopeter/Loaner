@@ -116,10 +116,10 @@ export default function NavMenu() {
                             Deals <i className='fa fa-caret-down' aria-hidden='true'></i>
                         </div>
                         <div id='deals-dropdown' className='shadow-md rounded'>
-                            <Link to={`/broker/dashboard/allloans/`}>All offers</Link>
-                            <Link to={`/broker/dashboard/allloans/`}>Successful offers</Link>
-                            <Link to={`/broker/dashboard/allloans/`}>Failed offers</Link>
-                            <Link to={`/broker/dashboard/allloans/`}>Accepted offers</Link>
+                            <Link to={`/broker/dashboard/all-offers/`}>All offers</Link>
+                            <Link to={`/broker/dashboard/all-offers/`}>Successful offers</Link>
+                            <Link to={`/broker/dashboard/all-offers/`}>Failed offers</Link>
+                            <Link to={`/broker/dashboard/all-offers/`}>Accepted offers</Link>
                         </div>
                     </li>
                     <li

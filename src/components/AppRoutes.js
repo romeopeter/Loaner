@@ -42,7 +42,7 @@ import AllClients from './dashboard/broker/AllClients';
 import CreateOffer from './dashboard/broker/CreateOffer';
 import NewOfferTiming from './dashboard/broker/NewOfferTiming';
 import LoanSummary from './dashboard/broker/LoanSummary';
-import AllLoans from './dashboard/broker/AllLoans';
+import BrokerOffers from './dashboard/broker/BrokerOffers';
 import Bids from './dashboard/broker/Bids';
 import AddNewBid from './dashboard/broker/AddNewBid';
 import Payment from './dashboard/broker/Payment';
@@ -303,10 +303,10 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/allloans/'
+                        path='/broker/dashboard/all-offers/'
                         element={
                             <RequireAuth>
-                                <AllLoans />
+                                <BrokerOffers/>
                             </RequireAuth>
                         }
                     />

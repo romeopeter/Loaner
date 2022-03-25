@@ -46,15 +46,14 @@ const AddNewBid = () => {
 
         setTimeout(() => {
             setResponsedata({ error: undefined });
-        }, 1000)
+        }, 1000);
     };
     useEffect(() => {
         let isMounted = true;
         axios
             .get(`/v1/loan_request/${id}/investors/`)
             .then((response) => {
-                console.log(response);
-                isMounted && setInvestors(response.data)
+                isMounted && setInvestors(response.data);
             })
             .catch((err) => err && setResponsedata({ ...responsedata, selectError: true }));
 
@@ -74,26 +73,36 @@ const AddNewBid = () => {
         axios
             .post('v1/bids/', bidObject)
             .then((response) => {
-
                 response.statusText === 'OK' &&
                     setResponsedata({ ...responsedata, modal: true, status: 'Bid Added Successfully!' });
             })
-            .catch(
-                (err) =>
-                    err &&
+            .catch((err) => {
+                if (err && err.message === 'Request failed with status code 400') {
+                    setResponsedata({
+                        ...responsedata,
+                        modal: true,
+                        error: 'You cannot create a new bid with this investor.',
+                    });
+                } else if (err && err.message === 'Network Error') {
+                    setResponsedata({
+                        ...responsedata,
+                        modal: true,
+                        error: 'Network Error',
+                    });
+                } else {
                     setResponsedata({
                         ...responsedata,
                         modal: true,
                         error: 'Something went wrong, Please try again.',
-                    })
-            );
+                    });
+                }
+            });
         values.bidValue = '';
-
     };
 
     return (
         <>
-            <DocumentHead title='New Client' />
+            <DocumentHead title='Add New Bid' />
             <OrderbookLayout PageNav={NavMenu}>
                 <div className='NewBid'>
                     <div className='NewBid--form'>
@@ -146,7 +155,6 @@ const AddNewBid = () => {
                                                         component='div'
                                                     />
                                                     <Select
-
                                                         name='select'
                                                         type='text'
                                                         valueField='id'
@@ -170,7 +178,7 @@ const AddNewBid = () => {
                                                 </h2>
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => { }} type='submit'>
+                                                        <button onClick={() => {}} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>
@@ -331,7 +339,7 @@ const AddNewBid = () => {
                                                 {/*cta */}
                                                 <Grid>
                                                     <GridItem colEnd={6}>
-                                                        <button onClick={() => { }} type='submit'>
+                                                        <button onClick={() => {}} type='submit'>
                                                             Submit
                                                         </button>
                                                     </GridItem>

@@ -80,7 +80,7 @@ const LoanOfferPublished = () => {
                             </h3>
                             <div id='the-offer'>
                                 <div className='mb-8'>
-                                    <Link to='/broker/dashboard/allloans/'>
+                                    <Link to='/broker/dashboard/all-offers/'>
                                         <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>
