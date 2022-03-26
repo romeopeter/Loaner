@@ -86,55 +86,69 @@ export default function LoanRequest() {
 		requestContainerRef.current.classList.toggle("modal");
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
 
 		if (formState.dealType === "CP") {
-			const response = dispatch(CPLoanOfferAction(cp(formState, currentUser)));
+			const req = await dispatch(CPLoanOfferAction(cp(formState, currentUser)));
 
-			if (componentMounted.current) {
-				response.then(() => {
-					setIsLoading(true);
+			if (componentMounted.current) setIsLoading(true);
 
-					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
-                        console.log("Loan created");
-                        navigate("/client/offers/offer/publish");
-                    } else {
-                    	
-                    	if (serverError) {
-                    		alert(serverError.detail);
-                    	}
-                    }
-				});
-			}
+
+			if (req.meta.requestStatus === "fulfilled") {
+
+				if (componentMounted.current) setIsLoading(false);
+
+				// Loan is created, Navigate to publish page
+                navigate("/client/offers/offer/publish");
+            } else {
+            	if (componentMounted.current) setIsLoading(false);
+
+            	if (serverError) alert(serverError.detail);
+
+            	return
+            }
+
+            if (serverError.messageType === "network_error") {
+            	if (componentMounted.current) setIsLoading(false);
+            	
+                setIsLoading(false);
+
+                alert(serverError.detail);
+
+                return
+            }
 		}
 
 		if (formState.dealType === "BOND") {
-			const response = dispatch(bondLoanOfferAction(bond(formState, currentUser)))
+			const req = await dispatch(bondLoanOfferAction(bond(formState, currentUser)));
+
+			if (componentMounted.current) setIsLoading(true);
 			
-			if(componentMounted.current) {
-				response.then(() => {
-					setIsLoading(true);
+			if (req.meta.requestStatus === "fulfilled") {
 
-					/*if (serverError.messageType === "network_error") {
-                        setIsLoading(false);
+				if (componentMounted.current) setIsLoading(false);
+                
+                // Loan is created, Navigate to publish page
+                navigate("/client/offers/offer/publish");
+            } else {
+            	if (componentMounted.current) setIsLoading(false);
 
-                        handleSubmit();
-                    }*/
+            	if (serverError) alert(serverError.detail);
 
-					if (currentOfferIsUpdated !== false || currentOfferIsUpdated !== null) {
-                        console.log("Loan created");
-                        navigate("/client/offers/offer/publish");
-                    } else {
+            	return
+            }
 
-                    	if (serverError) {
-                    		alert(serverError.detail);
-                    	}
-                    }
-				})
-			};
+            if (serverError.messageType === "network_error") {
+            	if (componentMounted.current) setIsLoading(false);
+
+                setIsLoading(false);
+
+                alert(serverError.detail);
+
+                return
+            }
 		}
-
 	};
 
 	return (
@@ -329,7 +343,6 @@ export default function LoanRequest() {
 										</div>
 										<Button
 											type="submit"
-											// title="Publish"
 											buttonClass="w-full bg-green-600 rounded"
 											handleClick={() => handleSubmit()}
 										>
