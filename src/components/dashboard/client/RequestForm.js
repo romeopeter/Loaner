@@ -4,20 +4,28 @@ import { useAlert } from "react-alert";
 
 import Button from "../../Button";
 
+import {
+	form1Validation,
+	form2Validation,
+	form3Validation,
+} from "./loan-request-data/requestFormValidation";
+
 export default function RequestForm({ requestFormState, showSummary }) {
 	const { formState, setFormState } = requestFormState;
 	const { summaryState, setSummaryState, handleModal } = showSummary;
 
 	const secondSlideRef = createRef();
-	const lastSlideSlideRef = createRef();
+	const lastSlideRef = createRef();
 	const alert = useAlert();
 
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
 		secondSlideIn: false,
 		lastSlideIn: false,
-		isValidated: false,
-		emptyFields: "",
+		fieldNotValidated: false,
+		slide1FieldsAreEmpty: false,
+		slide2FieldsAreEmpty: false,
+		slide3FieldsAreEmpty: false,
 	});
 
 	const [hiddenFieldTrigger, setHiddenFieldTrigger] = useState({
@@ -32,52 +40,62 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	/**Methods handle the slide-in and slide-out of second and third form 
 		field.
 	**/
-	const handleSecondFormSlideIn = () => {
-		secondSlideRef.current.classList.add("slide-out");
+	const handleSecondFormSlide = () => {
+		const checkFieldsFunc = form1Validation(formState, setState);
 
-		setState((state) => {
-			return {
-				...state,
-				secondSlideIn: true,
-			};
-		});
-	};
+		if (checkFieldsFunc.isEmpty) {
+			alert.error(checkFieldsFunc.errorMessage);
+			return;
+		} else {
+			let isSlidedIn =
+				secondSlideRef.current.classList.toggle("slide-out");
 
-	const handleSecondFormSlideOut = () => {
-		secondSlideRef.current.classList.remove("slide-out");
-		setState((state) => {
-			return {
-				...state,
-				secondSlideIn: false,
-			};
-		});
-	};
-
-	const handleLastFormSlideIn = () => {
-		const isSlidedIn =
-			lastSlideSlideRef.current.classList.toggle("slide-out");
-
-		if (isSlidedIn) {
-			setState((state) => {
-				return {
-					...state,
-					submitButtonIsDisabled: false,
-					lastSlideIn: true,
-					secondSlideIn: false,
-				};
-			});
+			if (isSlidedIn) {
+				setState((state) => {
+					return {
+						...state,
+						secondSlideIn: true,
+					};
+				});
+			} else {
+				setState((state) => {
+					return {
+						...state,
+						secondSlideIn: false,
+					};
+				});
+			}
 		}
 	};
 
-	const handleLastFormSlideOut = () => {
-		lastSlideSlideRef.current.classList.remove("slide-out");
-		setState((state) => {
-			return {
-				...state,
-				submitButtonIsDisabled: true,
-				lastSlideIn: false,
-			};
-		});
+	const handleLastFormSlide = () => {
+		const checkFieldsFunc = form2Validation(formState, setState);
+
+		if (checkFieldsFunc.isEmpty) {
+			alert.error(checkFieldsFunc.errorMessage);
+			return;
+		} else {
+			const isSlidedIn = lastSlideRef.current.classList.toggle("slide-out");
+
+			if (isSlidedIn) {
+				setState((state) => {
+					return {
+						...state,
+						submitButtonIsDisabled: false,
+						lastSlideIn: true,
+						secondSlideIn: false,
+					};
+				});
+			} else {
+				setState((state) => {
+					return {
+						...state,
+						submitButtonIsDisabled: true,
+						lastSlideIn: false,
+					};
+				});
+			}
+		}
 	};
 
 	// Handles all field chanages
@@ -93,9 +111,15 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		}
 
 		if (value === "floating") {
-			setHiddenFieldTrigger(state => ({...state, showBenchmark: true}))
+			setHiddenFieldTrigger((state) => ({
+				...state,
+				showBenchmark: true,
+			}));
 		} else {
-			setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
+			setHiddenFieldTrigger((state) => ({
+				...state,
+				showBenchmark: false,
+			}));
 		}
 
 		if (fieldclassName) {
@@ -177,143 +201,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const handleValidation = (e) => {
 		e.preventDefault();
 
-		for (let prop in formState) {
-
-			if (prop === "dealType" && formState[prop] === "") {
-				setState((state) => ({ ...state, isValidated: true }));
-				alert.error("Deal type can not be empty!");
-
-				return
-			}
-
-			if (prop === "guarantor" && formState[prop] === "") {
-				alert.error("Guarantor can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "dealName" && formState[prop] === "") {
-				alert.error("Deal name can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "projectName" && formState[prop] === "") {
-				alert.error("Project name can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "dealOwner" && formState[prop] === "") {
-				alert.error("Deal Owner field can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "dealTeam" && formState[prop] === "") {
-				alert.error("Deal team field can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "status" && formState[prop] === "") {
-				alert.error("Status field can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if (prop === "trancheName" && formState[prop] === "") {
-				alert.error("Tranche name field can not be empty!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			} else if (typeof formState[prop] === "number") {
-				alert.error("Tranche name can not contain number!");
-				setState((state) => ({ ...state, isValidated: true }));
-
-				return
-			}
-
-			if(typeof formState[prop] === "object" && prop === "trancheSize") {
-				if (formState[prop]["currency"] === "") {
-					alert.error("Currency field can not be empty!");
-					setState((state) => ({ ...state, isValidated: true }));
-
-					return
-				}
-
-				if (formState[prop]["minSubscription"] === "") {
-					alert.error("Minimum subscription is empty!");
-					setState((state) => ({ ...state, isValidated: true }));
-
-					return
-				}
-
-				if (formState[prop]["faceValue"] === "") {
-					alert.error("Face value field can not be empty!");
-					setState((state) => ({ ...state, isValidated: true }));
-
-					return
-				} else if (formState[prop]["faceValue"] === 0) {
-					alert.error("Face value field be zero!");
-					setState((state) => ({ ...state, isValidated: true }));
-				}
-
-				if (formState[prop]["DiscountValue"] === "") {
-					alert.error("Face value field can not be empty!");
-					setState((state) => ({ ...state, isValidated: true }));
-
-					return
-				} else if (formState[prop]["DiscountValue"] === 0) {
-					alert.error("Discount value can not be zero!");
-					setState((state) => ({ ...state, isValidated: true }));
-
-					return
-				}
-			}
-
-			if(typeof formState[prop] === "object" && prop === "pricing") {
-				if (formState[prop]["dayCount"] === "") {
-					setState((state) => ({ ...state, isValidated: false }));
-					alert.error("Day count can not be empty!");
-
-					return
-				}
-			}
-
-			if(typeof formState[prop] === "object" && prop === "timing") {
-			}
-
-			// Field specific to deal type of bond
-			if (formState[prop] === "BOND") {
-				if (typeof formState[prop] === "object" && prop === "pricing") {
-					
-					if (formState[prop]["couponType"] === "") {
-						setState((state) => ({ ...state, isValidated: false }));
-						alert.error("Coupon type can not be empty!");
-
-						return
-					} else if (formState[prop]["couponType"] === "floating") {
-						// if (formState[prop]["benchmark"] )
-					}
-				}
-			}
-		}
+		const checkFieldFunc = form3Validation(formState, setState);
 
 		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
 	};
 
 	/*
-		These are tweaks to extend form slide parent hide.
+		These are tweaks to extend form slide parent.
 		Not really the best way but needed to be done
-		*/
+	*/
 	const formHeightIsExtended =
 		state.secondSlideIn === true && formState.dealType === "BOND";
 	const secondSlideWillHide =
@@ -321,7 +218,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const secondSlideWillShow =
 		state.lastSlideIn === false && formState.dealType === "BOND";
 
-	const formErrorStyle = {border: state.isValidated ? "2px solid #f25858 !important" : "none"};
+	const formFieldErrorStyle = {
+		border:
+			state.fieldNotValidated || state.slide1FieldsAreEmpty
+				? "2px solid #f25858"
+				: "none",
+	};
+	const form1ErrorStyle = {
+		border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
+	};
+	const form2ErrorStyle = {
+		border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
+	};
+	const form3ErrorStyle = {
+		border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
+	};
 
 	return (
 		<>
@@ -337,7 +248,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				}}
 			>
 				<div id="loan-request-steps">
-					{/*loan request -- 1st step*/}
+					{/*First slide*/}
 					<div
 						id="general-issuer-terms"
 						className="form-slide slide-1"
@@ -348,7 +259,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 
 						<div className="grid grid-cols-1 gap-4">
-							<div className="col-span-12 mt-1" style={formErrorStyle}>
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<select
 									name="dealType"
 									id="dealType"
@@ -367,22 +281,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</select>
 							</div>
 
-							{/*<div className="col-span-12 mt-1">
-								<select
-									name="issuer"
-									id="issuer"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									disabled={true}
-									style={{ cursor: "not-allowed" }}
-									// required
-								>
-									<option defaultValue="Client/issue">
-										Client/issuer
-									</option>
-								</select>
-							</div>*/}
-
-							<div className="col-span-12 mt-1">
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<input
 									type="text"
 									name="guarantor"
@@ -396,7 +298,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									// required
 								/>
 							</div>
-							<div className="col-span-12 mt-1">
+
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<input
 									type="text"
 									name="dealName"
@@ -410,7 +316,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									// required
 								/>
 							</div>
-							<div className="col-span-12 mt-1">
+
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<input
 									type="text"
 									name="projectName"
@@ -425,7 +335,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 
-							<div className="col-span-12 mt-1">
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<input
 									type="text"
 									name="dealOwner"
@@ -440,7 +353,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 
-							<div className="col-span-12 mt-1">
+							<div
+								className="col-span-12 mt-1"
+								style={form1ErrorStyle}
+							>
 								<input
 									type="text"
 									name="dealTeam"
@@ -464,13 +380,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<Button
 									title="Next"
 									buttonClass="bg-white rounded"
-									handleClick={handleSecondFormSlideIn}
+									handleClick={handleSecondFormSlide}
 								/>
 							</div>
 						</div>
 					</div>
 
-					{/*loan request -- 2nd step*/}
+					{/*Second slide*/}
 					<div
 						className="form-slide slide-2"
 						ref={secondSlideRef}
@@ -489,7 +405,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						{/*Tranche terms*/}
 						<div id="tranche-terms">
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2 mt-1">
+								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
 									<select
 										name="status"
 										id="status"
@@ -497,7 +413,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										value={formState.status}
 										onChange={(e) => handleChange(e)}
 									>
-										<option defaultValue="">Select loan status</option>
+										<option defaultValue="">
+											Select loan status
+										</option>
 										<option value="draft">Draft</option>
 										<option value="invitation">
 											Invitation
@@ -517,7 +435,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-2 mt-1">
+								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
 									<input
 										type="text"
 										name="trancheName"
@@ -538,7 +456,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2 mt-1">
+								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
 									<select
 										name="currency"
 										id="currency"
@@ -555,34 +473,66 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="USD">USD</option>
 									</select>
 								</div>
+
 								<div className="col-span-1 mt-1">
-									<input
-										type="number"
-										name="faceValue"
-										id="face-value"
-										placeholder="Enter face value"
-										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={formState.trancheSize.faceValue}
-										onChange={(e) =>
-											handleChange(e, "trancheSize")
-										}
-									/>
+									<div
+										className=""
+										style={form2ErrorStyle}
+									>
+										<input
+											type="number"
+											name="faceValue"
+											id="face-value"
+											placeholder="Enter face value"
+											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											value={
+												formState.trancheSize.faceValue
+											}
+											onChange={(e) =>
+												handleChange(e, "trancheSize")
+											}
+										/>
+									</div>
+									{/*<label
+										className="error-label text-sm"
+										htmlFor="face-value"
+										className="text-gray-300"
+									>
+										Value shouldn't be more than two
+										digits and 2 decimals. e.g: 40.01
+									</label>*/}
 								</div>
+
 								<div className="col-span-1 mt-1">
-									<input
-										name="discountValue"
-										type="number"
-										placeholder="Enter discount value"
-										id="tranche-value"
-										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-										value={
-											formState.trancheSize.discountValue
-										}
-										onChange={(e) =>
-											handleChange(e, "trancheSize")
-										}
-									/>
+									<div
+										className=""
+										style={form2ErrorStyle}
+									>
+										<input
+											name="discountValue"
+											type="number"
+											placeholder="Enter discount value"
+											id="tranche-value"
+											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+											value={
+												formState.trancheSize
+													.discountValue
+											}
+											onChange={(e) =>
+												handleChange(e, "trancheSize")
+											}
+										/>
+									</div>
+									{/*<label
+										className="error-label text-sm"
+										htmlFor="tranche-value"
+										className="text-gray-300"
+									>
+										Value shouldn't be more than two
+										digits and 2 decimals. e.g: 40.01
+									</label>*/}
 								</div>
+
 								<div className="col-span-1 mt-1">
 									<input
 										type="number"
@@ -595,7 +545,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									/>
 								</div>
 
-								<div className="col-span-1 mt-1">
+								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
 									<select
 										name="minSubscription"
 										id="min-subscription"
@@ -638,6 +588,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 								<div className="col-span-2 mt-1">
 									{hiddenFieldTrigger.customMinimumSub ? (
+										<div style={form2ErrorStyle}>
 										<input
 											type="number"
 											id="custom-min-subscription"
@@ -663,6 +614,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												});
 											}}
 										/>
+										</div>
 									) : null}
 								</div>
 							</div>
@@ -674,62 +626,97 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<p className="py-2">Pricing</p>
 							</div>
 
+							{/*Bond field*/}
 							<div className="grid grid-cols-2 gap-4">
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-1 mt-1">
-											<select
-												id="coupon-type"
-												name="couponType"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-												value={
-													formState.pricing.couponType
-												}
-												onChange={(e) =>
-													handleChange(e, "pricing")
-												}
-											>
-												<option defaultValue="">
-													Choose coupon type
-												</option>
-												<option value="fixed">
-													Fixed
-												</option>
-												<option value="floating">
-													Floating
-												</option>
-											</select>
+										<div className="col-span-1 mt-1" style={form2ErrorStyle}>
+											<div className="">
+												<select
+													id="coupon-type"
+													name="couponType"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={
+														formState.pricing
+															.couponType
+													}
+													onChange={(e) =>
+														handleChange(
+															e,
+															"pricing"
+														)
+													}
+												>
+													<option defaultValue="">
+														Choose coupon type
+													</option>
+													<option value="fixed">
+														Fixed
+													</option>
+													<option value="floating">
+														Floating
+													</option>
+												</select>
+											</div>
 										</div>
 
-
 										<div className="col-span-1 mt-1">
-											<input
-												type="number"
-												name="Enter benchmark"
-												id="benchmark"
-												placeholder="Benchmark"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-												disabled={formState.pricing.couponType === "floating" ? false : true}
-												style={{
-													backgroundColor: formState.pricing.couponType === "floating" ? "#d1d5db" : "#888",
-													cursor:  formState.pricing.couponType === "floating" ? "text":"not-allowed",
-												}}
-												value={
-													formState.pricing
-														.benchmark
-												}
-												onChange={(e) =>
-													handleChange(
-														e,
-														"pricing"
-													)
-												}
-											/>
+											<div
+												className=""
+												style={form2ErrorStyle}
+											>
+												<input
+													type="number"
+													name="Enter benchmark"
+													id="benchmark"
+													placeholder="Benchmark"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													disabled={
+														formState.pricing
+															.couponType ===
+														"floating"
+															? false
+															: true
+													}
+													style={{
+														backgroundColor:
+															formState.pricing
+																.couponType ===
+															"floating"
+																? "#d1d5db"
+																: "#888",
+														cursor:
+															formState.pricing
+																.couponType ===
+															"floating"
+																? "text"
+																: "not-allowed",
+													}}
+													value={
+														formState.pricing
+															.benchmark
+													}
+													onChange={(e) =>
+														handleChange(
+															e,
+															"pricing"
+														)
+													}
+												/>
+											</div>
+											{/*<label
+												className="error-label text-sm"
+												htmlFor="benchmark"
+												className="text-gray-300"
+											>
+												Value shouldn't be more than 3 digits
+												e.g: 100
+											</label>*/}
 										</div>
 									</>
 								) : null}
 
-								<div className="col-span-1 mt-1">
+								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
 									<select
 										name="dayCount"
 										id="day-count"
@@ -754,7 +741,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										</option>
 									</select>
 								</div>
-								<div className="col-span-1 mt-1">
+
+								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
 									<select
 										name="offerType"
 										id="offer-type"
@@ -782,76 +770,109 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								"fixed price" ? (
 									<>
 										<div className="col-span-1 mt-1">
-											<input
-												type="number"
-												name="discountRate"
-												id="discount-rate"
-												placeholder="Enter discount rate"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-												value={
-													formState.pricing.offerType
-														.fixedPrice.rate
-												}
-												onChange={(e) =>
-													setFormState((state) => {
-														return {
-															...state,
-															pricing: {
-																...state.pricing,
-																offerType: {
-																	...state
-																		.pricing
-																		.offerType,
-																	fixedPrice:
-																		{
-																			...state
-																				.pricing
-																				.offerType
-																				.fixedPrice,
-																			rate: e.target.value,
-																		},
-																},
-															},
-														};
-													})
-												}
-											/>
+											<div style={form2ErrorStyle}>
+												<input
+													type="number"
+													name="discountRate"
+													id="discount-rate"
+													placeholder="Enter discount rate"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+													value={
+														formState.pricing
+															.offerType
+															.fixedPrice.rate
+													}
+													onChange={(e) =>
+														setFormState(
+															(state) => {
+																return {
+																	...state,
+																	pricing: {
+																		...state.pricing,
+																		offerType:
+																			{
+																				...state
+																					.pricing
+																					.offerType,
+																				fixedPrice:
+																					{
+																						...state
+																							.pricing
+																							.offerType
+																							.fixedPrice,
+																						rate: e
+																							.target
+																							.value,
+																					},
+																			},
+																	},
+																};
+															}
+														)
+													}
+												/>
+											</div>
+											{/*<label
+												className="error-label text-sm"
+												htmlFor="discount-rate"
+												className="text-gray-300"
+											>
+												Value shouldn't be more than 4 digits
+												e.g: 1000
+											</label>*/}
 										</div>
+
 										<div className="col-span-1 mt-1">
-											<input
-												type="number"
-												name="impliedYield"
-												id="implied-yield"
-												placeholder="Enter implied yield"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-												value={
-													formState.pricing.offerType
-														.fixedPrice.yield
-												}
-												onChange={(e) =>
-													setFormState((state) => {
-														return {
-															...state,
-															pricing: {
-																...state.pricing,
-																offerType: {
-																	...state
-																		.pricing
-																		.offerType,
-																	fixedPrice:
-																		{
-																			...state
-																				.pricing
-																				.offerType
-																				.fixedPrice,
-																			yield: e.target.value,
-																		},
-																},
-															},
-														};
-													})
-												}
-											/>
+											<div style={form2ErrorStyle}>
+												<input
+													type="number"
+													name="impliedYield"
+													id="implied-yield"
+													placeholder="Enter implied yield"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+													value={
+														formState.pricing
+															.offerType
+															.fixedPrice.yield
+													}
+													onChange={(e) =>
+														setFormState(
+															(state) => {
+																return {
+																	...state,
+																	pricing: {
+																		...state.pricing,
+																		offerType:
+																			{
+																				...state
+																					.pricing
+																					.offerType,
+																				fixedPrice:
+																					{
+																						...state
+																							.pricing
+																							.offerType
+																							.fixedPrice,
+																						yield: e
+																							.target
+																							.value,
+																					},
+																			},
+																	},
+																};
+															}
+														)
+													}
+												/>
+											</div>
+											{/*<label
+												className="error-label text-sm"
+												htmlFor="implied-yield"
+												className="text-gray-300"
+											>
+												Value shouldn't be more than 4 digits
+												e.g: 1000
+											</label>*/}
 										</div>
 									</>
 								) : null}
@@ -860,6 +881,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								"book build" ? (
 									<>
 										<div className="col-span-1 mt-1">
+											<div style={form2ErrorStyle}>
 											<input
 												type="number"
 												name="discountRateRange"
@@ -886,7 +908,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																				.pricing
 																				.offerType
 																				.fixedPrice,
-																			rate: e.target.value,
+																			rate: e
+																				.target
+																				.value,
 																		},
 																},
 															},
@@ -894,8 +918,19 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													})
 												}
 											/>
+											</div>
+											{/*<label
+												className="error-label text-sm"
+												htmlFor="discount-rate-range"
+												className="text-gray-300"
+											>
+												Value shouldn't be more than 3 digits
+												e.g: 100
+											</label>*/}
 										</div>
+
 										<div className="col-span-1 mt-1">
+											<div style={form2ErrorStyle}>
 											<input
 												type="number"
 												name="yield"
@@ -922,7 +957,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																				.pricing
 																				.offerType
 																				.fixedPrice,
-																			yield: e.target.value,
+																			yield: e
+																				.target
+																				.value,
 																		},
 																},
 															},
@@ -930,13 +967,22 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													})
 												}
 											/>
+											</div>
+											{/*<label
+												className="error-label text-sm"
+												htmlFor="yield"
+												className="text-gray-300"
+											>
+												Value shouldn't be more than 4 digits
+												e.g: 1000
+											</label>*/}
 										</div>
 									</>
 								) : null}
 
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-2 mt-1">
+										<div className="col-span-2 mt-1" style={form2ErrorStyle}>
 											<select
 												id="coupon-frequency"
 												name="couponFrequency"
@@ -1023,8 +1069,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</div>
 										</div>
 
-										<div className="col-span-2 mt-1">
-											{hiddenFieldTrigger.showCallOption ? (
+										
+										{hiddenFieldTrigger.showCallOption ? (
+											<div className="col-span-2 mt-1" style={form2ErrorStyle}>
 												<input
 													type="text"
 													name="callOption"
@@ -1042,8 +1089,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														)
 													}
 												/>
-											) : null}
-										</div>
+											</div>
+										) : null}
 									</>
 								) : null}
 							</div>
@@ -1056,19 +1103,19 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							<Button
 								title="Previous"
 								buttonClass="bg-white rounded previous"
-								handleClick={handleSecondFormSlideOut}
+								handleClick={handleSecondFormSlide}
 							/>
 
 							<Button
 								title="Next"
 								buttonClass="bg-white rounded next"
-								handleClick={handleLastFormSlideIn}
+								handleClick={handleLastFormSlide}
 							/>
 						</div>
 					</div>
 
-					{/*loan request -- 3rd step*/}
-					<div className="form-slide slide-3" ref={lastSlideSlideRef}>
+					{/*Third slide*/}
+					<div className="form-slide slide-3" ref={lastSlideRef}>
 						<div id="terms-heading">
 							<p className="py-2">Timing</p>
 						</div>
@@ -1204,7 +1251,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											handleChange(e, "rating")
 										}
 									>
-										<option defaultValue="">Choose rating name</option>
+										<option defaultValue="">
+											Choose rating name
+										</option>
 										<option value="agusto">Agusto</option>
 										<option value="gcr">GCR</option>
 										<option value="fitch">Fitch</option>
@@ -1226,7 +1275,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											handleChange(e, "rating")
 										}
 									>
-										<option defaultValue="">Choose rating scale</option>
+										<option defaultValue="">
+											Choose rating scale
+										</option>
 										<option value="AAA">AAA</option>
 										<option value="AA">AA</option>
 										<option value="A">A</option>
@@ -1244,7 +1295,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<Button
 									title="Previous"
 									buttonClass="bg-white rounded"
-									handleClick={handleLastFormSlideOut}
+									handleClick={handleLastFormSlide}
 								/>
 							</div>
 						</div>
@@ -1256,7 +1307,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					type="submit"
 					style={{
 						marginTop: "15rem",
-						visibility: state.lastSlideIn?"visible":"hidden"
+						visibility: state.lastSlideIn ? "visible" : "hidden",
 					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
