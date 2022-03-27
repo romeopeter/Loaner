@@ -1,20 +1,21 @@
 // MOBILE SCREENS
 @include respond-below(sm) {
-	#loan-request-container {
-		display: block !important;
-		padding: 25px !important;
+	#orderbook-loan-request {
+		#loan-request-container {
+			display: block !important;
+			padding: 25px !important;
 
-		#request-loan-form {
-			width: 100% !important;
-		}
-		#loan-summary {
-			display: none;
+			#request-loan-form {
+				width: 100% !important;
+			}
+			#loan-summary {
+				display: none;
+			}
 		}
 
-		&.modal {
+		#loan-summary-modal {
 			position: fixed;
 			z-index: 1;
-			padding-top: 100px;
 			left: 0;
 			top: 0;
 			width: 100% !important;
@@ -22,9 +23,9 @@
 			overflow: hidden;
 			background-color: rgba(0,0,0,0.4) !important;
 
-			#request-loan-form {
+			/*#request-loan-form {
 				display: none !important;
-			}
+			}*/
 
 			.modal-content {
 				display: block !important;
@@ -158,6 +159,65 @@
 
 		#loan-summary {
 			margin-top: 55px;
+
+			#summary-intro {
+				p {
+					font-size: 15px;
+				}
+			}
+
+			table {
+				tbody {
+					tr {
+						border-bottom: 1px solid $black;
+
+						td {
+							padding-top: 10px;
+							width: 200px;
+
+							small {
+								display: block;
+							}
+							
+							span {
+								font-weight: bold;
+							}
+						}
+
+						&#summary-dates-row {
+							border-bottom: none !important;
+
+							td {
+								text-align: center;
+							}
+						}
+					}
+				}
+			}
+
+			#loan-summary-buttons {
+				.grid {
+					justify-items: center;
+
+					button {
+						width: 100%;
+
+						&.share {
+							background: $primary-dark !important;
+						}
+					}
+				}
+
+				button {
+					width: 100%;
+				}
+			}
+		}
+	}
+
+	#loan-summary-modal {
+		#loan-summary {
+			margin-top: 30px;
 
 			#summary-intro {
 				p {
