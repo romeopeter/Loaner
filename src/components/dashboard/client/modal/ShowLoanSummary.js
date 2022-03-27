@@ -17,7 +17,7 @@ export default function ShowLoanSummary({
 	}
 
 	return (
-		<div id="loan-summary-modal" className="px-5">
+		<div id="loan-summary-modal" className="px-5 hidden">
 			<div id="loan-summary" className="modal-content bg-white">
 				<div id="summary-table" className="mt-20 mx-10">
 					<span
