@@ -202,10 +202,15 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		e.preventDefault();
 
 		const checkFieldFunc = form3Validation(formState, setState);
+	};
 
+	const viewOfferSummary = () => {
 		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
 		setSummaryState(true);
-	};
+
+		// Show modal
+		handleModal()
+	}
 
 	/*
 		These are tweaks to extend form slide parent.
@@ -630,8 +635,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							<div className="grid grid-cols-2 gap-4">
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-1 mt-1" style={form2ErrorStyle}>
-											<div className="">
+										<div className="col-span-1 mt-1">
+											<div className="" style={form2ErrorStyle}>
 												<select
 													id="coupon-type"
 													name="couponType"
@@ -1311,7 +1316,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
-					handleClick={summaryState ? handleModal : undefined}
+					handleClick={viewOfferSummary}
 				/>
 			</form>
 		</>
