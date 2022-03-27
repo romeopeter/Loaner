@@ -14,6 +14,7 @@
 		}
 
 		#loan-summary-modal {
+			display: block !important;
 			position: fixed;
 			z-index: 1;
 			left: 0;
@@ -28,7 +29,6 @@
 			}*/
 
 			.modal-content {
-				display: block !important;
 				margin: auto;
 				width: 100% !important;
 				padding: 20px;
@@ -137,6 +137,10 @@
 									height: 30px;
 									color: $black;
 								}
+							}
+
+							label {
+								font-size: 11px;
 							}
 						}
 					}
