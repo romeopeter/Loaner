@@ -15,6 +15,8 @@ import {cp, bond} from "../loan-request-data/requestData"
 
 import { CPLoanOfferAction, bondLoanOfferAction} from "../../../redux/loanSlice";
 
+import ShowLoanSummary from "./modal/ShowLoanSummary";
+
 export default function LoanRequest() {
 	const pageName = "Loan request";
 
@@ -71,6 +73,8 @@ export default function LoanRequest() {
 
 	const [summaryState, setSummaryState] = useState(false);
 
+	const [showModal, setShowModal] = useState(false);
+
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { user } = JSON.parse(localStorage.getItem("USER"));
@@ -83,7 +87,7 @@ export default function LoanRequest() {
 	const componentMounted = useRef(true);
 
 	const handleModal = () => {
-		requestContainerRef.current.classList.toggle("modal");
+		setShowModal(true);
 	};
 
 	const handleSubmit = async () => {
@@ -197,7 +201,7 @@ export default function LoanRequest() {
 						</div>
 						<div
 							id="loan-summary"
-							className="bg-white loan-request-flex-item modal-content"
+							className="bg-white loan-request-flex-item"
 						>
 							{!summaryState ? (
 								<div id="summary-intro" className="mt-20 ml-20">
@@ -359,6 +363,9 @@ export default function LoanRequest() {
 							)}
 						</div>
 					</div>
+
+					{/*Put modal here*/}
+					{showModal && (<ShowLoanSummary formState={formState} modal={{showModal, setShowModal}} />)}
 				</section>
 			</OrderbookLayout>
 		</>
