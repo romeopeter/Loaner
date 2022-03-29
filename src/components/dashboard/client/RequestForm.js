@@ -20,6 +20,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 	const [state, setState] = useState({
 		submitButtonIsDisabled: true,
+		firstSlideIn: true,
 		secondSlideIn: false,
 		lastSlideIn: false,
 		fieldNotValidated: false,
@@ -41,12 +42,12 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		field.
 	**/
 	const handleSecondFormSlide = () => {
-		const checkFieldsFunc = form1Validation(formState, setState);
+		// const checkFieldsFunc = form1Validation(formState, setState);
 
-		if (checkFieldsFunc.isEmpty) {
+		/*if (checkFieldsFunc.isEmpty) {
 			alert.error(checkFieldsFunc.errorMessage);
 			return;
-		} else {
+		} else {*/
 			let isSlidedIn =
 				secondSlideRef.current.classList.toggle("slide-out");
 
@@ -54,6 +55,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				setState((state) => {
 					return {
 						...state,
+						firstSlideIn: false,
 						secondSlideIn: true,
 					};
 				});
@@ -61,21 +63,23 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				setState((state) => {
 					return {
 						...state,
+						firstSlideIn: true,
 						secondSlideIn: false,
 					};
 				});
 			}
-		}
+		// }
 	};
 
 	const handleLastFormSlide = () => {
 		const checkFieldsFunc = form2Validation(formState, setState);
 
-		if (checkFieldsFunc.isEmpty) {
+		/*if (checkFieldsFunc.isEmpty) {
 			alert.error(checkFieldsFunc.errorMessage);
 			return;
-		} else {
-			const isSlidedIn = lastSlideRef.current.classList.toggle("slide-out");
+		} else {*/
+			const isSlidedIn =
+				lastSlideRef.current.classList.toggle("slide-out");
 
 			if (isSlidedIn) {
 				setState((state) => {
@@ -95,7 +99,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					};
 				});
 			}
-		}
+		// }
 	};
 
 	// Handles all field chanages
@@ -201,7 +205,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	const handleValidation = (e) => {
 		e.preventDefault();
 
-		const checkFieldFunc = form3Validation(formState, setState);
+		// const checkFieldFunc = form3Validation(formState, setState);
 	};
 
 	const viewOfferSummary = () => {
@@ -209,26 +213,20 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		setSummaryState(true);
 
 		// Show modal
-		handleModal()
-	}
+		handleModal();
+	};
 
 	/*
 		These are tweaks to extend form slide parent.
 		Not really the best way but needed to be done
 	*/
-	const formHeightIsExtended =
-		state.secondSlideIn === true && formState.dealType === "BOND";
-	const secondSlideWillHide =
-		state.lastSlideIn === true && formState.dealType === "BOND";
-	const secondSlideWillShow =
-		state.lastSlideIn === false && formState.dealType === "BOND";
 
-	const formFieldErrorStyle = {
-		border:
-			state.fieldNotValidated || state.slide1FieldsAreEmpty
-				? "2px solid #f25858"
-				: "none",
-	};
+	const firstSlideIsHidden = (state.secondSlideIn === true || state.lastSlideIn === true);
+	
+	const secondSlideIsHidden = state.lastSlideIn === true;
+	const secondSlideWillShow =
+		state.lastSlideIn === false && (formState.dealType === "BOND" || formState.dealType === "CP");
+
 	const form1ErrorStyle = {
 		border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
 	};
@@ -239,24 +237,26 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
 	};
 
+	
+	const formHeightstyle = {
+		height: state.firstSlideIn ? "900px" : state.lastSlideIn ? "650px" : "1195px"
+	};
+
 	return (
 		<>
 			<form
 				id="loan-summary-form"
 				className="h-full pb-5"
 				onSubmit={handleValidation}
-				style={{
-					height:
-						formHeightIsExtended | secondSlideWillShow
-							? "1080px"
-							: "auto",
-				}}
+				style={formHeightstyle}
 			>
 				<div id="loan-request-steps">
+
 					{/*First slide*/}
 					<div
 						id="general-issuer-terms"
 						className="form-slide slide-1"
+						style={{visibility: firstSlideIsHidden ? "hidden" : "visible"}}
 					>
 						<div id="terms-heading">
 							<h1>New Offer</h1>
@@ -376,11 +376,66 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								/>
 							</div>
 
+							<div id="terms-heading" className="col-span-12">
+								<h3 className="py-2 text-xl">Tranche Terms</h3>
+							</div>
+
+							{/*Tranche terms*/}
+							<div id="tranche-terms" className="col-span-12 mt-1">
+								<div className="grid grid-cols-2 gap-4">
+									<div
+										className="col-span-2 mt-1"
+										style={form1ErrorStyle}
+									>
+										<select
+											name="status"
+											id="status"
+											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+											value={formState.status}
+											onChange={(e) => handleChange(e)}
+										>
+											<option defaultValue="">
+												Select loan status
+											</option>
+											<option value="draft">Draft</option>
+											<option value="invitation">
+												Invitation
+											</option>
+											<option value="pre-market">
+												Pre-market
+											</option>
+											<option value="announced">
+												Announced
+											</option>
+											<option value="allocated">
+												Books closed
+											</option>
+											<option value="archived">
+												Archived
+											</option>
+										</select>
+									</div>
+
+									<div
+										className="col-span-2 mt-1"
+										style={form1ErrorStyle}
+									>
+										<input
+											type="text"
+											name="trancheName"
+											id="trancheName"
+											placeholder="Enter tranche name"
+											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+											value={formState.trancheName}
+											onChange={(e) => handleChange(e)}
+										/>
+									</div>
+								</div>
+							</div>
+
 							<div
 								id="general-terms-next-button"
-								className={`col-span-12 text-right form-slide-button ${
-									state.secondSlideIn && "hidden"
-								}`}
+								className={`col-span-12 text-right form-slide-button`}
 							>
 								<Button
 									title="Next"
@@ -396,62 +451,87 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						className="form-slide slide-2"
 						ref={secondSlideRef}
 						style={{
-							visibility: secondSlideWillHide
+							visibility: secondSlideIsHidden
 								? "hidden"
-								: secondSlideWillShow
-								? "visible"
-								: "auto",
+								:"visible"
 						}}
 					>
+						{/*Timing*/}
 						<div id="terms-heading">
-							<h3 className="py-2 text-xl">Tranche Terms</h3>
+							<p className="py-2">Timing</p>
 						</div>
 
-						{/*Tranche terms*/}
-						<div id="tranche-terms">
-							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
-									<select
-										name="status"
-										id="status"
-										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-										value={formState.status}
-										onChange={(e) => handleChange(e)}
-									>
-										<option defaultValue="">
-											Select loan status
-										</option>
-										<option value="draft">Draft</option>
-										<option value="invitation">
-											Invitation
-										</option>
-										<option value="pre-market">
-											Pre-market
-										</option>
-										<option value="announced">
-											Announced
-										</option>
-										<option value="allocated">
-											Books closed
-										</option>
-										<option value="archived">
-											Archived
-										</option>
-									</select>
-								</div>
-
-								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
-									<input
-										type="text"
-										name="trancheName"
-										id="trancheName"
-										placeholder="Enter tranche name"
-										className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-										value={formState.trancheName}
-										onChange={(e) => handleChange(e)}
-									/>
-								</div>
+						<div className="grid grid-cols-2 gap-4">
+							<div className="col-span-1 mt-1">
+								<input
+									type="text"
+									name="offerStart"
+									id="offer-start"
+									placeholder="Enter offer start date"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									value={formState.timing.offerStart}
+									onFocus={(e) => (e.target.type = "date")}
+									onBlur={(e) => (e.target.type = "text")}
+									onChange={(e) => handleChange(e, "timing")}
+								/>
 							</div>
+
+
+							<div className="col-span-1 mt-1">
+								<input
+									type="text"
+									name="offerEnd"
+									id="offer-end"
+									placeholder="Enter Offer end data"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+									value={formState.timing.offerEnd}
+									onFocus={(e) => (e.target.type = "date")}
+									onBlur={(e) => (e.target.type = "text")}
+									onChange={(e) => handleChange(e, "timing")}
+								/>
+							</div>
+
+							<div className="col-span-1 mt-1">
+								<input
+									type="text"
+									name="allotmentDate"
+									id="allotment-date"
+									placeholder="Enter allotment date"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									value={formState.timing.allotmentDate}
+									onFocus={(e) => (e.target.type = "date")}
+									onBlur={(e) => (e.target.type = "text")}
+									onChange={(e) => handleChange(e, "timing")}
+								/>
+							</div>
+
+							<div className="col-span-1 mt-1">
+								<input
+									type="text"
+									name="settlementDate"
+									id="settlement-date"
+									placeholder="Enter settlement date"
+									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+									value={formState.timing.settlementDate}
+									onFocus={(e) => (e.target.type = "date")}
+									onBlur={(e) => (e.target.type = "text")}
+									onChange={(e) => handleChange(e, "timing")}
+								/>
+							</div>
+						</div>
+
+						<div className="col-span-12 mt-5">
+							<input
+								type="text"
+								name="maturityDate"
+								id="maturity-date"
+								placeholder="Enter maturity date"
+								className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+								value={formState.timing.maturityDate}
+								onFocus={(e) => (e.target.type = "date")}
+								onBlur={(e) => (e.target.type = "text")}
+								onChange={(e) => handleChange(e, "timing")}
+							/>
 						</div>
 
 						{/*Tranche size*/}
@@ -461,7 +541,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">
-								<div className="col-span-2 mt-1" style={form2ErrorStyle}>
+								<div
+									className="col-span-2 mt-1"
+									style={form2ErrorStyle}
+								>
 									<select
 										name="currency"
 										id="currency"
@@ -480,10 +563,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 
 								<div className="col-span-1 mt-1">
-									<div
-										className=""
-										style={form2ErrorStyle}
-									>
+									<div className="" style={form2ErrorStyle}>
 										<input
 											type="number"
 											name="faceValue"
@@ -509,10 +589,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 
 								<div className="col-span-1 mt-1">
-									<div
-										className=""
-										style={form2ErrorStyle}
-									>
+									<div className="" style={form2ErrorStyle}>
 										<input
 											name="discountValue"
 											type="number"
@@ -550,7 +627,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									/>
 								</div>
 
-								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
+								<div
+									className="col-span-1 mt-1"
+									style={form2ErrorStyle}
+								>
 									<select
 										name="minSubscription"
 										id="min-subscription"
@@ -594,31 +674,32 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<div className="col-span-2 mt-1">
 									{hiddenFieldTrigger.customMinimumSub ? (
 										<div style={form2ErrorStyle}>
-										<input
-											type="number"
-											id="custom-min-subscription"
-											name="custom-min-subscription"
-											className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-											value={
-												formState.trancheSize
-													.minSubscription
-											}
-											placeholder="Enter minimum subscription"
-											min="200000"
-											max="10000000000"
-											onChange={(e) => {
-												setFormState((state) => {
-													return {
-														...state,
-														trancheSize: {
-															...state.trancheSize,
-															minSubscription:
-																e.target.value,
-														},
-													};
-												});
-											}}
-										/>
+											<input
+												type="number"
+												id="custom-min-subscription"
+												name="custom-min-subscription"
+												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+												value={
+													formState.trancheSize
+														.minSubscription
+												}
+												placeholder="Enter minimum subscription"
+												min="200000"
+												max="10000000000"
+												onChange={(e) => {
+													setFormState((state) => {
+														return {
+															...state,
+															trancheSize: {
+																...state.trancheSize,
+																minSubscription:
+																	e.target
+																		.value,
+															},
+														};
+													});
+												}}
+											/>
 										</div>
 									) : null}
 								</div>
@@ -636,7 +717,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								{formState.dealType === "BOND" ? (
 									<>
 										<div className="col-span-1 mt-1">
-											<div className="" style={form2ErrorStyle}>
+											<div
+												className=""
+												style={form2ErrorStyle}
+											>
 												<select
 													id="coupon-type"
 													name="couponType"
@@ -721,7 +805,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</>
 								) : null}
 
-								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
+								<div
+									className={`${formState.dealType === "BOND" ? "col-span-1" : "col-span-2"} mt-1`}
+									style={form2ErrorStyle}
+								>
 									<select
 										name="dayCount"
 										id="day-count"
@@ -747,7 +834,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</select>
 								</div>
 
-								<div className="col-span-1 mt-1" style={form2ErrorStyle}>
+								<div
+									className={`${formState.dealType === "BOND" ? "col-span-1" : "col-span-2"} mt-1`}
+									style={form2ErrorStyle}
+								>
 									<select
 										name="offerType"
 										id="offer-type"
@@ -887,42 +977,46 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									<>
 										<div className="col-span-1 mt-1">
 											<div style={form2ErrorStyle}>
-											<input
-												type="number"
-												name="discountRateRange"
-												id="discount-rate-range"
-												placeholder="Enter discount rate range"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-												value={
-													formState.pricing.offerType
-														.fixedPrice.rate
-												}
-												onChange={(e) =>
-													setFormState((state) => {
-														return {
-															...state,
-															pricing: {
-																...state.pricing,
-																offerType: {
-																	...state
-																		.pricing
-																		.offerType,
-																	fixedPrice:
-																		{
-																			...state
-																				.pricing
-																				.offerType
-																				.fixedPrice,
-																			rate: e
-																				.target
-																				.value,
-																		},
-																},
-															},
-														};
-													})
-												}
-											/>
+												<input
+													type="number"
+													name="discountRateRange"
+													id="discount-rate-range"
+													placeholder="Enter discount rate range"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={
+														formState.pricing
+															.offerType
+															.fixedPrice.rate
+													}
+													onChange={(e) =>
+														setFormState(
+															(state) => {
+																return {
+																	...state,
+																	pricing: {
+																		...state.pricing,
+																		offerType:
+																			{
+																				...state
+																					.pricing
+																					.offerType,
+																				fixedPrice:
+																					{
+																						...state
+																							.pricing
+																							.offerType
+																							.fixedPrice,
+																						rate: e
+																							.target
+																							.value,
+																					},
+																			},
+																	},
+																};
+															}
+														)
+													}
+												/>
 											</div>
 											{/*<label
 												className="error-label text-sm"
@@ -936,42 +1030,46 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 										<div className="col-span-1 mt-1">
 											<div style={form2ErrorStyle}>
-											<input
-												type="number"
-												name="yield"
-												id="yield"
-												placeholder="Enter yield"
-												className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-												value={
-													formState.pricing.offerType
-														.fixedPrice.yield
-												}
-												onChange={(e) =>
-													setFormState((state) => {
-														return {
-															...state,
-															pricing: {
-																...state.pricing,
-																offerType: {
-																	...state
-																		.pricing
-																		.offerType,
-																	fixedPrice:
-																		{
-																			...state
-																				.pricing
-																				.offerType
-																				.fixedPrice,
-																			yield: e
-																				.target
-																				.value,
-																		},
-																},
-															},
-														};
-													})
-												}
-											/>
+												<input
+													type="number"
+													name="yield"
+													id="yield"
+													placeholder="Enter yield"
+													className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
+													value={
+														formState.pricing
+															.offerType
+															.fixedPrice.yield
+													}
+													onChange={(e) =>
+														setFormState(
+															(state) => {
+																return {
+																	...state,
+																	pricing: {
+																		...state.pricing,
+																		offerType:
+																			{
+																				...state
+																					.pricing
+																					.offerType,
+																				fixedPrice:
+																					{
+																						...state
+																							.pricing
+																							.offerType
+																							.fixedPrice,
+																						yield: e
+																							.target
+																							.value,
+																					},
+																			},
+																	},
+																};
+															}
+														)
+													}
+												/>
 											</div>
 											{/*<label
 												className="error-label text-sm"
@@ -987,7 +1085,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 								{formState.dealType === "BOND" ? (
 									<>
-										<div className="col-span-2 mt-1" style={form2ErrorStyle}>
+										<div
+											className="col-span-2 mt-1"
+											style={form2ErrorStyle}
+										>
 											<select
 												id="coupon-frequency"
 												name="couponFrequency"
@@ -1074,9 +1175,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											</div>
 										</div>
 
-										
 										{hiddenFieldTrigger.showCallOption ? (
-											<div className="col-span-2 mt-1" style={form2ErrorStyle}>
+											<div
+												className="col-span-2 mt-1"
+												style={form2ErrorStyle}
+											>
 												<input
 													type="text"
 													name="callOption"
@@ -1121,80 +1224,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 					{/*Third slide*/}
 					<div className="form-slide slide-3" ref={lastSlideRef}>
-						<div id="terms-heading">
-							<p className="py-2">Timing</p>
-						</div>
-
-						<div className="grid grid-cols-2 gap-4">
-							<div className="col-span-1 mt-1">
-								<input
-									type="text"
-									name="offerStart"
-									id="offer-start"
-									placeholder="Enter offer start date"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.timing.offerStart}
-									onFocus={(e) => (e.target.type = "date")}
-									onBlur={(e) => (e.target.type = "text")}
-									onChange={(e) => handleChange(e, "timing")}
-								/>
-							</div>
-							<div className="col-span-1 mt-1">
-								<input
-									type="text"
-									name="offerEnd"
-									id="offer-end"
-									placeholder="Enter Offer end data"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-									value={formState.timing.offerEnd}
-									onFocus={(e) => (e.target.type = "date")}
-									onBlur={(e) => (e.target.type = "text")}
-									onChange={(e) => handleChange(e, "timing")}
-								/>
-							</div>
-							<div className="col-span-1 mt-1">
-								<input
-									type="text"
-									name="allotmentDate"
-									id="allotment-date"
-									placeholder="Enter allotment date"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-									value={formState.timing.allotmentDate}
-									onFocus={(e) => (e.target.type = "date")}
-									onBlur={(e) => (e.target.type = "text")}
-									onChange={(e) => handleChange(e, "timing")}
-								/>
-							</div>
-							<div className="col-span-1 mt-1">
-								<input
-									type="text"
-									name="settlementDate"
-									id="settlement-date"
-									placeholder="Enter settlement date"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-									value={formState.timing.settlementDate}
-									onFocus={(e) => (e.target.type = "date")}
-									onBlur={(e) => (e.target.type = "text")}
-									onChange={(e) => handleChange(e, "timing")}
-								/>
-							</div>
-						</div>
+						
 
 						<div className="grid grid-cols-1 gap-4 mt-5">
-							<div className="col-span-12 mt-1">
-								<input
-									type="text"
-									name="maturityDate"
-									id="maturity-date"
-									placeholder="Enter maturity date"
-									className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-									value={formState.timing.maturityDate}
-									onFocus={(e) => (e.target.type = "date")}
-									onBlur={(e) => (e.target.type = "text")}
-									onChange={(e) => handleChange(e, "timing")}
-								/>
-							</div>
-							<hr className="border-1 border-gray-500 col-span-12" />
 							<div className="col-span-12 mt-1">
 								<input
 									type="text"
@@ -1294,9 +1326,22 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										<option value="C">C</option>
 									</select>
 								</div>
+
+								<div className="col-span-2 mt-5">
+									<Button
+										title="View offer summary"
+										type="submit"
+										style={{
+											visibility: state.lastSlideIn ? "visible" : "hidden",
+										}}
+										buttonClass="rounded submit-loan-request-button"
+										buttonDisabled={state.submitButtonIsDisabled}
+										handleClick={viewOfferSummary}
+									/>
+								</div>
 							</div>
 
-							<div className="col-span-12 text-left mt-5 form-slide-button">
+							<div className="col-span-12 text-left mt-10 form-slide-button">
 								<Button
 									title="Previous"
 									buttonClass="bg-white rounded"
@@ -1307,17 +1352,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 					</div>
 				</div>
 
-				<Button
+				{/*<Button
 					title="View offer summary"
 					type="submit"
 					style={{
-						marginTop: "15rem",
 						visibility: state.lastSlideIn ? "visible" : "hidden",
 					}}
 					buttonClass="rounded submit-loan-request-button mt-20"
 					buttonDisabled={state.submitButtonIsDisabled}
 					handleClick={viewOfferSummary}
-				/>
+				/>*/}
 			</form>
 		</>
 	);
