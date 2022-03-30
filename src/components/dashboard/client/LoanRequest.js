@@ -95,6 +95,14 @@ export default function LoanRequest() {
 	const handleSubmit = async () => {
 		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
 
+		for (let prop in formState) {
+
+			if (formState[prop] === "") {
+				alert.error("Empty field");
+				return
+			}
+		}
+
 		if (formState.dealType === "CP") {
 			const req = await dispatch(CPLoanOfferAction(cp(formState, currentUser)));
 
@@ -102,8 +110,6 @@ export default function LoanRequest() {
 
 
 			if (req.meta.requestStatus === "fulfilled") {
-
-				if (componentMounted.current) setIsLoading(false);
 
 				// Loan is created, Navigate to publish page
                 navigate("/client/offers/offer/publish");
@@ -117,8 +123,6 @@ export default function LoanRequest() {
 
             if (serverError.messageType === "network_error") {
             	if (componentMounted.current) setIsLoading(false);
-            	
-                setIsLoading(false);
 
                 alert(serverError.detail);
 
@@ -132,8 +136,6 @@ export default function LoanRequest() {
 			if (componentMounted.current) setIsLoading(true);
 			
 			if (req.meta.requestStatus === "fulfilled") {
-
-				if (componentMounted.current) setIsLoading(false);
                 
                 // Loan is created, Navigate to publish page
                 navigate("/client/offers/offer/publish");
@@ -147,8 +149,6 @@ export default function LoanRequest() {
 
             if (serverError.messageType === "network_error") {
             	if (componentMounted.current) setIsLoading(false);
-
-                setIsLoading(false);
 
                 alert(serverError.detail);
 
@@ -188,11 +188,11 @@ export default function LoanRequest() {
 		if (tenure === 0 || tenure < 0) {
 			alert.error("End date can not be the same as or less than start date!");
 
-			return "---"
+			return "***"
 		}
 
 
-		return tenure
+		return isNaN(tenure) === false && tenure;
 	}
 
 	return (
@@ -405,7 +405,12 @@ export default function LoanRequest() {
 					</div>
 
 					{/*Put modal here*/}
-					{showModal && (<ShowLoanSummary formState={formState} modal={{showModal, setShowModal}} />)}
+					{showModal && (<ShowLoanSummary 
+						formState={formState} 
+						modal={{showModal, setShowModal}} 
+						handleSubmit={handleSubmit}
+						CalculateLoanTenure={CalculateLoanTenure} 
+					/>)}
 				</section>
 			</OrderbookLayout>
 		</>
