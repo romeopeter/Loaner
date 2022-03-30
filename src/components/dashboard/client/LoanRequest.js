@@ -13,17 +13,22 @@ import Button from "../../Button";
 
 import { setServerMessage } from "../../../redux/messageSlice";
 
-import {cp, bond} from "../loan-request-data/requestData"
+import { cp, bond } from "../loan-request-data/requestData";
 
-import { CPLoanOfferAction, bondLoanOfferAction} from "../../../redux/loanSlice";
+import {
+	CPLoanOfferAction,
+	bondLoanOfferAction,
+} from "../../../redux/loanSlice";
 
 import ShowLoanSummary from "./modal/ShowLoanSummary";
 
 export default function LoanRequest() {
 	const pageName = "Loan request";
 	const alert = useAlert();
-	const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
-	const serverError = useSelector(state => state.message.server.message);
+	const currentOfferIsUpdated = useSelector(
+		(state) => state.loan.currentOffer
+	);
+	const serverError = useSelector((state) => state.message.server.message);
 
 	const [formState, setFormState] = useState({
 		dealType: "",
@@ -39,7 +44,7 @@ export default function LoanRequest() {
 			currency: "NGN",
 			value: "",
 			faceValue: "",
-			discountValue:"",
+			discountValue: "",
 			parValue: 1000,
 			minSubscription: "",
 		},
@@ -48,13 +53,13 @@ export default function LoanRequest() {
 			couponType: "",
 			benchmark: "",
 			couponFrequency: "",
-			callOption:"",
+			callOption: "",
 			offerType: {
 				name: "",
 				fixedPrice: {
 					rate: "", // Can be discount rate or rate range
 					yield: "", // Can be implied yield or yield type
-				}
+				},
 			},
 		},
 		timing: {
@@ -84,7 +89,7 @@ export default function LoanRequest() {
 	const userFullName = `${user.first_name} ${user.last_name}`;
 
 	const dispatch = useDispatch();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const requestContainerRef = createRef();
 	const componentMounted = useRef(true);
 
@@ -93,74 +98,74 @@ export default function LoanRequest() {
 	};
 
 	const handleSubmit = async () => {
-		const {user: currentUser} = JSON.parse(localStorage.getItem("USER"));
+		const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
 
 		for (let prop in formState) {
-
 			if (formState[prop] === "") {
 				alert.error("Empty field");
-				return
+				return;
 			}
 		}
 
 		if (formState.dealType === "CP") {
-			const req = await dispatch(CPLoanOfferAction(cp(formState, currentUser)));
+			const req = await dispatch(
+				CPLoanOfferAction(cp(formState, currentUser))
+			);
 
 			if (componentMounted.current) setIsLoading(true);
 
-
 			if (req.meta.requestStatus === "fulfilled") {
-
 				// Loan is created, Navigate to publish page
-                navigate("/client/offers/offer/publish");
-            } else {
-            	if (componentMounted.current) setIsLoading(false);
+				navigate("/client/offers/offer/publish");
+			} else {
+				if (componentMounted.current) setIsLoading(false);
 
-            	if (serverError) alert(serverError.detail);
+				if (serverError) alert(serverError.detail);
 
-            	return
-            }
+				return;
+			}
 
-            if (serverError.messageType === "network_error") {
-            	if (componentMounted.current) setIsLoading(false);
+			if (serverError.messageType === "network_error") {
+				if (componentMounted.current) setIsLoading(false);
 
-                alert(serverError.detail);
+				alert(serverError.detail);
 
-                return
-            }
+				return;
+			}
 		}
 
 		if (formState.dealType === "BOND") {
-			const req = await dispatch(bondLoanOfferAction(bond(formState, currentUser)));
+			const req = await dispatch(
+				bondLoanOfferAction(bond(formState, currentUser))
+			);
 
 			if (componentMounted.current) setIsLoading(true);
-			
+
 			if (req.meta.requestStatus === "fulfilled") {
-                
-                // Loan is created, Navigate to publish page
-                navigate("/client/offers/offer/publish");
-            } else {
-            	if (componentMounted.current) setIsLoading(false);
+				// Loan is created, Navigate to publish page
+				navigate("/client/offers/offer/publish");
+			} else {
+				if (componentMounted.current) setIsLoading(false);
 
-            	if (serverError) alert(serverError.detail);
+				if (serverError) alert(serverError.detail);
 
-            	return
-            }
+				return;
+			}
 
-            if (serverError.messageType === "network_error") {
-            	if (componentMounted.current) setIsLoading(false);
+			if (serverError.messageType === "network_error") {
+				if (componentMounted.current) setIsLoading(false);
 
-                alert(serverError.detail);
+				alert(serverError.detail);
 
-                return
-            }
+				return;
+			}
 		}
 	};
 
 	const CalculateLoanTenure = (startDate, EndDate) => {
 		let tenure = "";
 
-		const currentDate = new Date()
+		const currentDate = new Date();
 		const loanStartDate = new Date(startDate);
 		const loanEndDate = new Date(EndDate);
 
@@ -186,14 +191,15 @@ export default function LoanRequest() {
 		 the same time as loan start date
 		 */
 		if (tenure === 0 || tenure < 0) {
-			alert.error("End date can not be the same as or less than start date!");
+			alert.error(
+				"End date can not be the same as or less than start date!"
+			);
 
-			return "***"
+			return "***";
 		}
 
-
 		return isNaN(tenure) === false && tenure;
-	}
+	};
 
 	return (
 		<>
@@ -289,8 +295,16 @@ export default function LoanRequest() {
 												<td>
 													<small>Type of offer</small>
 													<span>
-														{(formState.dealType !== "" && formState.dealType === "CP") && "Commercial paper"}
-														{(formState.dealType !== "" && formState.dealType === "BOND") && "Bond"}
+														{formState.dealType !==
+															"" &&
+															formState.dealType ===
+																"CP" &&
+															"Commercial paper"}
+														{formState.dealType !==
+															"" &&
+															formState.dealType ===
+																"BOND" &&
+															"Bond"}
 													</span>
 												</td>
 											</tr>
@@ -298,14 +312,17 @@ export default function LoanRequest() {
 												<td>
 													<small>Loan amount</small>
 													<span>
-														{formState.trancheSize.currency}{" "}
+														{
+															formState
+																.trancheSize
+																.currency
+														}{" "}
 														{formState.trancheSize
 															.minSubscription !==
 															"" &&
 															formState
 																.trancheSize
-																.minSubscription
-														}
+																.minSubscription}
 													</span>
 												</td>
 											</tr>
@@ -322,7 +339,14 @@ export default function LoanRequest() {
 											<tr>
 												<td>
 													<small>Tenor</small>
-													<span>{CalculateLoanTenure(formState.timing.offerStart, formState.timing.offerEnd)}</span>
+													<span>
+														{CalculateLoanTenure(
+															formState.timing
+																.offerStart,
+															formState.timing
+																.offerEnd
+														)}
+													</span>
 												</td>
 											</tr>
 											<tr>
@@ -405,12 +429,14 @@ export default function LoanRequest() {
 					</div>
 
 					{/*Put modal here*/}
-					{showModal && (<ShowLoanSummary 
-						formState={formState} 
-						modal={{showModal, setShowModal}} 
-						handleSubmit={handleSubmit}
-						CalculateLoanTenure={CalculateLoanTenure} 
-					/>)}
+					{showModal && (
+						<ShowLoanSummary
+							formState={formState}
+							modal={{ showModal, setShowModal }}
+							handleSubmit={handleSubmit}
+							CalculateLoanTenure={CalculateLoanTenure}
+						/>
+					)}
 				</section>
 			</OrderbookLayout>
 		</>
