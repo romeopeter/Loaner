@@ -519,7 +519,7 @@ export default function PublishOffer({ children, ...props }) {
 						<div
 							id="save-as-checkboxes"
 							className="grid grid-cols-2 gap-4"
-							style={{justifyItems: "center"}}
+							// style={{justifyItems: "center"}}
 						>
 							<div className="col-span-2 sm:col-span-1 checkboxes">
 								<input
@@ -538,7 +538,7 @@ export default function PublishOffer({ children, ...props }) {
 								</label>
 							</div>
 
-							<div className="col-span-2 sm:col-span-1 checkboxes">
+							<div className="col-span-2 sm:col-span-1 text-right checkboxes">
 								<input
 									type="checkbox"
 									id="save-as-now-coming"
