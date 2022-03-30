@@ -2,6 +2,8 @@ import React, { useState, createRef, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useAlert } from "react-alert";
+
 import OrderbookLayout from "../../OrderbookLayout";
 import RequestForm from "./RequestForm";
 import DocumentHead from "../../DocumentHead";
@@ -19,7 +21,7 @@ import ShowLoanSummary from "./modal/ShowLoanSummary";
 
 export default function LoanRequest() {
 	const pageName = "Loan request";
-
+	const alert = useAlert();
 	const currentOfferIsUpdated = useSelector(state => state.loan.currentOffer)
 	const serverError = useSelector(state => state.message.server.message);
 
@@ -155,6 +157,44 @@ export default function LoanRequest() {
 		}
 	};
 
+	const CalculateLoanTenure = (startDate, EndDate) => {
+		let tenure = "";
+
+		const currentDate = new Date()
+		const loanStartDate = new Date(startDate);
+		const loanEndDate = new Date(EndDate);
+
+		// Start Date cant be before the current year
+		/*if (loanStartDate.getTime() === currentDate.getFullYear()) {
+			alert.error("Loan start year must be the current year");
+
+			return
+		}*/
+
+		/*
+		 Get loan tenure. Time difference is calculated and divided by 
+		 number of miliseconds in a day to get day difference which
+		 becomes the tenure
+		*/
+		const timeDifference = loanEndDate.getTime() - loanStartDate.getTime();
+		const daysDiffernce = timeDifference / (1000 * 60 * 60 * 24);
+		tenure = daysDiffernce;
+
+		/*
+		 End date can't be the same as start date.
+		 If the the difference is days is 0 then loan end date is set to
+		 the same time as loan start date
+		 */
+		if (tenure === 0 || tenure < 0) {
+			alert.error("End date can not be the same as or less than start date!");
+
+			return "---"
+		}
+
+
+		return tenure
+	}
+
 	return (
 		<>
 			<DocumentHead title={pageName} />
@@ -282,7 +322,7 @@ export default function LoanRequest() {
 											<tr>
 												<td>
 													<small>Tenor</small>
-													<span>180 days</span>
+													<span>{CalculateLoanTenure(formState.timing.offerStart, formState.timing.offerEnd)}</span>
 												</td>
 											</tr>
 											<tr>
