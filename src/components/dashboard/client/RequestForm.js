@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, useEffect, createRef } from "react";
 
 import { useAlert } from "react-alert";
 
@@ -48,57 +48,55 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			alert.error(checkFieldsFunc.errorMessage);
 			return;
 		} else {*/
-			let isSlidedIn =
-				secondSlideRef.current.classList.toggle("slide-out");
+		let isSlidedIn = secondSlideRef.current.classList.toggle("slide-out");
 
-			if (isSlidedIn) {
-				setState((state) => {
-					return {
-						...state,
-						firstSlideIn: false,
-						secondSlideIn: true,
-					};
-				});
-			} else {
-				setState((state) => {
-					return {
-						...state,
-						firstSlideIn: true,
-						secondSlideIn: false,
-					};
-				});
-			}
+		if (isSlidedIn) {
+			setState((state) => {
+				return {
+					...state,
+					firstSlideIn: false,
+					secondSlideIn: true,
+				};
+			});
+		} else {
+			setState((state) => {
+				return {
+					...state,
+					firstSlideIn: true,
+					secondSlideIn: false,
+				};
+			});
+		}
 		// }
 	};
 
 	const handleLastFormSlide = () => {
-		const checkFieldsFunc = form2Validation(formState, setState);
+		// const checkFieldsFunc = form2Validation(formState, setState);
 
 		/*if (checkFieldsFunc.isEmpty) {
 			alert.error(checkFieldsFunc.errorMessage);
 			return;
 		} else {*/
-			const isSlidedIn =
-				lastSlideRef.current.classList.toggle("slide-out");
+		const isSlidedIn = lastSlideRef.current.classList.toggle("slide-out");
 
-			if (isSlidedIn) {
-				setState((state) => {
-					return {
-						...state,
-						submitButtonIsDisabled: false,
-						lastSlideIn: true,
-						secondSlideIn: false,
-					};
-				});
-			} else {
-				setState((state) => {
-					return {
-						...state,
-						submitButtonIsDisabled: true,
-						lastSlideIn: false,
-					};
-				});
-			}
+		if (isSlidedIn) {
+			setState((state) => {
+				return {
+					...state,
+					submitButtonIsDisabled: false,
+					lastSlideIn: true,
+					secondSlideIn: false,
+				};
+			});
+		} else {
+			setState((state) => {
+				return {
+					...state,
+					submitButtonIsDisabled: true,
+					lastSlideIn: false,
+				};
+			});
+		}
 		// }
 	};
 
@@ -220,12 +218,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		These are tweaks to extend form slide parent.
 		Not really the best way but needed to be done
 	*/
+	const firstSlideIsHidden =
+		state.secondSlideIn === true || state.lastSlideIn === true;
 
-	const firstSlideIsHidden = (state.secondSlideIn === true || state.lastSlideIn === true);
-	
 	const secondSlideIsHidden = state.lastSlideIn === true;
 	const secondSlideWillShow =
-		state.lastSlideIn === false && (formState.dealType === "BOND" || formState.dealType === "CP");
+		state.lastSlideIn === false &&
+		(formState.dealType === "BOND" || formState.dealType === "CP");
 
 	const form1ErrorStyle = {
 		border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
@@ -237,10 +236,103 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
 	};
 
-	
 	const formHeightstyle = {
-		height: state.firstSlideIn ? "900px" : state.lastSlideIn ? "650px" : "1195px"
+		height: state.firstSlideIn
+			? "900px"
+			: state.lastSlideIn
+			? "650px"
+			: "1195px",
 	};
+
+	/**
+	 * Loan offer calculations
+	 * */
+
+	const discountRateValue = formState.pricing.offerType.fixedPrice.rate;
+	const offerFaceValueValue = formState.trancheSize.faceValue;
+	const startDateValue = formState.timing.offerStart;
+	const EndDateValue = formState.timing.offerEnd;
+
+	useEffect(() => {
+		const loanOfferCalculation = (
+			discountRate,
+			faceValue,
+			startDate,
+			EndDate
+		) => {
+			let discountValue = "";
+			let offerYield = "";
+
+			const currentYear = new Date().getFullYear();
+			const currentDate = new Date(`${currentYear}/1/1`);
+
+			const loanStartDate = new Date(startDate);
+			const loanEndDate = new Date(EndDate);
+
+			const startDateCurrentDateDiff =
+				(currentDate.getTime() - loanStartDate.getTime()) /
+				(1000 * 60 * 60 * 24);
+			const EndDateCurrentDateDiff =
+				(currentDate.getTime() - loanEndDate.getTime()) /
+				(1000 * 60 * 60 * 24);
+
+			// Get offer discount
+			const firstPart =
+				discountRate * faceValue * (startDateCurrentDateDiff / 365);
+			const secondPart =
+				(EndDateCurrentDateDiff / 366) * discountRate * faceValue;
+			const offerDiscount = firstPart + secondPart;
+
+			// Get discount value
+			discountValue = faceValue - offerDiscount;
+
+			// Get offer yield
+			offerYield =
+				discountRate / (startDateCurrentDateDiff / 366) +
+				EndDateCurrentDateDiff / 365 -
+				1;
+
+			// Set discount value and offer yield
+			if (
+				isNaN(discountValue) === false &&
+				isNaN(offerYield) === false
+			) {
+				setFormState((state) => {
+
+					return {
+						...state,
+						trancheSize: {
+							...state.trancheSize,
+							discountValue: Number(discountValue.toFixed(3)),
+						},
+						pricing: {
+							...state.pricing,
+							offerType: {
+								...state.pricing.offerType,
+								fixedPrice: {
+									...state.pricing.offerType.fixedPrice,
+									yield: Number(offerYield.toFixed(3)),
+								},
+							},
+						},
+					};
+				});
+			}
+		};
+
+		loanOfferCalculation(
+			discountRateValue,
+			offerFaceValueValue,
+			startDateValue,
+			EndDateValue
+		);
+	}, [
+		setFormState,
+		EndDateValue,
+		discountRateValue,
+		offerFaceValueValue,
+		startDateValue,
+	]);
 
 	return (
 		<>
@@ -251,12 +343,15 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				style={formHeightstyle}
 			>
 				<div id="loan-request-steps">
-
 					{/*First slide*/}
 					<div
 						id="general-issuer-terms"
 						className="form-slide slide-1"
-						style={{visibility: firstSlideIsHidden ? "hidden" : "visible"}}
+						style={{
+							visibility: firstSlideIsHidden
+								? "hidden"
+								: "visible",
+						}}
 					>
 						<div id="terms-heading">
 							<h1>New Offer</h1>
@@ -381,7 +476,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 
 							{/*Tranche terms*/}
-							<div id="tranche-terms" className="col-span-12 mt-1">
+							<div
+								id="tranche-terms"
+								className="col-span-12 mt-1"
+							>
 								<div className="grid grid-cols-2 gap-4">
 									<div
 										className="col-span-2 mt-1"
@@ -453,7 +551,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						style={{
 							visibility: secondSlideIsHidden
 								? "hidden"
-								:"visible"
+								: "visible",
 						}}
 					>
 						{/*Timing*/}
@@ -475,7 +573,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) => handleChange(e, "timing")}
 								/>
 							</div>
-
 
 							<div className="col-span-1 mt-1">
 								<input
@@ -578,14 +675,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											}
 										/>
 									</div>
-									{/*<label
+									<label
 										className="error-label text-sm"
 										htmlFor="face-value"
 										className="text-gray-300"
 									>
-										Value shouldn't be more than two
-										digits and 2 decimals. e.g: 40.01
-									</label>*/}
+										Value shouldn't be more than 4 digits
+										and 2 decimals. e.g: 1000.01
+									</label>
 								</div>
 
 								<div className="col-span-1 mt-1">
@@ -600,19 +697,19 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												formState.trancheSize
 													.discountValue
 											}
-											onChange={(e) =>
+											readOnly={true}
+											/*onChange={(e) =>
 												handleChange(e, "trancheSize")
-											}
+											}*/
 										/>
 									</div>
-									{/*<label
+									<label
 										className="error-label text-sm"
 										htmlFor="tranche-value"
 										className="text-gray-300"
 									>
-										Value shouldn't be more than two
-										digits and 2 decimals. e.g: 40.01
-									</label>*/}
+										Discount value is read only is implicity determined.
+									</label>
 								</div>
 
 								<div className="col-span-1 mt-1">
@@ -793,20 +890,24 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													}
 												/>
 											</div>
-											{/*<label
+											<label
 												className="error-label text-sm"
 												htmlFor="benchmark"
 												className="text-gray-300"
 											>
-												Value shouldn't be more than 3 digits
-												e.g: 100
-											</label>*/}
+												Value shouldn't be more than 3
+												digits e.g: 100
+											</label>
 										</div>
 									</>
 								) : null}
 
 								<div
-									className={`${formState.dealType === "BOND" ? "col-span-1" : "col-span-2"} mt-1`}
+									className={`${
+										formState.dealType === "BOND"
+											? "col-span-1"
+											: "col-span-2"
+									} mt-1`}
 									style={form2ErrorStyle}
 								>
 									<select
@@ -835,7 +936,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 
 								<div
-									className={`${formState.dealType === "BOND" ? "col-span-1" : "col-span-2"} mt-1`}
+									className={`${
+										formState.dealType === "BOND"
+											? "col-span-1"
+											: "col-span-2"
+									} mt-1`}
 									style={form2ErrorStyle}
 								>
 									<select
@@ -907,14 +1012,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													}
 												/>
 											</div>
-											{/*<label
+											<label
 												className="error-label text-sm"
 												htmlFor="discount-rate"
 												className="text-gray-300"
 											>
-												Value shouldn't be more than 4 digits
-												e.g: 1000
-											</label>*/}
+												Value shouldn't be more than 4
+												digits e.g: 1000
+											</label>
 										</div>
 
 										<div className="col-span-1 mt-1">
@@ -960,14 +1065,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													}
 												/>
 											</div>
-											{/*<label
+											<label
 												className="error-label text-sm"
 												htmlFor="implied-yield"
 												className="text-gray-300"
 											>
-												Value shouldn't be more than 4 digits
-												e.g: 1000
-											</label>*/}
+												Value shouldn't be more than 4
+												digits e.g: 1000
+											</label>
 										</div>
 									</>
 								) : null}
@@ -1018,14 +1123,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													}
 												/>
 											</div>
-											{/*<label
+											<label
 												className="error-label text-sm"
 												htmlFor="discount-rate-range"
 												className="text-gray-300"
 											>
-												Value shouldn't be more than 3 digits
-												e.g: 100
-											</label>*/}
+												Value shouldn't be more than 3
+												digits e.g: 100
+											</label>
 										</div>
 
 										<div className="col-span-1 mt-1">
@@ -1041,7 +1146,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 															.offerType
 															.fixedPrice.yield
 													}
-													onChange={(e) =>
+													readOnly={true}
+													/*onChange={(e) =>
 														setFormState(
 															(state) => {
 																return {
@@ -1068,17 +1174,16 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																};
 															}
 														)
-													}
+													}*/
 												/>
 											</div>
-											{/*<label
+											<label
 												className="error-label text-sm"
 												htmlFor="yield"
 												className="text-gray-300"
 											>
-												Value shouldn't be more than 4 digits
-												e.g: 1000
-											</label>*/}
+												Offer yield value is read only and is implicitly determined.
+											</label>
 										</div>
 									</>
 								) : null}
@@ -1224,8 +1329,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 					{/*Third slide*/}
 					<div className="form-slide slide-3" ref={lastSlideRef}>
-						
-
 						<div className="grid grid-cols-1 gap-4 mt-5">
 							<div className="col-span-12 mt-1">
 								<input
@@ -1332,10 +1435,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										title="View offer summary"
 										type="submit"
 										style={{
-											visibility: state.lastSlideIn ? "visible" : "hidden",
+											visibility: state.lastSlideIn
+												? "visible"
+												: "hidden",
 										}}
 										buttonClass="rounded submit-loan-request-button"
-										buttonDisabled={state.submitButtonIsDisabled}
+										buttonDisabled={
+											state.submitButtonIsDisabled
+										}
 										handleClick={viewOfferSummary}
 									/>
 								</div>
@@ -1351,17 +1458,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 					</div>
 				</div>
-
-				{/*<Button
-					title="View offer summary"
-					type="submit"
-					style={{
-						visibility: state.lastSlideIn ? "visible" : "hidden",
-					}}
-					buttonClass="rounded submit-loan-request-button mt-20"
-					buttonDisabled={state.submitButtonIsDisabled}
-					handleClick={viewOfferSummary}
-				/>*/}
 			</form>
 		</>
 	);
