@@ -7,7 +7,8 @@ export default function ShowLoanSummary({
 	handleSubmit,
 	userFullName,
 	isLoading,
-	modal
+	modal,
+	CalculateLoanTenure
 }) {
 
 	const {showModal, setShowModal} = modal;
@@ -81,7 +82,7 @@ export default function ShowLoanSummary({
 							<tr>
 								<td>
 									<small>Tenor</small>
-									<span>180 days</span>
+									<span>{CalculateLoanTenure(formState.timing.offerStart, formState.timing.offerEnd)}</span>
 								</td>
 							</tr>
 							<tr>
