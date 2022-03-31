@@ -544,7 +544,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 					</div>
 
-					{/*Second slide*/}
+					{/*loan request -- 2nd step*/}
 					<div
 						className="form-slide slide-2"
 						ref={secondSlideRef}
