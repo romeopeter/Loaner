@@ -116,7 +116,7 @@ export default function LoanRequest() {
 
             if (req.meta.requestStatus === "fulfilled") {
                 // Loan is created, Navigate to publish page
-                navigate("/client/offers/offer/publish");
+                navigate("/broker/dashboard/loan-offer/select-investor");
             } else {
                 if (componentMounted.current) setIsLoading(false);
 
@@ -143,7 +143,7 @@ export default function LoanRequest() {
 
             if (req.meta.requestStatus === "fulfilled") {
                 // Loan is created, Navigate to publish page
-                navigate("/client/offers/offer/publish");
+                navigate("/broker/dashboard/loan-offer/select-investor");
             } else {
                 if (componentMounted.current) setIsLoading(false);
 
