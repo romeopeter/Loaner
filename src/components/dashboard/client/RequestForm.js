@@ -303,7 +303,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						...state,
 						trancheSize: {
 							...state.trancheSize,
-							discountValue: Number(discountValue.toFixed(3)),
+							discountValue: Number(discountValue.toFixed(2)),
 						},
 						pricing: {
 							...state.pricing,
@@ -311,7 +311,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								...state.pricing.offerType,
 								fixedPrice: {
 									...state.pricing.offerType.fixedPrice,
-									yield: Number(offerYield.toFixed(3)),
+									yield: Number(offerYield.toFixed(2)),
 								},
 							},
 						},
