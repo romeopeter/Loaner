@@ -73,10 +73,10 @@ export default function InvestorDashboard() {
 					<div id="offers">
 						<div
 							id="offer-tabs"
-							className="flex flex-col sm:flex-row justify-start items-center"
+							className="flex flex-row justify-center sm:justify-start items-center h-20 px-5"
 						>
 							<h3
-								className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60 pt-2"
+								className="header cursor-pointer text-md sm:text-2xl text-center sm:text-left w-full md:w-60 pt-2 mx-0"
 								onClick={() => setOfferStatus("open")}
 							>
 								<span
@@ -90,7 +90,7 @@ export default function InvestorDashboard() {
 								</span>
 							</h3>
 							<h3
-								className="header cursor-pointer text-xl sm:text-3xl w-full md:w-60"
+								className="header cursor-pointer text-md sm:text-2xl text-center sm:text-left w-full md:w-60 mx-0"
 								onClick={() => setOfferStatus("coming soon")}
 							>
 								<span
@@ -100,12 +100,12 @@ export default function InvestorDashboard() {
 											: "text-gray-400"
 									}
 								>
-									Coming soon
+									Incoming offers
 								</span>
 							</h3>
 						</div>
 						{offerStatus === "open" && (<ShowAllOpenedOffers openOffers={openOffers} />)}
-						{offerStatus === "coming soon" && (<ShowAllOpenedOffers openOffers={incomingOffers} />)}
+						{offerStatus === "coming soon" && (<ShowAllIncomingOffers incomingOffers={incomingOffers} />)}
 					</div>
 				</section>
 			</OrderbookLayout>
