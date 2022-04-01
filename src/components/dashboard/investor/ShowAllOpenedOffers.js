@@ -34,13 +34,9 @@ export default function ShowAllOpenedOffers({ openOffers }) {
 	};
 
 	return (
-		<div className="mb-5"> 
+		<div className="mb-5">
 			<div id="table-container" style={{ overflowX: "auto" }}>
-				{items.length === 0 ? (
-					<div className="bg-white text-center h-60">
-						<h5 className="h-full flex justify-center items-center text-2xl">You have no open offers</h5>
-					</div>
-				) : (
+				{items.length > 0 ? (
 					<>
 						<div
 							id="table-action"
@@ -132,6 +128,12 @@ export default function ShowAllOpenedOffers({ openOffers }) {
 							</tbody>
 						</table>
 					</>
+				) : (
+					<div className="bg-white text-center h-60">
+						<h5 className="h-full flex justify-center items-center text-2xl">
+							You have no open offers
+						</h5>
+					</div>
 				)}
 			</div>
 
