@@ -10,6 +10,7 @@ import {
     loanRequestCP,
     loanRequestBond,
     getOffers,
+    editOffers,
     loanRequestAddInvestor,
     loanRequestPublish,
 } from "../services/loan.service.js";
@@ -41,7 +42,7 @@ export const bondLoanOfferAction = createAsyncThunk(
 );
 
 export const getOffersAction = createAsyncThunk(
-    "loan/getOffers",
+    "loan/getOffersAction",
     async (thunkAPI) => {
         const res = await getOffers();
         // const dispatch = thunkAPI.dispatch;
@@ -52,10 +53,22 @@ export const getOffersAction = createAsyncThunk(
     }
 );
 
+export const EditOffersAction = createAsyncThunk(
+    "loan/editOffersAction",
+    async (data, thunkAPI) => {
+        const res = await editOffers(data);
+
+        const dispatch = thunkAPI.dispatch;
+
+        handleRequestError(res, dispatch);
+
+        if (res.status === 200 || res.status === 201) return res.data;
+    }
+);
+
 export const AddInvestorsAction = createAsyncThunk(
     "loan/AddInvestors",
     async (arg, thunkAPI) => {
-        console.log(arg);
         const {loanOfferId: id, data} = arg;
         const res = await loanRequestAddInvestor(id, data);
         const dispatch = thunkAPI.dispatch;
