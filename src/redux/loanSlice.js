@@ -10,7 +10,8 @@ import {
     loanRequestCP,
     loanRequestBond,
     getOffers,
-    editOffers,
+    getOffer,
+    editOffer,
     loanRequestAddInvestor,
     loanRequestPublish,
 } from "../services/loan.service.js";
@@ -53,11 +54,23 @@ export const getOffersAction = createAsyncThunk(
     }
 );
 
-export const EditOffersAction = createAsyncThunk(
-    "loan/editOffersAction",
-    async (data, thunkAPI) => {
-        const res = await editOffers(data);
+export const getOfferAction = createAsyncThunk(
+    "loan/getOfferAction",
+    async (thunkAPI) => {
+        const res = await getOffers();
+        const dispatch = thunkAPI.dispatch;
 
+        handleRequestError(res, dispatch);
+
+        if (res.status === 200) return res.data;
+    }
+);
+
+export const editOfferAction = createAsyncThunk(
+    "loan/editOfferAction",
+    async (data, thunkAPI) => {
+        const {deatType, id, requestData} = data;
+        const res = await editOffer(deatType, id, requestData);
         const dispatch = thunkAPI.dispatch;
 
         handleRequestError(res, dispatch);
@@ -96,6 +109,7 @@ export const loanSlice = createSlice({
     initialState: {
         offers: [],
         currentOffer: null,
+        updatedOffer: null,
     },
     reducers: {
         createLoan: (state, action) => {
@@ -139,6 +153,34 @@ export const loanSlice = createSlice({
         [getOffersAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.offers = payload;
+
+            console.log(state.offers);
+        },
+
+        // GET OFFER
+        [getOfferAction.pending]: (state, action) => {
+            console.log("Pending");
+        },
+        [getOfferAction.rejected]: (state, action) => {
+            console.log("Rejected");
+        },
+        [getOfferAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state.currentOffer = payload;
+
+            console.log(state.offers);
+        },
+
+        // EDIT OFFER
+        [editOfferAction.pending]: (state, action) => {
+            console.log("Pending");
+        },
+        [editOfferAction.rejected]: (state, action) => {
+            console.log("Rejected");
+        },
+        [editOfferAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state.updatedOffer = payload;
 
             console.log(state.offers);
         },
