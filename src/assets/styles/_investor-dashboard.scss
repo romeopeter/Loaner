@@ -42,6 +42,20 @@
 				}
 			}
 		}
+
+		#offer-status {
+			table {
+				tbody {
+					tr {
+						td#offer-title {
+							img {
+								display: none !important;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -193,6 +207,7 @@
 						&.offer-title {
 							width: 250px;
 							text-align: left !important;
+							padding-left: 3rem;
 
 							img {
 								display: inline-block !important;
