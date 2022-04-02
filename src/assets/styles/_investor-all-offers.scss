@@ -30,12 +30,21 @@ component in the _investor-offers.scss partial*/
 					column-span: 1;
 				}
 			}
+			
 			tbody {
 				tr {
 					td {
+
+						p {
+							font-size: 15px !important;
+							max-width: 650px;
+							width: 650px;
+							display: inline-block;
+						}
+
 						button {
 							&.open {
-								color: lightgreen !important;
+								color: $white !important;
 							}
 							&.coming-soon {
 								color: #d82c0d !important;
