@@ -69,7 +69,7 @@ export const getOfferAction = createAsyncThunk(
 export const editOfferAction = createAsyncThunk(
     "loan/editOfferAction",
     async (data, thunkAPI) => {
-        const {deatType, id, requestData} = data;
+        const { deatType, id, requestData } = data;
         const res = await editOffer(deatType, id, requestData);
         const dispatch = thunkAPI.dispatch;
 
@@ -82,7 +82,7 @@ export const editOfferAction = createAsyncThunk(
 export const AddInvestorsAction = createAsyncThunk(
     "loan/AddInvestors",
     async (arg, thunkAPI) => {
-        const {loanOfferId: id, data} = arg;
+        const { loanOfferId: id, data } = arg;
         const res = await loanRequestAddInvestor(id, data);
         const dispatch = thunkAPI.dispatch;
 
