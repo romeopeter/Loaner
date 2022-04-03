@@ -5,6 +5,14 @@ const getOffers = () => {
     return axios.get("/v1/loan_request/").catch((error) => console.log(error));
 };
 
+const getOffer = (dealType, id) => {
+    return axios.get(`/v1/loan_request/${dealType}/${id}`).catch((error) => error);
+};
+
+const editOffer = (dealType, id, data) => {
+    return axios.patch(`/v1/loan_request/${dealType}/${id}`, data).catch((error) => error);
+};
+
 const loanRequestCP = (data) => {
     return axios.post("/v1/loan_request/cp/", data).catch((error) => error);
 };
@@ -90,6 +98,8 @@ export {
     loanRequestCP,
     loanRequestBond,
     getOffers,
+    getOffer,
+    editOffer,
     loanRequestAddInvestor,
     loanRequestPublish,
 };
