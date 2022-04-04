@@ -99,6 +99,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
         const target = e.target;
         const name = target.name;
         const value = target.value;
+        const multiSelectValues = []
 
         if (value === "BOND") {
             setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
@@ -112,16 +113,37 @@ export default function RequestForm({ requestFormState, showSummary }) {
             setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
         }
 
-        if (fieldclassName) {
-            setFormState((state) => {
-                return {
-                    ...state,
-                    [fieldclassName]: {
-                        ...state[fieldclassName],
-                        [name]: value,
-                    },
-                };
-            });
+        if (e.target.type === "select-multiple") {
+
+            for (var i = 0; i < target.options.length; i++) {
+               if (target.options[i].selected) {
+                    multiSelectValues.push(target.options[i].value);
+               }
+            }
+
+            if (fieldclassName) {
+                setFormState(state => {
+                    return {
+                        ...state,
+                        [fieldclassName]: {
+                            ...state[fieldclassName],
+                            [name]: multiSelectValues
+                        }
+                    }
+                });
+            }
+        } else {
+            if (fieldclassName) {
+                setFormState((state) => {
+                    return {
+                        ...state,
+                        [fieldclassName]: {
+                            ...state[fieldclassName],
+                            [name]: value,
+                        },
+                    };
+                });
+            }
         }
 
         setFormState((state) => {
@@ -261,7 +283,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                     return
                 }
-/*
+
+                /*
                 if (formState[prop]["value"] === "") {
                     alert.error("Minimum subscription field can not be empty!");
                     setState((state) => ({ ...state, isValidated: true }));
@@ -333,8 +356,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
         height: state.firstSlideIn
             ? "900px"
             : state.lastSlideIn
-            ? "650px"
-            : "1195px",
+            ? "800px"
+            : "1300px",
     };
 
     /**
@@ -1454,8 +1477,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         Choose eligible investor
                                     </option>
                                     <option value="all">All</option>
-                                    <option value="retail-investor-only">
-                                        Retail investors only
+                                    <option value="high-network-investors">
+                                        High Network Investors
                                     </option>
                                     <option value="qualified-institutional-investors-only">
                                         Qualified institutional investor only
@@ -1471,18 +1494,17 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-2 mt-1">
+                                    <label htmlFor="name" className="text-white">Choose rating name</label>
                                     <select
                                         name="name"
                                         id="name"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+                                        multiple={true}
                                         value={formState.rating.name}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
                                     >
-                                        <option defaultValue="">
-                                            Choose rating name
-                                        </option>
                                         <option value="agusto">Agusto</option>
                                         <option value="gcr">GCR</option>
                                         <option value="fitch">Fitch</option>
@@ -1495,18 +1517,17 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 </div>
 
                                 <div className="col-span-2 mt-1">
+                                    <label htmlFor="scale" className="text-white">Choose rating scale</label>
                                     <select
                                         name="scale"
                                         id="scale"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
+                                        multiple={true}
                                         value={formState.rating.scale}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
                                     >
-                                        <option defaultValue="">
-                                            Choose rating scale
-                                        </option>
                                         <option value="AAA">AAA</option>
                                         <option value="AA">AA</option>
                                         <option value="A">A</option>
