@@ -86,7 +86,8 @@ export default function ShowAllOpenedOffers({ openOffers }) {
 												<img
 													src={offerImage}
 													alt=""
-													className="rounded h-10 w-10"
+													className="h-10 w-10 rounded mx-2"
+													id="offer-image"
 												/>
 												<span>{item.deal_name}</span>
 											</td>
@@ -130,8 +131,12 @@ export default function ShowAllOpenedOffers({ openOffers }) {
 					</>
 				) : (
 					<div className="bg-white text-center h-60">
-						<h5 className="h-full flex justify-center items-center text-2xl">
-							You have no open offers
+						<h5 className="h-full flex justify-center items-center text-2xl text-gray-400">
+							Loading open offers {""}
+							<i
+								className="fa fa-spinner fa-pulse fa-3x fa-fw"
+								style={{ fontSize: 20 }}
+							></i>
 						</h5>
 					</div>
 				)}
