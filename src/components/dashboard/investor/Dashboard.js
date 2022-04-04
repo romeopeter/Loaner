@@ -48,12 +48,11 @@ export default function AllOffers() {
 				);
 
 				if (req.meta.requestStatus === "fulfilled") {
-					const offersPayload = req.payload;
 
 					setPaginateState((state) => {
 						return {
 							...state,
-							list: offersPayload,
+							list: req.payload,
 							pages: Math.floor(req.payload.length / paginateState.perPage),
 						};
 					});
