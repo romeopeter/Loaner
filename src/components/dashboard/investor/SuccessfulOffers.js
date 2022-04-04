@@ -57,8 +57,8 @@ export default function SuccessfulBids() {
 						Offers
 					</Link>
 				</div>
-				<section id="orderbook-investor-successful-offers">
-					<div id="Succesful-offers">
+				<section id="orderbook-investor-successful-bids">
+					<div id="Succesful-bids">
 						<h3 id="header" className="py-10 text-lg sm:text-2xl pl-5 text-white">Succesful offers</h3>
 						<div id="table-container" style={{ overflowX: "auto" }}>
 							<div id="table-action" className="bg-white py-5 px-2 w-full">
@@ -80,26 +80,29 @@ export default function SuccessfulBids() {
 									{items.map((item, index) => {
 										return (
 											<tr key={index}>
-												<td className="bid-name">
-													<input
-														type="checkbox"
-														name="checkbox"
-														className="checkbox rounded"
-													/>
-													<img
-														src={offerImage}
-														alt=""
-														className="rounded h-10 w-10"
-													/>
-													<span>{item.bidName}</span>
+												<td className="offer-name">
+													<div>
+														<input
+															type="checkbox"
+															name="checkbox"
+															className="checkbox rounded"
+															title="checkbox"
+														/>
+														<img
+															src={offerImage}
+															alt=""
+															className="rounded h-10 w-10 hidden sm:block"
+														/>
+														<span>{item.bidName}</span>
+													</div>
 												</td>
-												<td>
-													<p>{item.bidDescription}</p>
+												<td className="offer-description">
+													<p className="">{item.bidDescription}</p>
 												</td>
-												<td>
+												<td className="table-btn">
 													<Button
 														title="View details"
-														buttonClass="bg-green-600 hover:bg-white hover:shadow"
+														buttonClass="bg-green-600 rounded-md hover:bg-white successful-btn"
 													/>
 												</td>
 											</tr>
