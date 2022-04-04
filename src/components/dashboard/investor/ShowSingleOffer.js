@@ -338,264 +338,264 @@ export default function SingleOffer() {
 					</div>
 					<div id="offer-table" className="mt-20">
 						<div>
-							
-								{offer === null ? (
-									<p className="text-center text-3xl font-bold">Loading...</p>
-								) : (
-									<table className="table-auto w-full border-collapse border border-slate-500">
-										<thead>
-											<tr>
-												<th></th>
-												<th></th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td className="border border-black">
-													<b>Issuer</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													{offer.deal_owner}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Dealer</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													Name of bank
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Issue rating</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													{offer.tranche_id.ratings.scale}{" "}
-													({offer.tranche_id.ratings.name}
-													)
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Issuer rating</b>
-												</td>
-												<td className="border border-black">
-													AAA (Agusto), AA (GCR)
-													{/*****/}
-												</td>
-												<td className="border border-black">
-													AAA (Agusto), / A+ (GCR)
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Series/Tranche</b>
-												</td>
-												<td className="border border-black">
-													1
-													{/*****/}
-												</td>
-												<td className="border border-black">
-													3
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Tenor</b>
-												</td>
-												<td className="border border-black">
-													90 days
-													{/*****/}
-												</td>
-												<td className="border border-black">
-													180 days
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Tenor (bond)</b>
-												</td>
-												<td className="border border-black">
-													5 years
-													{/*****/}
-												</td>
-												<td className="border border-black">
-													7 years
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Size</b>
-												</td>
-												<td className="border border-black">
-													{/*NGN 10 billion*/}
-													{
-														offer.tranche_id.size
-															.currency
-													}{" "}
-													{
-														offer.tranche_id.size
-															.minimum_subscription.amount
-													}
-												</td>
-												<td className="border border-black">
-													NGN 5 billion
-													{/*****/}
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Discount Rate</b>
-												</td>
-												<td className="border border-black text-red-600">
-													5.5%
-												</td>
-												<td className="border border-black text-red-600">
-													6%
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Implied Yield</b>
-												</td>
-												<td className="border border-black text-red-600">
-													5.75%
-												</td>
-												<td className="border border-black text-red-600">
-													6.25%
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Coupon range</b>
-												</td>
-												<td className="border border-black text-red-600">
-													10-10.5%
-												</td>
-												<td className="border border-black text-red-600">
-													11-11%
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Offer opens</b>
-												</td>
-												<td
-													className="border border-black text-red-600"
-													colSpan="2"
-												>
-													8 December 2021
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Offer closes</b>
-												</td>
-												<td
-													className="border border-black text-red-600"
-													colSpan="2"
-												>
-													15 December 2021
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Allotment date</b>
-												</td>
-												<td
-													className="border border-black text-red-600"
-													colSpan="2"
-												>
-													17 December 2021
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Settlement date</b>
-												</td>
-												<td
-													className="border border-black text-red-600"
-													colSpan="2"
-												>
-													21 December 2021
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black text-red-600">
-													<b>Maturity date</b>
-												</td>
-												<td
-													className="border border-black text-red-600"
-													colSpan="2"
-												>
-													21 December 2022
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Use of proceeds</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													General corporate purposes
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Minimum subscription</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													NGN 5 million
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Eligible investor</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													Qualified institutional
-													investors
-												</td>
-											</tr>
-											<tr>
-												<td className="border border-black">
-													<b>Tax consideration</b>
-												</td>
-												<td
-													className="border border-black"
-													colSpan="2"
-												>
-													Issued free and clear of
-													witholdin taxes
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								)}
+							{offer === null ? (
+								<p className="text-center text-3xl font-bold">
+									Loading...
+								</p>
+							) : (
+								<table className="table-auto w-full border-collapse border border-slate-500">
+									<thead>
+										<tr>
+											<th></th>
+											<th></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td className="border border-black">
+												<b>Issuer</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												{offer.deal_owner}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Dealer</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												Name of bank
+												{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Issue rating</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												{offer.tranche_id.ratings.scale}{" "}
+												({offer.tranche_id.ratings.name}
+												)
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Issuer rating</b>
+											</td>
+											<td className="border border-black">
+												AAA (Agusto), AA (GCR)
+												{/*****/}
+											</td>
+											<td className="border border-black">
+												AAA (Agusto), / A+ (GCR)
+												{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Series/Tranche</b>
+											</td>
+											<td className="border border-black">
+												1{/*****/}
+											</td>
+											<td className="border border-black">
+												3{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Tenor</b>
+											</td>
+											<td className="border border-black">
+												90 days
+												{/*****/}
+											</td>
+											<td className="border border-black">
+												180 days
+												{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Tenor (bond)</b>
+											</td>
+											<td className="border border-black">
+												5 years
+												{/*****/}
+											</td>
+											<td className="border border-black">
+												7 years
+												{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Size</b>
+											</td>
+											<td className="border border-black">
+												{/*NGN 10 billion*/}
+												{
+													offer.tranche_id.size
+														.currency
+												}{" "}
+												{
+													offer.tranche_id.size
+														.minimum_subscription
+														.amount
+												}
+											</td>
+											<td className="border border-black">
+												NGN 5 billion
+												{/*****/}
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Discount Rate</b>
+											</td>
+											<td className="border border-black text-red-600">
+												5.5%
+											</td>
+											<td className="border border-black text-red-600">
+												6%
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Implied Yield</b>
+											</td>
+											<td className="border border-black text-red-600">
+												5.75%
+											</td>
+											<td className="border border-black text-red-600">
+												6.25%
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Coupon range</b>
+											</td>
+											<td className="border border-black text-red-600">
+												10-10.5%
+											</td>
+											<td className="border border-black text-red-600">
+												11-11%
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Offer opens</b>
+											</td>
+											<td
+												className="border border-black text-red-600"
+												colSpan="2"
+											>
+												8 December 2021
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Offer closes</b>
+											</td>
+											<td
+												className="border border-black text-red-600"
+												colSpan="2"
+											>
+												15 December 2021
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Allotment date</b>
+											</td>
+											<td
+												className="border border-black text-red-600"
+												colSpan="2"
+											>
+												17 December 2021
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Settlement date</b>
+											</td>
+											<td
+												className="border border-black text-red-600"
+												colSpan="2"
+											>
+												21 December 2021
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black text-red-600">
+												<b>Maturity date</b>
+											</td>
+											<td
+												className="border border-black text-red-600"
+												colSpan="2"
+											>
+												21 December 2022
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Use of proceeds</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												General corporate purposes
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Minimum subscription</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												NGN 5 million
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Eligible investor</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												Qualified institutional
+												investors
+											</td>
+										</tr>
+										<tr>
+											<td className="border border-black">
+												<b>Tax consideration</b>
+											</td>
+											<td
+												className="border border-black"
+												colSpan="2"
+											>
+												Issued free and clear of
+												witholdin taxes
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							)}
 						</div>
 						<div
 							id="offer-signature"
@@ -709,8 +709,8 @@ export default function SingleOffer() {
 					)}
 
 					{/*Show all modals*/}
-					{modalState.bidIsAccepted && (<BidAccepted />)}
-					{modalState.bidIsRejected && (<BidRejected />)}
+					{modalState.bidIsAccepted && <BidAccepted />}
+					{modalState.bidIsRejected && <BidRejected />}
 				</section>
 			</OrderbookLayout>
 		</>
