@@ -40,6 +40,7 @@ import BrokerDashboard from './dashboard/broker/Dashboard';
 import NewClient from './dashboard/broker/NewClient';
 import AllClients from './dashboard/broker/AllClients';
 import CreateOffer from './dashboard/broker/CreateOffer';
+import EditBrokerOffer from './dashboard/broker/EditBrokerOffer';
 import NewOfferTiming from './dashboard/broker/NewOfferTiming';
 import LoanSummary from './dashboard/broker/LoanSummary';
 import AllLoans from './dashboard/broker/AllLoans';
@@ -356,6 +357,14 @@ export default function AppRoutes() {
                         element={
                             <RequireAuth>
                                 <LoanOfferPublished />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path='/broker/dashboard/edit-loan-offer/:id'
+                        element={
+                            <RequireAuth>
+                                <EditBrokerOffer />
                             </RequireAuth>
                         }
                     />
