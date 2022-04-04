@@ -7,7 +7,7 @@ import Button from "../../Button";
 import NavMenu from "../NavMenu";
 import offerImage from "../../../assets/images/offerImage.png";
 
-export default function BidComingSoon() {
+export default function BidComingSoon({incomingOffers}) {
 	const pageName = "Bid coming soon";
 
 	const modalContainerRef = createRef();
