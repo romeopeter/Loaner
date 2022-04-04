@@ -67,6 +67,12 @@ export default function ShowAllIncomingOffers({ incomingOffers }) {
 										name="checkbox"
 										className="checkbox rounded mr-5"
 									/>
+									<img
+										src={offerImage}
+										alt=""
+										className="h-10 w-10 rounded mx-2"
+										id="offer-image"
+									/>
 									<span>Name</span>
 								</th>
 								<th className="pl-5 py-5" colspan="2">
@@ -130,8 +136,12 @@ export default function ShowAllIncomingOffers({ incomingOffers }) {
 					</>
 				) : (
 					<div className="bg-white text-center h-60">
-						<h5 className="h-full flex justify-center items-center text-2xl">
-							You have no incoming offers
+						<h5 className="h-full flex justify-center items-center text-gray-400 text-2xl">
+							Loading incoming offers {""}
+							<i
+								className="fa fa-spinner fa-pulse fa-3x fa-fw"
+								style={{ fontSize: 20 }}
+							></i>
 						</h5>
 					</div>
 				)}
