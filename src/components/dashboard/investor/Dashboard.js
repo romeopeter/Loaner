@@ -35,7 +35,7 @@ export default function AllOffers() {
 
 	const [paginateState, setPaginateState] = useState({
 		list: [],
-		perPage: 0,
+		perPage: 9,
 		page: 0,
 		pages: 0,
 	});
@@ -54,8 +54,7 @@ export default function AllOffers() {
 						return {
 							...state,
 							list: offersPayload,
-							perPage: 9,
-							pages: Math.floor(req.payload.length / 9),
+							pages: Math.floor(req.payload.length / paginateState.perPage),
 						};
 					});
 				}
@@ -337,7 +336,7 @@ export default function AllOffers() {
 						<hr className="border-1 border-white mt-10" />
 
 						{/*Pagination*/}
-						{pages >= 1 ? (
+						{pages === paginateState.perPage ? (
 							<div id="paginate-offer-status">
 								<ReactPaginate
 									previousLabel={"<"}
