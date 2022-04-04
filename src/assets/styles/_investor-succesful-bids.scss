@@ -1,0 +1,99 @@
+#orderbook-investor-successful-bids {
+	#Succesful-bids {
+		#table-container {
+			&::-webkit-scrollbar {
+		 	 width: 10px;
+			}
+
+			/* Track */
+			&::-webkit-scrollbar-track {
+			  background: #f1f1f1; 
+			}
+			 
+			/* Handle */
+			&::-webkit-scrollbar-thumb {
+			  background: #888;
+			  border-radius: 10px; 
+			}
+
+			/* Handle on hover */
+			&::-webkit-scrollbar-thumb:hover {
+			  background: #555; 
+			}
+			
+			table {
+				tbody {
+					tr {
+						td {
+							&.offer-name {
+								// padding: 0 !important;
+
+								div {
+									width: 100%;
+									overflow-x: auto;
+									padding-left: 1rem;
+
+									span {
+										display: block !important;
+									}
+
+									img {
+										display: inline-block;
+										margin: 0 10px;
+										height: 40px;
+										width: 40px;
+										padding: 0 0 0 3rem;
+										border-radius: 20px;
+									}
+								}
+							}
+
+							&.offer-description {
+								width: 750px;
+							}
+
+							&.table-btn {
+								text-align: center;
+
+								.succesful-btn {
+									color: $white !important;
+
+									&:hover {
+										color: rgba(255, 0, 0, 0.7) !important;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		#paginate-bids {
+			padding: 20px;
+
+			.pagination {
+				display: flex;
+				justify-content: flex-end;
+
+				li {
+					color: $black;
+					font-family: $body-font;
+					font-size: 17px;
+					font-weight: bold;
+					height: 45px;
+					width: 45px;
+					border-radius: 22.5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+
+					&.selected {
+						background: $black;
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+}
