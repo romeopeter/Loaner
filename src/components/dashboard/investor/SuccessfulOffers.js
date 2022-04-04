@@ -45,14 +45,14 @@ export default function SuccessfulBids() {
 					<Link
 						to="/investor/dashboard"
 						id="home"
-						className="dropdown-container mr-5"
+						className="dropdown-container mr-5 underline"
 					>
-						Home
+						Dashboard
 					</Link>
 					<Link
 						to="/investor/offers"
 						id="offers"
-						className="dropdown-container"
+						className="dropdown-container underline"
 					>
 						Offers
 					</Link>

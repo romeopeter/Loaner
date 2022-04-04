@@ -45,7 +45,7 @@ export default function DeclinedBids() {
 						id="home"
 						className="dropdown-container mr-5 underline"
 					>
-						Home
+						Dashboard
 					</Link>
 					<Link
 						to="/investor/offers"
