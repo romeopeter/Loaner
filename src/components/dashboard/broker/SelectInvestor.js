@@ -4,6 +4,7 @@
 
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
@@ -64,6 +65,7 @@ export default function PublishOffer({ children, ...props }) {
         loanIsPublished: "",
         statusNotSet: ""
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Get all investors categories
@@ -237,6 +239,8 @@ export default function PublishOffer({ children, ...props }) {
 
     // Publish offer
     const publishOffer = () => {
+        setIsLoading(true);
+
         if (currentOffer !== null) {
             const {id} = currentOffer;
 
@@ -245,8 +249,6 @@ export default function PublishOffer({ children, ...props }) {
 
             return
         }
-
-        // assignInvestors(32);
     }
 
     // Get categories ID
@@ -353,19 +355,12 @@ export default function PublishOffer({ children, ...props }) {
                     class="bg-white px-16 py-10 shadow-md flex items-start"
                 >
                     <div id="loan" className="dropdown-container underline mr-5">
-                        View offers
-                        {/*<i
-                            className="fa fa-caret-down mr-5"
-                            aria-hidden="true"
-                        ></i>
-                        <div id="load-dropdown"></div>*/}
+                       <Link to="/Broker/dashboard">View offers</Link>
                     </div>
-                    {" "}
-                    {/*<div id="investor" className="dropdown-container">
-                        Investor{" "}
-                        <i className="fa fa-caret-down" aria-hidden="true"></i>
-                        <div id="investor-dropdown"></div>
-                    </div>*/}
+                    <span className="mr-5">|</span>
+                    <div id="investor" className="dropdown-container underline">
+                        <Link to={`/broker/dashboard/edit-loan-offer/${currentOffer !== null && currentOffer.id}`}>Edit offer</Link>
+                    </div>
                 </div>
                 <div id="orderbook-publish-offer">
                     <div id="offer-publication">
@@ -549,7 +544,7 @@ export default function PublishOffer({ children, ...props }) {
                                     htmlFor="save-as-now-coming"
                                     className="text-white text-xl"
                                 >
-                                    Do you want to save and send as now coming
+                                    Do you want to save and send as now coming soon
                                 </label>
                             </div>
                         </div>
@@ -568,9 +563,11 @@ export default function PublishOffer({ children, ...props }) {
                         <Button
                             title="Publish loan"
                             type="submit"
-                            buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
+                            buttonClass={`publish-loan bg-green-700 py-5 text-center mr-5`}
                             handleClick={publishOffer}
-                        />
+                        >
+                            Publish <i className={`${isLoading && "fa fa-spinner fa-pulse fa-1x fa-fw"}`}></i>
+                        </Button>
                     </div>
 
                     {/*Save list modal*/}

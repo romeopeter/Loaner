@@ -10,7 +10,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Button } from '@chakra-ui/react';
 
 const LoanOfferDraft = () => {
-    let { id } = useParams();
+    let { id, dealType } = useParams();
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -213,6 +213,8 @@ const LoanOfferDraft = () => {
                                                 borderRadius={'0'}
                                                 w={'120px'}
                                                 mt={['10px']}
+                                                as={Link}
+                                                to={`/broker/dashboard/edit-loan-offer/${id}/${dealType}`}
                                             >
                                                 Edit draft
                                             </Button>
