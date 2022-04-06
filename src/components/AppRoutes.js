@@ -345,7 +345,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/loan-offer-draft/:id'
+                        path='/broker/dashboard/loan-offer-draft/:id/:dealType'
                         element={
                             <RequireAuth>
                                 <LoanOfferDraft />
@@ -361,7 +361,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/edit-loan-offer/:id'
+                        path='/broker/dashboard/edit-loan-offer/:id/:dealType'
                         element={
                             <RequireAuth>
                                 <EditBrokerOffer />
