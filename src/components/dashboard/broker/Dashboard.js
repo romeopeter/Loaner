@@ -281,7 +281,7 @@ const BrokerDashboard = () => {
                                                         </Td>
                                                     ) : (
                                                         <Td>
-                                                            <Link to={`/broker/dashboard/loan-offer-draft/${data.id}`}>
+                                                            <Link to={`/broker/dashboard/loan-offer-draft/${data.id}/${data.deal_type}/`}>
                                                                 <button className='broker-cta'>View Draft</button>
                                                             </Link>
                                                         </Td>

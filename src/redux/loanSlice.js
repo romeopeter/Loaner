@@ -56,8 +56,10 @@ export const getOffersAction = createAsyncThunk(
 
 export const getOfferAction = createAsyncThunk(
     "loan/getOfferAction",
-    async (thunkAPI) => {
-        const res = await getOffers();
+    async (requestParams, thunkAPI) => {
+        const {id, dealType} = requestParams;
+
+        const res = await getOffer(dealType, id);
         const dispatch = thunkAPI.dispatch;
 
         handleRequestError(res, dispatch);

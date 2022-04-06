@@ -1,5 +1,5 @@
 import React, { useState, createRef, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useAlert } from "react-alert";
@@ -19,19 +19,33 @@ import {
     CPLoanOfferAction,
     bondLoanOfferAction,
     getOfferAction,
-    editOfferActon
+    editOfferActon,
 } from "../../../redux/loanSlice";
 
 import ShowLoanSummary from "./modals/ShowLoanSummary";
 
 export default function EditBrokerOffer() {
     const pageName = "Loan request";
-    const alert = useAlert();
-    const currentOfferIsUpdated = useSelector(
-        (state) => state.loan.currentOffer
-    );
 
+    const { user } = JSON.parse(localStorage.getItem("USER"));
+
+    const userFullName = `${user.first_name} ${user.last_name}`;
+
+    const alert = useAlert();
+    const dispatch = useDispatch();
+    const params = useParams();
+    const navigate = useNavigate();
+    const requestContainerRef = createRef();
+    const componentMounted = useRef(true);
+
+    const OfferIsUpdated = useSelector((state) => state.loan.currentOffer);
     const serverError = useSelector((state) => state.message.server.message);
+
+    const [summaryState, setSummaryState] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [formState, setFormState] = useState({
         dealType: "",
@@ -80,21 +94,6 @@ export default function EditBrokerOffer() {
             scale: "",
         },
     });
-
-    const [summaryState, setSummaryState] = useState(false);
-
-    const [showModal, setShowModal] = useState(false);
-
-    const [isLoading, setIsLoading] = useState(false);
-
-    const { user } = JSON.parse(localStorage.getItem("USER"));
-
-    const userFullName = `${user.first_name} ${user.last_name}`;
-
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const requestContainerRef = createRef();
-    const componentMounted = useRef(true);
 
     const handleSubmit = async () => {
         const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
@@ -162,8 +161,42 @@ export default function EditBrokerOffer() {
     };
 
     useEffect(() => {
-        // Get all current offer and populate fields
-    }, [])
+        (async function () {
+            const req = await dispatch(
+                getOfferAction({
+                    id: params.id,
+                    dealType: params.dealType.toLowerCase(),
+                })
+            );
+
+            // correct logic for checking status
+
+            if (req.meta.requestStatus === "fulfilled") {
+                console.log("Request successful");
+
+                console.log(req.payload);
+
+                // Store in component form state
+                setFormState((state) => {
+                    if (req.payload !== undefined && typeof req.payload === "object") {
+                        const payload = req.payload;
+                        
+                        return {
+                            ...state,
+                            dealType: payload["deal_type"],
+                            dealName: payload["deal_name"],
+                            dealOwner: payload["deal_owner"],
+                            dealTeam: payload['deal_team'],
+                            guarantor: payload['guarantor'],
+                        }
+                        
+                    } else {
+                        console.log("Network problem")
+                    }
+                });
+            }
+        })();
+    }, [dispatch, params.id, params.dealType]);
 
     const CalculateLoanTenure = (startDate, EndDate) => {
         let tenure = "";
@@ -214,20 +247,20 @@ export default function EditBrokerOffer() {
     const toggleDropdownClient = () => {
         if (isOpen.client) {
             setOpen({ ...isOpen, client: false });
-            return
+            return;
         }
-        
+
         setOpen({ investor: false, client: true });
-    }
+    };
 
     const toggleDropdownInvestor = () => {
         if (isOpen.investor) {
             setOpen({ ...isOpen, investor: false });
-            return
+            return;
         }
-        
+
         setOpen({ client: false, investor: true });
-    }
+    };
 
     return (
         <>
@@ -474,7 +507,7 @@ export default function EditBrokerOffer() {
                                                 buttonClass="col-span-2 bg-gray-400 rounded"
                                             />
                                         </div>
-                                       <Button
+                                        <Button
                                             type="submit"
                                             buttonClass="w-full bg-green-600 rounded"
                                             handleClick={() => handleSubmit()}

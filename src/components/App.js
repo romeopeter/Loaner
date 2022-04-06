@@ -43,9 +43,11 @@ function App() {
                     }));
 
                     const req = await dispatch(signOutAsync());
+
+                    console.log(req);
                 }
             }
-            checkTokenExpiration()
+            // checkTokenExpiration()
         }
     }, [])
 
