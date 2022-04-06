@@ -334,23 +334,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
         These are tweaks to extend form slide parent hide.
         Not really the best way but needed to be done
     */
-    const firstSlideIsHidden =
-        state.secondSlideIn === true || state.lastSlideIn === true;
+    let firstSlideIsHidden;
+    let secondSlideIsHidden;
+    let secondSlideWillShow;
 
-    const secondSlideIsHidden = state.lastSlideIn === true;
-    const secondSlideWillShow =
-        state.lastSlideIn === false &&
-        (formState.dealType === "BOND" || formState.dealType === "CP");
-
-    const form1ErrorStyle = {
-        border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
-    };
-    const form2ErrorStyle = {
-        border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
-    };
-    const form3ErrorStyle = {
-        border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
-    };
+    let form1ErrorStyle;
+    let form2ErrorStyle;
+    let form3ErrorStyle;
 
     const formHeightstyle = {
         height: state.firstSlideIn
@@ -360,14 +350,38 @@ export default function RequestForm({ requestFormState, showSummary }) {
             : "1300px",
     };
 
+    if (typeof formState === "object" && formState !== undefined) {
+        firstSlideIsHidden = state.secondSlideIn === true || state.lastSlideIn === true;
+        secondSlideIsHidden = state.lastSlideIn === true;
+        secondSlideWillShow = state.lastSlideIn === false && (formState.dealType === "BOND" || formState.dealType === "CP");
+
+        form1ErrorStyle = {
+            border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };
+        form2ErrorStyle = {
+            border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };
+        form3ErrorStyle = {
+            border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };   
+    }
+
     /**
      * Loan offer calculations
-     * */
+     * 
+    */
 
-    const discountRateValue = formState.pricing.offerType.fixedPrice.rate;
-    const offerFaceValueValue = formState.trancheSize.faceValue;
-    const startDateValue = formState.timing.offerStart;
-    const EndDateValue = formState.timing.offerEnd;
+    let discountRateValue;
+    let offerFaceValueValue;
+    let startDateValue;
+    let EndDateValue;
+
+    if (typeof formState === "object" && formState !== undefined) {
+        discountRateValue = formState.pricing.offerType.fixedPrice.rate;
+        offerFaceValueValue = formState.trancheSize.faceValue;
+        startDateValue = formState.timing.offerStart;
+        EndDateValue = formState.timing.offerEnd;
+    }
 
     useEffect(() => {
         const loanOfferCalculation = (
@@ -481,7 +495,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     name="dealType"
                                     id="dealType"
                                     className="mt-1 focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.dealType}
+                                    value={formState !== undefined && formState.dealType}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -503,7 +517,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="guarantor"
                                     placeholder="Enter guarantor name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.guarantor}
+                                    value={formState !== undefined && formState.guarantor}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -521,7 +535,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="dealName"
                                     placeholder="Enter deal name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.dealName}
+                                    value={formState !== undefined && formState.dealName}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -539,7 +553,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="projectName"
                                     placeholder="Enter project name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.projectName}
+                                    value={formState !== undefined && formState.projectName}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -557,7 +571,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="dealOwner"
                                     placeholder="Enter deal owner name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.dealOwner}
+                                    value={formState !== undefined && formState.dealOwner}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -575,7 +589,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="dealTeam"
                                     placeholder="Enter deal team name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.dealTeam}
+                                    value={formState !== undefined && formState.dealTeam}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
@@ -601,7 +615,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             name="status"
                                             id="status"
                                             className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-                                            value={formState.status}
+                                            value={formState !== undefined && formState.status}
                                             onChange={(e) => handleChange(e)}
                                         >
                                             <option defaultValue="">
@@ -636,7 +650,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             id="trancheName"
                                             placeholder="Enter tranche name"
                                             className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-                                            value={formState.trancheName}
+                                            value={formState !== undefined && formState.trancheName}
                                             onChange={(e) => handleChange(e)}
                                         />
                                     </div>
@@ -679,7 +693,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="offer-start"
                                     placeholder="Enter offer start date"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.timing.offerStart}
+                                    value={formState !== undefined && formState.timing.offerStart}
                                     onFocus={(e) => (e.target.type = "date")}
                                     onBlur={(e) => (e.target.type = "text")}
                                     onChange={(e) => handleChange(e, "timing")}
@@ -693,7 +707,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="offer-end"
                                     placeholder="Enter Offer end data"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    value={formState.timing.offerEnd}
+                                    value={formState !== undefined && formState.timing.offerEnd}
                                     onFocus={(e) => (e.target.type = "date")}
                                     onBlur={(e) => (e.target.type = "text")}
                                     onChange={(e) => handleChange(e, "timing")}
@@ -707,7 +721,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="allotment-date"
                                     placeholder="Enter allotment date"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                    value={formState.timing.allotmentDate}
+                                    value={formState !== undefined && formState.timing.allotmentDate}
                                     onFocus={(e) => (e.target.type = "date")}
                                     onBlur={(e) => (e.target.type = "text")}
                                     onChange={(e) => handleChange(e, "timing")}
@@ -721,7 +735,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="settlement-date"
                                     placeholder="Enter settlement date"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                    value={formState.timing.settlementDate}
+                                    value={formState !== undefined && formState.timing.settlementDate}
                                     onFocus={(e) => (e.target.type = "date")}
                                     onBlur={(e) => (e.target.type = "text")}
                                     onChange={(e) => handleChange(e, "timing")}
@@ -736,7 +750,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 id="maturity-date"
                                 placeholder="Enter maturity date"
                                 className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                value={formState.timing.maturityDate}
+                                value={formState !== undefined && formState.timing.maturityDate}
                                 onFocus={(e) => (e.target.type = "date")}
                                 onBlur={(e) => (e.target.type = "text")}
                                 onChange={(e) => handleChange(e, "timing")}
@@ -758,7 +772,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="currency"
                                         id="currency"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                        value={formState.trancheSize.currency}
+                                        value={formState !== undefined && formState.trancheSize.currency}
                                         onChange={(e) =>
                                             handleChange(e, "trancheSize")
                                         }
@@ -780,7 +794,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             placeholder="Enter face value"
                                             className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                             value={
-                                                formState.trancheSize.faceValue
+                                                formState !== undefined && formState.trancheSize.faceValue
                                             }
                                             onChange={(e) =>
                                                 handleChange(e, "trancheSize")
@@ -788,9 +802,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         />
                                     </div>
                                     <label
-                                        className="error-label text-sm"
                                         htmlFor="face-value"
-                                        className="text-gray-300"
+                                        className="text-gray-300 error-label text-sm"
                                     >
                                         Value shouldn't be more than 4 digits
                                         and 2 decimals. e.g: 1000.01
@@ -806,7 +819,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             id="tranche-value"
                                             className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                             value={
-                                                formState.trancheSize
+                                                formState !== undefined && formState.trancheSize
                                                     .discountValue
                                             }
                                             readOnly={true}
@@ -816,9 +829,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         />
                                     </div>
                                     <label
-                                        className="error-label text-sm"
                                         htmlFor="tranche-value"
-                                        className="text-gray-300"
+                                        className="text-gray-300 error-label text-sm"
                                     >
                                         Discount value is read only is implicity determined.
                                     </label>
@@ -845,7 +857,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         id="min-subscription"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                         value={
-                                            formState.trancheSize
+                                            formState !== undefined && formState.trancheSize
                                                 .minSubscription
                                         }
                                         onChange={(e) =>
@@ -889,7 +901,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 name="custom-min-subscription"
                                                 className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                                 value={
-                                                    formState.trancheSize
+                                                    formState !== undefined && formState.trancheSize
                                                         .minSubscription
                                                 }
                                                 placeholder="Enter minimum subscription"
@@ -923,7 +935,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                             {/*Bond field*/}
                             <div className="grid grid-cols-2 gap-4">
-                                {formState.dealType === "BOND" ? (
+                                {formState !== undefined && formState.dealType === "BOND" ? (
                                     <>
                                         <div className="col-span-1 mt-1">
                                             <div
@@ -935,7 +947,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     name="couponType"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .couponType
                                                     }
                                                     onChange={(e) =>
@@ -970,7 +982,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     placeholder="Benchmark"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
                                                     disabled={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .couponType ===
                                                         "floating"
                                                             ? false
@@ -978,20 +990,20 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     }
                                                     style={{
                                                         backgroundColor:
-                                                            formState.pricing
+                                                            formState !== undefined && formState.pricing
                                                                 .couponType ===
                                                             "floating"
                                                                 ? "#d1d5db"
                                                                 : "#888",
                                                         cursor:
-                                                            formState.pricing
+                                                            formState !== undefined && formState.pricing
                                                                 .couponType ===
                                                             "floating"
                                                                 ? "text"
                                                                 : "not-allowed",
                                                     }}
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .benchmark
                                                     }
                                                     onChange={(e) =>
@@ -1003,9 +1015,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 />
                                             </div>
                                             <label
-                                                className="error-label text-sm"
                                                 htmlFor="benchmark"
-                                                className="text-gray-300"
+                                                className="text-gray-300 error-label text-sm"
                                             >
                                                 Value shouldn't be more than 3
                                                 digits e.g: 100
@@ -1016,7 +1027,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                 <div
                                     className={`${
-                                        formState.dealType === "BOND"
+                                        formState !== undefined && formState.dealType === "BOND"
                                             ? "col-span-1"
                                             : "col-span-2"
                                     } mt-1`}
@@ -1026,7 +1037,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="dayCount"
                                         id="day-count"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-                                        value={formState.pricing.dayCount}
+                                        value={formState !== undefined && formState.pricing.dayCount}
                                         onChange={(e) =>
                                             handleChange(e, "pricing")
                                         }
@@ -1049,7 +1060,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                 <div
                                     className={`${
-                                        formState.dealType === "BOND"
+                                        formState !== undefined && formState.dealType === "BOND"
                                             ? "col-span-1"
                                             : "col-span-2"
                                     } mt-1`}
@@ -1059,7 +1070,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="offerType"
                                         id="offer-type"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
-                                        value={formState.pricing.offerType.name}
+                                        value={formState !== undefined && formState.pricing.offerType.name}
                                         onChange={(e) =>
                                             handleOfferTypeChange(e)
                                         }
@@ -1078,7 +1089,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="grid grid-cols-2 gap-4 mt-5">
-                                {formState.pricing.offerType.name ===
+                                {formState !== undefined && formState.pricing.offerType.name ===
                                 "fixed price" ? (
                                     <>
                                         <div className="col-span-1 mt-1">
@@ -1090,7 +1101,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     placeholder="Enter discount rate"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .offerType
                                                             .fixedPrice.rate
                                                     }
@@ -1125,9 +1136,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 />
                                             </div>
                                             <label
-                                                className="error-label text-sm"
+                                                className="error-label text-sm text-gray-300"
                                                 htmlFor="discount-rate"
-                                                className="text-gray-300"
                                             >
                                                 Value shouldn't be more than 4
                                                 digits e.g: 1000
@@ -1143,7 +1153,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     placeholder="Enter implied yield"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .offerType
                                                             .fixedPrice.yield
                                                     }
@@ -1178,9 +1188,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 />
                                             </div>
                                             <label
-                                                className="error-label text-sm"
+                                                className="error-label text-sm text-gray-300"
                                                 htmlFor="implied-yield"
-                                                className="text-gray-300"
                                             >
                                                 Value shouldn't be more than 4
                                                 digits e.g: 1000
@@ -1189,7 +1198,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     </>
                                 ) : null}
 
-                                {formState.pricing.offerType.name ===
+                                {formState !== undefined && formState.pricing.offerType.name ===
                                 "book build" ? (
                                     <>
                                         <div className="col-span-1 mt-1">
@@ -1201,7 +1210,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     placeholder="Enter discount rate range"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .offerType
                                                             .fixedPrice.rate
                                                     }
@@ -1236,9 +1245,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 />
                                             </div>
                                             <label
-                                                className="error-label text-sm"
+                                                className="error-label text-sm text-gray-300"
                                                 htmlFor="discount-rate-range"
-                                                className="text-gray-300"
                                             >
                                                 Value shouldn't be more than 3
                                                 digits e.g: 100
@@ -1254,7 +1262,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     placeholder="Enter yield"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .offerType
                                                             .fixedPrice.yield
                                                     }
@@ -1290,9 +1298,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 />
                                             </div>
                                             <label
-                                                className="error-label text-sm"
+                                                className="error-label text-sm text-gray-300"
                                                 htmlFor="yield"
-                                                className="text-gray-300"
                                             >
                                                 Offer yield value is read only and is implicitly determined.
                                             </label>
@@ -1300,7 +1307,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     </>
                                 ) : null}
 
-                                {formState.dealType === "BOND" ? (
+                                {formState !== undefined && formState.dealType === "BOND" ? (
                                     <>
                                         <div
                                             className="col-span-2 mt-1"
@@ -1403,7 +1410,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     id="call-option"
                                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field"
                                                     value={
-                                                        formState.pricing
+                                                        formState !== undefined && formState.pricing
                                                             .callOption
                                                     }
                                                     placeholder="Enter call option"
@@ -1449,7 +1456,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="use-of-proceeds"
                                     placeholder="Enter use of proceeds"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                    value={formState.useOfProceeds}
+                                    value={formState !== undefined && formState.useOfProceeds}
                                     onChange={(e) => handleChange(e)}
                                 />
                             </div>
@@ -1460,7 +1467,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     id="tax-consideration"
                                     placeholder="Enter tax consideration"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                    value={formState.taxConsideration}
+                                    value={formState !== undefined && formState.taxConsideration}
                                     onChange={(e) => handleChange(e)}
                                 />
                             </div>
@@ -1470,7 +1477,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     name="eligibleInvestors"
                                     id="eligible-investor"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                    value={formState.eligibleInvestors}
+                                    value={formState !== undefined && formState.eligibleInvestors}
                                     onChange={(e) => handleChange(e)}
                                 >
                                     <option defaultValue="">
