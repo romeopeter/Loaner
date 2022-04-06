@@ -109,7 +109,7 @@ export default function BidApproved() {
 
 			const popFileFormat = popFileName.split(".")[1];
 
-			if (popFileFormat !== "jpg" && popFileFormat !== "pdf") {
+			if (popFileFormat !== "jpg" && popFileFormat !== "pdf" && popFileFormat !== "jpeg") {
 				updateFileState({formatIsWrong: true})
 			} else {
 				
