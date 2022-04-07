@@ -14,7 +14,7 @@ const LoanOfferPublished = () => {
     let { id } = useParams();
     const [bidsData, setBidsData] = useState([]);
     const [data, setData] = useState(null);
-
+    console.log(data);
     useEffect(() => {
         axios.get('/v1/loan_request/').then((response) => {
             let index = response.data.findIndex((loan) => loan.id === parseInt(id));
@@ -26,12 +26,6 @@ const LoanOfferPublished = () => {
         });
         window.scroll(0, 0);
     }, [id]);
-
-    // //  Call Fetched data
-    // useEffect(() => {
-    //     setBidsData(AllBidsData);
-
-    // }, []);
 
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>

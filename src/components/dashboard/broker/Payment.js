@@ -166,8 +166,10 @@ const Payment = () => {
             setPaymentData(res.data);
         });
     }, [id, handleApply]);
-    // console.log(approvedBidsData);
-    // console.log(paymentData);
+    console.log(approvedBidsData);
+    console.log(paymentData);
+
+   
 
     return (
         <div>
