@@ -62,11 +62,11 @@ export default function ShowLoanSummary({
 								<td>
 									<small>Loan amount</small>
 									<span>
-										{formState.trancheSize.currency}{" "}
-										{formState.trancheSize
-											.minSubscription !== "" &&
-											formState.trancheSize
-												.minSubscription}
+									{
+										formState.trancheSize.currency}{" "}
+                            			{formState.trancheSize.minSubscription !== undefined &&
+                              			formState.trancheSize.minSubscription.amount
+									}
 									</span>
 								</td>
 							</tr>
@@ -89,10 +89,10 @@ export default function ShowLoanSummary({
 								<td>
 									<small>Size</small>
 									<span>
-										{formState.trancheSize
-											.minSubscription !== "" &&
-											formState.trancheSize
-												.minSubscription}
+									{
+										formState.trancheSize.minSubscription !== undefined &&
+                              			Math.round(formState.trancheSize.minSubscription.amount)
+									}
 									</span>
 								</td>
 							</tr>
