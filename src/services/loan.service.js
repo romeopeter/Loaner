@@ -9,8 +9,8 @@ const getOffer = (dealType, id) => {
     return axios.get(`/v1/loan_request/${dealType}/${id}`).catch((error) => error);
 };
 
-const editOffer = (dealType, id, data) => {
-    return axios.patch(`/v1/loan_request/${dealType}/${id}`, data).catch((error) => error);
+const editOffer = (dealType, id, requestData) => {
+    return axios.patch(`/v1/loan_request/${dealType}/${id}/`, requestData).catch((error) => error);
 };
 
 const loanRequestCP = (data) => {
