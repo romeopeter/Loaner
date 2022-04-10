@@ -8,7 +8,8 @@ export default function ShowLoanSummary({
 	userFullName,
 	isLoading,
 	modal,
-	CalculateLoanTenure
+	CalculateLoanTenure,
+	isEditOffer
 }) {
 
 	const {showModal, setShowModal} = modal;
@@ -91,7 +92,8 @@ export default function ShowLoanSummary({
 									<span>
 									{
 										formState.trancheSize.minSubscription !== undefined &&
-                              			Math.round(formState.trancheSize.minSubscription.amount)
+                              			Math.round(formState.trancheSize.minSubscription)
+										
 									}
 									</span>
 								</td>
@@ -136,7 +138,7 @@ export default function ShowLoanSummary({
 							buttonClass="w-full bg-green-600 rounded"
 							handleClick={() => handleSubmit()}
 						>
-							Create loan{" "}
+							{isEditOffer ? "Update loan":"Create loan"}{" "}
 							{isLoading ? (
 								<i
 									className="fa fa-spinner fa-pulse fa-3x fa-fw"
