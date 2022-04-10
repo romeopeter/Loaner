@@ -1,3 +1,4 @@
+import { calcLength } from "framer-motion";
 import React, { useState, useEffect, createRef } from "react";
 
 import { useAlert } from "react-alert";
@@ -377,6 +378,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
     let EndDateValue;
 
     if (typeof formState === "object" && formState !== undefined) {
+
         discountRateValue = formState.pricing.offerType.fixedPrice.rate;
         offerFaceValueValue = formState.trancheSize.faceValue;
         startDateValue = formState.timing.offerStart;
@@ -823,9 +825,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     .discountValue
                                             }
                                             readOnly={true}
-                                            /*onChange={(e) =>
-                                                handleChange(e, "trancheSize")
-                                            }*/
                                         />
                                     </div>
                                     <label
@@ -1267,34 +1266,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                             .fixedPrice.yield
                                                     }
                                                     readOnly={true}
-                                                    /*onChange={(e) =>
-                                                        setFormState(
-                                                            (state) => {
-                                                                return {
-                                                                    ...state,
-                                                                    pricing: {
-                                                                        ...state.pricing,
-                                                                        offerType:
-                                                                            {
-                                                                                ...state
-                                                                                    .pricing
-                                                                                    .offerType,
-                                                                                fixedPrice:
-                                                                                    {
-                                                                                        ...state
-                                                                                            .pricing
-                                                                                            .offerType
-                                                                                            .fixedPrice,
-                                                                                        yield: e
-                                                                                            .target
-                                                                                            .value,
-                                                                                    },
-                                                                            },
-                                                                    },
-                                                                };
-                                                            }
-                                                        )
-                                                    }*/
                                                 />
                                             </div>
                                             <label
