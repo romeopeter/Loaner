@@ -16,7 +16,6 @@ export const messageSlice = createSlice({
 			state.server.message = action.payload;
 		},
 		setClientMessage: (state, action) => {
-
 			state.client = action.payload;
 		},
 		clearServerMessage: (state, action) => {
