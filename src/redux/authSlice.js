@@ -9,8 +9,7 @@ import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse"
 import {
 	signUpRequest,
-	signInRequest,
-	signOutRequest,
+	signInRequest
 } from "../services/auth.service.js";
 
 const user = JSON.parse(localStorage.getItem("USER"));
@@ -22,7 +21,6 @@ const authState = user
 export const signInAction = createAsyncThunk(
 	"auth/signInAction", async (credentials, thunkAPI) => {
 		const response = await signInRequest(credentials);
-		const requestConfig = response.config;
 		const dispatch = thunkAPI.dispatch
 
 		// Handle error response
