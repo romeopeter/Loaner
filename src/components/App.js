@@ -1,58 +1,66 @@
-import React, {useEffect} from "react";
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useDispatch } from "react-redux";
 import axios from "axios";
-import jwt_decode from 'jwt-decode';
 
 import AppRoutes from "./AppRoutes";
+import AppErrorBoundary from "./AppErrorBoundary";
 
-import {signOutAsync} from "../redux/authSlice";
-import setClientMessage from "../redux/messageSlice.js";
+import { signOutAsync } from "../redux/authSlice";
+import {setClientMessage} from "../redux/messageSlice.js";
 
 function App() {
-    const userObj = JSON.parse(localStorage.getItem("USER"));
-    const decodeToken = jwt_decode;
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const userObj = JSON.parse(localStorage.getItem("USER"));
+  const dispatch = useDispatch();
 
-    // Set default endpoint URL and Authorization key
-    axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
-    axios.defaults.headers.post["Content-Type"] = "application/json";
-    axios.defaults.headers.common["Authorization"] = undefined;
+  // Set default endpoint URL and Authorization key
+  axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
+  axios.defaults.headers.post["Content-Type"] = "application/json";
+  axios.defaults.headers.common["Authorization"] = undefined;
 
-    if (userObj !== null && userObj !== false) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${userObj.tokens.access}`;
-    }
+  if (userObj !== null && userObj !== false) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${userObj.tokens.access}`;
+  }
 
-    // Write preflight request to check expired token
+  // Interceptor checks response for expire on invalid token
+  const requestsInterceptor = axios.interceptors.response.use(
+    () => {},
+    function (error) {
+        const response = error.response;
 
-    useEffect(() => {
-        if (userObj !== null && typeof userObj === "object") {
+        if (response.status === 401 && response.statusText === "Unauthorized") {
+            const message = dispatch(
+                setClientMessage({
+                    status: 401,
+                    messageType: "token_not_valid",
+                    message: "Unauthorized: Token is invalid or expired",
+                    detail: "Login token is expired. Please sign in",
+                })
+            );
 
-            async function checkTokenExpiration() {
-                let {tokens: { access }} = userObj;
-                const decodedToken = decodeToken(access);
-                const currentDate = new Date();
+            const messageObj = typeof message.payload === "object" && message.payload
 
-                if (decodedToken.exp * 1000 < currentDate.getTime()) {
-                    dispatch(setClientMessage({
-                        status: null,
-                        messageType: "token_not_valid", 
-                        message: "Token is invalid or expired", 
-                        detail: "Login token is expired. Please sign in"
-                    }));
-
-                    const req = await dispatch(signOutAsync());
-
-                    console.log(req);
+            if (messageObj !== false) {
+                if (messageObj.messageType !== undefined && messageObj.messageType === "token_not_valid") {
+                    // Sign user out
+                    dispatch(signOutAsync());
+                    
+                    // Redirect login page
+                    // navigate("/login");
                 }
             }
-            // checkTokenExpiration()
         }
-    }, [])
+    }
+  );
 
-    return (<AppRoutes />);
+    // Remove interceptors
+  axios.interceptors.response.eject(requestsInterceptor)
 
+  return (
+    <AppErrorBoundary>
+      <AppRoutes />
+    </AppErrorBoundary>
+  );
 }
 
 export default App;
