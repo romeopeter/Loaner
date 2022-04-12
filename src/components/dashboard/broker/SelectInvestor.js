@@ -2,7 +2,6 @@
     Also called the assigning-invetor component/page
 */
 
-<<<<<<< HEAD
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -17,21 +16,6 @@ import NavMenu from "../NavMenu";
 
 import { Danger, Success } from "../../alert";
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
-=======
-import React, { createRef, useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { components } from 'react-select';
-import { useAlert } from 'react-alert';
-
-import CustomSelect from './CustomSelect';
-import OrderbookLayout from '../../OrderbookLayout';
-import DocumentHead from '../../DocumentHead';
-import Button from '../../Button';
-import NavMenu from '../NavMenu';
-
-import { Danger, Success } from '../../alert';
-import { saveInvestorListAction } from '../../../redux/investorListSlice';
->>>>>>> broker
 import {
     getInvestorsInCategoryAction,
     mergeInvestorsInCategoriesAction,
@@ -253,13 +237,7 @@ export default function PublishOffer({ children, ...props }) {
 
             return;
         }
-<<<<<<< HEAD
     }
-=======
-
-        assignInvestors(32);
-    };
->>>>>>> broker
 
     // Get categories ID
     const getCategoriesIds = () => {
@@ -348,7 +326,6 @@ export default function PublishOffer({ children, ...props }) {
         <>
             <DocumentHead title={pageName} />
             <OrderbookLayout PageNav={NavMenu}>
-<<<<<<< HEAD
                 <div
                     id="loan-invest-dropdown"
                     class="bg-white px-16 py-10 shadow-md flex items-start"
@@ -360,22 +337,6 @@ export default function PublishOffer({ children, ...props }) {
                     <div id="investor" className="dropdown-container underline">
                         <Link to={`/broker/dashboard/edit-loan-offer/${currentOffer !== null && currentOffer.id}`}>Edit offer</Link>
                     </div>
-=======
-                <div id='loan-invest-dropdown' class='bg-white px-16 py-10 shadow-md flex items-start'>
-                    <div id='loan' className='dropdown-container underline mr-5'>
-                        View offers
-                        {/*<i
-                            className="fa fa-caret-down mr-5"
-                            aria-hidden="true"
-                        ></i>
-                        <div id="load-dropdown"></div>*/}
-                    </div>{' '}
-                    {/*<div id="investor" className="dropdown-container">
-                        Investor{" "}
-                        <i className="fa fa-caret-down" aria-hidden="true"></i>
-                        <div id="investor-dropdown"></div>
-                    </div>*/}
->>>>>>> broker
                 </div>
                 <div id='orderbook-publish-offer'>
                     <div id='offer-publication'>
@@ -509,16 +470,11 @@ export default function PublishOffer({ children, ...props }) {
                                     onChange={(e) => handleCheckbox(e)}
                                     className='mr-2 rounded focus:ring-0'
                                 />
-<<<<<<< HEAD
                                 <label
                                     htmlFor="save-as-now-coming"
                                     className="text-white text-xl"
                                 >
                                     Do you want to save and send as now coming soon
-=======
-                                <label htmlFor='save-as-now-coming' className='text-white text-xl'>
-                                    Do you want to save and send as now coming
->>>>>>> broker
                                 </label>
                             </div>
                         </div>
@@ -535,15 +491,9 @@ export default function PublishOffer({ children, ...props }) {
                         />
 
                         <Button
-<<<<<<< HEAD
-                            title="Publish loan"
-                            type="submit"
-                            buttonClass={`publish-loan bg-green-700 py-5 text-center mr-5`}
-=======
                             title='Publish loan'
                             type='submit'
                             buttonClass='publish-loan bg-green-700 py-5 text-center mr-5'
->>>>>>> broker
                             handleClick={publishOffer}
                         >
                             Publish <i className={`${isLoading && "fa fa-spinner fa-pulse fa-1x fa-fw"}`}></i>
