@@ -20,7 +20,6 @@ function App() {
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${userObj.tokens.access}`;
-  }
 
   // Interceptor checks response for expire on invalid token
   const requestsInterceptor = axios.interceptors.response.use(
