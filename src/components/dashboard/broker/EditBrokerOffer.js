@@ -28,6 +28,7 @@ export default function EditBrokerOffer() {
 
   const alert = useAlert();
   const params = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const requestContainerRef = createRef();
   const componentMounted = useRef(true);
