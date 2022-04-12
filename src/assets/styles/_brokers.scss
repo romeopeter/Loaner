@@ -356,6 +356,10 @@
     &--approve {
         background: #008060;
         margin-right: 20px;
+        &:disabled {
+            background: #788581;
+            cursor: not-allowed;
+        }
 
         @media only screen and (max-width: 750px) {
             margin-right: 5px;
@@ -363,6 +367,10 @@
     }
     &--reject {
         background: #d82c0d;
+        &:disabled {
+            background: #c59a93;
+            cursor: not-allowed;
+        }
     }
 }
 
@@ -584,7 +592,7 @@
 .loader-div {
     display: flex;
     align-items: center;
-    width: 180px;
+    width: 130px;
     padding: 10px;
     border-radius: 4px;
     margin: auto;
@@ -595,12 +603,24 @@
     }
 }
 .responseMessage {
-    text-align: center;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+
+    max-width: fit-content;
     margin: auto;
     padding: 10px;
     font-size: 16px !important;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    img {
+        margin-right: 10px;
+    }
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
 }
 .loader {
     margin: auto;

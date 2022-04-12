@@ -34,6 +34,7 @@ const Payment = () => {
         modal: false,
         paymentModal: false,
         successState: undefined,
+        data: undefined,
     });
     const [notification, setNotification] = useState({
         isLoading: undefined,
@@ -57,8 +58,8 @@ const Payment = () => {
 
     // --------------------------------------make one general state
 
-    const openPaymentModal = () => {
-        setState({ ...state, paymentModal: true });
+    const openPaymentModal = (data) => {
+        setState({ ...state, paymentModal: true, data: data });
     };
     const closePaymentModal = () => {
         setState({ ...state, paymentModal: false });
@@ -168,9 +169,11 @@ const Payment = () => {
     console.log(approvedBidsData);
     console.log(paymentData);
 
+   
+
     return (
         <div>
-            <DocumentHead title='Payments' /> 
+            <DocumentHead title='Payments' />
             <OrderbookLayout PageNav={NavMenu}>
                 <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
                     <div className='dropdownbroker'>
@@ -328,22 +331,20 @@ const Payment = () => {
                                                                 </Td>
 
                                                                 {(() => {
-                                                                    if (data.payment_status === 'approved') {
+                                                                    if (data.payment_status) {
                                                                         return (
                                                                             <Td color={'#008060'}>
-                                                                                {data.paymentStatus}
-                                                                            </Td>
-                                                                        );
-                                                                    } else if (data.payment_status === 'rejected') {
-                                                                        return (
-                                                                            <Td color={'#d82c0d'}>
-                                                                                {data.paymentStatus}
+                                                                                {data.payment_status
+                                                                                    .charAt(0)
+                                                                                    .toUpperCase() +
+                                                                                    data.current_status.slice(1)}
                                                                             </Td>
                                                                         );
                                                                     } else {
                                                                         return <Td color={'#eed202'}>Pending</Td>;
                                                                     }
                                                                 })()}
+
                                                                 {data.payment_status ? (
                                                                     <Td
                                                                         style={{
@@ -351,7 +352,7 @@ const Payment = () => {
                                                                             cursor: 'pointer',
                                                                             color: '#1C6CA6',
                                                                         }}
-                                                                        onClick={openPaymentModal}
+                                                                        onClick={() => openPaymentModal(data)}
                                                                     >
                                                                         View Payment
                                                                     </Td>
@@ -359,8 +360,22 @@ const Payment = () => {
                                                                     <Td>-</Td>
                                                                 )}
 
-                                                                {notification.status ? (
-                                                                    <Td>{notification.statusText}</Td>
+                                                                {data.payment_status ? (
+                                                                    <Td>
+                                                                        <button
+                                                                            disabled={true}
+                                                                            className='payment-cta--approve'
+                                                                        >
+                                                                            Approve Payment
+                                                                        </button>
+
+                                                                        <button
+                                                                            disabled={true}
+                                                                            className='payment-cta--reject'
+                                                                        >
+                                                                            Reject Payment
+                                                                        </button>
+                                                                    </Td>
                                                                 ) : (
                                                                     <Td className='payment-cta'>
                                                                         <button
@@ -409,6 +424,7 @@ const Payment = () => {
                             notification={notification}
                             openModalApproved={openModalApproved}
                             openModalRejected={openModalRejected}
+                            paymentData={paymentData}
                         />
                     </section>
                 </main>

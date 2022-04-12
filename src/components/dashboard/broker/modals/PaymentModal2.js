@@ -1,7 +1,19 @@
 import React from 'react';
-import paymentProof from '../../../../assets/images/paymentProof.png';
 
-const PaymentModal2 = ({ closePaymentModal, notification, openModalApproved, openModalRejected, state }) => {
+const PaymentModal2 = ({
+    closePaymentModal,
+    notification,
+    openModalApproved,
+    openModalRejected,
+    state,
+    paymentData,
+}) => {
+    let proofOfPayment;
+    if (state.data) {
+        let index = paymentData && paymentData.findIndex((item) => item.bid === state.data.id);
+        proofOfPayment = paymentData[index];
+    }
+
     const className = state.paymentModal ? 'open' : '';
 
     return (
@@ -9,8 +21,16 @@ const PaymentModal2 = ({ closePaymentModal, notification, openModalApproved, ope
             <div className='modal-overlay' onClick={closePaymentModal}></div>
 
             <div className='paymentmodal-body'>
-                <img className='paymentProof' alt='payment proof' src={paymentProof} />
-                <a href={paymentProof} download className='payment-modal-button'>
+                <img
+                    className='paymentProof'
+                    alt='payment proof'
+                    src={proofOfPayment && proofOfPayment.proof_of_payment[0].file_url}
+                />
+                <a
+                    href={proofOfPayment && proofOfPayment.proof_of_payment[0].file_url}
+                    download
+                    className='payment-modal-button'
+                >
                     Download Payment Proof
                 </a>
                 <div>

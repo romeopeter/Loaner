@@ -49,15 +49,22 @@ const UploadInvestor = () => {
                 response.statusText === 'Created' &&
                     setResponsedata({ ...response, modal: true, status: 'Upload Successful!' });
             })
-            .catch(
-                (err) =>
-                    err &&
+            .catch((err) => {
+                console.log(err.message);
+                if (err.message === 'Network Error') {
+                    setResponsedata({
+                        ...responsedata,
+                        modal: true,
+                        error: 'Network Error',
+                    });
+                } else {
                     setResponsedata({
                         ...responsedata,
                         modal: true,
                         error: 'Wrong data format or Data already exists, upload a different file.',
-                    })
-            );
+                    });
+                }
+            });
     };
 
     return (

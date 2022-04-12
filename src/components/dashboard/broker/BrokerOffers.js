@@ -11,7 +11,7 @@ import bidRejected from '../../../assets/images/bidRejected.png';
 import { Flex, Box, Table, Tbody, Tr, Td, Heading, Image, Center } from '@chakra-ui/react';
 
 let PageSize = 10;
-const AllLoans = () => {
+const BrokerOffers = () => {
     const [loanRequest, setLoanRequest] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -33,7 +33,14 @@ const AllLoans = () => {
                 setLoanRequest(response.data.reverse());
                 setGetValue(response);
             })
-            .catch((err) => setErrorMessage(err));
+            .catch((err) => {
+                console.log(err.message);
+                if (err.message === 'Network Error') {
+                    setErrorMessage(err.message);
+                } else {
+                    setErrorMessage('Something went wrong, please try  again.');
+                }
+            });
 
         window.scroll(0, 0);
     }, []);
@@ -81,29 +88,20 @@ const AllLoans = () => {
                             All Offers
                         </Heading>
                     </Flex>
-                    <section style={{ paddingBottom: '10%', marginTop: '3%' }}>
+                    <section>
                         {!getValue ? (
-                            <div style={{ margin: '120px 20px' }}>
+                            <div style={{ margin: '100px 10px' }}>
                                 {(() => {
                                     if (errorMessage) {
                                         return (
-                                            <div>
-                                                <p
-                                                    className='responseMessage'
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-around',
-                                                        alignItems: 'center',
-                                                    }}
-                                                >
-                                                    <img
-                                                        alt=''
-                                                        src={bidRejected}
-                                                        style={{ height: '30px', width: '30px' }}
-                                                    />
-                                                    Something went wrong, please try again.{' '}
-                                                </p>
-                                            </div>
+                                            <p className='responseMessage'>
+                                                <img
+                                                    alt=''
+                                                    src={bidRejected}
+                                                    style={{ height: '30px', width: '30px' }}
+                                                />
+                                                {errorMessage}
+                                            </p>
                                         );
                                     } else if (getValue) {
                                         if (loanRequest.length === 0 && getValue.statusText === 'OK') {
@@ -117,7 +115,7 @@ const AllLoans = () => {
                                         return (
                                             <div className='loader-div'>
                                                 <p className='loader'></p>
-                                                <p>Fetching Offers</p>
+                                                <p>Loading...</p>
                                             </div>
                                         );
                                     }
@@ -212,4 +210,4 @@ const AllLoans = () => {
     );
 };
 
-export default AllLoans;
+export default BrokerOffers;

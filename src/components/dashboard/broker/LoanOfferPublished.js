@@ -14,7 +14,7 @@ const LoanOfferPublished = () => {
     let { id } = useParams();
     const [bidsData, setBidsData] = useState([]);
     const [data, setData] = useState(null);
-
+    console.log(data);
     useEffect(() => {
         axios.get('/v1/loan_request/').then((response) => {
             let index = response.data.findIndex((loan) => loan.id === parseInt(id));
@@ -26,12 +26,6 @@ const LoanOfferPublished = () => {
         });
         window.scroll(0, 0);
     }, [id]);
-
-    // //  Call Fetched data
-    // useEffect(() => {
-    //     setBidsData(AllBidsData);
-
-    // }, []);
 
     const [isOpen, setOpen] = useState({ client: false, investor: false });
     const toggleDropdownClient = () =>
@@ -80,7 +74,7 @@ const LoanOfferPublished = () => {
                             </h3>
                             <div id='the-offer'>
                                 <div className='mb-8'>
-                                    <Link to='/broker/dashboard/allloans/'>
+                                    <Link to='/broker/dashboard/all-offers/'>
                                         <img alt='' src={Arrow} className='backArrow' />
                                     </Link>
                                 </div>
