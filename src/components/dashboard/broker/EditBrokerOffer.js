@@ -15,12 +15,7 @@ import { setServerMessage } from "../../../redux/messageSlice";
 
 import { cp, bond } from "../loan-request-data/requestData";
 
-import {
-  CPLoanOfferAction,
-  bondLoanOfferAction,
-  getOfferAction,
-  editOfferAction,
-} from "../../../redux/loanSlice";
+import { getOfferAction, editOfferAction } from "../../../redux/loanSlice";
 
 import ShowLoanSummary from "./modals/ShowLoanSummary";
 
@@ -32,7 +27,6 @@ export default function EditBrokerOffer() {
   const userFullName = `${user.first_name} ${user.last_name}`;
 
   const alert = useAlert();
-  const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
   const requestContainerRef = createRef();
@@ -112,7 +106,7 @@ export default function EditBrokerOffer() {
         requestData: cp(formState, currentUser),
       };
 
-      const req = await dispatch(editOfferAction(requestData));
+      const req = await (editOfferAction(requestData));
 
       if (componentMounted.current) setIsLoading(true);
 
@@ -145,7 +139,7 @@ export default function EditBrokerOffer() {
         requestData: bond(formState, currentUser),
       };
 
-      const req = await dispatch(editOfferAction(requestData));
+      const req = await (editOfferAction(requestData));
 
       if (componentMounted.current) setIsLoading(true);
 
@@ -268,7 +262,7 @@ export default function EditBrokerOffer() {
         });
       }
     })();
-  }, [dispatch, params.id, params.dealType]);
+  }, [params.id, params.dealType]);
 
   const CalculateLoanTenure = (startDate, EndDate) => {
     let tenure = "";
