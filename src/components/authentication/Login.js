@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
@@ -19,7 +19,7 @@ export default function Login() {
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
-	const { isLoggedIn, user } = useSelector((state) => state.auth);
+	const { isLoggedIn } = useSelector((state) => state.auth);
 	const { message: serverMessage } = useSelector((state) => state.message.server);
 	const {client: clientMessage}  = useSelector(state => state.message);
 
@@ -30,15 +30,6 @@ export default function Login() {
 		isLoading: false,
 		userType: null,
 	});
-
-	// Custom side-effect hook
-	const useLogin = (callback) => {
-		useEffect(() => {
-			if(callback) {
-				const IntervalId = setInterval(callback, 1000);
-			};
-		}, [])
-	}
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -56,9 +47,8 @@ export default function Login() {
 
 	
 	const { emailAddress, password } = form;
-	const authState = useSelector((state) => state.auth);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		if (e !== null && typeof e === "object") e.preventDefault();
 
 		setForm((state) => {
@@ -79,10 +69,10 @@ export default function Login() {
 		}
 
 		// Dispatch redux sign-in action
-		dispatch(signInAction(data)).then(() => {
+		const req = await dispatch(signInAction(data));
+
+		if (req.meta.requestStatus === "fulfilled") {
 			const { user } = JSON.parse(localStorage.getItem("USER"));
-
-
 
 			if (user !== undefined && "groups" in user) {
 				const userType = user.groups[0].name;
@@ -102,7 +92,7 @@ export default function Login() {
 			}
 
 			navigate("/login");
-		});
+		}
 	};
 
 	// Auth request responses
@@ -150,10 +140,10 @@ export default function Login() {
 				{confirmEmailMessage !== null ?(<Success message={confirmEmailMessage} />):null}
 			</div>
 			<div className="mb-5">
-				{tokenExpired !== null ?(<Info message={tokenExpired} />):null}
+				{tokenExpired !== null ?(<Danger message={tokenExpired} />):null}
 			</div>
 			<div className="mb-5">
-				{noUserMessage !== null ?(<Success message={noUserMessage} />):null}
+				{noUserMessage !== null ?(<Info message={noUserMessage} />):null}
 			</div>
 		</>
 	)
