@@ -1,4 +1,3 @@
-import { calcLength } from "framer-motion";
 import React, { useState, useEffect, createRef } from "react";
 
 import { useAlert } from "react-alert";
@@ -7,6 +6,7 @@ import Button from "../../Button";
 
 export default function RequestForm({ requestFormState, showSummary }) {
     const { formState, setFormState } = requestFormState;
+    // eslint-disable-next-line no-unused-vars
     const { summaryState, setSummaryState, handleModal } = showSummary;
 
     const secondSlideRef = createRef();
