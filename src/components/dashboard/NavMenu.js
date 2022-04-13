@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -8,7 +8,7 @@ import profileLady from '../../assets/images/profileLady.png';
 // import UBALogo from "../../assets/images/UBALogo.png";
 
 export default function NavMenu() {
-    const [showDropdown, setshowDropdown] = useState(false);
+    // const [showDropdown, setshowDropdown] = useState(false);
 
     // Dashboard nav reference
     let navMenuRef = createRef();
@@ -22,10 +22,6 @@ export default function NavMenu() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const handleDropdown = (e) => {
-        console.log(e.target.name);
-    };
 
     const handleSignOut = () => {
         dispatch(signOutAsync());
@@ -79,7 +75,7 @@ export default function NavMenu() {
                         <div id='profile-container' className=''>
                             <div id='profile-dropdown'>
                                 <img src={profileLady} id='profile-photo' alt='' className='round-lg' />{' '}
-                                <i className='fa fa-caret-down text-white' aria-hidden='true'></i>
+                                {/* <i className='fa fa-caret-down text-white' aria-hidden='true'></i> */}
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
@@ -161,7 +157,7 @@ export default function NavMenu() {
                         <div id='profile-container' className=''>
                             <div id='profile-dropdown'>
                                 <img src={profileLady} id='profile-photo' alt='' className='round-lg' />{' '}
-                                <i className='fa fa-caret-down text-white' aria-hidden='true'></i>
+                                {/* <i className='fa fa-caret-down text-white' aria-hidden='true'></i> */}
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
@@ -226,7 +222,7 @@ export default function NavMenu() {
                         <div id='profile-container' className=''>
                             <div id='profile-dropdown'>
                                 <img src={profileLady} id='profile-photo' alt='' className='round-lg' />{' '}
-                                <i className='fa fa-caret-down text-white' aria-hidden='true'></i>
+                                {/* <i className='fa fa-caret-down text-white' aria-hidden='true'></i> */}
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
@@ -311,7 +307,7 @@ export default function NavMenu() {
                         <div id='profile-container' className=''>
                             <div id='profile-dropdown'>
                                 <img src={profileLady} id='profile-photo' alt='' className='round-lg' />{' '}
-                                <i className='fa fa-caret-down text-white' aria-hidden='true'></i>
+                                {/* <i className='fa fa-caret-down text-white' aria-hidden='true'></i> */}
                                 <div id='profile-menu-nav' className='bg-white shadow-md rounded'>
                                     <div id='profile' className='menu-nav-container'>
                                         <Link to={`/${role}/dashboard`}>Dashboard</Link>
