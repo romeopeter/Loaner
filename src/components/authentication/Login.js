@@ -31,6 +31,13 @@ export default function Login() {
 		userType: null,
 	});
 
+	// Server message variables
+	const [acountCreated, noActiveAccount, networkError] = ["account_created", "no_active_account", "network_error"];
+	let networkErrorMessage = null;
+	let confirmEmailMessage = null;
+	let noUserMessage = null;
+	let tokenExpired = null;
+
 	const handleChange = (e) => {
 		const target = e.target;
 		const name = target.name;
@@ -44,12 +51,16 @@ export default function Login() {
 			};
 		});
 	};
-
 	
 	const { emailAddress, password } = form;
 
 	const handleSubmit = async (e) => {
-		if (e !== null && typeof e === "object") e.preventDefault();
+		e !== null && e.preventDefault();
+
+		if (serverMessage.messageType === networkError) {
+			setForm(state => ({...state, isLoading: false}));
+			return;
+		}
 
 		setForm((state) => {
 			return {
@@ -95,14 +106,6 @@ export default function Login() {
 		}
 	};
 
-	// Auth request responses
-	const [acountCreated, noActiveAccount, networkError] = ["account_created", "no_active_account", "network_error"];
-
-	let networkErrorMessage = null;
-	let confirmEmailMessage = null;
-	let noUserMessage = null;
-	let tokenExpired = null;
-
 	if (typeof serverMessage === "object") {
 		if (serverMessage.messageType === acountCreated) confirmEmailMessage = serverMessage.detail;
 		if (serverMessage.messageType === noActiveAccount) noUserMessage = serverMessage.detail;
@@ -117,7 +120,7 @@ export default function Login() {
 		}
 	}
 
-	// If already logged in.
+	// If user logged in.
 	const currentUserObj = JSON.parse(localStorage.getItem("USER"));
 	if (currentUserObj !== null && typeof currentUserObj === "object") {
 		const {user} = currentUserObj;
@@ -264,7 +267,6 @@ export default function Login() {
 										>
 											Forgot password?
 										</Link>
-
 									</div>
 
 									<div className="col-span-6 sm:col-span-4 mt-1">
@@ -273,7 +275,9 @@ export default function Login() {
 											buttonClass="login-button auth-button"
 										>
 											Login{" "}
-											{form.isLoading ? (
+											{
+											
+											form.isLoading ? (
 												<i
 													className="fa fa-spinner fa-pulse fa-3x fa-fw"
 													style={{ fontSize: 20 }}
