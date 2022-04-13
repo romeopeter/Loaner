@@ -57,11 +57,6 @@ export default function Login() {
 	const handleSubmit = async (e) => {
 		e !== null && e.preventDefault();
 
-		if (serverMessage.messageType === networkError) {
-			setForm(state => ({...state, isLoading: false}));
-			return;
-		}
-
 		setForm((state) => {
 			return {
 				...state,
@@ -103,6 +98,11 @@ export default function Login() {
 			}
 
 			navigate("/login");
+		}
+
+		if (serverMessage.messageType === networkError) {
+			setForm(state => ({...state, isLoading: false}));
+			return;
 		}
 	};
 
