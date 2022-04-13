@@ -375,28 +375,30 @@ export default function PublishOffer({ children, ...props }) {
                                             <div id='categories' className='flex justify-start flex-wrap'>
                                                 {investorCategories.length > 0
                                                     ? investorCategories.map((category, index) => {
-                                                          if (index <= investorCatCount) {
-                                                              return (
-                                                                  <div
-                                                                      key={category.id}
-                                                                      className='checkboxes category-checkbox'
-                                                                  >
-                                                                      <input
-                                                                          type='checkbox'
-                                                                          name='categoryCheckbox'
-                                                                          value={`${category.name}_${category.id}`}
-                                                                          onChange={(e) => handleCheckbox(e)}
-                                                                          className='mr-2 rounded'
-                                                                      />
-                                                                      <label htmlFor='category-checkbox'>
-                                                                          {capFirstLetter(category.name).replace(
-                                                                              '-',
-                                                                              ' & '
-                                                                          )}
-                                                                      </label>
-                                                                  </div>
-                                                              );
-                                                          }
+                                                        if (index <= investorCatCount) {
+                                                            return (
+                                                                <div
+                                                                    key={category.id}
+                                                                    className='checkboxes category-checkbox'
+                                                                >
+                                                                    <input
+                                                                        type='checkbox'
+                                                                        name='categoryCheckbox'
+                                                                        value={`${category.name}_${category.id}`}
+                                                                        onChange={(e) => handleCheckbox(e)}
+                                                                        className='mr-2 rounded'
+                                                                    />
+                                                                    <label htmlFor='category-checkbox'>
+                                                                        {capFirstLetter(category.name).replace(
+                                                                            '-',
+                                                                            ' & '
+                                                                        )}
+                                                                    </label>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        return null
                                                       })
                                                     : null}
                                                 {investorCatCount <= 5 ? (
