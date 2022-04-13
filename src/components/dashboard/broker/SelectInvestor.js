@@ -64,17 +64,33 @@ export default function PublishOffer({ children, ...props }) {
         dispatch(getInvestorsCategoriesAction());
         dispatch(getInvestorsInCategoryAction());
         window.scroll(0, 0);
-    }, []);
+    });
 
     useEffect(() => {
-        // Invoke function to get all categories IDs
-        getCategoriesIds();
+        // Get categories ID
+        (function() {
+            const IDs =
+                state.categoryCheckbox.length > 0
+                    ? state.categoryCheckbox.map((category) => {
+                        return Number(category.split('_')[1]);
+                    })
+                    : [];
+
+            setCategoriesIds((state) => [...IDs]);
+        })();
+
     }, [state.categoryCheckbox]);
 
     useEffect(() => {
-        // Invoke function to generate request based on categories clicked
-        genMultiInvestorsRequests();
-    }, [categoriesIds]);
+        // Self-invoke function to generate requests based on investor category clicked
+        (function() {
+            const multiRequests = categoriesIds.map((id, index) => {
+                const API_URL = 'https://order-book-online.herokuapp.com/v1/investor_category';
+                return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
+            });
+            dispatch(mergeInvestorsInCategoriesAction(multiRequests));
+        })();
+    }, [categoriesIds, dispatch]);
 
     const handleInvestorChange = (selected) => {
         setState((state) => {
@@ -134,8 +150,6 @@ export default function PublishOffer({ children, ...props }) {
 
     /*Save list as favourite*/
     const saveFavouriteList = () => {
-        const investorValues = state.investorSelected;
-        const categoryValues = state.categoryCheckbox;
 
         // const clientInvestorsList = {};
         const serverInvestorsList = {};
@@ -205,7 +219,7 @@ export default function PublishOffer({ children, ...props }) {
             dispatch(AddInvestorsAction({ loanOfferId, data }));
 
             // Publish offers
-            // dispatch(publishOfferAction(loanOfferId));
+            dispatch(publishOfferAction(loanOfferId));
 
             if (componentMounted.current) {
                 // Show modal
@@ -238,18 +252,6 @@ export default function PublishOffer({ children, ...props }) {
             return;
         }
     }
-
-    // Get categories ID
-    const getCategoriesIds = () => {
-        const IDs =
-            state.categoryCheckbox.length > 0
-                ? state.categoryCheckbox.map((category) => {
-                      return Number(category.split('_')[1]);
-                  })
-                : [];
-
-        setCategoriesIds((state) => [...IDs]);
-    };
 
     /* React-select customization start */
     const allOption = {
@@ -306,15 +308,6 @@ export default function PublishOffer({ children, ...props }) {
     };
 
     const loadInvestorsOptions = loadAllInvestorsOptionsFunc();
-
-    // Generate multi request
-    const genMultiInvestorsRequests = () => {
-        const multiRequests = categoriesIds.map((id, index) => {
-            const API_URL = 'https://order-book-online.herokuapp.com/v1/investor_category';
-            return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
-        });
-        dispatch(mergeInvestorsInCategoriesAction(multiRequests));
-    };
     /* React-select customization ends */
 
     // Captialize first letter of alphabets characters
