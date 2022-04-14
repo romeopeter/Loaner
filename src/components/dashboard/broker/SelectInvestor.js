@@ -62,9 +62,13 @@ export default function PublishOffer({ children, ...props }) {
     useEffect(() => {
         // Get all investors categories
         dispatch(getInvestorsCategoriesAction());
+
+        // Get investors in category
         dispatch(getInvestorsInCategoryAction());
+
+        // Position window at the top
         window.scroll(0, 0);
-    });
+    },[dispatch]);
 
     useEffect(() => {
         // Get categories ID
@@ -84,12 +88,12 @@ export default function PublishOffer({ children, ...props }) {
     useEffect(() => {
         // Self-invoke function to generate requests based on investor category clicked
         (function() {
-            const multiRequests = categoriesIds.map((id, index) => {
+            const multiInvestors = categoriesIds.map((id, index) => {
                 const API_URL = 'https://order-book-online.herokuapp.com/v1/investor_category';
                 return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
             });
-            dispatch(mergeInvestorsInCategoriesAction(multiRequests));
-        })();
+            dispatch(mergeInvestorsInCategoriesAction(multiInvestors));
+        })()
     }, [categoriesIds, dispatch]);
 
     const handleInvestorChange = (selected) => {
@@ -315,6 +319,13 @@ export default function PublishOffer({ children, ...props }) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
+    // Get current offer id and deal type
+   let id; let dealType;
+   if (currentOffer !== null) {
+       id = currentOffer.id;
+       dealType = currentOffer.dealType;
+   }
+
     return (
         <>
             <DocumentHead title={pageName} />
@@ -324,11 +335,11 @@ export default function PublishOffer({ children, ...props }) {
                     class="bg-white px-16 py-10 shadow-md flex items-start"
                 >
                     <div id="loan" className="dropdown-container underline mr-5">
-                       <Link to="/Broker/dashboard">View offers</Link>
+                       <Link to={`/broker/dashboard/loan-offer-draft/${id}/${dealType}/`}>View offer</Link>
                     </div>
                     <span className="mr-5">|</span>
                     <div id="investor" className="dropdown-container underline">
-                        <Link to={`/broker/dashboard/edit-loan-offer/${currentOffer !== null && currentOffer.id}`}>Edit offer</Link>
+                        <Link to={`/broker/dashboard/edit-loan-offer/${id}`}>Edit offer</Link>
                     </div>
                 </div>
                 <div id='orderbook-publish-offer'>
