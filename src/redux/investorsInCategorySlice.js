@@ -39,6 +39,8 @@ export const investorsInCategorySlice = createSlice({
 	name: "investorsInCategory",
 	initialState: {investors: []},
 	extraReducers: {
+
+		// Get all category
 		[getInvestorsInCategoryAction.pending]: (state, action) => {
 			console.log("Pending");
 		},
@@ -51,7 +53,7 @@ export const investorsInCategorySlice = createSlice({
 			state.investors = payload;
 		},
 
-		// Get investor in categories
+		// Merge investors in multiple category
 		[mergeInvestorsInCategoriesAction.pending]: (state, action) => {
 			console.log("Pending");
 		},
