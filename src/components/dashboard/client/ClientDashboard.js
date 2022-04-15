@@ -13,7 +13,7 @@ import headerBanner from "../../../assets/images/headerBanner.png";
 import offerImage from "../../../assets/images/offerImage.png";
 import createList from "../../../assets/images/createList.png";
 import createOffer from "../../../assets/images/createOffer.png";
-// import offersIcon from "../../../assets/images/offersIcon.png";
+import offersIcon from "../../../assets/images/offersIcon.png";
 import allLoans from "../../../assets/images/allLoans.png";
 import approvedLoans from "../../../assets/images/approvedLoans.png";
 import declineLoans from "../../../assets/images/declineLoans.png";
@@ -68,19 +68,19 @@ export default function ClientDashboard() {
                     >
                         <div id="loan" className="dropdown-container">
                             <div>
-                                Loan{" "}
+                                Offers{" "}
                                 <i className="fa fa-caret-down mr-5" aria-hidden="true"></i>
                             </div>
                             <div id="loan-dropdown" className="shadow-md rounded bg-white">
-                                <Link to="#">All loans</Link>
-                                <Link to="#">Approved loans</Link>
-                                <Link to="#">Declined loans</Link>
+                                <Link to="#">All offers</Link>
+                                <Link to="#">Publised offers</Link>
+                                <Link to="#">Drafts</Link>
                             </div>
                         </div>
-                        <div id="investor" className="dropdown-container">
+                        {/* <div id="investor" className="dropdown-container">
                             Investor <i className="fa fa-caret-down" aria-hidden="true"></i>
                             <div id="investor-dropdown"></div>
-                        </div>
+                        </div> */}
                     </div>
                     <div id="orderbook-dashboard-intro" style={setBgImage(headerBanner)}>
                         <h1>Hello, {currentUser.first_name}</h1>
@@ -125,7 +125,7 @@ export default function ClientDashboard() {
                                 <h2 className="font-bold">
                                     <div className="action-icon-container">
                                         {/**find offersIcon image */}
-                                        {/** <img src={offersIcon} alt='' />*/}
+                                        <img src={offersIcon} alt='' />
                                     </div>
                                     My offers
                                 </h2>
