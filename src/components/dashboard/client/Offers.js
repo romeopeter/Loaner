@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {Link} from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+import { Link } from "react-router-dom";
 
 import ReactPaginate from "react-paginate";
 
@@ -17,34 +18,32 @@ export default function Offers() {
 	const pageName = "Offers";
 
 	const dispatch = useDispatch();
-	const currentUserObj = useSelector((state) => state.auth);
-    const authToken = currentUserObj.user.tokens;
 	const offersArr = useSelector((state) => state.loan.offers);
 
 	useEffect(() => {
 
 		// Get Offers
-        if (offersArr.length === 0) {
-            dispatch(getOffersAction())
-        }
-	}, [])
+		if (offersArr.length === 0) {
+			dispatch(getOffersAction())
+		}
+	}, [dispatch, offersArr.length])
 
 
 	// Pagination
 	const [paginateState, setPaginateState] = useState({
-		list: offersArr.length > 0 ? offersArr: offersArr,
-		perPage: 6,
+		list: offersArr.length > 0 ? offersArr : offersArr,
+		perPage: 9,
 		page: 0,
-		pages: Math.floor(offersArr.length / 6)
+		pages: Math.floor(offersArr.length / 9)
 	})
 
 
-	const {page, perPage, pages, list} = paginateState;
+	const { page, perPage, pages, list } = paginateState;
 	let offerItems = list !== false && list.slice(page * perPage, (page + 1) * perPage);
-	
+
 	const handlePageClick = (event) => {
-	 let page = event.selected;
-	 setPaginateState(state => ({...state, page: page}));
+		let page = event.selected;
+		setPaginateState(state => ({ ...state, page: page }));
 	}
 
 	return (
@@ -90,21 +89,38 @@ export default function Offers() {
 										<p className="offer-description">
 											{offer.deal_name}
 										</p>
-										<div className="offer-button">
-											<Button
-												title="Edit draft"
-												link="/client/offers/offer/edit"
-												buttonClass="h-2 p-2 bg-grey"
-											/>
+										{offer['availability'] === null && (
+											<div className="offer-button">
 
-											<Button
-												title="Publish"
-												link="/client/offers/offer/publish"
-												buttonClass="h-2 p-2 bg-white"
-											/>
-										</div>
+												<Button
+													title="Edit draft"
+													link="/client/offers/offer/edit"
+													buttonClass="h-2 p-2 bg-grey"
+												/>
+
+												<Button
+													title="Publish"
+													link="/client/offers/offer/publish"
+													buttonClass="h-2 p-2 bg-white"
+												/>
+											</div>
+										)}
+										{offer['availability'] === "open" && (
+											<div className="offer-button">
+
+												<Button
+													title="View offer"
+													link="/client/offers/offer/edit"
+													buttonClass="h-2 p-2 bg-grey"
+													style={{ width: "100%" }}
+												/>
+
+
+											</div>
+										)}
+
 									</div>
-								)):"Loading offers..."}
+								)) : "Loading offers..."}
 							</div>
 						</div>
 					</div>
