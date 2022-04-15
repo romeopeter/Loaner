@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
@@ -16,16 +17,20 @@ export default function App() {
     axios.defaults.headers.post["Content-Type"] = "application/json";
     axios.defaults.headers.common["Authorization"] = undefined;
 
-    if (userObj !== null && userObj !== false) {
+    if (userObj !== null && userObj.hasOwnProperty("tokens")) {
         axios.defaults.headers.common[
             "Authorization"
         ] = `Bearer ${userObj.tokens.access}`;
+    }
 
-        // Interceptor checks response for expire on invalid token
-        const requestsInterceptor = axios.interceptors.response.use(
+    // Interceptor checks response for expire on invalid token
+    const requestsInterceptor = () => {
+        return axios.interceptors.response.use(
             () => { },
             function (error) {
                 const response = error.response;
+
+                console.log(response);
 
                 if (response.status === 401 && response.statusText === "Unauthorized") {
                     const message = dispatch(
@@ -49,20 +54,20 @@ export default function App() {
                             dispatch(signOutAsync());
 
                             // Redirect login page
-                            // navigate("/login");
+                            // navigate("/login")
                         }
                     }
                 }
             }
         );
-
-        // Remove interceptors
-        axios.interceptors.response.eject(requestsInterceptor);
     }
 
+    // Remove interceptors
+    axios.interceptors.response.eject(requestsInterceptor());
+
     return (
-        <AppErrorBoundary>
-            <AppRoutes />
-        </AppErrorBoundary>
+        // <AppErrorBoundary>
+        <AppRoutes />
+        // </AppErrorBoundary>
     );
 }
