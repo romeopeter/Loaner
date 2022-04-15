@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
-import { signOutAsync } from "../../../redux/authSlice";
+import { Link, Navigate } from "react-router-dom";
 import { getOffersAction } from "../../../redux/loanSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -37,7 +36,7 @@ export default function ClientDashboard() {
 
         // Scroll windows to the top
         window.scroll(0, 0);
-    }, []);
+    }, [dispatch, authToken.access]);
 
     const { user: currentUser } = authUser;
 
