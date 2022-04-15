@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-export const tokenExpired = () => {
+export const TokenExpired = () => {
   return (
-    <div>
+    <div className="w-full h-full">
       <h3 className="text-gray-300">
         Your current token is expired
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
@@ -35,7 +35,7 @@ export default class AppErrorBoundary extends Component {
   render() {
     // Fallback UI
     if (this.state.hasError) {
-      return <tokenExpired />;
+      return <TokenExpired />;
     }
     return this.props.children;
   }
