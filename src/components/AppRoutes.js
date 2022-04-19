@@ -120,7 +120,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/client/offers/offer/edit'
+                        path='/client/offers/offer/edit/:id/:dealType'
                         element={
                             <RequireAuth>
                                 <EditOffer />
@@ -129,7 +129,7 @@ export default function AppRoutes() {
                     />
 
                     <Route
-                        path='/client/offers/offer/publish'
+                        path='/client/offers/offer/publish/:id/::dealType'
                         element={
                             <RequireAuth>
                                 <PublishOffer />
