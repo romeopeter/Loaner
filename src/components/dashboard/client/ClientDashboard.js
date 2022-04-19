@@ -26,7 +26,7 @@ export default function ClientDashboard() {
     const authUser = currentUserObj.user;
     const authToken = authUser.tokens;
     const offers = useSelector((state) => state.loan.offers);
-
+    const { user: currentUser } = authUser;
     const [offerStatus, setOfferStatus] = useState('open');
 
     useEffect(function getAllOffers() {
@@ -38,15 +38,11 @@ export default function ClientDashboard() {
         window.scroll(0, 0);
     }, [dispatch, authToken.access]);
 
-    const { user: currentUser } = authUser;
-
     if (!currentUser) {
         return <Navigate replace to="login" />;
     }
 
     const handleChange = (e) => {
-        console.log(e.target.value);
-
         const value = e.target.value === "" ? null : e.target.value;
 
         // Update offer status
@@ -268,13 +264,13 @@ export default function ClientDashboard() {
                                                             <div className="offer-button">
                                                                 <Button
                                                                     title="Edit draft"
-                                                                    link="/client/offers/offer/edit"
+                                                                    link={`/client/offers/offer/edit/${offer.id}/${offer['deal_type'].toLowerCase()}`}
                                                                     type="button"
                                                                     buttonClass="h-2 p-2 bg-grey"
                                                                 />
                                                                 <Button
                                                                     title='Publish'
-                                                                    link='/client/offers/offer/publish'
+                                                                    link={`/client/offers/offer/publish/${offer.id}/${offer['deal_type'].toLowerCase()}`}
                                                                     type='button'
                                                                     buttonClass='h-2 p-2 bg-white'
                                                                 />
