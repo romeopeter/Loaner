@@ -5,6 +5,7 @@
  * **/
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse"
 import {
@@ -24,7 +25,7 @@ export const signInAction = createAsyncThunk(
 		const dispatch = thunkAPI.dispatch
 
 		// Handle error response
-		handleRequestError(response, dispatch);	
+		if (response.status !== 200) handleRequestError(response, dispatch); 
 
 		// Request sent and resolved
 		if (response.status === 200) return response.data;
@@ -56,6 +57,11 @@ export const authSlice = createSlice({
 			// Store user object in browser storage
 			localStorage.setItem("USER", JSON.stringify(payload));
 
+			// Set default headers token
+			const accessToken = payload.tokens.access;
+			axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+			// Update state
 			state.isLoggedIn = true;
 			state.user = payload;
 		},
