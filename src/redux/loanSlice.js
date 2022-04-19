@@ -36,7 +36,7 @@ export const bondLoanOfferAction = createAsyncThunk(
         const res = await loanRequestBond(data);
         const dispatch = thunkAPI.dispatch;
 
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200 || res.status === 201) return res.data;
     }
@@ -44,11 +44,11 @@ export const bondLoanOfferAction = createAsyncThunk(
 
 export const getOffersAction = createAsyncThunk(
     "loan/getOffersAction",
-    async (thunkAPI) => {
+    async (_, thunkAPI) => {
         const res = await getOffers();
-        // const dispatch = thunkAPI.dispatch;
+        const dispatch = thunkAPI.dispatch;
 
-        // handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200) return res.data;
     }
@@ -62,7 +62,7 @@ export const getOfferAction = createAsyncThunk(
         const res = await getOffer(dealType, id);
         const dispatch = thunkAPI.dispatch;
 
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200) return res.data;
     }
@@ -76,7 +76,7 @@ export const editOfferAction = createAsyncThunk(
         const res = await editOffer(dealType, id, requestData);
         const dispatch = thunkAPI.dispatch;
 
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200 || res.status === 201) return res.data;
     }
@@ -89,7 +89,7 @@ export const AddInvestorsAction = createAsyncThunk(
         const res = await loanRequestAddInvestor(id, data);
         const dispatch = thunkAPI.dispatch;
 
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200 || res.status === 201) return res.data;
     }
@@ -101,7 +101,7 @@ export const publishOfferAction = createAsyncThunk(
         const res = await loanRequestPublish(id);
         const dispatch = thunkAPI.dispatch;
 
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) handleRequestError(res, dispatch);
 
         if (res.status === 200 || res.status === 201) return res.data;
     }
