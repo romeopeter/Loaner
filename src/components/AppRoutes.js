@@ -129,7 +129,7 @@ export default function AppRoutes() {
                     />
 
                     <Route
-                        path='/client/offers/offer/publish/:id/::dealType'
+                        path='/client/offers/offer/publish/:id/:dealType'
                         element={
                             <RequireAuth>
                                 <PublishOffer />
