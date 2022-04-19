@@ -4,6 +4,7 @@
 
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//import {useParams} from "react-router-dom";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
@@ -23,6 +24,7 @@ import { getInvestorsCategoriesAction } from "../../../redux/investorCategorySli
 import {
 	AddInvestorsAction,
 	publishOfferAction,
+	//getOfferAction
 } from "../../../redux/loanSlice.js";
 
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
@@ -32,6 +34,7 @@ import { Danger, Success } from "../../alert";
 export default function PublishOffer({ children, ...props }) {
 	const pageName = "Publish offer";
 
+	//const params = useParams();
 	const saveListModalRef = createRef();
 	const componentMounted = useRef(true);
 	const publishSuccessModalRef = createRef();
@@ -77,10 +80,13 @@ export default function PublishOffer({ children, ...props }) {
 		getCategoriesIds();
 	}, [state.categoryCheckbox]);
 
-	useEffect(() => {
+	useEffect(function muiltiInvestorsRequest() {
 		// Invoke function to generate request based on categories clicked
 		genMultiInvestorsRequests();
 	}, [categoriesIds]);
+
+	useEffect(function getOffer() {
+    }, [])
 
 	const handleInvestorChange = (selected) => {
 		setState((state) => {
@@ -141,8 +147,8 @@ export default function PublishOffer({ children, ...props }) {
 
 	/*Save list as favourite*/
 	const saveFavouriteList = () => {
-		const investorValues = state.investorSelected;
-		const categoryValues = state.categoryCheckbox;
+		// const investorValues = state.investorSelected;
+		// const categoryValues = state.categoryCheckbox;
 
 		// const clientInvestorsList = {};
 		const serverInvestorsList = {};
