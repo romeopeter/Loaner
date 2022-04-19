@@ -55,7 +55,6 @@ export default function handleRequestError(errorResponse, dispatch) {
 		}
 
 		/* LOAN REQUEST ERRORS */
-		
 		// Unprocessed entity
 		if (errorResponse.status === 422) {
 			dispatch(setServerMessage({
