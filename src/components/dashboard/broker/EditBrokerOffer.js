@@ -11,8 +11,6 @@ import NavMenu from "../NavMenu";
 
 import Button from "../../Button";
 
-import { setServerMessage } from "../../../redux/messageSlice";
-
 import { cp, bond } from "../loan-request-data/requestData";
 
 import { getOfferAction, editOfferAction } from "../../../redux/loanSlice";
@@ -263,7 +261,7 @@ export default function EditBrokerOffer() {
         });
       }
     })();
-  }, [params.id, params.dealType]);
+  }, [dispatch, params.id, params.dealType]);
 
   const CalculateLoanTenure = (startDate, EndDate) => {
     let tenure = "";
