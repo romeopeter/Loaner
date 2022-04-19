@@ -15,7 +15,6 @@ export default function App() {
     // Set default endpoint URL and Authorization key
     axios.defaults.baseURL = "https://order-book-online.herokuapp.com/";
     axios.defaults.headers.post["Content-Type"] = "application/json";
-    axios.defaults.headers.common["Authorization"] = undefined;
 
     if (userObj !== null && userObj.hasOwnProperty("tokens")) {
         axios.defaults.headers.common[
@@ -24,46 +23,42 @@ export default function App() {
     }
 
     // Interceptor checks response for expire on invalid token
-    const requestsInterceptor = () => {
-        return axios.interceptors.response.use(
-            () => { },
-            function (error) {
-                const response = error.response;
+    axios.interceptors.response.use(
+        (response) => {
+            // Any status code that lie within the range of 2xx cause this function to trigger
+            return response
+        },
+        (error) => {
+            // Any status codes that falls outside the range of 2xx cause this function to trigger
+            const response = error.response;
 
-                console.log(response);
+            if (response.status === 401 && response.statusText === "Unauthorized") {
+                const message = dispatch(
+                    setClientMessage({
+                        status: 401,
+                        messageType: "token_not_valid",
+                        message: "Unauthorized: Token is invalid or expired",
+                        detail: "Login token is expired. Please sign in",
+                    })
+                );
 
-                if (response.status === 401 && response.statusText === "Unauthorized") {
-                    const message = dispatch(
-                        setClientMessage({
-                            status: 401,
-                            messageType: "token_not_valid",
-                            message: "Unauthorized: Token is invalid or expired",
-                            detail: "Login token is expired. Please sign in",
-                        })
-                    );
+                const messageObj =
+                    typeof message.payload === "object" && message.payload;
 
-                    const messageObj =
-                        typeof message.payload === "object" && message.payload;
-
-                    if (messageObj !== false) {
-                        if (
-                            messageObj.messageType !== undefined &&
-                            messageObj.messageType === "token_not_valid"
-                        ) {
-                            // Sign user out
-                            dispatch(signOutAsync());
-
-                            // Redirect login page
-                            // navigate("/login")
-                        }
+                if (messageObj !== false) {
+                    if (
+                        messageObj.messageType !== undefined &&
+                        messageObj.messageType === "token_not_valid"
+                    ) {
+                        // Sign user out
+                        dispatch(signOutAsync());
                     }
                 }
             }
-        );
-    }
+        }
+    );
 
-    // Remove interceptors
-    axios.interceptors.response.eject(requestsInterceptor());
+    //Remove interceptors
 
     return (
         // <AppErrorBoundary>
