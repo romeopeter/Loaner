@@ -1477,11 +1477,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="name"
                                         id="name"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                       /* multiple={true}
+                                        multiple={true}
                                         value={formState.rating.name}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
-                                        }*/
+                                        }
                                     >
                                         <option value="agusto">Agusto</option>
                                         <option value="gcr">GCR</option>
@@ -1500,11 +1500,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="scale"
                                         id="scale"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                       /* multiple={true}
+                                        multiple={true}
                                         value={formState.rating.scale}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
-                                        }*/
+                                        }
                                     >
                                         <option value="AAA">AAA</option>
                                         <option value="AA">AA</option>
