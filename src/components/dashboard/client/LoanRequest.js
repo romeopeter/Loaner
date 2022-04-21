@@ -11,6 +11,7 @@ import NavMenu from "../NavMenu";
 
 import Button from "../../Button";
 
+// eslint-disable-next-line no-unused-vars
 import { setServerMessage } from "../../../redux/messageSlice";
 
 import { cp, bond } from "../loan-request-data/requestData";
@@ -25,6 +26,12 @@ import ShowLoanSummary from "./modal/ShowLoanSummary";
 export default function LoanRequest() {
 	const pageName = "Loan request";
 	const alert = useAlert();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const requestContainerRef = createRef();
+	const componentMounted = useRef(true);
+	
+	// eslint-disable-next-line no-unused-vars
 	const currentOfferIsUpdated = useSelector(
 		(state) => state.loan.currentOffer
 	);
@@ -88,11 +95,6 @@ export default function LoanRequest() {
 
 	const userFullName = `${user.first_name} ${user.last_name}`;
 
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const requestContainerRef = createRef();
-	const componentMounted = useRef(true);
-
 	const handleModal = () => {
 		setShowModal(true);
 	};
@@ -115,8 +117,9 @@ export default function LoanRequest() {
 			if (componentMounted.current) setIsLoading(true);
 
 			if (req.meta.requestStatus === "fulfilled") {
+				const payload = req.payload;
 				// Loan is created, Navigate to publish page
-				navigate("/client/offers/offer/publish");
+				navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
 			} else {
 				if (componentMounted.current) setIsLoading(false);
 
@@ -142,8 +145,10 @@ export default function LoanRequest() {
 			if (componentMounted.current) setIsLoading(true);
 
 			if (req.meta.requestStatus === "fulfilled") {
+				const payload = req.payload;
+
 				// Loan is created, Navigate to publish page
-				navigate("/client/offers/offer/publish");
+				navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
 			} else {
 				if (componentMounted.current) setIsLoading(false);
 
@@ -164,7 +169,7 @@ export default function LoanRequest() {
 
 	const CalculateLoanTenure = (startDate, EndDate) => {
 		let tenure = "";
-
+		// eslint-disable-next-line no-unused-vars
 		const currentDate = new Date();
 		const loanStartDate = new Date(startDate);
 		const loanEndDate = new Date(EndDate);
