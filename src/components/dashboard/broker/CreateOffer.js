@@ -11,6 +11,7 @@ import NavMenu from "../NavMenu";
 
 import Button from "../../Button";
 
+// eslint-disable-next-line no-unused-vars
 import { setServerMessage } from "../../../redux/messageSlice";
 
 import { cp, bond } from "../loan-request-data/requestData";
@@ -25,9 +26,6 @@ import ShowLoanSummary from "./modals/ShowLoanSummary";
 export default function LoanRequest() {
     const pageName = "Loan request";
     const alert = useAlert();
-    const currentOfferIsUpdated = useSelector(
-        (state) => state.loan.currentOffer
-    );
     const serverError = useSelector((state) => state.message.server.message);
 
     const [formState, setFormState] = useState({
@@ -100,9 +98,10 @@ export default function LoanRequest() {
     const handleSubmit = async () => {
         const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
 
+        // Check empty fields
         for (let prop in formState) {
             if (formState[prop] === "") {
-                alert.error("Empty field");
+                alert.error("You have empty fields");
                 return;
             }
         }
@@ -170,11 +169,11 @@ export default function LoanRequest() {
         const loanEndDate = new Date(EndDate);
 
         // Start Date cant be before the current year
-        /*if (loanStartDate.getTime() === currentDate.getFullYear()) {
+        if (loanStartDate.getTime() === currentDate.getFullYear()) {
             alert.error("Loan start year must be the current year");
 
             return
-        }*/
+        }
 
         /*
          Get loan tenure. Time difference is calculated and divided by 
@@ -187,7 +186,7 @@ export default function LoanRequest() {
 
         /*
          End date can't be the same as start date.
-         If the the difference is days is 0 then loan end date is set to
+         If the difference in days is 0 then loan end-date has been set to
          the same time as loan start date
          */
         if (tenure === 0 || tenure < 0) {
