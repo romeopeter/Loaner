@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, createRef } from "react";
 
 import { useAlert } from "react-alert";
@@ -101,7 +102,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
         const name = target.name;
         const value = target.value;
         const multiSelectValues = []
-
+ 
         if (value === "BOND") {
             setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
         } else {
@@ -354,6 +355,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
     if (typeof formState === "object" && formState !== undefined) {
         firstSlideIsHidden = state.secondSlideIn === true || state.lastSlideIn === true;
         secondSlideIsHidden = state.lastSlideIn === true;
+        // eslint-disable-next-line no-unused-vars
         secondSlideWillShow = state.lastSlideIn === false && (formState.dealType === "BOND" || formState.dealType === "CP");
 
         form1ErrorStyle = {
@@ -812,7 +814,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     </label>
                                 </div>
 
-                                <div className="col-span-1 mt-1">
+                                <div className="col-span- mt-1">
                                     <div className="" style={form2ErrorStyle}>
                                         <input
                                             name="discountValue"
@@ -831,11 +833,11 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         htmlFor="tranche-value"
                                         className="text-gray-300 error-label text-sm"
                                     >
-                                        Discount value is read only is implicity determined.
+                                        Discount value is read only and is implicity determined.
                                     </label>
                                 </div>
 
-                                <div className="col-span-1 mt-1">
+                                {/* <div className="col-span-1 mt-1">
                                     <input
                                         type="number"
                                         name="par-value"
@@ -845,10 +847,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         disabled={true}
                                         style={{ cursor: "not-allowed" }}
                                     />
-                                </div>
+                                </div> */}
 
                                 <div
-                                    className="col-span-1 mt-1"
+                                    className="col-span-2 mt-1"
                                     style={form2ErrorStyle}
                                 >
                                     <select
