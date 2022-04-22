@@ -194,7 +194,7 @@ export default function LoanRequest() {
                 "End date can not be the same as or less than start date!"
             );
 
-            return "***";
+            return;
         }
 
         return isNaN(tenure) === false && tenure;
