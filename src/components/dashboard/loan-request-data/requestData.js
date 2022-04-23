@@ -39,7 +39,6 @@ function cp(formState, currentUser) {
 				use_of_proceeds: formState.useOfProceeds,
 				tax_consideration: formState.taxConsideration,
 				pricing: {
-
 					day_count: formState.pricing.dayCount,
 					coupon_type: formState.pricing.couponType !== "" ? formState.pricing.couponType:null,
 					benchmark: formState.pricing.benchmark !== "" ? formState.pricing.benchmark:null,
