@@ -833,7 +833,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         htmlFor="tranche-value"
                                         className="text-gray-300 error-label text-sm"
                                     >
-                                        Discount value is read only and is implicity determined.
+                                        Discount value is read-only and is implicity determined.
                                     </label>
                                 </div>
 
