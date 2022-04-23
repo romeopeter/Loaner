@@ -31,6 +31,7 @@ export default function EditBrokerOffer() {
   const requestContainerRef = createRef();
   const componentMounted = useRef(true);
 
+  // eslint-disable-next-line no-unused-vars
   const OfferIsUpdated = useSelector((state) => state.loan.currentOffer);
   const serverError = useSelector((state) => state.message.server.message);
 
@@ -105,14 +106,14 @@ export default function EditBrokerOffer() {
         requestData: cp(formState, currentUser),
       };
 
-      const req = await (editOfferAction(requestData));
+      const req = await dispatch(editOfferAction(requestData));
 
       if (componentMounted.current) setIsLoading(true);
 
       if (req.meta.requestStatus === "fulfilled") {
         // Loan is updated, Navigate to publish page
 
-        console.log("Loan offer update successfully");
+        console.log("CP loan offer update successfully");
         navigate("/broker/dashboard/loan-offer/select-investor");
       } else {
         if (componentMounted.current) setIsLoading(false);
@@ -145,7 +146,7 @@ export default function EditBrokerOffer() {
       if (req.meta.requestStatus === "fulfilled") {
         // Loan is updated, Navigate to publish page
 
-        console.log("Loan offer update successfully");
+        console.log("Bond loan offer update successfully");
         navigate("/broker/dashboard/loan-offer/select-investor");
       } else {
         if (componentMounted.current) setIsLoading(false);
@@ -166,7 +167,7 @@ export default function EditBrokerOffer() {
   };
 
   useEffect(() => {
-    (async function () {
+    (async function populateOfferFields() {
       const req = await dispatch(
         getOfferAction({
           id: params.id,
@@ -184,19 +185,15 @@ export default function EditBrokerOffer() {
             const trancheObj = payload["tranche_id"];
 
             //  Determine offer rating based on deal type
-            let fixedPriceOfferType;
-            let bookBuildOfferType;
-            const getOfferTypeName =
-              trancheObj["pricing"]["offer_type"]["name"];
-
-            if (getOfferTypeName === "fixed value") {
-              fixedPriceOfferType = {
+            let fixedPrice = {rate: "",yield: ""};
+            if (trancheObj["pricing"]["offer_type"]["name"] === "fixed value") {
+              fixedPrice = {
                 rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
                 yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
               };
             }
-            if (getOfferTypeName === "book build") {
-              bookBuildOfferType = {
+            if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
+              fixedPrice = {
                 rate: trancheObj["pricing"]["offer_type"][
                   "discount_rate_range"
                 ],
@@ -232,12 +229,7 @@ export default function EditBrokerOffer() {
                 callOption: trancheObj["pricing"]["call_option"],
                 offerType: {
                   name: trancheObj["pricing"]["offer_type"]["name"],
-                  fixedPrice:
-                    getOfferTypeName === "fixed value"
-                      ? fixedPriceOfferType
-                      : getOfferTypeName === "book build"
-                      ? bookBuildOfferType
-                      : { rate: "", yield: "" },
+                  fixedPrice: fixedPrice
                 },
               },
               timing: {
