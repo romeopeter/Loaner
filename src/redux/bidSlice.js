@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
     getBids, 
-    getBid, 
+    getBid,
     createBid, 
     updateBids,
+    getapprovedBids,
+    getDeclinedBids,
     getAllOffersStatus
 } from "../services/bid.service.js";
 import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse";
-
 
 export const createBidAction = createAsyncThunk(
     "bid/createBidAction",
@@ -17,9 +18,11 @@ export const createBidAction = createAsyncThunk(
         const res = await createBid(data);
 
         // Catch error
-        handleRequestError(res, dispatch);
+        if (res.status !== 200) {
+            handleRequestError(res, dispatch);   
+        }
 
-        if (res.status === 200) console.log(res);
+        if (res.status === 200) return res.data;
     }
 );
 
@@ -28,7 +31,9 @@ export const getBidAction = createAsyncThunk("bid/getBidAction", async (offerId,
     const res = await getBid(offerId);
 
     // Catch error
-    handleRequestError(res, dispatch);
+    if (res.status !== 200) {
+        handleRequestError(res, dispatch);   
+    }
 
     if (res.status === 200) return res.data;
 });
@@ -37,11 +42,44 @@ export const getAllOffersStatusAction = createAsyncThunk(
     "bid/getAllOffersStatusAction",
     async (reqArr, thunkAPI) => {
         const dispatch = thunkAPI.dispatch;
-        const response = await getAllOffersStatus(reqArr);
+        const res = await getAllOffersStatus(reqArr);
 
-        handleRequestError(response, dispatch);
+        // Catch error
+        if (res.status !== 200) {
+            handleRequestError(res, dispatch);   
+        }
 
-        return response;
+        if (res.status === 200) return res.data;
+    }
+)
+
+export const getApprovedBidsAction = createAsyncThunk(
+    "bid/getApprovedBidsAction",
+    async (_, thunkAPI) => {
+        const dispatch = thunkAPI.dispatch;
+        const res = await getapprovedBids();
+
+        // Catch error
+        if (res.status !== 200) {
+            handleRequestError(res, dispatch);   
+        }
+
+        if (res.status === 200) return res.data;
+    }
+)
+
+export const getDeclinedBidsAction = createAsyncThunk(
+    "bid/getDeclinedBidsAction",
+    async (_, thunkAPI) => {
+        const dispatch = thunkAPI.dispatch;
+        const res = await getDeclinedBids();
+
+        // Catch error
+        if (res.status !== 200) {
+            handleRequestError(res, dispatch);   
+        }
+
+        if (res.status === 200) return res.data;
     }
 )
 
@@ -50,7 +88,9 @@ export const bidSlice = createSlice({
     initialState: {
         bid: null,
         allBids: null,
-        allBidsStatus: null
+        allBidsStatus: null,
+        approvedBids: null,
+        declinedBids: null
     },
     reducers: {
         setCurrentBid: (state, action) => {
@@ -58,6 +98,17 @@ export const bidSlice = createSlice({
         }
     },
     extraReducers: {
+        // GET BID
+        [getBidAction.pending]: (state, action) => {
+            console.log("Pending");
+        },
+        [getBidAction.rejected]: (state, action) => {
+            console.log("rejected");
+        },
+        [getBidAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state.bid = payload;
+        },
 
         // CREATE BID
         [createBidAction.pending]: (state, action) => {
@@ -81,19 +132,32 @@ export const bidSlice = createSlice({
         [getAllOffersStatusAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.allBidsStatus = payload;
+            
         },
-
-        // GET BID
-        [getBidAction.pending]: (state, action) => {
-            console.log("Pending");
+            // Get approved Bids
+            [getApprovedBidsAction.pending]: (state, action) => {
+            console.log("pending");
         },
-        [getBidAction.rejected]: (state, action) => {
+        [getApprovedBidsAction.rejected]: (state, action) => {
             console.log("rejected");
         },
-        [getBidAction.fulfilled]: (state, action) => {
+        [getApprovedBidsAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
-            state.bid = payload;
+            state.approvedBids = payload;
         },
+
+        // Get declined Bids
+        [getDeclinedBidsAction.pending]: (state, action) => {
+            console.log("pending");
+        },
+        [getDeclinedBidsAction.rejected]: (state, action) => {
+            console.log("rejected");
+        },
+        [getDeclinedBidsAction.fulfilled]: (state, action) => {
+            const payload = action.payload !== undefined && action.payload;
+            state.approvedBids = payload;
+        },
+
     }
  
 });
