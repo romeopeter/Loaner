@@ -1,8 +1,7 @@
-import React, { createRef, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import ReactPaginate from "react-paginate";
 
 import OrderbookLayout from "../../OrderbookLayout";
@@ -18,19 +17,20 @@ import offerImage from "../../../assets/images/offerImage.png";
 /* Data call modules */
 import { getInvestorAllOffersAction } from "../../../redux/investorSlice";
 import { getAllOffersStatusAction } from "../../../redux/bidSlice";
+// eslint-disable-next-line no-unused-vars
 import { setCurrentBid } from "../../../redux/bidSlice";
-import { offers } from "../../../fake-backend/investor/offers";
 
 export default function AllOffers() {
 	const pageName = "Investor";
-
-	const currentUserObj = useSelector((state) => state.auth.user);
-	const allOffers = useSelector((state) => state.investor.allOffers);
-	const allBidsStatus = useSelector((state) => state.bid.allBidsStatus);
 	const dispatch = useDispatch();
 
+	const currentUserObj = useSelector((state) => state.auth.user);
+	// eslint-disable-next-line no-unused-vars
+	const allOffers = useSelector((state) => state.investor.allOffers);
+	const allBidsStatus = useSelector((state) => state.bid.allBidsStatus);
+
 	const { user: currentUser } = currentUserObj;
-	const { tokens: userTokens } = currentUserObj;
+	// const { tokens: userTokens } = currentUserObj;
 	const { id: investorId } = currentUser["investor_details"];
 
 	const [paginateState, setPaginateState] = useState({
@@ -40,15 +40,20 @@ export default function AllOffers() {
 		pages: 0,
 	});
 
+	let [isLoading, setisLoading] = useState(true);
+
+	let componentIsMounted = useRef(true);
+
 	useEffect(function getAllInvestorOffers() {
-		(async function() {
-			if (userTokens.access !== undefined || userTokens.access !== null) {
-				const req = await dispatch(
-					getInvestorAllOffersAction(investorId)
-				);
 
-				if (req.meta.requestStatus === "fulfilled") {
+		(async function () {
+			const req = await dispatch(
+				getInvestorAllOffersAction(investorId)
+			);
 
+			if (req.meta.requestStatus === "fulfilled") {
+
+				if (componentIsMounted.current) {
 					setPaginateState((state) => {
 						return {
 							...state,
@@ -56,10 +61,15 @@ export default function AllOffers() {
 							pages: Math.floor(req.payload.length / paginateState.perPage),
 						};
 					});
+
+					setisLoading(false);
 				}
 			}
 		})();
-	}, [dispatch, investorId, userTokens.access]);
+
+		return () => componentIsMounted;
+
+	}, [dispatch, investorId, paginateState.perPage]);
 
 	useEffect(
 		function getOffersStatusById() {
@@ -83,12 +93,26 @@ export default function AllOffers() {
 	};
 	/*Paginatiion ends*/
 
-	const trancheTenure = (offerStart, offerEnds) => {
-		const offerStartDate = new Date(offerStart);
-		const offerEndDate = new Date(offerEnds);
-		let tenure = "120 days";
+	const calculateLoanTenure = (startDate, EndDate) => {
+		let tenure = "";
 
-		return tenure;
+		const loanStartDate = new Date(startDate);
+		const loanEndDate = new Date(EndDate);
+
+		/*
+			Get loan tenure. Time difference is calculated and divided by 
+			number of miliseconds in a day to get day difference which
+			becomes the tenure
+		*/
+		const timeDifference = loanEndDate.getTime() - loanStartDate.getTime();
+		const daysDiffernce = timeDifference / (1000 * 60 * 60 * 24);
+		tenure = daysDiffernce;
+
+		/* If the the difference is days is 0 then loan-end date is set to
+		 the same time as loan-start date*/
+		if (tenure === 0 || tenure < 0) return "***";
+
+		return isNaN(tenure) === false && tenure;
 	};
 
 	const checkBidStatus = (offer, offerIndex) => {
@@ -212,125 +236,136 @@ export default function AllOffers() {
 						<div id="title" className="pb-2 pt-5">
 							<h3>My Offers</h3>
 						</div>
-						<table className="table-auto w-full">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Tranche</th>
-									<th>Tenor</th>
-									<th>Size</th>
-									<th>Status</th>
-								</tr>
-							</thead>
 
-							<tbody>
-								{items.length > 0 ? (
-									items.map((item, itemIndex) => (
-										<tr key={itemIndex}>
-											<td className="offer-title">
-												<input
-													type="checkbox"
-													name="checkbox"
-													className="checkbox mr-2 rounded"
-												/>
-												<img
-													src={offerImage}
-													alt=""
-													className="h-10 w-10 rounded mx-2"
-													id="offer-image"
-												/>
-												<span>{item.deal_name}</span>
-											</td>
-											<td>{item.tranche_id.name}</td>
-											<td>
-												{trancheTenure(
-													item.tranche_id.timing
-														.offer_start,
-													item.tranche_id.timing
-														.offer_end
-												)}
-											</td>
-											<td>
-												{Math.round(
-													item.tranche_id.size
-														.minimum_subscription
-														.amount
-												)}
-											</td>
-											<td>
-												{checkBidStatus(
-													item,
-													itemIndex
-												) === "approved" && (
-													<Button
-														title={checkBidStatus(
-															item,
-															itemIndex
-														)}
-														link={`/investor/dashboard/offers/${item.id}/bid-approved`}
-														buttonClass="bg-green-600 rounded-md bid-approved"
-													/>
-												)}
-												{checkBidStatus(
-													item,
-													itemIndex
-												) === "disagreed" && (
-													<Button
-														title="Rejected"
-														// title={checkBidStatus(item, itemIndex)}
-														link={`/investor/dashboard/offers/${item.id}/bid-rejected`}
-														buttonClass="bg-red-600 rounded-md bid-rejected"
-													/>
-												)}
-												{checkBidStatus(
-													item,
-													itemIndex
-												) === "pending" && (
-													<Button
-														title={checkBidStatus(
-															item,
-															itemIndex
-														)}
-														buttonClass="bg-yellow-400 rounded-md offer-open"
-														buttonDisabled={true}
-													/>
-												)}
-												{checkBidStatus(
-													item,
-													itemIndex
-												) === "open" && (
-													<Button
-														title={checkBidStatus(
-															item,
-															itemIndex
-														)}
-														link={`/investor/dashboard/offers/${item.id}/`}
-														buttonClass="bg-blue-500 rounded-md offer-open"
-													/>
-												)}
-												{checkBidStatus(
-													item,
-													itemIndex
-												) === "Coming soon" && (
-													<Button
-														title={checkBidStatus(
-															item,
-															itemIndex
-														)}
-														link="/investor/offer-coming-soon"
-														buttonClass="bg-gray-500 rounded-md coming-soon"
-													/>
-												)}
-											</td>
+						{isLoading ? (
+							<div className="text-3xl w-full py-5">
+								<p className="text-center">Loading
+									<i className="fa fa-spinner fa-pulse fa-3x fa-fw ml-2" style={{ fontSize: 30 }}></i>
+								</p>
+							</div>) : (
+							<table className="table-auto w-full">
+								{items.length === 0 ? (
+									<div className="py-5">
+										<p className="text-center text-3xl text-gray-500" style={{ fontSize: "1.9rem" }}>
+											You have no offers <i class="fa fa-times ml-2" aria-hidden="true"></i>
+										</p>
+									</div>
+								) : (<>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Tranche</th>
+											<th>Tenor</th>
+											<th>Size</th>
+											<th>Status</th>
 										</tr>
-									))
-								) : (
-									<tr className="text-3xl text-center w-full py-5">
-										Loading...
-									</tr>
+									</thead>
+									<tbody>
+										{
+											items.map((item, itemIndex) => (
+												<tr key={itemIndex}>
+													<td className="offer-title">
+														<input
+															type="checkbox"
+															name="checkbox"
+															className="checkbox mr-2 rounded"
+														/>
+														<img
+															src={offerImage}
+															alt=""
+															className="h-10 w-10 rounded mx-2"
+															id="offer-image"
+														/>
+														<span>{item.deal_name}</span>
+													</td>
+													<td>{item.tranche_id.name}</td>
+													<td>
+														{calculateLoanTenure(
+															item.tranche_id.timing
+																.offer_start,
+															item.tranche_id.timing
+																.offer_end
+														)}
+													</td>
+													<td>
+														{Math.round(
+															item.tranche_id.size
+																.minimum_subscription
+																.amount
+														)}
+													</td>
+													<td>
+														{checkBidStatus(
+															item,
+															itemIndex
+														) === "approved" && (
+																<Button
+																	title={checkBidStatus(
+																		item,
+																		itemIndex
+																	)}
+																	link={`/investor/dashboard/offers/${item.id}/bid-approved`}
+																	buttonClass="bg-green-600 rounded-md bid-approved"
+																/>
+															)}
+														{checkBidStatus(
+															item,
+															itemIndex
+														) === "disagreed" && (
+																<Button
+																	title="Rejected"
+																	// title={checkBidStatus(item, itemIndex)}
+																	link={`/investor/dashboard/offers/${item.id}/bid-rejected`}
+																	buttonClass="bg-red-600 rounded-md bid-rejected"
+																/>
+															)}
+														{checkBidStatus(
+															item,
+															itemIndex
+														) === "pending" && (
+																<Button
+																	title={checkBidStatus(
+																		item,
+																		itemIndex
+																	)}
+																	buttonClass="bg-yellow-400 rounded-md offer-open"
+																	buttonDisabled={true}
+																/>
+															)}
+														{checkBidStatus(
+															item,
+															itemIndex
+														) === "open" && (
+																<Button
+																	title={checkBidStatus(
+																		item,
+																		itemIndex
+																	)}
+																	link={`/investor/dashboard/offers/${item.id}/`}
+																	buttonClass="bg-blue-500 rounded-md offer-open"
+																/>
+															)}
+														{checkBidStatus(
+															item,
+															itemIndex
+														) === "Coming soon" && (
+																<Button
+																	title={checkBidStatus(
+																		item,
+																		itemIndex
+																	)}
+																	link="/investor/offer-coming-soon"
+																	buttonClass="bg-gray-500 rounded-md coming-soon"
+																/>
+															)}
+													</td>
+												</tr>
+											))
+										}
+									</tbody>
+								</>
 								)}
-							</tbody>
-						</table>
+							</table>)}
 
 						<hr className="border-1 border-white mt-10" />
 
