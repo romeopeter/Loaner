@@ -33,8 +33,8 @@ import BidApproved from './dashboard/investor/BidApproved';
 import BidRejected from './dashboard/investor/BidRejected';
 import BAPaymentProof from './dashboard/investor/BAPaymentProof';
 import BAPaymentDetail from './dashboard/investor/BAPaymentDetail';
-import SuccessfulOffers from './dashboard/investor/SuccessfulOffers';
-import DeclinedOffers from './dashboard/investor/DeclinedOffers';
+import ApprovedBids from './dashboard/investor/ApprovedBids';
+import DeclinedBids from './dashboard/investor/DeclinedBids';
 
 import BrokerDashboard from './dashboard/broker/Dashboard';
 import NewClient from './dashboard/broker/NewClient';
@@ -112,7 +112,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/client/offers/offer'
+                        path='/client/offers/offer/:id/:dealType'
                         element={
                             <RequireAuth>
                                 <ShowOffer />
@@ -127,7 +127,14 @@ export default function AppRoutes() {
                             </RequireAuth>
                         }
                     />
-
+                     <Route
+                        path='/client/offers/offer/full-edit/:id/:dealType'
+                        element={
+                            <RequireAuth>
+                                <EditOffer />
+                            </RequireAuth>
+                        }
+                    />
                     <Route
                         path='/client/offers/offer/publish/:id/:dealType'
                         element={
@@ -233,7 +240,7 @@ export default function AppRoutes() {
 						path="/investor/sucessful-bids"
 						element={
 							<RequireAuth>
-								<SuccessfulOffers />
+								<ApprovedBids />
 							</RequireAuth>
 						}
 					/>
@@ -241,7 +248,7 @@ export default function AppRoutes() {
 						path="/investor/bids/declined"
 						element={
 							<RequireAuth>
-								<DeclinedOffers />
+								<DeclinedBids />
 							</RequireAuth>
 						}
 					/>
