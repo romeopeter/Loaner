@@ -27,8 +27,6 @@ export default function DeclinedBids() {
 	const { page, perPage, pages, list } = paginateState;
 	let approvedBids = list.slice(page * perPage, (page + 1) * perPage);
 
-	console.log(approvedBids);
-
 	const handlePageClick = (event) => {
 		let page = event.selected;
 		setPaginateState((state) => ({ ...state, page: page }));
@@ -118,13 +116,15 @@ export default function DeclinedBids() {
 								<table className="bg-white table-auto w-full">
 									<tbody>
 										{approvedBids.length === 0 ? (
-											<p 
+											<div>
+												<p 
 												className="py-5 text-center text-3xl text-gray-400 h-40 flex justify-center items-center"
 												style={{fontSize: "1.875rem"}}
 											>
 											You have declined bids
 												<i class="fa fa-times ml-2" aria-hidden="true"></i>
 											</p>
+											</div>
 										) : approvedBids.map((item, index) => {
 
 											return (
