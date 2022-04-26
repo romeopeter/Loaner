@@ -41,15 +41,8 @@ export const getBidAction = createAsyncThunk("bid/getBidAction", async (offerId,
 export const getAllOffersStatusAction = createAsyncThunk(
     "bid/getAllOffersStatusAction",
     async (reqArr, thunkAPI) => {
-        const dispatch = thunkAPI.dispatch;
         const res = await getAllOffersStatus(reqArr);
-
-        // Catch error
-        if (res.status !== 200) {
-            handleRequestError(res, dispatch);   
-        }
-
-        if (res.status === 200) return res.data;
+        return res;
     }
 )
 
