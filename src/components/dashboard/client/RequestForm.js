@@ -222,6 +222,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		state.secondSlideIn === true || state.lastSlideIn === true;
 
 	const secondSlideIsHidden = state.lastSlideIn === true;
+	// eslint-disable-next-line no-unused-vars
 	const secondSlideWillShow =
 		state.lastSlideIn === false &&
 		(formState.dealType === "BOND" || formState.dealType === "CP");
@@ -240,8 +241,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		height: state.firstSlideIn
 			? "900px"
 			: state.lastSlideIn
-			? "650px"
-			: "1195px",
+				? "650px"
+				: "1195px",
 	};
 
 	/**
@@ -395,7 +396,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+								// required
 								/>
 							</div>
 
@@ -413,7 +414,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+								// required
 								/>
 							</div>
 
@@ -431,7 +432,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+								// required
 								/>
 							</div>
 
@@ -449,7 +450,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+								// required
 								/>
 							</div>
 
@@ -467,7 +468,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									onChange={(e) =>
 										handleChange(e, "generalTerms")
 									}
-									// required
+								// required
 								/>
 							</div>
 
@@ -676,9 +677,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										/>
 									</div>
 									<label
-										className="error-label text-sm"
+										className="error-label text-sm text-gray-300"
 										htmlFor="face-value"
-										className="text-gray-300"
+
 									>
 										Value shouldn't be more than 4 digits
 										and 2 decimals. e.g: 1000.01
@@ -698,15 +699,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													.discountValue
 											}
 											readOnly={true}
-											/*onChange={(e) =>
-												handleChange(e, "trancheSize")
-											}*/
+										/*onChange={(e) =>
+											handleChange(e, "trancheSize")
+										}*/
 										/>
 									</div>
 									<label
-										className="error-label text-sm"
+										className="error-label text-sm text-gray-300"
 										htmlFor="tranche-value"
-										className="text-gray-300"
 									>
 										Discount value is read only is implicity determined.
 									</label>
@@ -860,7 +860,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													disabled={
 														formState.pricing
 															.couponType ===
-														"floating"
+															"floating"
 															? false
 															: true
 													}
@@ -868,13 +868,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
 														backgroundColor:
 															formState.pricing
 																.couponType ===
-															"floating"
+																"floating"
 																? "#d1d5db"
 																: "#888",
 														cursor:
 															formState.pricing
 																.couponType ===
-															"floating"
+																"floating"
 																? "text"
 																: "not-allowed",
 													}}
@@ -891,9 +891,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												/>
 											</div>
 											<label
-												className="error-label text-sm"
+												className="error-label text-sm text-gray-300"
 												htmlFor="benchmark"
-												className="text-gray-300"
 											>
 												Value shouldn't be more than 3
 												digits e.g: 100
@@ -903,11 +902,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								) : null}
 
 								<div
-									className={`${
-										formState.dealType === "BOND"
+									className={`${formState.dealType === "BOND"
 											? "col-span-1"
 											: "col-span-2"
-									} mt-1`}
+										} mt-1`}
 									style={form2ErrorStyle}
 								>
 									<select
@@ -936,11 +934,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 
 								<div
-									className={`${
-										formState.dealType === "BOND"
+									className={`${formState.dealType === "BOND"
 											? "col-span-1"
 											: "col-span-2"
-									} mt-1`}
+										} mt-1`}
 									style={form2ErrorStyle}
 								>
 									<select
@@ -967,7 +964,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 							<div className="grid grid-cols-2 gap-4 mt-5">
 								{formState.pricing.offerType.name ===
-								"fixed price" ? (
+									"fixed price" ? (
 									<>
 										<div className="col-span-1 mt-1">
 											<div style={form2ErrorStyle}>
@@ -990,21 +987,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																	pricing: {
 																		...state.pricing,
 																		offerType:
+																		{
+																			...state
+																				.pricing
+																				.offerType,
+																			fixedPrice:
 																			{
 																				...state
 																					.pricing
-																					.offerType,
-																				fixedPrice:
-																					{
-																						...state
-																							.pricing
-																							.offerType
-																							.fixedPrice,
-																						rate: e
-																							.target
-																							.value,
-																					},
+																					.offerType
+																					.fixedPrice,
+																				rate: e
+																					.target
+																					.value,
 																			},
+																		},
 																	},
 																};
 															}
@@ -1013,9 +1010,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												/>
 											</div>
 											<label
-												className="error-label text-sm"
+												className="error-label text-sm text-gray-300"
 												htmlFor="discount-rate"
-												className="text-gray-300"
 											>
 												Value shouldn't be more than 4
 												digits e.g: 1000
@@ -1043,21 +1039,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																	pricing: {
 																		...state.pricing,
 																		offerType:
+																		{
+																			...state
+																				.pricing
+																				.offerType,
+																			fixedPrice:
 																			{
 																				...state
 																					.pricing
-																					.offerType,
-																				fixedPrice:
-																					{
-																						...state
-																							.pricing
-																							.offerType
-																							.fixedPrice,
-																						yield: e
-																							.target
-																							.value,
-																					},
+																					.offerType
+																					.fixedPrice,
+																				yield: e
+																					.target
+																					.value,
 																			},
+																		},
 																	},
 																};
 															}
@@ -1066,9 +1062,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												/>
 											</div>
 											<label
-												className="error-label text-sm"
+												className="error-label text-sm text-gray-300"
 												htmlFor="implied-yield"
-												className="text-gray-300"
 											>
 												Value shouldn't be more than 4
 												digits e.g: 1000
@@ -1078,7 +1073,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								) : null}
 
 								{formState.pricing.offerType.name ===
-								"book build" ? (
+									"book build" ? (
 									<>
 										<div className="col-span-1 mt-1">
 											<div style={form2ErrorStyle}>
@@ -1101,21 +1096,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
 																	pricing: {
 																		...state.pricing,
 																		offerType:
+																		{
+																			...state
+																				.pricing
+																				.offerType,
+																			fixedPrice:
 																			{
 																				...state
 																					.pricing
-																					.offerType,
-																				fixedPrice:
-																					{
-																						...state
-																							.pricing
-																							.offerType
-																							.fixedPrice,
-																						rate: e
-																							.target
-																							.value,
-																					},
+																					.offerType
+																					.fixedPrice,
+																				rate: e
+																					.target
+																					.value,
 																			},
+																		},
 																	},
 																};
 															}
@@ -1124,9 +1119,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												/>
 											</div>
 											<label
-												className="error-label text-sm"
+												className="error-label text-sm text-gray-300"
 												htmlFor="discount-rate-range"
-												className="text-gray-300"
+
 											>
 												Value shouldn't be more than 3
 												digits e.g: 100
@@ -1147,40 +1142,39 @@ export default function RequestForm({ requestFormState, showSummary }) {
 															.fixedPrice.yield
 													}
 													readOnly={true}
-													/*onChange={(e) =>
-														setFormState(
-															(state) => {
-																return {
-																	...state,
-																	pricing: {
-																		...state.pricing,
-																		offerType:
-																			{
-																				...state
-																					.pricing
-																					.offerType,
-																				fixedPrice:
-																					{
-																						...state
-																							.pricing
-																							.offerType
-																							.fixedPrice,
-																						yield: e
-																							.target
-																							.value,
-																					},
-																			},
-																	},
-																};
-															}
-														)
-													}*/
+												/*onChange={(e) =>
+													setFormState(
+														(state) => {
+															return {
+																...state,
+																pricing: {
+																	...state.pricing,
+																	offerType:
+																		{
+																			...state
+																				.pricing
+																				.offerType,
+																			fixedPrice:
+																				{
+																					...state
+																						.pricing
+																						.offerType
+																						.fixedPrice,
+																					yield: e
+																						.target
+																						.value,
+																				},
+																		},
+																},
+															};
+														}
+													)
+												}*/
 												/>
 											</div>
 											<label
-												className="error-label text-sm"
+												className="error-label text-sm text-gray-300"
 												htmlFor="yield"
-												className="text-gray-300"
 											>
 												Offer yield value is read only and is implicitly determined.
 											</label>
