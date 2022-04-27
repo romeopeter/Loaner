@@ -25,8 +25,6 @@ export default function AllOffers() {
 	const dispatch = useDispatch();
 
 	const currentUserObj = useSelector((state) => state.auth.user);
-	// eslint-disable-next-line no-unused-vars
-	const allOffers = useSelector((state) => state.investor.allOffers);
 	const allBidsStatus = useSelector((state) => state.bid.allBidsStatus);
 
 	const { user: currentUser } = currentUserObj;
