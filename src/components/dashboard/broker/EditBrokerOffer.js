@@ -18,7 +18,7 @@ import { getOfferAction, editOfferAction } from "../../../redux/loanSlice";
 import ShowLoanSummary from "./modals/ShowLoanSummary";
 
 export default function EditBrokerOffer() {
-  const pageName = "Loan request";
+  const pageName = "Loan offer edit";
 
   const { user } = JSON.parse(localStorage.getItem("USER"));
 
@@ -31,8 +31,6 @@ export default function EditBrokerOffer() {
   const requestContainerRef = createRef();
   const componentMounted = useRef(true);
 
-  // eslint-disable-next-line no-unused-vars
-  const OfferIsUpdated = useSelector((state) => state.loan.currentOffer);
   const serverError = useSelector((state) => state.message.server.message);
 
   const [summaryState, setSummaryState] = useState(false);
@@ -88,6 +86,8 @@ export default function EditBrokerOffer() {
       scale: "",
     },
   });
+
+  const [isOpen, setOpen] = useState({ client: false, investor: false });
 
   const handleSubmit = async () => {
     const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
@@ -296,26 +296,25 @@ export default function EditBrokerOffer() {
     setShowModal(true);
   };
 
-  // Dropdown
-  const [isOpen, setOpen] = useState({ client: false, investor: false });
+  /* Dropdown starts */
+    const toggleDropdownClient = () => {
+      if (isOpen.client) {
+        setOpen({ ...isOpen, client: false });
+        return;
+      }
 
-  const toggleDropdownClient = () => {
-    if (isOpen.client) {
-      setOpen({ ...isOpen, client: false });
-      return;
-    }
+      setOpen({ investor: false, client: true });
+    };
 
-    setOpen({ investor: false, client: true });
-  };
+    const toggleDropdownInvestor = () => {
+      if (isOpen.investor) {
+        setOpen({ ...isOpen, investor: false });
+        return;
+      }
 
-  const toggleDropdownInvestor = () => {
-    if (isOpen.investor) {
-      setOpen({ ...isOpen, investor: false });
-      return;
-    }
-
-    setOpen({ client: false, investor: true });
-  };
+      setOpen({ client: false, investor: true });
+    };
+  /* Dropdown starts */
 
   return (
     <>
