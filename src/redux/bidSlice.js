@@ -1,14 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+    // eslint-disable-next-line no-unused-vars
     getBids, 
     getBid,
     createBid, 
+    // eslint-disable-next-line no-unused-vars
     updateBids,
     getapprovedBids,
     getDeclinedBids,
     getAllOffersStatus
 } from "../services/bid.service.js";
-import { setServerMessage } from "./messageSlice";
 import handleRequestError from "./errorResponse";
 
 export const createBidAction = createAsyncThunk(
