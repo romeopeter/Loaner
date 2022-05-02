@@ -20,6 +20,7 @@ import LoanRequest from './dashboard/client/LoanRequest';
 import Offers from './dashboard/client/Offers';
 import ShowOffer from './dashboard/client/ShowOffer';
 import EditOffer from './dashboard/client/EditOffer';
+import FullEdit from './dashboard/client/FullEdit';
 import PublishOffer from './dashboard/client/PublishOffer';
 import ViewInvestor from './dashboard/client/ViewInvestor';
 import ShowBids from './dashboard/client/ShowBids';
@@ -131,7 +132,7 @@ export default function AppRoutes() {
                         path='/client/offers/offer/full-edit/:id/:dealType'
                         element={
                             <RequireAuth>
-                                <EditOffer />
+                                <FullEdit />
                             </RequireAuth>
                         }
                     />
