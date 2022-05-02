@@ -4,7 +4,7 @@
 
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-//import {useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
@@ -24,7 +24,7 @@ import { getInvestorsCategoriesAction } from "../../../redux/investorCategorySli
 import {
 	AddInvestorsAction,
 	publishOfferAction,
-	//getOfferAction
+	getOfferAction
 } from "../../../redux/loanSlice.js";
 
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
@@ -32,9 +32,13 @@ import { saveInvestorListAction } from "../../../redux/investorListSlice";
 import { Danger, Success } from "../../alert";
 
 export default function PublishOffer({ children, ...props }) {
+	// Scroll window to the top
+	window.scroll(0, 0);
+
+
 	const pageName = "Publish offer";
 
-	//const params = useParams();
+	const params = useParams();
 	const saveListModalRef = createRef();
 	const componentMounted = useRef(true);
 	const publishSuccessModalRef = createRef();
@@ -69,24 +73,32 @@ export default function PublishOffer({ children, ...props }) {
 		statusNotSet: ""
 	});
 
-	useEffect(() => {
-		// Get all investors categories
+	// Get all investors categories
+	useEffect(function getCategories() {
 		dispatch(getInvestorsCategoriesAction());
 		dispatch(getInvestorsInCategoryAction());
-	}, []);
+	}, [dispatch]);
 
+	// Get all categories IDs
 	useEffect(() => {
-		// Invoke function to get all categories IDs
 		getCategoriesIds();
 	}, [state.categoryCheckbox]);
 
+	// Generate request based on categories clicked
 	useEffect(function muiltiInvestorsRequest() {
-		// Invoke function to generate request based on categories clicked
 		genMultiInvestorsRequests();
 	}, [categoriesIds]);
 
-	useEffect(function getOffer() {
-    }, [])
+	// useEffect(function getOffer() {
+	// 	const req = dispatch(getOfferAction({id: params['id'], dealType: params["deal_type"]}));
+
+	// 	console.log(req);
+
+	// 	if (req.meta.requestStatus === "fulfilled") {
+	// 		const payload = req.payload !== undefined && req.payload;
+	// 		setCurrentOffer(payload);
+	// 	}
+    // }, [dispatch, params])
 
 	const handleInvestorChange = (selected) => {
 		setState((state) => {
@@ -358,7 +370,7 @@ export default function PublishOffer({ children, ...props }) {
 			<OrderbookLayout PageNav={NavMenu}>
 				<div
 					id="loan-invest-dropdown"
-					class="bg-white px-16 py-10 shadow-md flex items-start"
+					className="bg-white px-16 py-10 shadow-md flex items-start"
 				>
 					<div id="loan" className="dropdown-container underline mr-5">
 						View offers
@@ -481,6 +493,8 @@ export default function PublishOffer({ children, ...props }) {
 																		</div>
 																	);
 																}
+
+																return null
 															}
 													  )
 													: null}
@@ -494,7 +508,13 @@ export default function PublishOffer({ children, ...props }) {
 															)
 														}
 													/>
-												) : null}
+												) : (<Button
+													title="view less"
+													buttonClass="view-more font-bold"
+													handleClick={() =>
+														setInvestorCatCount(5)
+													}
+												/>)}
 											</div>
 										</div>
 									</div>
@@ -597,7 +617,7 @@ export default function PublishOffer({ children, ...props }) {
 									<input
 										type="text"
 										name="favouriteListName"
-										value={state.favouriteListName}
+										value={state.favouriteListName} 
 										onChange={(e) =>
 											setState((state) => ({
 												...state,
