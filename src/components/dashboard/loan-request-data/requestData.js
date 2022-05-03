@@ -48,8 +48,8 @@ function cp(formState, currentUser) {
 						name: formState.pricing.offerType.name,
 						discount_rate: Number(formState.pricing.offerType.fixedPrice.rate).toFixed(3),
 						implied_yield: Number(formState.pricing.offerType.fixedPrice.yield).toFixed(3),
-						discount_rate_range: Number(formState.pricing.offerType.fixedPrice.rate).toFixed(3),
-						type_yield: Number(formState.pricing.offerType.fixedPrice.yield).toFixed(3)
+						discount_rate_range: null,
+						type_yield: null
 					},
 				},
 			},
@@ -107,8 +107,8 @@ function bond(formState, currentUser) {
 					call_option: formState.pricing.callOption !== "" ? formState.pricing.callOption:null,
 					offer_type: {
 						name: formState.pricing.offerType.name,
-						discount_rate: Number(formState.pricing.offerType.fixedPrice.rate).toFixed(3),
-						implied_yield: Number(formState.pricing.offerType.fixedPrice.yield).toFixed(3),
+						discount_rate: null,
+						implied_yield: null,
 						discount_rate_range: Number(formState.pricing.offerType.fixedPrice.rate).toFixed(3),
 						type_yield: Number(formState.pricing.offerType.fixedPrice.yield).toFixed(3) 
 					},
