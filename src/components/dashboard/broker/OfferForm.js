@@ -212,8 +212,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
     };
 
     // Form fields validation
-    const handleValidation = (e) => {
-        e.preventDefault();
+    const handleValidation = () => {
 
         for (let prop in formState) {
 
@@ -278,24 +277,45 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 return
             }
 
+            if (prop === "useOfProceeds" && formState[prop] === "") {
+                alert.error("Proceeds field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "taxConsideraton" && (formState[prop] === undefined || formState[prop] === "")) {
+                alert.error("Tax consideration field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "eligibleInvestors" && (formState[prop] === undefined || formState[prop] === "")) {
+                alert.error("Eligible investors field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
             if(typeof formState[prop] === "object" && prop === "trancheSize") {
+
                 if (formState[prop]["currency"] === "") {
-                    alert.error("Currency field can not be empty!");
+                    alert.error("Currency field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                /*
-                if (formState[prop]["value"] === "") {
-                    alert.error("Minimum subscription field can not be empty!");
+                if (formState[prop]["minSubscription"] === "Choose minimum subscription") {
+                    alert.error("Subscription field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
-                }*/
+                }
 
                 if (formState[prop]["faceValue"] === "") {
-                    alert.error("Face value field can not be empty!");
+                    alert.error("Face value field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
@@ -303,9 +323,81 @@ export default function RequestForm({ requestFormState, showSummary }) {
             }
 
             if(typeof formState[prop] === "object" && prop === "pricing") {
+                const offerType = formState["pricing"]["offerType"];
+
+                if (formState[prop]["dayCount"] === "") {
+                    alert.error("Day count field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (offerType["name"] === "") {
+                    alert.error("Offer type field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (offerType["fixedPrice"]["rate"] === "") {
+                    alert.error("Discount rate field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+            }
+
+            if (formState[prop] === "object" && prop === "rating") {
+                if (formState[prop]["name"] === "") {
+                    alert.error("Rating name field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["scale"] === "") {
+                    alert.error("Rating scale field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
             }
 
             if(typeof formState[prop] === "object" && prop === "timing") {
+                if (formState[prop]["offerStart"] === "") {
+                    alert.error("Offer start field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["offerEnd"] === undefined) {
+                    alert.error("Offer end field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["allotmentDate"] === undefined) {
+                    alert.error("Allotment date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["settlementDate"] === undefined) {
+                    alert.error("Settlement date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["maturityDate"] === undefined) {
+                    alert.error("Maturity date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
             }
 
             if (formState[prop] === "") {
@@ -321,15 +413,15 @@ export default function RequestForm({ requestFormState, showSummary }) {
         setSummaryState(true);
 
 
-        /*NOTE: All validation should be specific field*/
+        /*NOTE: All validation should be specific to field*/
     };
 
     const viewOfferSummary = () => {
-        // Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
-        setSummaryState(true);
-
         // Show modal
         handleModal();
+
+        // Validate fields
+        handleValidation()
     };
 
     /*
@@ -473,7 +565,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
             <form
                 id="loan-summary-form"
                 className="h-full pb-5"
-                onSubmit={handleValidation}
+                // onSubmit={handleValidation}
                 style={formHeightstyle}
             >
                 <div id="loan-request-steps">
@@ -865,7 +957,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             handleMinimumSubscription(e)
                                         }
                                     >
-                                        <option defaultValue="">
+                                        <option defaultValue="minSub">
                                             Choose minimum subscription
                                         </option>
                                         <option value="5000000">
@@ -1479,12 +1571,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="name"
                                         id="name"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                        multiple={true}
                                         value={formState.rating.name}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
+                                        style={{padding: "10px"}}
                                     >
+                                        <option defaultValue=""></option>
                                         <option value="agusto">Agusto</option>
                                         <option value="gcr">GCR</option>
                                         <option value="fitch">Fitch</option>
@@ -1502,12 +1595,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         name="scale"
                                         id="scale"
                                         className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field timing"
-                                        multiple={true}
                                         value={formState.rating.scale}
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
+                                        style={{padding: "10px"}}
                                     >
+                                        <option defaultValue=""></option>
                                         <option value="AAA">AAA</option>
                                         <option value="AA">AA</option>
                                         <option value="A">A</option>
@@ -1523,7 +1617,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 <div className="col-span-2 mt-5">
                                     <Button
                                         title="View offer summary"
-                                        type="submit"
+                                        // type="submit"
                                         style={{
                                             visibility: state.lastSlideIn
                                                 ? "visible"
