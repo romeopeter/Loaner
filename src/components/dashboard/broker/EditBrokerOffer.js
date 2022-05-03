@@ -92,9 +92,10 @@ export default function EditBrokerOffer() {
   const handleSubmit = async () => {
     const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
 
+    // Check empty fields
     for (let prop in formState) {
       if (formState[prop] === "") {
-        alert.error("Empty field");
+        alert.error("You have empty fields");
         return;
       }
     }
@@ -176,81 +177,82 @@ export default function EditBrokerOffer() {
       );
 
       if (req.meta.requestStatus === "fulfilled") {
-        console.log(req.payload);
 
         // Store in component form state
-        setFormState((state) => {
-          if (req.payload !== undefined && typeof req.payload === "object") {
-            const payload = req.payload;
-            const trancheObj = payload["tranche_id"];
-
-            //  Determine offer rating based on deal type
-            let fixedPrice = {rate: "",yield: ""};
-            if (trancheObj["pricing"]["offer_type"]["name"] === "fixed value") {
-              fixedPrice = {
-                rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
-                yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
-              };
-            }
-            if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
-              fixedPrice = {
-                rate: trancheObj["pricing"]["offer_type"][
-                  "discount_rate_range"
-                ],
-                yield: trancheObj["pricing"]["offer_type"]["type_yield"],
-              };
-            }
-
-            return {
-              ...state,
-              dealType: payload["deal_type"],
-              dealName: payload["deal_name"],
-              projectName: payload["project_name"],
-              dealOwner: payload["deal_owner"],
-              dealTeam: payload["deal_team"],
-              guarantor: payload["guarantor"],
-              status: trancheObj["status"],
-              trancheName: trancheObj["name"],
-              trancheSize: {
-                currency: trancheObj["size"]["currency"],
-                value: trancheObj["size"]["value"]["value"],
-                faceValue: trancheObj["size"]["value"]["face_value"],
-                discountValue: trancheObj["size"]["value"]["discount_value"],
-                parValue: 1000,
-                minSubscription: Math.round(
-                  trancheObj["size"]["minimum_subscription"]["amount"]
-                ),
-              },
-              pricing: {
-                dayCount: trancheObj["pricing"]["day_count"],
-                couponType: trancheObj["pricing"]["coupon_type"],
-                benchmark: trancheObj["pricing"]["benchmark"],
-                couponFrequency: trancheObj["pricing"]["coupon_frequency"],
-                callOption: trancheObj["pricing"]["call_option"],
-                offerType: {
-                  name: trancheObj["pricing"]["offer_type"]["name"],
-                  fixedPrice: fixedPrice
+        if (componentMounted.current) {
+          setFormState((state) => {
+            if (req.payload !== undefined && typeof req.payload === "object") {
+              const payload = req.payload;
+              const trancheObj = payload["tranche_id"];
+  
+              //  Determine offer rating based on deal type
+              let fixedPrice = {rate: "",yield: ""};
+              if (trancheObj["pricing"]["offer_type"]["name"] === "fixed value") {
+                fixedPrice = {
+                  rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
+                  yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
+                };
+              }
+              if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
+                fixedPrice = {
+                  rate: trancheObj["pricing"]["offer_type"][
+                    "discount_rate_range"
+                  ],
+                  yield: trancheObj["pricing"]["offer_type"]["type_yield"],
+                };
+              }
+  
+              return {
+                ...state,
+                dealType: payload["deal_type"],
+                dealName: payload["deal_name"],
+                projectName: payload["project_name"],
+                dealOwner: payload["deal_owner"],
+                dealTeam: payload["deal_team"],
+                guarantor: payload["guarantor"],
+                status: trancheObj["status"],
+                trancheName: trancheObj["name"],
+                trancheSize: {
+                  currency: trancheObj["size"]["currency"],
+                  value: trancheObj["size"]["value"]["value"],
+                  faceValue: trancheObj["size"]["value"]["face_value"],
+                  discountValue: trancheObj["size"]["value"]["discount_value"],
+                  parValue: 1000,
+                  minSubscription: Math.round(
+                    trancheObj["size"]["minimum_subscription"]["amount"]
+                  ),
                 },
-              },
-              timing: {
-                offerStart: trancheObj["timing"]["offer_start"],
-                offerEnd: trancheObj["timing"]["offer_end"],
-                allotmentDate: trancheObj["timing"]["allotment_date"],
-                settlementDate: trancheObj["timing"]["settle_date"],
-                maturityDate: trancheObj["timing"]["maturity_date"],
-              },
-              useOfProceeds: trancheObj["use_of_proceeds"],
-              taxConsideration: trancheObj["tax_consideration"],
-              eligibleInvestors: trancheObj["eligible_investor"],
-              rating: {
-                name: trancheObj["ratings"]["name"],
-                scale: trancheObj["ratings"]["scale"],
-              },
-            };
-          } else {
-            console.log("Network problem");
-          }
-        });
+                pricing: {
+                  dayCount: trancheObj["pricing"]["day_count"],
+                  couponType: trancheObj["pricing"]["coupon_type"],
+                  benchmark: trancheObj["pricing"]["benchmark"],
+                  couponFrequency: trancheObj["pricing"]["coupon_frequency"],
+                  callOption: trancheObj["pricing"]["call_option"],
+                  offerType: {
+                    name: trancheObj["pricing"]["offer_type"]["name"],
+                    fixedPrice: fixedPrice
+                  },
+                },
+                timing: {
+                  offerStart: trancheObj["timing"]["offer_start"],
+                  offerEnd: trancheObj["timing"]["offer_end"],
+                  allotmentDate: trancheObj["timing"]["allotment_date"],
+                  settlementDate: trancheObj["timing"]["settle_date"],
+                  maturityDate: trancheObj["timing"]["maturity_date"],
+                },
+                useOfProceeds: trancheObj["use_of_proceeds"],
+                taxConsideration: trancheObj["tax_consideration"],
+                eligibleInvestors: trancheObj["eligible_investor"],
+                rating: {
+                  name: trancheObj["ratings"]["name"],
+                  scale: trancheObj["ratings"]["scale"],
+                },
+              };
+            } else {
+              console.log("Network problem");
+            }
+          });
+        }
       }
     })();
   }, [dispatch, params.id, params.dealType]);
