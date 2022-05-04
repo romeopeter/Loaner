@@ -227,7 +227,7 @@ export default function ClientDashboard() {
                                                             <div className="offer-button">
                                                                 <Button
                                                                     title="View offer"
-                                                                    link="/client/offers/offer/publish"
+                                                                    link={`/client/offers/offer/${offer["id"]}/${offer["deal_type"].toLowerCase()}`}
                                                                     type="button"
                                                                     buttonClass="h-2 p-2 bg-white"
                                                                     style={{ width: "100%" }}
