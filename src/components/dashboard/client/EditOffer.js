@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
+import OrderbookLayout from "../../OrderbookLayout";
+import DocumentHead from "../../DocumentHead";
+import Button from "../../Button";
+import NavMenu from "../NavMenu";
+import { Info, Danger } from "../../alert.js";
+import offerImage from "../../../assets/images/offerImage.png";
+
 import {
 	getOfferAction,
 	editOfferAction
 } from "../../../redux/loanSlice.js";
 
-import OrderbookLayout from "../../OrderbookLayout";
-import DocumentHead from "../../DocumentHead";
-import { Info, Danger } from "../../alert.js";
-
-import Button from "../../Button";
-import NavMenu from "../NavMenu";
-import offerImage from "../../../assets/images/offerImage.png";
-
 export default function EditOffer() {
-	const pageName = "Offer"
+	const pageName = "Edit loan offer"
 
 	const params = useParams();
 	const dispatch = useDispatch();
@@ -135,7 +134,7 @@ export default function EditOffer() {
 
 			if (req.meta.requestStatus === "fulfilled") {
 				window.scroll(0, 0);
-				// Update state with alert message: "Loan offer updated"
+				// Update state with alert message: "CP loan offer updated"
 			}
 		}
 
@@ -144,7 +143,7 @@ export default function EditOffer() {
 
 			if (req.meta.requestStatus === "fulfilled") {
 				window.scroll(0, 0);
-				// Update state with alert message: "Loan offer updated"
+				// Update state with alert message: "Bond loan offer updated"
 			}
 		}
 	}
