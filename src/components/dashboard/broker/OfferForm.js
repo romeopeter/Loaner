@@ -67,7 +67,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
     };
 
     const handleLastFormSlide = () => {
-        // const checkFieldsFunc = form2Validation(formState, setState);
 
         /*if (checkFieldsFunc.isEmpty) {
             alert.error(checkFieldsFunc.errorMessage);
@@ -102,7 +101,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
         const name = target.name;
         const value = target.value;
         const multiSelectValues = []
- 
+
         if (value === "BOND") {
             setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
         } else {
@@ -110,17 +109,17 @@ export default function RequestForm({ requestFormState, showSummary }) {
         }
 
         if (value === "floating") {
-            setHiddenFieldTrigger(state => ({...state, showBenchmark: true}))
+            setHiddenFieldTrigger(state => ({ ...state, showBenchmark: true }))
         } else {
-            setHiddenFieldTrigger(state => ({...state, showBenchmark: false}))
+            setHiddenFieldTrigger(state => ({ ...state, showBenchmark: false }))
         }
 
         if (e.target.type === "select-multiple") {
 
             for (var i = 0; i < target.options.length; i++) {
-               if (target.options[i].selected) {
+                if (target.options[i].selected) {
                     multiSelectValues.push(target.options[i].value);
-               }
+                }
             }
 
             if (fieldclassName) {
@@ -298,7 +297,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 return
             }
 
-            if(typeof formState[prop] === "object" && prop === "trancheSize") {
+            if (typeof formState[prop] === "object" && prop === "trancheSize") {
 
                 if (formState[prop]["currency"] === "") {
                     alert.error("Currency field is empty!");
@@ -322,7 +321,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 }
             }
 
-            if(typeof formState[prop] === "object" && prop === "pricing") {
+            if (typeof formState[prop] === "object" && prop === "pricing") {
                 const offerType = formState["pricing"]["offerType"];
 
                 if (formState[prop]["dayCount"] === "") {
@@ -363,7 +362,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 }
             }
 
-            if(typeof formState[prop] === "object" && prop === "timing") {
+            if (typeof formState[prop] === "object" && prop === "timing") {
                 if (formState[prop]["offerStart"] === "") {
                     alert.error("Offer start field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
@@ -411,9 +410,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
         // Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
         setSummaryState(true);
-
-
-        /*NOTE: All validation should be specific to field*/
     };
 
     const viewOfferSummary = () => {
@@ -440,8 +436,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
         height: state.firstSlideIn
             ? "900px"
             : state.lastSlideIn
-            ? "800px"
-            : "1300px",
+                ? "800px"
+                : "1300px",
     };
 
     if (typeof formState === "object" && formState !== undefined) {
@@ -458,14 +454,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
         };
         form3ErrorStyle = {
             border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
-        };   
+        };
     }
 
-    /**
-     * Loan offer calculations
-     * 
-    */
-
+    /* Loan offer calculations starts */
     let discountRateValue;
     let offerFaceValueValue;
     let startDateValue;
@@ -559,6 +551,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
         offerFaceValueValue,
         startDateValue,
     ]);
+    /* Loan offer calculations ends */
 
     return (
         <>
@@ -569,7 +562,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 style={formHeightstyle}
             >
                 <div id="loan-request-steps">
-                    {/*loan request -- 1st step*/}
+                    {/*loan request -- first slide*/}
                     <div
                         id="general-issuer-terms"
                         className="form-slide slide-1"
@@ -596,7 +589,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         handleChange(e, "generalTerms")
                                     }
                                     required
-                                    style={{border: "2px solid #f25858"}}
+                                    style={{ border: "2px solid #f25858" }}
                                 >
                                     <option defaultValue="">
                                         Select deal type
@@ -617,7 +610,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
-                                    // required
+                                // required
                                 />
                             </div>
 
@@ -635,7 +628,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
-                                    // required
+                                // required
                                 />
                             </div>
 
@@ -653,7 +646,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
-                                    // required
+                                // required
                                 />
                             </div>
 
@@ -671,7 +664,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
-                                    // required
+                                // required
                                 />
                             </div>
 
@@ -689,7 +682,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
-                                    // required
+                                // required
                                 />
                             </div>
 
@@ -766,8 +759,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                         </div>
                     </div>
 
-                    {/*loan request -- 2nd step*/}
-                   <div
+                    {/*loan request -- Second slide*/}
+                    <div
                         className="form-slide slide-2"
                         ref={secondSlideRef}
                         style={{
@@ -901,7 +894,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         htmlFor="face-value"
                                         className="text-gray-300 error-label text-sm"
                                     >
-                                        Value shouldn't be more than 4 digits
+                                        Value shouldn't be more than 9 digits
                                         and 2 decimals. e.g: 1000.01
                                     </label>
                                 </div>
@@ -1077,7 +1070,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                     disabled={
                                                         formState !== undefined && formState.pricing
                                                             .couponType ===
-                                                        "floating"
+                                                            "floating"
                                                             ? false
                                                             : true
                                                     }
@@ -1085,13 +1078,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                         backgroundColor:
                                                             formState !== undefined && formState.pricing
                                                                 .couponType ===
-                                                            "floating"
+                                                                "floating"
                                                                 ? "#d1d5db"
                                                                 : "#888",
                                                         cursor:
                                                             formState !== undefined && formState.pricing
                                                                 .couponType ===
-                                                            "floating"
+                                                                "floating"
                                                                 ? "text"
                                                                 : "not-allowed",
                                                     }}
@@ -1119,11 +1112,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 ) : null}
 
                                 <div
-                                    className={`${
-                                        formState !== undefined && formState.dealType === "BOND"
+                                    className={`${formState !== undefined && formState.dealType === "BOND"
                                             ? "col-span-1"
                                             : "col-span-2"
-                                    } mt-1`}
+                                        } mt-1`}
                                     style={form2ErrorStyle}
                                 >
                                     <select
@@ -1152,11 +1144,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 </div>
 
                                 <div
-                                    className={`${
-                                        formState !== undefined && formState.dealType === "BOND"
+                                    className={`${formState !== undefined && formState.dealType === "BOND"
                                             ? "col-span-1"
                                             : "col-span-2"
-                                    } mt-1`}
+                                        } mt-1`}
                                     style={form2ErrorStyle}
                                 >
                                     <select
@@ -1183,7 +1174,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                             <div className="grid grid-cols-2 gap-4 mt-5">
                                 {formState !== undefined && formState.pricing.offerType.name ===
-                                "fixed price" ? (
+                                    "fixed price" ? (
                                     <>
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
@@ -1206,21 +1197,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                                     pricing: {
                                                                         ...state.pricing,
                                                                         offerType:
+                                                                        {
+                                                                            ...state
+                                                                                .pricing
+                                                                                .offerType,
+                                                                            fixedPrice:
                                                                             {
                                                                                 ...state
                                                                                     .pricing
-                                                                                    .offerType,
-                                                                                fixedPrice:
-                                                                                    {
-                                                                                        ...state
-                                                                                            .pricing
-                                                                                            .offerType
-                                                                                            .fixedPrice,
-                                                                                        rate: e
-                                                                                            .target
-                                                                                            .value,
-                                                                                    },
+                                                                                    .offerType
+                                                                                    .fixedPrice,
+                                                                                rate: e
+                                                                                    .target
+                                                                                    .value,
                                                                             },
+                                                                        },
                                                                     },
                                                                 };
                                                             }
@@ -1258,21 +1249,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                                     pricing: {
                                                                         ...state.pricing,
                                                                         offerType:
+                                                                        {
+                                                                            ...state
+                                                                                .pricing
+                                                                                .offerType,
+                                                                            fixedPrice:
                                                                             {
                                                                                 ...state
                                                                                     .pricing
-                                                                                    .offerType,
-                                                                                fixedPrice:
-                                                                                    {
-                                                                                        ...state
-                                                                                            .pricing
-                                                                                            .offerType
-                                                                                            .fixedPrice,
-                                                                                        yield: e
-                                                                                            .target
-                                                                                            .value,
-                                                                                    },
+                                                                                    .offerType
+                                                                                    .fixedPrice,
+                                                                                yield: e
+                                                                                    .target
+                                                                                    .value,
                                                                             },
+                                                                        },
                                                                     },
                                                                 };
                                                             }
@@ -1292,7 +1283,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 ) : null}
 
                                 {formState !== undefined && formState.pricing.offerType.name ===
-                                "book build" ? (
+                                    "book build" ? (
                                     <>
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
@@ -1315,21 +1306,21 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                                     pricing: {
                                                                         ...state.pricing,
                                                                         offerType:
+                                                                        {
+                                                                            ...state
+                                                                                .pricing
+                                                                                .offerType,
+                                                                            fixedPrice:
                                                                             {
                                                                                 ...state
                                                                                     .pricing
-                                                                                    .offerType,
-                                                                                fixedPrice:
-                                                                                    {
-                                                                                        ...state
-                                                                                            .pricing
-                                                                                            .offerType
-                                                                                            .fixedPrice,
-                                                                                        rate: e
-                                                                                            .target
-                                                                                            .value,
-                                                                                    },
+                                                                                    .offerType
+                                                                                    .fixedPrice,
+                                                                                rate: e
+                                                                                    .target
+                                                                                    .value,
                                                                             },
+                                                                        },
                                                                     },
                                                                 };
                                                             }
@@ -1575,7 +1566,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
-                                        style={{padding: "10px"}}
+                                        style={{ padding: "10px" }}
                                     >
                                         <option defaultValue=""></option>
                                         <option value="agusto">Agusto</option>
@@ -1599,7 +1590,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         onChange={(e) =>
                                             handleChange(e, "rating")
                                         }
-                                        style={{padding: "10px"}}
+                                        style={{ padding: "10px" }}
                                     >
                                         <option defaultValue=""></option>
                                         <option value="AAA">AAA</option>
