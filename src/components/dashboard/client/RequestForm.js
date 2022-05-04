@@ -4,14 +4,9 @@ import { useAlert } from "react-alert";
 
 import Button from "../../Button";
 
-import {
-	form1Validation,
-	form2Validation,
-	form3Validation,
-} from "./loan-request-data/requestFormValidation";
-
 export default function RequestForm({ requestFormState, showSummary }) {
 	const { formState, setFormState } = requestFormState;
+	// eslint-disable-next-line no-unused-vars
 	const { summaryState, setSummaryState, handleModal } = showSummary;
 
 	const secondSlideRef = createRef();
@@ -71,7 +66,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 	};
 
 	const handleLastFormSlide = () => {
-		// const checkFieldsFunc = form2Validation(formState, setState);
 
 		/*if (checkFieldsFunc.isEmpty) {
 			alert.error(checkFieldsFunc.errorMessage);
@@ -105,6 +99,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 		const target = e.target;
 		const name = target.name;
 		const value = target.value;
+		const multiSelectValues = []
 
 		if (value === "BOND") {
 			setHiddenFieldTrigger((state) => ({ ...state, isBond: true }));
@@ -124,17 +119,38 @@ export default function RequestForm({ requestFormState, showSummary }) {
 			}));
 		}
 
-		if (fieldclassName) {
-			setFormState((state) => {
-				return {
-					...state,
-					[fieldclassName]: {
-						...state[fieldclassName],
-						[name]: value,
-					},
-				};
-			});
-		}
+		if (e.target.type === "select-multiple") {
+
+            for (var i = 0; i < target.options.length; i++) {
+               if (target.options[i].selected) {
+                    multiSelectValues.push(target.options[i].value);
+               }
+            }
+
+            if (fieldclassName) {
+                setFormState(state => {
+                    return {
+                        ...state,
+                        [fieldclassName]: {
+                            ...state[fieldclassName],
+                            [name]: multiSelectValues
+                        }
+                    }
+                });
+            }
+        } else {
+            if (fieldclassName) {
+                setFormState((state) => {
+                    return {
+                        ...state,
+                        [fieldclassName]: {
+                            ...state[fieldclassName],
+                            [name]: value,
+                        },
+                    };
+                });
+            }
+        }
 
 		setFormState((state) => {
 			return {
@@ -170,72 +186,256 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 	// Custom field change methods for minimum-subscription field
 	const handleMinimumSubscription = (e) => {
-		if (e.target.value === "other") {
-			// set in state to trigger offer type fields to show
-			setHiddenFieldTrigger((state) => {
-				return {
-					...state,
-					customMinimumSub: true,
-				};
-			});
-		} else {
-			setFormState((state) => {
-				return {
-					...state,
-					trancheSize: {
-						...state.trancheSize,
-						minSubscription: e.target.value,
-					},
-				};
-			});
+        if (e.target.value === "other") {
+            // set in state to trigger offer type fields to show
+            setHiddenFieldTrigger((state) => {
+                return {
+                    ...state,
+                    customMinimumSub: true,
+                };
+            });
+        } else {
+            setFormState((state) => {
+                return {
+                    ...state,
+                    trancheSize: {
+                        ...state.trancheSize,
+                        minSubscription: e.target.value,
+                    },
+                };
+            });
 
-			// set in state to trigger offer type fields to show
-			setHiddenFieldTrigger((state) => {
-				return {
-					...state,
-					customMinimumSub: false,
-				};
-			});
-		}
-	};
+            // set in state to trigger offer type fields to show
+            setHiddenFieldTrigger((state) => {
+                return {
+                    ...state,
+                    customMinimumSub: false,
+                };
+            });
+        }
+    };
 
 	// Form fields validation
-	const handleValidation = (e) => {
-		e.preventDefault();
+	const handleValidation = () => {
+		for (let prop in formState) {
 
-		// const checkFieldFunc = form3Validation(formState, setState);
+            if (prop === "dealType" && formState[prop] === "") {
+                alert.error("Deal type can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "guarantor" && formState[prop] === "") {
+                alert.error("Guarantor can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "dealName" && formState[prop] === "") {
+                alert.error("Deal name can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "projectName" && formState[prop] === "") {
+                alert.error("Project name can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "dealOwner" && formState[prop] === "") {
+                alert.error("Deal Owner field can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "dealTeam" && formState[prop] === "") {
+                alert.error("Deal team field can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "status" && formState[prop] === "") {
+                alert.error("Status field can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "trancheName" && formState[prop] === "") {
+                alert.error("Tranche name field can not be empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            } else if (typeof formState[prop] === "number") {
+                alert.error("Tranche name can not contain number!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "useOfProceeds" && formState[prop] === "") {
+                alert.error("Proceeds field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "taxConsideraton" && (formState[prop] === undefined || formState[prop] === "")) {
+                alert.error("Tax consideration field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "eligibleInvestors" && (formState[prop] === undefined || formState[prop] === "")) {
+                alert.error("Eligible investors field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if(typeof formState[prop] === "object" && prop === "trancheSize") {
+
+                if (formState[prop]["currency"] === "") {
+                    alert.error("Currency field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["minSubscription"] === "Choose minimum subscription") {
+                    alert.error("Subscription field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["faceValue"] === "") {
+                    alert.error("Face value field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+            }
+
+            if(typeof formState[prop] === "object" && prop === "pricing") {
+                const offerType = formState["pricing"]["offerType"];
+
+                if (formState[prop]["dayCount"] === "") {
+                    alert.error("Day count field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (offerType["name"] === "") {
+                    alert.error("Offer type field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (offerType["fixedPrice"]["rate"] === "") {
+                    alert.error("Discount rate field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+            }
+
+            if (formState[prop] === "object" && prop === "rating") {
+                if (formState[prop]["name"] === "") {
+                    alert.error("Rating name field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["scale"] === "") {
+                    alert.error("Rating scale field is empty!");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+            }
+
+            if(typeof formState[prop] === "object" && prop === "timing") {
+                if (formState[prop]["offerStart"] === "") {
+                    alert.error("Offer start field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["offerEnd"] === undefined) {
+                    alert.error("Offer end field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["allotmentDate"] === undefined) {
+                    alert.error("Allotment date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["settlementDate"] === undefined) {
+                    alert.error("Settlement date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState[prop]["maturityDate"] === undefined) {
+                    alert.error("Maturity date field is empty");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+            }
+
+            if (formState[prop] === "") {
+
+                setState((state) => ({ ...state, isValidated: false }));
+                alert.error("Please fill all fields");
+
+                return
+            }
+        }
+
+		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
+        setSummaryState(true);
 	};
 
 	const viewOfferSummary = () => {
-		// Trigger for showing summary tables in LoanRequest (LoanRequest.js) component
-		setSummaryState(true);
-
 		// Show modal
-		handleModal();
+        handleModal();
+
+        // Validate fields
+        handleValidation()
 	};
 
 	/*
 		These are tweaks to extend form slide parent.
 		Not really the best way but needed to be done
 	*/
-	const firstSlideIsHidden =
-		state.secondSlideIn === true || state.lastSlideIn === true;
 
-	const secondSlideIsHidden = state.lastSlideIn === true;
-	// eslint-disable-next-line no-unused-vars
-	const secondSlideWillShow =
-		state.lastSlideIn === false &&
-		(formState.dealType === "BOND" || formState.dealType === "CP");
+	let firstSlideIsHidden;
+    let secondSlideIsHidden;
+    let secondSlideWillShow;
 
-	const form1ErrorStyle = {
-		border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
-	};
-	const form2ErrorStyle = {
-		border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
-	};
-	const form3ErrorStyle = {
-		border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
-	};
+    let form1ErrorStyle;
+    let form2ErrorStyle;
+    let form3ErrorStyle;
 
 	const formHeightstyle = {
 		height: state.firstSlideIn
@@ -245,106 +445,129 @@ export default function RequestForm({ requestFormState, showSummary }) {
 				: "1195px",
 	};
 
-	/**
-	 * Loan offer calculations
-	 * */
+	if (typeof formState === "object" && formState !== undefined) {
+        firstSlideIsHidden = state.secondSlideIn === true || state.lastSlideIn === true;
+        secondSlideIsHidden = state.lastSlideIn === true;
+        // eslint-disable-next-line no-unused-vars
+        secondSlideWillShow = state.lastSlideIn === false && (formState.dealType === "BOND" || formState.dealType === "CP");
 
-	const discountRateValue = formState.pricing.offerType.fixedPrice.rate;
-	const offerFaceValueValue = formState.trancheSize.faceValue;
-	const startDateValue = formState.timing.offerStart;
-	const EndDateValue = formState.timing.offerEnd;
+        form1ErrorStyle = {
+            border: state.slide1FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };
+        form2ErrorStyle = {
+            border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };
+        form3ErrorStyle = {
+            border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
+        };   
+    }
 
-	useEffect(() => {
-		const loanOfferCalculation = (
-			discountRate,
-			faceValue,
-			startDate,
-			EndDate
-		) => {
-			let discountValue = "";
-			let offerYield = "";
+	/* Loan offer calculations starts */
+		let discountRateValue;
+		let offerFaceValueValue;
+		let startDateValue;
+		let EndDateValue;
 
-			const currentYear = new Date().getFullYear();
-			const currentDate = new Date(`${currentYear}/1/1`);
+		if (typeof formState === "object" && formState !== undefined) {
 
-			const loanStartDate = new Date(startDate);
-			const loanEndDate = new Date(EndDate);
+			discountRateValue = formState.pricing.offerType.fixedPrice.rate;
+			offerFaceValueValue = formState.trancheSize.faceValue;
+			startDateValue = formState.timing.offerStart;
+			EndDateValue = formState.timing.offerEnd;
+		}
 
-			const startDateCurrentDateDiff =
-				(currentDate.getTime() - loanStartDate.getTime()) /
-				(1000 * 60 * 60 * 24);
-			const EndDateCurrentDateDiff =
-				(currentDate.getTime() - loanEndDate.getTime()) /
-				(1000 * 60 * 60 * 24);
+		useEffect(() => {
+			const loanOfferCalculation = (
+				discountRate,
+				faceValue,
+				startDate,
+				EndDate
+			) => {
+				let discountValue = "";
+				let offerYield = "";
 
-			// Get offer discount
-			const firstPart =
-				discountRate * faceValue * (startDateCurrentDateDiff / 365);
-			const secondPart =
-				(EndDateCurrentDateDiff / 366) * discountRate * faceValue;
-			const offerDiscount = firstPart + secondPart;
+				const currentYear = new Date().getFullYear();
+				const currentDate = new Date(`${currentYear}/1/1`);
 
-			// Get discount value
-			discountValue = faceValue - offerDiscount;
+				const loanStartDate = new Date(startDate);
+				const loanEndDate = new Date(EndDate);
 
-			// Get offer yield
-			offerYield =
-				discountRate / (startDateCurrentDateDiff / 366) +
-				EndDateCurrentDateDiff / 365 -
-				1;
+				const startDateCurrentDateDiff =
+					(currentDate.getTime() - loanStartDate.getTime()) /
+					(1000 * 60 * 60 * 24);
+				const EndDateCurrentDateDiff =
+					(currentDate.getTime() - loanEndDate.getTime()) /
+					(1000 * 60 * 60 * 24);
 
-			// Set discount value and offer yield
-			if (
-				isNaN(discountValue) === false &&
-				isNaN(offerYield) === false
-			) {
-				setFormState((state) => {
+				// Get offer discount
+				const firstPart =
+					discountRate * faceValue * (startDateCurrentDateDiff / 365);
+				const secondPart =
+					(EndDateCurrentDateDiff / 366) * discountRate * faceValue;
+				const offerDiscount = firstPart + secondPart;
 
-					return {
-						...state,
-						trancheSize: {
-							...state.trancheSize,
-							discountValue: Number(discountValue.toFixed(2)),
-						},
-						pricing: {
-							...state.pricing,
-							offerType: {
-								...state.pricing.offerType,
-								fixedPrice: {
-									...state.pricing.offerType.fixedPrice,
-									yield: Number(offerYield.toFixed(2)),
+				// Get discount value
+				discountValue = faceValue - offerDiscount;
+
+				// Get offer yield
+				offerYield =
+					discountRate / (startDateCurrentDateDiff / 366) +
+					EndDateCurrentDateDiff / 365 -
+					1;
+
+				// Set discount value and offer yield
+				if (
+					isNaN(discountValue) === false &&
+					isNaN(offerYield) === false
+				) {
+					setFormState((state) => {
+
+						return {
+							...state,
+							trancheSize: {
+								...state.trancheSize,
+								discountValue: Number(discountValue.toFixed(2)),
+							},
+							pricing: {
+								...state.pricing,
+								offerType: {
+									...state.pricing.offerType,
+									fixedPrice: {
+										...state.pricing.offerType.fixedPrice,
+										yield: Number(offerYield.toFixed(2)),
+									},
 								},
 							},
-						},
-					};
-				});
-			}
-		};
+						};
+					});
+				}
+			};
 
-		loanOfferCalculation(
+			loanOfferCalculation(
+				discountRateValue,
+				offerFaceValueValue,
+				startDateValue,
+				EndDateValue
+			);
+		}, [
+			setFormState,
+			EndDateValue,
 			discountRateValue,
 			offerFaceValueValue,
 			startDateValue,
-			EndDateValue
-		);
-	}, [
-		setFormState,
-		EndDateValue,
-		discountRateValue,
-		offerFaceValueValue,
-		startDateValue,
-	]);
+		]);
+	/* Loan offer calculations ends */
 
 	return (
 		<>
 			<form
 				id="loan-summary-form"
 				className="h-full pb-5"
-				onSubmit={handleValidation}
+				// onSubmit={handleValidation}
 				style={formHeightstyle}
 			>
 				<div id="loan-request-steps">
-					{/*First slide*/}
+					 {/*loan request -- first slide*/}
 					<div
 						id="general-issuer-terms"
 						className="form-slide slide-1"
@@ -545,7 +768,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 						</div>
 					</div>
 
-					{/*loan request -- 2nd step*/}
+					{/*loan request -- Second slide*/}
 					<div
 						className="form-slide slide-2"
 						ref={secondSlideRef}
@@ -681,7 +904,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										htmlFor="face-value"
 
 									>
-										Value shouldn't be more than 4 digits
+										Value shouldn't be more than 9 digits
 										and 2 decimals. e.g: 1000.01
 									</label>
 								</div>
@@ -699,9 +922,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 													.discountValue
 											}
 											readOnly={true}
-										/*onChange={(e) =>
-											handleChange(e, "trancheSize")
-										}*/
 										/>
 									</div>
 									<label
@@ -712,7 +932,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</label>
 								</div>
 
-								<div className="col-span-1 mt-1">
+								{/* <div className="col-span-1 mt-1">
 									<input
 										type="number"
 										name="par-value"
@@ -722,10 +942,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										disabled={true}
 										style={{ cursor: "not-allowed" }}
 									/>
-								</div>
+								</div> */}
 
 								<div
-									className="col-span-1 mt-1"
+									className="col-span-2 mt-1"
 									style={form2ErrorStyle}
 								>
 									<select
@@ -740,7 +960,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 											handleMinimumSubscription(e)
 										}
 									>
-										<option defaultValue="">
+										<option defaultValue="minSub">
 											Choose minimum subscription
 										</option>
 										<option value="5000000">
@@ -811,7 +1031,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 							{/*Bond field*/}
 							<div className="grid grid-cols-2 gap-4">
-								{formState.dealType === "BOND" ? (
+								{formState !== undefined && formState.dealType === "BOND" ? (
 									<>
 										<div className="col-span-1 mt-1">
 											<div
@@ -903,8 +1123,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 								<div
 									className={`${formState.dealType === "BOND"
-											? "col-span-1"
-											: "col-span-2"
+										? "col-span-1"
+										: "col-span-2"
 										} mt-1`}
 									style={form2ErrorStyle}
 								>
@@ -935,8 +1155,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
 								<div
 									className={`${formState.dealType === "BOND"
-											? "col-span-1"
-											: "col-span-2"
+										? "col-span-1"
+										: "col-span-2"
 										} mt-1`}
 									style={form2ErrorStyle}
 								>
@@ -1072,7 +1292,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</>
 								) : null}
 
-								{formState.pricing.offerType.name ===
+								{formState !== undefined && formState.pricing.offerType.name ===
 									"book build" ? (
 									<>
 										<div className="col-span-1 mt-1">
@@ -1142,34 +1362,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
 															.fixedPrice.yield
 													}
 													readOnly={true}
-												/*onChange={(e) =>
-													setFormState(
-														(state) => {
-															return {
-																...state,
-																pricing: {
-																	...state.pricing,
-																	offerType:
-																		{
-																			...state
-																				.pricing
-																				.offerType,
-																			fixedPrice:
-																				{
-																					...state
-																						.pricing
-																						.offerType
-																						.fixedPrice,
-																					yield: e
-																						.target
-																						.value,
-																				},
-																		},
-																},
-															};
-														}
-													)
-												}*/
 												/>
 											</div>
 											<label
@@ -1182,7 +1374,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 									</>
 								) : null}
 
-								{formState.dealType === "BOND" ? (
+								{formState !== undefined && formState.dealType === "BOND" ? (
 									<>
 										<div
 											className="col-span-2 mt-1"
@@ -1376,6 +1568,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div className="col-span-2 mt-1">
+									<label htmlFor="name" className="text-white">Choose rating name</label>
 									<select
 										name="name"
 										id="name"
@@ -1384,10 +1577,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										onChange={(e) =>
 											handleChange(e, "rating")
 										}
+										style={{ padding: "10px" }}
 									>
-										<option defaultValue="">
-											Choose rating name
-										</option>
+										<option defaultValue="">---</option>
 										<option value="agusto">Agusto</option>
 										<option value="gcr">GCR</option>
 										<option value="fitch">Fitch</option>
@@ -1400,6 +1592,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								</div>
 
 								<div className="col-span-2 mt-1">
+								<label htmlFor="scale" className="text-white">Choose rating scale</label>
 									<select
 										name="scale"
 										id="scale"
@@ -1408,10 +1601,9 @@ export default function RequestForm({ requestFormState, showSummary }) {
 										onChange={(e) =>
 											handleChange(e, "rating")
 										}
+										style={{ padding: "10px" }}
 									>
-										<option defaultValue="">
-											Choose rating scale
-										</option>
+										<option defaultValue="">---</option>
 										<option value="AAA">AAA</option>
 										<option value="AA">AA</option>
 										<option value="A">A</option>
@@ -1427,7 +1619,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 								<div className="col-span-2 mt-5">
 									<Button
 										title="View offer summary"
-										type="submit"
+										// type="submit"
 										style={{
 											visibility: state.lastSlideIn
 												? "visible"
