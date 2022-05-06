@@ -112,10 +112,15 @@ export default function FullEdit() {
           if (componentMounted.current) setIsLoading(true);
     
           if (req.meta.requestStatus === "fulfilled") {
+
+            const payload = req.payload;
+
             // Loan is updated, Navigate to publish page
-    
             console.log("CP loan offer update successfully");
-            navigate("/broker/dashboard/loan-offer/select-investor");
+
+            // if (componentMounted.current) setIsLoading(false);
+
+            navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
           } else {
             if (componentMounted.current) setIsLoading(false);
     
@@ -145,10 +150,14 @@ export default function FullEdit() {
           if (componentMounted.current) setIsLoading(true);
     
           if (req.meta.requestStatus === "fulfilled") {
+            const payload = req.payload();
+
             // Loan is updated, Navigate to publish page
-    
             console.log("Bond loan offer update successfully");
-            navigate("/broker/dashboard/loan-offer/select-investor");
+            
+            // if (componentMounted.current) setIsLoading(false);
+
+            navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
           } else {
             if (componentMounted.current) setIsLoading(false);
     
@@ -181,8 +190,7 @@ export default function FullEdit() {
           );
     
           if (req.meta.requestStatus === "fulfilled") {
-            console.log(req.payload);
-    
+
             // Store in component form state
             setFormState((state) => {
               if (req.payload !== undefined && typeof req.payload === "object") {
@@ -190,15 +198,21 @@ export default function FullEdit() {
                 const trancheObj = payload["tranche_id"];
     
                 //  Determine offer rating based on deal type
-                let fixedPrice = {rate: "",yield: ""};
-                if (trancheObj["pricing"]["offer_type"]["name"] === "fixed value") {
+                let fixedPrice = {
+                  ...state.pricing.offerType.fixedPrice,
+                  rate: "",
+                  yield: ""
+                };
+                if (trancheObj["pricing"]["offer_type"]["name"] === "fixed price") {
                   fixedPrice = {
+                    ...state.pricing.offerType.fixedPrice,
                     rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
                     yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
                   };
                 }
                 if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
                   fixedPrice = {
+                    ...state.pricing.offerType.fixedPrice,
                     rate: trancheObj["pricing"]["offer_type"][
                       "discount_rate_range"
                     ],
@@ -217,6 +231,7 @@ export default function FullEdit() {
                   status: trancheObj["status"],
                   trancheName: trancheObj["name"],
                   trancheSize: {
+                    ...state.trancheSize,
                     currency: trancheObj["size"]["currency"],
                     value: trancheObj["size"]["value"]["value"],
                     faceValue: trancheObj["size"]["value"]["face_value"],
@@ -227,27 +242,31 @@ export default function FullEdit() {
                     ),
                   },
                   pricing: {
+                    ...state.pricing,
                     dayCount: trancheObj["pricing"]["day_count"],
                     couponType: trancheObj["pricing"]["coupon_type"],
                     benchmark: trancheObj["pricing"]["benchmark"],
                     couponFrequency: trancheObj["pricing"]["coupon_frequency"],
                     callOption: trancheObj["pricing"]["call_option"],
                     offerType: {
+                      ...state.pricing.offerType,
                       name: trancheObj["pricing"]["offer_type"]["name"],
                       fixedPrice: fixedPrice
                     },
                   },
                   timing: {
+                    ...state.timing,
                     offerStart: trancheObj["timing"]["offer_start"],
                     offerEnd: trancheObj["timing"]["offer_end"],
                     allotmentDate: trancheObj["timing"]["allotment_date"],
-                    settlementDate: trancheObj["timing"]["settle_date"],
+                    settlementDate: trancheObj["timing"]["settlement_date"],
                     maturityDate: trancheObj["timing"]["maturity_date"],
                   },
                   useOfProceeds: trancheObj["use_of_proceeds"],
                   taxConsideration: trancheObj["tax_consideration"],
                   eligibleInvestors: trancheObj["eligible_investor"],
                   rating: {
+                    ...state.rating,
                     name: trancheObj["ratings"]["name"],
                     scale: trancheObj["ratings"]["scale"],
                   },
@@ -402,7 +421,7 @@ export default function FullEdit() {
               ) : (
                 <div id="summary-table" className="mt-20 mx-10">
                   <span
-                    class="md:hidden modal-close"
+                    className="md:hidden modal-close"
                     onClick={() =>
                       requestContainerRef.current.classList.remove("modal")
                     }
