@@ -4,7 +4,7 @@
 
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
@@ -98,7 +98,7 @@ export default function PublishOffer({ children, ...props }) {
 	// 		const payload = req.payload !== undefined && req.payload;
 	// 		setCurrentOffer(payload);
 	// 	}
-    // }, [dispatch, params])
+	// }, [dispatch, params])
 
 	const handleInvestorChange = (selected) => {
 		setState((state) => {
@@ -126,7 +126,7 @@ export default function PublishOffer({ children, ...props }) {
 				}));
 			}
 		} else {
-			
+
 			if (name === "saveAsOpen" || name === "saveAsComing") {
 				setState((state) => ({ ...state, [name]: !target.checked }));
 			}
@@ -172,7 +172,7 @@ export default function PublishOffer({ children, ...props }) {
 			const investorsIds = investorsInCategory.map(
 				(investor) => investor.id
 			);
-			
+
 			let availability;
 
 			if (state.saveAsOpen) availability = "open";
@@ -232,7 +232,7 @@ export default function PublishOffer({ children, ...props }) {
 			};
 
 			// Assign investors
-			dispatch(AddInvestorsAction({loanOfferId, data}));
+			dispatch(AddInvestorsAction({ loanOfferId, data }));
 
 			// Publish offers
 			dispatch(publishOfferAction(loanOfferId));
@@ -258,7 +258,7 @@ export default function PublishOffer({ children, ...props }) {
 	// Publish offer
 	const publishOffer = () => {
 		if (currentOffer !== null) {
-			const {id} = currentOffer;
+			const { id } = currentOffer;
 
 			// Pass offer reference to assigned investors
 			assignInvestors(id);
@@ -274,8 +274,8 @@ export default function PublishOffer({ children, ...props }) {
 		const IDs =
 			state.categoryCheckbox.length > 0
 				? state.categoryCheckbox.map((category) => {
-						return Number(category.split("_")[1]);
-				  })
+					return Number(category.split("_")[1]);
+				})
 				: [];
 
 		setCategoriesIds((state) => [...IDs]);
@@ -351,9 +351,8 @@ export default function PublishOffer({ children, ...props }) {
 		const multiRequests = categoriesIds.map((id, index) => {
 			const API_URL =
 				"https://order-book-online.herokuapp.com/v1/investor_category";
-			return `${API_URL}/${
-				id !== undefined && id
-			}/?display_investors=True`;
+			return `${API_URL}/${id !== undefined && id
+				}/?display_investors=True`;
 		});
 		dispatch(mergeInvestorsInCategoriesAction(multiRequests));
 	};
@@ -396,27 +395,27 @@ export default function PublishOffer({ children, ...props }) {
 									<Danger
 										message={feedBack.offerNotCreated}
 									/>
-								):null}
+								) : null}
 								{feedBack.investorsNotAssigned !== "" ? (
 									<Danger
 										message={feedBack.investorsNotAssigned}
 									/>
-								):null}
+								) : null}
 								{feedBack.statusNotSet !== "" ? (
 									<Danger
 										message={feedBack.statusNotSet}
 									/>
-								): null}
+								) : null}
 								{/*{serverError.message.messageTyoe !== "network_error" ? (
 									<Danger
 										message={serverError.message.detail}
 									/>
 								):null}*/}
 								{feedBack.loanIsPublished !== "" ? (
-									<Success 
-										message={feedBack.loanIsPublished} 
+									<Success
+										message={feedBack.loanIsPublished}
 									/>
-								): null}
+								) : null}
 							</div>
 							<h3 className="text-3xl font-bold text-white mb-5">
 								Select investors
@@ -454,58 +453,55 @@ export default function PublishOffer({ children, ...props }) {
 											>
 												{investorCategories.length > 0
 													? investorCategories.map(
-															(
-																category,
-																index
-															) => {
-																if (
-																	index <=
-																	investorCatCount
-																) {
-																	return (
-																		<div
-																			key={
-																				category.id
-																			}
-																			className="checkboxes category-checkbox"
-																		>
-																			<input
-																				type="checkbox"
-																				name="categoryCheckbox"
-																				value={`${category.name}_${category.id}`}
-																				onChange={(
+														(
+															category,
+															index
+														) => {
+															if (
+																index <=
+																investorCatCount
+															) {
+																return (
+																	<div
+																		key={
+																			category.id
+																		}
+																		className="checkboxes category-checkbox"
+																	>
+																		<input
+																			type="checkbox"
+																			name="categoryCheckbox"
+																			value={`${category.name}_${category.id}`}
+																			onChange={(
+																				e
+																			) =>
+																				handleCheckbox(
 																					e
-																				) =>
-																					handleCheckbox(
-																						e
-																					)
-																				}
-																				className="mr-2 rounded"
-																			/>
-																			<label htmlFor="category-checkbox">
-																				{capFirstLetter(
-																					category.name
-																				).replace(
-																					"-",
-																					" & "
-																				)}
-																			</label>
-																		</div>
-																	);
-																}
-
-																return null
+																				)
+																			}
+																			className="mr-2 rounded"
+																		/>
+																		<label htmlFor="category-checkbox">
+																			{capFirstLetter(
+																				category.name
+																			).replace(
+																				"-",
+																				" & "
+																			)}
+																		</label>
+																	</div>
+																);
 															}
-													  )
+
+															return null
+														})
 													: null}
 												{investorCatCount <= 5 ? (
 													<Button
 														title="view more"
 														buttonClass="view-more font-bold"
 														handleClick={() =>
-															setInvestorCatCount(
-																investorCategories.length
-															)
+															setInvestorCatCount(investorCategories.length)
 														}
 													/>
 												) : (<Button
@@ -545,7 +541,7 @@ export default function PublishOffer({ children, ...props }) {
 						<div
 							id="save-as-checkboxes"
 							className="grid grid-cols-2 gap-4"
-							// style={{justifyItems: "center"}}
+							
 						>
 							<div className="col-span-2 sm:col-span-1 checkboxes">
 								<input
@@ -617,7 +613,7 @@ export default function PublishOffer({ children, ...props }) {
 									<input
 										type="text"
 										name="favouriteListName"
-										value={state.favouriteListName} 
+										value={state.favouriteListName}
 										onChange={(e) =>
 											setState((state) => ({
 												...state,
