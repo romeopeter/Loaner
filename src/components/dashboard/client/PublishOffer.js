@@ -4,7 +4,7 @@
 
 import React, { createRef, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { components } from "react-select";
 import { useAlert } from "react-alert";
 
@@ -363,6 +363,13 @@ export default function PublishOffer({ children, ...props }) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	};
 
+	 // Get current offer id and deal type
+	let id; let dealType;
+	if (currentOffer !== null) {
+		id = currentOffer.id;
+		dealType = currentOffer["deal_type"];
+	}
+
 	return (
 		<>
 			<DocumentHead title={pageName} />
@@ -372,12 +379,7 @@ export default function PublishOffer({ children, ...props }) {
 					className="bg-white px-16 py-10 shadow-md flex items-start"
 				>
 					<div id="loan" className="dropdown-container underline mr-5">
-						View offers
-						{/*<i
-							className="fa fa-caret-down mr-5"
-							aria-hidden="true"
-						></i>
-						<div id="load-dropdown"></div>*/}
+						<Link to={`/client/offers/offer/edit/${id}/${dealType.toLowerCase()}/`}>View offers</Link>
 					</div>
 					{" "}
 					{/*<div id="investor" className="dropdown-container">
