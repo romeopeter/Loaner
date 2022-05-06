@@ -53,9 +53,11 @@ export default function EditOffer() {
 					dealOwner: payload["deal_owner"],
 					trancheName: payload["tranche_id"]["name"],
 					trancheSize: {
+						...state.trancheSize,
 						minSubscription: payload["tranche_id"]["size"]["minimum_subscription"]["amount"]
 					},
 					timing: {
+						...state.timing,
 						offerStart: payload['tranche_id']['timing']["offer_start"],
 						offerEnd: payload['tranche_id']['timing']["offer_end"],
 						settlementDate: payload['tranche_id']['timing']["settlement_date"],
@@ -156,7 +158,7 @@ export default function EditOffer() {
 			<OrderbookLayout PageNav={NavMenu}>
 				<div
 					id="loan-invest-dropdown"
-					class="bg-white px-16 py-10 shadow-md flex justify-start"
+					className="bg-white px-16 py-10 shadow-md flex justify-start"
 				>
 					<div id="loan" className="dropdown-container">
 						Loan{" "}
@@ -285,7 +287,7 @@ export default function EditOffer() {
 
 												<div className="col-span-12 grid grid-cols-12 gap-4 border-t-2 border-grey-200 pt-5">
 													<div className="col-span-12 sm:col-span-3">
-														<lable htmlFor="size">Size <small>(read-only)</small></lable>
+														<label htmlFor="size">Size <small>(read-only)</small></label>
 														<input type="number" name="size" id="size" defaultValue={amount} readOnly={true} className="bg-gray-300 border-none w-full" />
 													</div>
 
@@ -295,12 +297,12 @@ export default function EditOffer() {
 													</div>
 
 													<div className="col-span-12 sm:col-span-3">
-														<lable htmlFor="offer-closes">Offer closes</lable>
+														<label htmlFor="offer-closes">Offer closes</label>
 														<input type="date" id="offer-closes" name="offerEnd" defaultValue={updatedOffer.timing.offerEnd} placeholder={updatedOffer.timing.offerEnd} className="bg-gray-300 border-none w-full" onChange={onChangeHandler} />
 													</div>
 
 													<div className="col-span-12 sm:col-span-3">
-														<lable htmlFor="settlement-date">Settlement date</lable>
+														<label htmlFor="settlement-date">Settlement date</label>
 														<input type="date" id="settlement-date" name="settlementDate" defaultValue={updatedOffer.timing.offerEnd} placeholder={updatedOffer.timing.offerEnd} className="bg-gray-300 border-none w-full" onChange={onChangeHandler} />
 													</div>
 												</div>
