@@ -457,6 +457,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
         form2ErrorStyle = {
             border: state.slide2FieldsAreEmpty ? "2px solid #f25858" : "none",
         };
+        // eslint-disable-next-line no-unused-vars
         form3ErrorStyle = {
             border: state.slide3FieldsAreEmpty ? "2px solid #f25858" : "none",
         };   
