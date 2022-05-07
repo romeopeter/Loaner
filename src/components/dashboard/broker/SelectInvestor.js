@@ -68,11 +68,11 @@ export default function PublishOffer({ children, ...props }) {
 
         // Position window at the top
         window.scroll(0, 0);
-    },[dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         // Get categories ID
-        (function() {
+        (function () {
             const IDs =
                 state.categoryCheckbox.length > 0
                     ? state.categoryCheckbox.map((category) => {
@@ -87,7 +87,7 @@ export default function PublishOffer({ children, ...props }) {
 
     useEffect(() => {
         // Self-invoke function to generate requests based on investor category clicked
-        (function() {
+        (function () {
             const multiInvestors = categoriesIds.map((id, index) => {
                 const API_URL = 'https://order-book-online.herokuapp.com/v1/investor_category';
                 return `${API_URL}/${id !== undefined && id}/?display_investors=True`;
@@ -320,11 +320,11 @@ export default function PublishOffer({ children, ...props }) {
     };
 
     // Get current offer id and deal type
-   let id; let dealType;
-   if (currentOffer !== null) {
-       id = currentOffer.id;
-       dealType = currentOffer.dealType;
-   }
+    let id; let dealType;
+    if (currentOffer !== null) {
+        id = currentOffer.id;
+        dealType = currentOffer.dealType;
+    }
 
     return (
         <>
@@ -335,7 +335,7 @@ export default function PublishOffer({ children, ...props }) {
                     class="bg-white px-16 py-10 shadow-md flex items-start"
                 >
                     <div id="loan" className="dropdown-container underline mr-5">
-                       <Link to={`/broker/dashboard/loan-offer-draft/${id}/${dealType}/`}>View offer</Link>
+                        <Link to={`/broker/dashboard/loan-offer-draft/${id}/${dealType}/`}>View offer</Link>
                     </div>
                     <span className="mr-5">|</span>
                     <div id="investor" className="dropdown-container underline">
@@ -410,7 +410,7 @@ export default function PublishOffer({ children, ...props }) {
                                                         }
 
                                                         return null
-                                                      })
+                                                    })
                                                     : null}
                                                 {investorCatCount <= 5 ? (
                                                     <Button
@@ -420,7 +420,13 @@ export default function PublishOffer({ children, ...props }) {
                                                             setInvestorCatCount(investorCategories.length)
                                                         }
                                                     />
-                                                ) : null}
+                                                ) : (<Button
+													title="view less"
+													buttonClass="view-more font-bold"
+													handleClick={() =>
+														setInvestorCatCount(5)
+													}
+												/>)}
                                             </div>
                                         </div>
                                     </div>
@@ -451,7 +457,7 @@ export default function PublishOffer({ children, ...props }) {
                         <div
                             id='save-as-checkboxes'
                             className='grid grid-cols-2 gap-4'
-                            style={{ justifyItems: 'center' }}
+                
                         >
                             <div className='col-span-2 sm:col-span-1 checkboxes'>
                                 <input
@@ -462,12 +468,14 @@ export default function PublishOffer({ children, ...props }) {
                                     onChange={(e) => handleCheckbox(e)}
                                     className='mr-2 rounded focus:ring-0'
                                 />
-                                <label htmlFor='sava-as-open' className='text-white text-xl'>
-                                    Do you want to save and send as now open
+                                <label
+                                    htmlFor='sava-as-open'
+                                    className='text-white text-xl'>
+                                    Mark as now open
                                 </label>
                             </div>
 
-                            <div className='col-span-2 sm:col-span-1 checkboxes'>
+                            <div className='col-span-2 sm:col-span-1 text-right checkboxes'>
                                 <input
                                     type='checkbox'
                                     id='save-as-now-coming'
@@ -480,7 +488,7 @@ export default function PublishOffer({ children, ...props }) {
                                     htmlFor="save-as-now-coming"
                                     className="text-white text-xl"
                                 >
-                                    Do you want to save and send as now coming soon
+                                    Mark as coming soon
                                 </label>
                             </div>
                         </div>
@@ -572,7 +580,7 @@ export default function PublishOffer({ children, ...props }) {
                                     buttonClass='view-orders mr-5  rounded w-full'
                                 />
 
-                                <Button title='View offer' link='/' buttonClass='go-home rounded create' />
+                                {/* <Button title='View offer' link='/' buttonClass='go-home rounded create' /> */}
                             </div>
                         </div>
                     </div>
