@@ -113,9 +113,10 @@ export default function EditBrokerOffer() {
 
       if (req.meta.requestStatus === "fulfilled") {
         // Loan is updated, Navigate to publish page
-
         console.log("CP loan offer update successfully");
-        navigate("/broker/dashboard/loan-offer/select-investor");
+
+        const payload = req.payload;
+        navigate(`/broker/dashboard/loan-offer/${payload["id"]}/${payload["deal_type"]}/select-investor`);
       } else {
         if (componentMounted.current) setIsLoading(false);
 
@@ -146,9 +147,11 @@ export default function EditBrokerOffer() {
 
       if (req.meta.requestStatus === "fulfilled") {
         // Loan is updated, Navigate to publish page
-
         console.log("Bond loan offer update successfully");
-        navigate("/broker/dashboard/loan-offer/select-investor");
+
+        const payload = req.paylaod;
+        console.log(payload);
+        navigate(`/broker/dashboard/loan-offer/${payload["id"]}/${payload["deal_type"]}/select-investor`);
       } else {
         if (componentMounted.current) setIsLoading(false);
 
@@ -186,21 +189,27 @@ export default function EditBrokerOffer() {
               const trancheObj = payload["tranche_id"];
   
               //  Determine offer rating based on deal type
-              let fixedPrice = {rate: "",yield: ""};
-              if (trancheObj["pricing"]["offer_type"]["name"] === "fixed value") {
+              let fixedPrice = {
+                ...state.pricing.offerType.fixedPrice,
+                rate: "",
+                yield: ""
+              };
+              if (trancheObj["pricing"]["offer_type"]["name"] === "fixed price") {
                 fixedPrice = {
+                  ...state.pricing.offerType.fixedPrice,
                   rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
                   yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
                 };
               }
               if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
                 fixedPrice = {
+                  ...state.pricing.offerType.fixedPrice,
                   rate: trancheObj["pricing"]["offer_type"][
                     "discount_rate_range"
                   ],
                   yield: trancheObj["pricing"]["offer_type"]["type_yield"],
                 };
-              }
+              } 
   
               return {
                 ...state,
@@ -213,6 +222,7 @@ export default function EditBrokerOffer() {
                 status: trancheObj["status"],
                 trancheName: trancheObj["name"],
                 trancheSize: {
+                  ...state.trancheSize,
                   currency: trancheObj["size"]["currency"],
                   value: trancheObj["size"]["value"]["value"],
                   faceValue: trancheObj["size"]["value"]["face_value"],
@@ -223,27 +233,31 @@ export default function EditBrokerOffer() {
                   ),
                 },
                 pricing: {
+                  ...state.pricing,
                   dayCount: trancheObj["pricing"]["day_count"],
                   couponType: trancheObj["pricing"]["coupon_type"],
                   benchmark: trancheObj["pricing"]["benchmark"],
                   couponFrequency: trancheObj["pricing"]["coupon_frequency"],
                   callOption: trancheObj["pricing"]["call_option"],
                   offerType: {
+                    ...state.pricing.offerType,
                     name: trancheObj["pricing"]["offer_type"]["name"],
                     fixedPrice: fixedPrice
                   },
                 },
                 timing: {
+                  ...state.timing,
                   offerStart: trancheObj["timing"]["offer_start"],
                   offerEnd: trancheObj["timing"]["offer_end"],
                   allotmentDate: trancheObj["timing"]["allotment_date"],
-                  settlementDate: trancheObj["timing"]["settle_date"],
+                  settlementDate: trancheObj["timing"]["settlement_date"],
                   maturityDate: trancheObj["timing"]["maturity_date"],
                 },
                 useOfProceeds: trancheObj["use_of_proceeds"],
-                taxConsideration: trancheObj["tax_consideration"],
-                eligibleInvestors: trancheObj["eligible_investor"],
+                taxConsideration: trancheObj["tax_considerations"] === null && "",
+                eligibleInvestors: trancheObj["eligible_investors"],
                 rating: {
+                  ...state.timing,
                   name: trancheObj["ratings"]["name"],
                   scale: trancheObj["ratings"]["scale"],
                 },
@@ -281,10 +295,10 @@ export default function EditBrokerOffer() {
     tenure = daysDiffernce;
 
     /*
-         End date can't be the same as start date.
-         If the the difference is days is 0 then loan end date is set to
-         the same time as loan start date
-         */
+      End date can't be the same as start date.
+      If the the difference is days is 0 then loan end date is set to
+      the same time as loan start date
+    */
     if (tenure === 0 || tenure < 0) {
       alert.error("End date can not be the same as or less than start date!");
 
@@ -403,7 +417,7 @@ export default function EditBrokerOffer() {
               ) : (
                 <div id="summary-table" className="mt-20 mx-10">
                   <span
-                    class="md:hidden modal-close"
+                    className="md:hidden modal-close"
                     onClick={() =>
                       requestContainerRef.current.classList.remove("modal")
                     }
