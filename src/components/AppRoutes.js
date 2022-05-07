@@ -377,7 +377,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/loan-offer/select-investor'
+                        path='/broker/dashboard/loan-offer/:id/:dealType/select-investor'
                         element={
                             <RequireAuth>
                                 <SelectInvestor />
