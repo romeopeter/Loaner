@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Button from "../../Button";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
-import {getAllOffersStatusAction, getBidAction} from "../../../redux/bidSlice";
+import { getBidAction } from "../../../redux/bidSlice";
 import { getInvestorAllOffersAction } from "../../../redux/investorSlice";
 import { uploadPaymentAction } from "../../../redux/paymentSlice";
 import { Danger } from "../../alert";
@@ -20,12 +20,10 @@ export default function BidApproved() {
 	const pageName = "Bid Approved";
 
 	const currentUserObj = useSelector((state) => state.auth.user);
-	const allOffers = useSelector(state => state.investor.allOffers);
 	const allBidsStatus = useSelector(state => state.bid.allBidsStatus);
-	const popFileDetails = JSON.parse(localStorage.getItem("INVESTOR_BID_POP_FILE"));
 	const urlParams = useParams();
 	const dispatch = useDispatch();
-	const {id: investorId} = currentUserObj.user["investor_details"];
+	const { id: investorId } = currentUserObj.user["investor_details"];
 
 	const [offer, setOffer] = useState(null);
 	const [bid, setBid] = useState(null);
@@ -39,32 +37,31 @@ export default function BidApproved() {
 		formatErrorMessage: "File format is wrong. Expected is JPEG or PNG."
 	})
 
-	useEffect(() => {
-		if (allOffers === null) {
-			(async function() {
-				const req = await dispatch(
-					getInvestorAllOffersAction(investorId)
+	useEffect(function investorOffers() {
+		let componentIsMounted = true;
+
+		(async function () {
+			const req = await dispatch(
+				getInvestorAllOffersAction(investorId)
+			);
+
+			if (req.meta.requestStatus === "fulfilled") {
+				// Match offer id with url id parameter
+				const approvedOffer = req.payload.find(
+					(offer) => offer.id === Number(urlParams.offerId)
 				);
 
-				if (req.meta.requestStatus === "fulfilled") {
-					// Find loan offer with the same id as url parameter id
-					const approvedOffer = req.payload.find(
-						(offer) => offer.id === Number(urlParams.offerId)
-					);
+				// Update component state
+				if (componentIsMounted) setOffer(approvedOffer);
+			}
+		})();
 
-					// Update coponent state
-					setOffer(approvedOffer);
-				}
-			})();
-		} else {
-			const approvedOffer = allOffers.find(offer => offer.id === Number(urlParams.offerId));
+		return () => componentIsMounted = false;
 
-			if (approvedOffer !== undefined) setOffer(approvedOffer);
-		}
-	}, [allOffers,investorId,urlParams.offerId,dispatch])
+	}, [investorId, urlParams.offerId, dispatch])
 
 	useEffect(function getBid() {
-		let isSubscribed = true;
+		let componentIsMounted = true;
 		if (allBidsStatus !== null) {
 
 			const offerId = urlParams.offerId;
@@ -73,33 +70,37 @@ export default function BidApproved() {
 
 				if (bid !== undefined && bid.length > 0) {
 					const offerBid = bid[0];
-					const bidMatchedOffer = offerBid["loan_request"]["id"] === Number(offerId);
 
-					if (bidMatchedOffer) setBid(offerBid);
+					console.log(offerBid);
+
+					if (componentIsMounted) {
+						const bidMatchedOffer = offerBid["loan_request"]["id"] === Number(offerId);
+						if (bidMatchedOffer) setBid(offerBid);
+					}
 				}
 			})
 		} else {
-			(async function() {
+			(async function () {
 				const req = await dispatch(getBidAction(urlParams.offerId));
 
 				if (req.meta.requestStatus === "fulfilled") {
 
 					const offerBid = req.payload[0];
 
-					if(isSubscribed) setBid(offerBid);
+					if (componentIsMounted) setBid(offerBid);
 				}
 			})()
 		}
 
-		return () => isSubscribed = false;
+		return () => componentIsMounted = false;
 
-	},[dispatch, urlParams.offerId]);
+	}, [dispatch, urlParams.offerId, allBidsStatus]);
 
 	const handleFileUpload = async (e) => {
 		const popFile = e.target.files["0"];
 
 		const updateFileState = (updatedState) => {
-			setFileState(states => ({...states, ...updatedState}));
+			setFileState(states => ({ ...states, ...updatedState }));
 		}
 
 		if (popFile !== undefined) {
@@ -110,11 +111,10 @@ export default function BidApproved() {
 			const popFileFormat = popFileName.split(".")[1];
 
 			if (popFileFormat !== "jpg" && popFileFormat !== "pdf" && popFileFormat !== "jpeg") {
-				updateFileState({formatIsWrong: true})
+				updateFileState({ formatIsWrong: true })
 			} else {
-				
+
 				const popFileUrl = URL.createObjectURL(popFile);
-				// const bidAmount = offer["tranche_id"]["size"]["minimum_subscription"]["amount"];
 				const bidAmount = bid !== null && bid["amount"];
 				const bidStatus = bid !== null && bid["current_status"];
 				const bidId = bid !== null && bid.id;
@@ -123,7 +123,7 @@ export default function BidApproved() {
 					fileName: popFileName,
 					fileSize: popfileSize,
 					fileURL: popFileUrl,
-					formatIsWrong: false, 
+					formatIsWrong: false,
 					fileIsUploaded: true
 				});
 
@@ -141,18 +141,24 @@ export default function BidApproved() {
 				if (dataIsSent.meta.requestStatus === "fulfilled") {
 					URL.revokeObjectURL(popFile)
 
-					// Save files details to browser
-					const popFileIsStored = localStorage.setItem(
-						"INVESTOR_BID_POP_FILE", 
-						JSON.stringify({popFileName, popfileSize, popFileUrl})
-					);
-
 					// Refreshe page to show POP confirmation update
-					if (popFileIsStored) window.location.reload();
+					window.location.reload();
 				};
 			}
 		}
 	}
+
+	// Proof of payment details
+	let paymentStatus;
+	let proofOfPayment;
+	let popFileName;
+
+	if (bid !== null) {
+		paymentStatus = bid["payment"]["status"];
+		proofOfPayment = bid["payment"]["proof_of_payment"][0];
+		popFileName = proofOfPayment["file_name"];
+	}
+
 
 	return (
 		<>
@@ -167,11 +173,11 @@ export default function BidApproved() {
 							</Link>
 						</div>
 						<div id="inner-bid-container" className="flex flex-col justify-center items-center p-5 sm:p-0">
-							{offer === null ? (<p>Loading...</p>):(
+							{offer === null ? (<p>Loading...</p>) : (
 								<>
 									<div id="bid" className="mb-5">
 										<div id="img-container">
-											<img src={offerImage} alt="" className="w-full"/>
+											<img src={offerImage} alt="" className="w-full" />
 											<div className="overlay">
 												<div id="tick-icon" className="bg-white h-20 w-20 rounded-full flex justify-center items-center">
 													<img src={accepted} alt="accepted-tick-marked" />
@@ -180,10 +186,10 @@ export default function BidApproved() {
 										</div>
 										<h3 className="text-2xl underline text-center py-5 font-bold">{offer.deal_name}.</h3>
 
-										<div id="upload-area" className={bid !== null && bid["payment_status"] === null ? "block": "hidden"}>
+										<div id="upload-area" className={bid !== null && bid["payment_status"] === null ? "block" : "hidden"}>
 											<p id="offer-description" className="text-green-700 pb-5 font-bold">
-											Your bid with {offer.deal_name} has been approved, 
-											click below to upload your payment proof.
+												Your bid with {offer.deal_name} has been approved,
+												click below to upload your payment proof.
 											</p>
 											<div className="flex flex-col justify-center items-center">
 												<label htmlFor="upload-payment" id="upload-label" className="font-bold py-2 px-10 bg-gray-300 cursor-pointer text-center">
@@ -191,11 +197,13 @@ export default function BidApproved() {
 													Select file to upload
 												</label>
 												<small className="text-center text-blue-500 p-2">File should be either jpeg or pdf</small>
-												{fileState.formatIsWrong ? (<Danger message={fileState.formatErrorMessage} />): null}
+												{fileState.formatIsWrong ? (<Danger message={fileState.formatErrorMessage} />) : null}
 											</div>
 										</div>
-										{(bid !== null && bid["payment_status"] !== null) ? (
+										
+										{(bid !== null) ? (
 											<div id="upload-success">
+												
 												<p className="text-center text-green-700 mb-5">Your file has been successfully uploaded.</p>
 
 												{/*Show uploaded file*/}
@@ -211,26 +219,27 @@ export default function BidApproved() {
 														<li className="border-b-2 pb-2">
 															<div className="flex justify-evenly">
 																<span className="text-left text-gray-400">{offer !== null && offer["deal_name"]}</span>
-																<span className="text-left text-gray-400" style={{textOverflowX: "auto"}}>{popFileDetails !== null && popFileDetails.popFileName}</span>
+																<span className="text-left text-gray-400" style={{ textOverflowX: "auto" }}>{popFileName}</span>
 																<>
-																	{bid["payment_status"] === "rejected" && (
-																		<Button 
-																			title="Not approved" 
-																			buttonClass="bg-red-400 rounded-md text-center payment-not-approved" 
+																	{paymentStatus === "rejected" && (
+		
+																		<Button
+																			title="Not approved"
+																			buttonClass="bg-red-400 rounded-md text-center payment-not-approved"
 																			buttonDisabled={true}
 																		/>
 																	)}
-																	
-																	{bid["payment_status"] === "approved" && (
-																		<Button 
-																			title="Approved" 
+
+																	{paymentStatus === "approved" && (
+																		<Button
+																			title="Approved"
 																			link={`/investor/dashboard/offers/${urlParams.offerId}/payment-detail`} buttonClass="bg-green-400 text-center rounded-md payment-approved"
 																		/>
 																	)}
 
-																	{bid["payment_status"] === "pending" && (
-																		<Button 
-																			title="Pending" 
+																	{paymentStatus === "pending" && (
+																		<Button
+																			title="Pending"
 																			buttonClass="bg-yellow-400 text-center rounded-md payment-pending"
 																		/>
 																	)}
@@ -242,16 +251,16 @@ export default function BidApproved() {
 
 												<div className="flex flex-col sm:flex-row justify-evenly items-center">
 													{/*White background, black borders*/}
-													<Button title="View offers" link="/investor/dashboard/offers" buttonClass="view-offers font-bold rounded sm:mb-0 mb-5" />
+													<Button title="View offer" link={`/investor/dashboard/offers/${urlParams.offerId}`} buttonClass="view-offers font-bold rounded sm:mb-0 mb-5" />
 
 													{/*Green background, white text*/}
 													<Button title="Go home" link="/investor/dashboard" buttonClass="go-home w-full font-bold rounded" />
 												</div>
 											</div>
-										):null}
+											): null}
 									</div>
 								</>
-							)}	
+							)}
 						</div>
 					</div>
 				</section>
