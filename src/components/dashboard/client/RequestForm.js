@@ -348,17 +348,31 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                     return
                 }
+
+				if (formState["dealType"] === "CP" && offerType["name"] === "book build") {
+                    alert.error("Change offer type to 'Fixed price'");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
+
+                if (formState["dealType"] === "BOND" && offerType["name"] === "fixed price") {
+                    alert.error("Change offer type to 'Book build'");
+                    setState((state) => ({ ...state, isValidated: true }));
+
+                    return
+                }
             }
 
-            if (formState[prop] === "object" && prop === "rating") {
-                if (formState[prop]["name"] === "") {
+            if (typeof formState[prop] === "object" && prop === "rating") {
+                if (formState[prop]["name"] === "" || formState[prop]["name"] === "---") { 
                     alert.error("Rating name field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                if (formState[prop]["scale"] === "") {
+                if (formState[prop]["scale"] === "" || formState[prop]["scale"] === "---") {
                     alert.error("Rating scale field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
 
