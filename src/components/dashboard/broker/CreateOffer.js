@@ -114,8 +114,10 @@ export default function LoanRequest() {
             if (componentMounted.current) setIsLoading(true);
 
             if (req.meta.requestStatus === "fulfilled") {
+                const offer = req.payload;
+
                 // Loan is created, Navigate to publish page
-                navigate("/broker/dashboard/loan-offer/select-investor");
+                navigate(`/broker/dashboard/loan-offer/${offer["id"]}/${offer["deal_type"].toLowerCase()}/select-investor`);
             } else {
                 if (componentMounted.current) setIsLoading(false);
 
@@ -141,8 +143,10 @@ export default function LoanRequest() {
             if (componentMounted.current) setIsLoading(true);
 
             if (req.meta.requestStatus === "fulfilled") {
+                const offer = req.payload;
+
                 // Loan is created, Navigate to publish page
-                navigate("/broker/dashboard/loan-offer/select-investor");
+                navigate(`/broker/dashboard/loan-offer/${offer["id"]}/${offer["deal_type"].toLowerCase()}/select-investor`);
             } else {
                 if (componentMounted.current) setIsLoading(false);
 
