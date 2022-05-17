@@ -1,16 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-    // eslint-disable-next-line no-unused-vars
-    getBids, 
     getBid,
     createBid, 
-    // eslint-disable-next-line no-unused-vars
-    updateBids,
     getapprovedBids,
     getDeclinedBids,
     getAllOffersStatus
 } from "../services/bid.service.js";
-import handleRequestError from "./errorResponse";
+import handleRequestError from "./errorHandler";
 
 export const createBidAction = createAsyncThunk(
     "bid/createBidAction",
@@ -18,10 +14,11 @@ export const createBidAction = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const res = await createBid(data);
 
-        // Catch error
+        // Error
         if (res.status !== 200) {
-            handleRequestError(res, dispatch);   
-        }
+            handleRequestError(res, dispatch);
+            console.log(res);
+        };
 
         if (res.status === 200) return res.data;
     }
@@ -109,7 +106,7 @@ export const bidSlice = createSlice({
             console.log("Pending");
         },
         [createBidAction.rejected]: (state, action) => {
-            console.log("rejected");
+            console.log("Rejected");
         },
         [createBidAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
