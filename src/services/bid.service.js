@@ -1,21 +1,22 @@
 import axios from "axios";
 
 const getBids = () => {
-    return axios.get("/v1/bids/").catch((error) => console.log(error));
+    return axios.get("/v1/bids/").catch(error => error);
 };
 
 const getBid = (id) => {
-    return axios.get(`/v1/bids/?loan_request_id=${id}`).catch((error) => console.log(error));
+    return axios.get(`/v1/bids/?loan_request_id=${id}`).catch(error => error);
 };
 
 const createBid = (data) => {
-    return axios.post("/v1/bids/", data).catch((error) => console.log(error));
+    console.log(data);
+    return axios.post("/v1/bids/", data).catch(error => error);
 };
 
 const updateBids = (id) => {
     return axios
         .put(`/v1/payments/${id}/`)
-        .catch((error) => console.log(error));
+        .catch(error => error);
 };
 
 const getapprovedBids = () => {
