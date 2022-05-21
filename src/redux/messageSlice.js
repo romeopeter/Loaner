@@ -8,8 +8,16 @@ import { createSlice } from "@reduxjs/toolkit";
 export const messageSlice = createSlice({
 	name: "message",
 	initialState: {
-		server: { message: "" },
-		client: null,
+		server: { 
+			status: "",
+			messageType: "",
+			detail: "" 
+		},
+		client: {
+			status: "",
+			messageType: "",
+			detail: ""
+		},
 	},
 	reducers: {
 		setServerMessage: (state, action) => {
