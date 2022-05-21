@@ -7,7 +7,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { setServerMessage } from "./messageSlice";
-import handleRequestError from "./errorResponse"
+import authRequestError from "./errorHandler/authSliceErrorHandler";
+
 import {
 	signUpRequest,
 	signInRequest
@@ -22,10 +23,10 @@ const authState = user
 export const signInAction = createAsyncThunk(
 	"auth/signInAction", async (credentials, thunkAPI) => {
 		const response = await signInRequest(credentials);
-		const dispatch = thunkAPI.dispatch
+		const dispatch = thunkAPI.dispatch;
 
 		// Handle error response
-		if (response.status !== 200) handleRequestError(response, dispatch); 
+		if (response.status !== 200) authRequestError(response, dispatch); 
 
 		// Request sent and resolved
 		if (response.status === 200) return response.data;
@@ -74,10 +75,8 @@ export default authSlice.reducer;
 export const signUpAsync = (data) => (dispatch) => {
 	return signUpRequest(data).then((response) => {
 
-		console.log(response);
-
 		// Handle error response
-		handleRequestError(response, dispatch);
+		if (response.status !== 201) authRequestError(response, dispatch);
 
 		// Request successfull
 		if (response.status === 201) {
