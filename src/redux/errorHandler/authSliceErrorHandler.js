@@ -1,13 +1,13 @@
 import { setServerMessage, setClientMessage } from "../messageSlice";
 
-export default function authRequestError(error, dispatch) {
+export default function authRequestError(response, dispatch) {
 
-    const requestError = error.request;
+    const requestError = response.request;
     const responseText = JSON.parse(requestError.responseText);
 	const { code, detail } = responseText;
 
     // Network error, unable to sent request
-	if (error.message === "Network Error") {
+	if (response.message === "Network Error") {
 		// Dipatch action
 		dispatch(
 			setClientMessage({
@@ -27,7 +27,7 @@ export default function authRequestError(error, dispatch) {
         if (responseText.error) {
             dispatch(
                 setServerMessage({
-                    status: requestError.status,
+                    status: requestError?.status,
                     messageType: "Email_Conflict",
                     detail: responseText.error
                 })
@@ -41,7 +41,22 @@ export default function authRequestError(error, dispatch) {
     if (requestError.status === 401) {
         dispatch(
             setServerMessage({
-                status: requestError.status,
+                status: requestError?.status,
+                messageType: code,
+                detail: detail,
+            })
+        );
+
+        return;
+    }
+
+    // Internal server error
+    if (requestError.status === 500) {
+        console.log(requestError);
+
+        dispatch(
+            setServerMessage({
+                status: requestError?.status,
                 messageType: code,
                 detail: detail,
             })
