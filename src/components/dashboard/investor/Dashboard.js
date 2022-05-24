@@ -339,7 +339,7 @@ export default function AllOffers() {
 																		item,
 																		itemIndex
 																	)}
-																	link={`/investor/dashboard/offers/${item.id}/`}
+																	link={`/investor/dashboard/offers/${item["id"]}/${item["deal_type"].toLowerCase()}/open`}
 																	buttonClass="bg-blue-500 rounded-md offer-open"
 																/>
 															)}
@@ -352,7 +352,7 @@ export default function AllOffers() {
 																		item,
 																		itemIndex
 																	)}
-																	link="/investor/offer-coming-soon"
+																	link={`/investor/dashboard/offers/${item["id"]}/${item["deal_type"].toLowerCase()}/coming-soon`}
 																	buttonClass="bg-gray-500 rounded-md coming-soon"
 																/>
 															)}
