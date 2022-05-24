@@ -241,7 +241,7 @@ const LoanOfferDraft = () => {
                                                 w={'120px'}
                                                 mt={['10px']}
                                                 as={Link}
-                                                to='/broker/dashboard/loan-offer/select-investor'
+                                                to={`/broker/dashboard/loan-offer/${id}/${dealType}/select-investor`}
                                             >
                                                 Next
                                             </Button>
