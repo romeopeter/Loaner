@@ -214,7 +214,7 @@ const LoanOfferDraft = () => {
                                                 w={'120px'}
                                                 mt={['10px']}
                                                 as={Link}
-                                                to={`/broker/dashboard/edit-loan-offer/${id}/${dealType}`}
+                                                to={`/broker/dashboard/edit-loan-offer/${id}/${dealType.toLocaleLowerCase()}`}
                                             >
                                                 Edit draft
                                             </Button>
@@ -241,7 +241,7 @@ const LoanOfferDraft = () => {
                                                 w={'120px'}
                                                 mt={['10px']}
                                                 as={Link}
-                                                to={`/broker/dashboard/loan-offer/${id}/${dealType}/select-investor`}
+                                                to={`/broker/dashboard/loan-offer/${id}/${dealType.toLocaleLowerCase()}/select-investor`}
                                             >
                                                 Next
                                             </Button>
