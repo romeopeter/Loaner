@@ -116,7 +116,7 @@ export default function BidApproved() {
       } else {
         const popFileUrl = URL.createObjectURL(popFile);
         const bidAmount = bid !== null && bid["amount"];
-        const bidStatus = bid !== null && bid["current_status"];
+        // const bidStatus = bid !== null && bid["current_status"];
         const bidId = bid !== null && bid.id;
 
         updateFileState({
