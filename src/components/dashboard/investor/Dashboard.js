@@ -17,8 +17,6 @@ import offerImage from "../../../assets/images/offerImage.png";
 /* Data call modules */
 import { getInvestorAllOffersAction } from "../../../redux/investorSlice";
 import { getAllOffersStatusAction } from "../../../redux/bidSlice";
-// eslint-disable-next-line no-unused-vars
-import { setCurrentBid } from "../../../redux/bidSlice";
 
 export default function AllOffers() {
 	const pageName = "Investor";
@@ -28,7 +26,6 @@ export default function AllOffers() {
 	const allBidsStatus = useSelector((state) => state.bid.allBidsStatus);
 
 	const { user: currentUser } = currentUserObj;
-	// const { tokens: userTokens } = currentUserObj;
 	const { id: investorId } = currentUser["investor_details"];
 
 	const [paginateState, setPaginateState] = useState({
@@ -335,10 +332,7 @@ export default function AllOffers() {
 															itemIndex
 														) === "open" && (
 																<Button
-																	title={checkBidStatus(
-																		item,
-																		itemIndex
-																	)}
+																	title="Open"
 																	link={`/investor/dashboard/offers/${item["id"]}/${item["deal_type"].toLowerCase()}/open`}
 																	buttonClass="bg-blue-500 rounded-md offer-open"
 																/>
@@ -346,12 +340,9 @@ export default function AllOffers() {
 														{checkBidStatus(
 															item,
 															itemIndex
-														) === "Coming soon" && (
+														) === "coming soon" && (
 																<Button
-																	title={checkBidStatus(
-																		item,
-																		itemIndex
-																	)}
+																	title="Coming soon"
 																	link={`/investor/dashboard/offers/${item["id"]}/${item["deal_type"].toLowerCase()}/coming-soon`}
 																	buttonClass="bg-gray-500 rounded-md coming-soon"
 																/>
