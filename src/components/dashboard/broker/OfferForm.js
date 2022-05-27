@@ -323,6 +323,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
             if (typeof formState[prop] === "object" && prop === "pricing") {
                 const offerType = formState["pricing"]["offerType"];
+                const offerTypeRate = offerType["fixedPrice"]["rate"];
+                const rateDecimalDigits = offerTypeRate.split(".")[0];
 
                 if (formState[prop]["dayCount"] === "") {
                     alert.error("Day count field is empty!");
@@ -338,11 +340,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
                     return
                 }
 
-                if (offerType["fixedPrice"]["rate"] === "") {
+                if (offerTypeRate === "") {
                     alert.error("Discount rate field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
-
                     return
+                } else if (rateDecimalDigits.length > 3) {
+                    alert.error("Discount rate digit shouldn't be more than 3 after decimal point");
+                    setState((state) => ({ ...state, isValidated: true }));
+                    return;
                 }
 
                 if (formState["dealType"] === "CP" && offerType["name"] === "book build") {
@@ -1238,8 +1243,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 className="error-label text-sm text-gray-300"
                                                 htmlFor="discount-rate"
                                             >
-                                                Value shouldn't be more than 4
-                                                digits e.g: 1000
+                                                Value shouldn't be more than 3 digits
+                                                before decimal point and 2 digits after e.g: 140.00
                                             </label>
                                         </div>
 
@@ -1284,14 +1289,14 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                             }
                                                         )
                                                     }
+                                                    readOnly={true}
                                                 />
                                             </div>
                                             <label
                                                 className="error-label text-sm text-gray-300"
                                                 htmlFor="implied-yield"
                                             >
-                                                Value shouldn't be more than 4
-                                                digits e.g: 1000
+                                                Discount value is read-only and is implicity determined.
                                             </label>
                                         </div>
                                     </>
