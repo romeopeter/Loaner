@@ -12,13 +12,12 @@ import newClient from '../../../assets/images/newClient.png';
 import Pagination from './pagination/Pagination';
 import bidRejected from '../../../assets/images/bidRejected.png';
 
-// import Brokerdata from '../../../fake-backend/broker/DummyData';
-
 import { Flex, Box, Button, Center, Text, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 let PageSize = 10;
 const BrokerDashboard = () => {
     // Used in pagination
     const [loanRequest, setLoanRequest] = useState([]);
+
     // Used for conditional rendering
     const [getValue, setGetValue] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
@@ -27,7 +26,6 @@ const BrokerDashboard = () => {
         axios
             .get('/v1/loan_request/')
             .then((response) => {
-                console.log(response.data);
                 setLoanRequest(response.data.reverse());
                 setGetValue(response);
             })
@@ -57,6 +55,7 @@ const BrokerDashboard = () => {
         const lastPageIndex = firstPageIndex + PageSize;
         return loanRequest.slice(firstPageIndex, lastPageIndex);
     }, [currentPage, loanRequest]);
+    
     // ----------------------
 
     const navigate = useNavigate();
