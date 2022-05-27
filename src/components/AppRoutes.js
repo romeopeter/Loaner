@@ -190,7 +190,7 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/offer-coming-soon"
+						path="/investor/dashboard/offers/:offerId/:dealType/coming-soon"
 						element={
 							<RequireAuth>
 								<IncomingOffer />
@@ -198,7 +198,7 @@ export default function AppRoutes() {
 						}
 					/>
 					<Route
-						path="/investor/dashboard/offers/:offerId/"
+						path="/investor/dashboard/offers/:offerId/:dealType/open"
 						element={
 							<RequireAuth>
 								<ShowSingleOffer />
