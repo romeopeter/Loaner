@@ -17,7 +17,7 @@ import {
 } from "../services/loan.service.js";
 
 import { setServerMessage } from "./messageSlice";
-import handleRequestError from "./errorResponse";
+import handleRequestError from "./errorHandler";
 
 export const CPLoanOfferAction = createAsyncThunk(
     "loan/CPLoanOfferAction",
@@ -97,8 +97,9 @@ export const AddInvestorsAction = createAsyncThunk(
 
 export const publishOfferAction = createAsyncThunk(
     "loan/PublishOfferAction",
-    async (id, thunkAPI) => {
-        const res = await loanRequestPublish(id);
+    async (loanId, thunkAPI) => {
+
+        const res = await loanRequestPublish(loanId);
         const dispatch = thunkAPI.dispatch;
 
         if (res.status !== 200) handleRequestError(res, dispatch);
@@ -131,6 +132,9 @@ export const loanSlice = createSlice({
             console.log("Request fulfilled");
             const payload = action.payload !== undefined && action.payload;
             state.currentOffer = payload;
+
+            // store current offer
+            localStorage.setItem("CURRENT_OFFER", JSON.stringify(action.payload));
         },
 
         // CREATE BOND LOAN OFFERS
@@ -144,6 +148,9 @@ export const loanSlice = createSlice({
             console.log("Request fulfilled");
             const payload = action.payload !== undefined && action.payload;
             state.currentOffer = payload;
+
+            // store current offer
+            localStorage.setItem("CURRENT_OFFER", JSON.stringify(action.payload));
         },
 
         // GET OFFERS
@@ -156,8 +163,6 @@ export const loanSlice = createSlice({
         [getOffersAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.offers = payload;
-
-            console.log(state.offers);
         },
 
         // GET OFFER
@@ -171,7 +176,8 @@ export const loanSlice = createSlice({
             const payload = action.payload !== undefined && action.payload;
             state.currentOffer = payload;
 
-            console.log(state.offers);
+            // store current offer
+            localStorage.setItem("CURRENT_OFFER", JSON.stringify(action.payload));
         },
 
         // EDIT OFFER
@@ -184,8 +190,6 @@ export const loanSlice = createSlice({
         [editOfferAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.updatedOffer = payload;
-
-            console.log(state.offers);
         },
     },
 });
