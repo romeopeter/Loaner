@@ -23,7 +23,7 @@ const loanRequestBond = (data) => {
 
 const loanRequestAddInvestor = (id, data) => {
     return axios
-        .put(`/v1/loan_request/add_investors/${id}/`, data)
+        .patch(`/v1/loan_request/add_investors/${id}/`, data)
         .catch((error) => error);
 };
 
