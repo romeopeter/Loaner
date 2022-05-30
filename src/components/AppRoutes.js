@@ -128,7 +128,7 @@ export default function AppRoutes() {
                             </RequireAuth>
                         }
                     />
-                     <Route
+                    <Route
                         path='/client/offers/offer/full-edit/:id/:dealType'
                         element={
                             <RequireAuth>
@@ -172,88 +172,88 @@ export default function AppRoutes() {
                         }
                     />
 
-					{/*Investor Dashboard*/}
-					<Route
-						path="/investor/dashboard"
-						element={
-							<RequireAuth>
-								<Dashboard />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/offers"
-						element={
-							<RequireAuth>
-								<AllOffers />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/offers/:offerId/:dealType/coming-soon"
-						element={
-							<RequireAuth>
-								<IncomingOffer />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/offers/:offerId/:dealType/open"
-						element={
-							<RequireAuth>
-								<ShowSingleOffer />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/offers/:offerId/bid-approved"
-						element={
-							<RequireAuth>
-								<BidApproved />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/offers/:offerId/bid-rejected"
-						element={
-							<RequireAuth>
-								<BidRejected />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/payment-proof"
-						element={
-							<RequireAuth>
-								<BAPaymentProof />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/dashboard/offers/:offerId/payment-detail"
-						element={
-							<RequireAuth>
-								<BAPaymentDetail />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/sucessful-bids"
-						element={
-							<RequireAuth>
-								<ApprovedBids />
-							</RequireAuth>
-						}
-					/>
-					<Route
-						path="/investor/bids/declined"
-						element={
-							<RequireAuth>
-								<DeclinedBids />
-							</RequireAuth>
-						}
-					/>
-                    
+                    {/*Investor Dashboard*/}
+                    <Route
+                        path="/investor/dashboard"
+                        element={
+                            <RequireAuth>
+                                <Dashboard />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/offers"
+                        element={
+                            <RequireAuth>
+                                <AllOffers />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/offers/:offerId/:dealType/coming-soon"
+                        element={
+                            <RequireAuth>
+                                <IncomingOffer />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/offers/:offerId/:dealType/open"
+                        element={
+                            <RequireAuth>
+                                <ShowSingleOffer />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/offers/:offerId/bid-approved"
+                        element={
+                            <RequireAuth>
+                                <BidApproved />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/offers/:offerId/bid-rejected"
+                        element={
+                            <RequireAuth>
+                                <BidRejected />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/:offerId/payment-proof"
+                        element={
+                            <RequireAuth>
+                                <BAPaymentProof />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/dashboard/offers/:offerId/payment-detail"
+                        element={
+                            <RequireAuth>
+                                <BAPaymentDetail />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/sucessful-bids"
+                        element={
+                            <RequireAuth>
+                                <ApprovedBids />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/investor/bids/declined"
+                        element={
+                            <RequireAuth>
+                                <DeclinedBids />
+                            </RequireAuth>
+                        }
+                    />
+
 
                     {/*Broker dashboard*/}
                     <Route
@@ -316,7 +316,7 @@ export default function AppRoutes() {
                         path='/broker/dashboard/all-offers/'
                         element={
                             <RequireAuth>
-                                <BrokerOffers/>
+                                <BrokerOffers />
                             </RequireAuth>
                         }
                     />
