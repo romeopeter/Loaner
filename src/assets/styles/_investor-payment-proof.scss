@@ -26,9 +26,11 @@
 						width: 200px;
 						font-size: bold;
 
-						&.view-offers {
+						&.view-offer {
 							border: 2px solid $black;
-							color: $black;
+							a {
+								color: $black;
+							}
 						}
 
 						&.go-home {
