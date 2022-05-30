@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import AppRoutes from "./AppRoutes";
+// eslint-disable-next-line no-unused-vars
 import AppErrorBoundary from "./AppErrorBoundary";
 
-import { signOutAsync } from "../redux/authSlice";
+// import { signOutAsync } from "../redux/authSlice";
+import { signOutAction } from "../redux/authSlice";
 import { setClientMessage } from "../redux/messageSlice.js";
 
 export default function App() {
@@ -28,7 +30,7 @@ export default function App() {
             // Any status code that lie within the range of 2xx cause this function to trigger
             return response
         },
-        (error) => {
+        async (error) => {
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             const response = error.response;
 
@@ -51,7 +53,9 @@ export default function App() {
                         messageObj.messageType === "token_not_valid"
                     ) {
                         // Sign user out
-                        dispatch(signOutAsync());
+                        const signOut = await dispatch(signOutAction());
+
+                        if (signOut.type === "auth/signOutAction") window.location.reload() 
                     }
                 }
             }
