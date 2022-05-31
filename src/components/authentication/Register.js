@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setClientMessage } from "../../redux/messageSlice";
 import { signUpAsync } from "../../redux/authSlice";
 
 import DocumentHead from "../DocumentHead";
 import Button from "../Button";
 import Form from "./Form";
 import { useAlert } from "react-alert";
+import {Danger} from "../alert"
 
 import phoneLady from "../../assets/images/phoneLady.jpg";
 import setBgImage from "../../utils/setBgImage";
@@ -55,20 +55,6 @@ export default function Register() {
 	// Alerts
 	const alert = useAlert();
 
-	const handleChange = (e) => {
-		const target = e.target;
-		const name = target.name;
-		const value =
-			target.type === "checkbox" ? target.checked : target.value;
-
-		setForm((state) => {
-			return {
-				...state,
-				[name]: value,
-			};
-		});
-	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -84,7 +70,6 @@ export default function Register() {
 			emailAddress,
 			role,
 			title,
-			dateOfBirth,
 			firstName,
 			lastName,
 			organization,
@@ -106,16 +91,6 @@ export default function Register() {
 			password,
 			confirm_password: confirmPassword,
 		};
-
-		/*for (let props in data) {
-			if (data[props] === "" || data[props] === null) {
-				setForm((state) => ({ ...state, isLoading: false }));
-
-				alert.error("Please fill all fields");
-
-				return;
-			}
-		}*/
 
 		if (form.password !== "" && form.password.length < 6) {
 			setForm((state) => ({ ...state, isLoading: false }));
@@ -171,22 +146,14 @@ export default function Register() {
 		}
 	}
 
-	const ErrorComponent = () => (
+	const AlertComponent = () => (
 		<>
 			<div className="mb-5">
-				{networkErrorMessage !== null ?(
-					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-						{networkErrorMessage}
-					</div>
-				):null}
+				{networkErrorMessage !== null ?(<Danger message={networkErrorMessage} />):null}
 			</div>
-
+			
 			<div className="mb-5">
-				{emailConflictMessage !== null ?(
-					<div className="text-black text-center bg-red-100 p-2 rounded border border-1 border-red-400">
-						{emailConflictMessage}
-					</div>
-				):null}
+				{emailConflictMessage !== null ?(<Danger message={emailConflictMessage} />):null}
 			</div>
 		</>
 	)
@@ -243,7 +210,7 @@ export default function Register() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									{/*Request error messages*/}
-									<ErrorComponent />
+									<AlertComponent />
 
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Nice to meet you.
