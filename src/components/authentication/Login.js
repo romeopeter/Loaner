@@ -125,16 +125,16 @@ export default function Login() {
 	if (currentUserObj !== null && typeof currentUserObj === "object") {
 		const {user} = currentUserObj;
 
-		const role = user.groups[0].name;
+		const userType = user.groups[0].name;
 
 		// Rediret if already logged in
 		if (isLoggedIn && typeof user === "object") {
-			return <Navigate replace to={`/${role.toLowerCase()}/dashboard`} />
+			return <Navigate replace to={`/${userType.toLowerCase()}/dashboard`} />
 		};
 	}
 
 	// Shows alerts from server and client
-	const ShowAlerts = () => (
+	const AlertComponent = () => (
 		<>
 			<div className="mb-5">
 				{networkErrorMessage !== null ?(<Danger message={networkErrorMessage} />):null}
@@ -200,7 +200,7 @@ export default function Login() {
 								</h1>
 								<div className="px-4 sm:px-0 mb-3">
 									{/*Request error messages*/}
-									<ShowAlerts />
+									<AlertComponent />
 									<h2 className="text-lg font-medium leading-6 pb-3 sm:pb-2">
 										Welcome back
 									</h2>
