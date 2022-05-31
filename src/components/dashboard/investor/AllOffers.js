@@ -1,21 +1,13 @@
- import React, { createRef, useState, useEffect } from "react";
-import { useSelector, useDispatch }  from "react-redux";
-import { Link, useNavigate, Navigate } from "react-router-dom";
-import ReactPaginate from "react-paginate";
+ import React, { useState, useEffect } from "react";
+import { useSelector }  from "react-redux";
+import { Link } from "react-router-dom";
 
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
-import Button from "../../Button";
 
 import ShowAllIncomingOffers from "./ShowAllIncomingOffers";
 import ShowAllOpenedOffers from "./ShowAllOpenedOffers";
-
-import offerImage from "../../../assets/images/offerImage.png";
-import setBgImage from "../../../utils/setBgImage";
-import headerBanner from "../../../assets/images/headerBanner.png";
-
-import { successfulBids } from "../../../fake-backend/investor/successfulBids";
 
 export default function InvestorDashboard() {
 	const pageName = "Investor";

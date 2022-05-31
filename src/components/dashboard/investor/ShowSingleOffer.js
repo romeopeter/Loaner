@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -25,7 +25,6 @@ export default function SingleOffer() {
 	const dispatch = useDispatch();
 
 	const { user: currentUser } = currentUserObj;
-	const { tokens: userTokens } = currentUserObj;
 	const { id: investorId } = currentUser["investor_details"];
 
 	// Acces all loan
@@ -78,10 +77,10 @@ export default function SingleOffer() {
 				(offer) => offer.id === Number(offerId)
 			);
 
-			// Update coponent state with opened loan offer
+			// Update component state with opened loan offer
 			setOffer(loanOffer);
 		}
-	}, [offerId]);
+	}, [dispatch, offerId]);
 
 	const handleChange = (e) => {
 		const target = e.target;
@@ -257,7 +256,7 @@ export default function SingleOffer() {
 									className="px-5 md:px-0 col-span-12 lg:col-span-8 mr-5 pt-10"
 								>
 									<h3 className="text-green-700 text-lg font-bold pb-5">
-										Dear Agropartner,
+										Dear {offer !== null && offer["deal_owner"]},
 									</h3>
 
 									<p id="description">
@@ -384,8 +383,7 @@ export default function SingleOffer() {
 												colSpan="2"
 											>
 												{offer.tranche_id.ratings.scale}{" "}
-												({offer.tranche_id.ratings.name}
-												)
+												({offer.tranche_id.ratings.name})
 											</td>
 										</tr>
 										<tr>
@@ -613,10 +611,15 @@ export default function SingleOffer() {
 								></i>
 							</Link>*/}
 							<div className="self-center">
-								<span className="block">OA</span>
-								<h4 className="font-bold text-lg">
-									Mr Olamide Jettah
-								</h4>
+								{offer !== null && (
+								<>
+									<span className="block">{offer["deal_owner"].substr(0,1)}{offer["deal_owner"].substr(7,1)}</span>
+									<h4 className="font-bold text-lg">
+										{/* Mr  */}
+										{offer["deal_owner"]}
+									</h4>
+								</>
+								)}
 							</div>
 						</div>
 						<div
