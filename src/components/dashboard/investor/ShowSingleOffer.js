@@ -82,7 +82,7 @@ export default function SingleOffer() {
       // Update component state with opened loan offer
       setOffer(loanOffer);
     }
-  }, [dispatch, offerId]);
+  }, [dispatch, allLoanOffers, offerId, investorId]);
 
   useEffect(
     function getBid() {
@@ -153,9 +153,9 @@ export default function SingleOffer() {
       setFormError((state) => ({ ...state, ...error }));
     };
 
-    const updateState = (state) => {
-      setState((state) => ({ ...state, ...state }));
-    };
+    // const updateState = (state) => {
+    //   setState((state) => ({ ...state, ...state }));
+    // };
 
     if (state.bidValue === "") {
       setTimeout(
