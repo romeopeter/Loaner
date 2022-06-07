@@ -183,11 +183,6 @@ export default function AllOffers() {
 					>
 						<div className="actions action-1 border-r border-black">
 							<h2 className="font-bold">
-								{/*<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>*/}
-
 								<Link
 									to="/investor/offers"
 									className="quick-action-links"
@@ -197,12 +192,7 @@ export default function AllOffers() {
 							</h2>
 						</div>
 						<div className="actions action-2 border-r border-black">
-							<h2 className="font-bold">
-								{/*	<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>*/}
-
+							<h2 className="font-bold">		
 								<Link
 									to="/investor/sucessful-bids"
 									className="quick-action-links"
@@ -213,11 +203,6 @@ export default function AllOffers() {
 						</div>
 						<div className="actions action-3">
 							<h2 className="font-bold">
-								{/*<i
-									className="fa fa-thumbs-o-up"
-									aria-hidden="true"
-								></i>*/}
-
 								<Link
 									to="/investor/bids/declined"
 									className="quick-action-links"
@@ -234,7 +219,7 @@ export default function AllOffers() {
 
 						{isLoading ? (
 							<div className="text-3xl w-full py-5">
-								<p className="text-center">Loading
+								<p className="text-center">
 									<i className="fa fa-spinner fa-pulse fa-3x fa-fw ml-2" style={{ fontSize: 30 }}></i>
 								</p>
 							</div>) : (
@@ -295,10 +280,7 @@ export default function AllOffers() {
 															itemIndex
 														) === "approved" && (
 																<Button
-																	title={checkBidStatus(
-																		item,
-																		itemIndex
-																	)}
+																	title="Approved"
 																	link={`/investor/dashboard/offers/${item.id}/bid-approved`}
 																	buttonClass="bg-green-600 rounded-md bid-approved"
 																/>
@@ -319,10 +301,7 @@ export default function AllOffers() {
 															itemIndex
 														) === "pending" && (
 																<Button
-																	title={checkBidStatus(
-																		item,
-																		itemIndex
-																	)}
+																	title="Pending"
 																	buttonClass="bg-yellow-400 rounded-md offer-open"
 																	buttonDisabled={true}
 																/>
