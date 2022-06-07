@@ -157,7 +157,6 @@ export default function BidApproved() {
     navigate(`/investor/dashboard/${urlParams.offerId}/payment-proof`);
   }
 
-
   if (offer !== null) {
     return (
       <>
@@ -241,7 +240,7 @@ export default function BidApproved() {
   return (
     <div className="flex items-center justify-center" style={{height: "100vh"}}>
       <p className="text-center text-gray-400 font-medium text-3xl">
-        Loading {" "}
+        Loading... {" "}
         <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
       </p>
     </div>
