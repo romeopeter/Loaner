@@ -8,11 +8,12 @@ export default function RequireAuth({ children }) {
 	
 	const { isLoggedIn, user } = userStateObj;
 	const userTypeFromPathName = location.pathname.split("/")[1].toLowerCase();
-	const userTypeFromState = user.user.groups[0].name.toLowerCase();;
+	const userTypeFromState = user !== null && user.user.groups[0].name.toLowerCase();
 
-	if (isLoggedIn === true && userTypeFromPathName === userTypeFromState) {
+
+	if (user !== null && isLoggedIn === true && userTypeFromPathName === userTypeFromState) {
 		return (children);
+	} else {
+		return (<Navigate to="/login" replace state={{ path: location.pathname }} />);
 	}
-
-	return (<Navigate to="/login" replace state={{ path: location.pathname }} />);
 }
