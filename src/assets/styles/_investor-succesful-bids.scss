@@ -22,11 +22,12 @@
 			}
 			
 			table {
+				width: 1440px !important;
 				tbody {
+
 					tr {
 						td {
 							&.offer-name {
-								// padding: 0 !important;
 
 								div {
 									width: 100%;
@@ -36,15 +37,6 @@
 									span {
 										display: block !important;
 									}
-
-									img {
-										display: inline-block;
-										margin: 0 10px;
-										height: 40px;
-										width: 40px;
-										padding: 0 0 0 3rem;
-										border-radius: 20px;
-									}
 								}
 							}
 
@@ -52,17 +44,17 @@
 								width: 750px;
 							}
 
-							&.table-btn {
-								text-align: center;
+							// &.table-btn {
+							// 	text-align: center;
 
-								.succesful-btn {
-									color: $white !important;
+							// 	.succesful-btn {
+							// 		color: $white !important;
 
-									&:hover {
-										color: rgba(255, 0, 0, 0.7) !important;
-									}
-								}
-							}
+							// 		&:hover {
+							// 			color: rgba(255, 0, 0, 0.7) !important;
+							// 		}
+							// 	}
+							// }
 						}
 					}
 				}
