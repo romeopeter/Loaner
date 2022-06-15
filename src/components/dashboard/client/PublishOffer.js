@@ -2,7 +2,7 @@
 	Also called the assigning-invetor component/page
 */
 
-import React, { createRef, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { components } from "react-select";
@@ -50,7 +50,7 @@ export default function PublishOffer({ children, ...props }) {
 	const investorCategories = useSelector(
 		(state) => state.investorsCategories.categories
 	);
-	const serverError = useSelector(state => state.message.server);
+	// const serverError = useSelector(state => state.message.server);
 	const currentOfferObj = localStorage.getItem("CURRENT_OFFER");
 
     const currentOffer = currentOfferObj !== null ? JSON.parse(currentOfferObj) : null;
@@ -104,8 +104,20 @@ export default function PublishOffer({ children, ...props }) {
 
 	// Generate request based on categories clicked
 	useEffect(function multiInvestorsRequest() {
-		genMultiInvestorsRequests();
-	}, [categoriesIds]);
+
+		// Generate multi request
+
+		(async function() {
+			const multiRequests = categoriesIds.map((id, index) => {
+				const API_URL =
+					"https://order-book-online.herokuapp.com/v1/investor_category";
+				return `${API_URL}/${id !== undefined && id
+					}/?display_investors=True`;
+			});
+	
+			await dispatch(mergeInvestorsInCategoriesAction(multiRequests));
+		})();
+	}, [dispatch, categoriesIds]);
 
 	useEffect(function getOffer() {
 		dispatch(getOfferAction({id: params.id, dealType: params.dealType}));
@@ -341,17 +353,6 @@ export default function PublishOffer({ children, ...props }) {
 	};
 
 	const loadInvestorsOptions = loadAllInvestorsOptionsFunc();
-
-	// Generate multi request
-	const genMultiInvestorsRequests = () => {
-		const multiRequests = categoriesIds.map((id, index) => {
-			const API_URL =
-				"https://order-book-online.herokuapp.com/v1/investor_category";
-			return `${API_URL}/${id !== undefined && id
-				}/?display_investors=True`;
-		});
-		dispatch(mergeInvestorsInCategoriesAction(multiRequests));
-	};
 	/* React-select customization ends */
 
 	// Captialize first letter of alphabets characters
