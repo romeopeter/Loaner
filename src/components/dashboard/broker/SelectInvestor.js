@@ -28,8 +28,6 @@ import { getOfferAction } from "../../../redux/loanSlice.js";
 
 export default function PublishOffer({ children, ...props }) {
     const pageName = 'Publish offer';
-
-    const componentMounted = useRef(true);
     const alert = useAlert();
     const dispatch = useDispatch();
     const params = useParams();
@@ -211,6 +209,7 @@ export default function PublishOffer({ children, ...props }) {
             return;
         } else {
             const investorsId = investorsInCategory.map((investor) => investor.id);
+            let componentIsMounted = true;
 
             const data = {
                 investor_ids: investorsId,
@@ -227,8 +226,10 @@ export default function PublishOffer({ children, ...props }) {
                 console.log("Loan published!");
 
                 // Show publish modal
-                if (componentMounted.current) showPublishModal(true);
+                if (componentIsMounted) showPublishModal(true);
             }
+
+            componentIsMounted = false;
 
             setFeedBack((state) => ({
                 investorsNotAssigned: '',
@@ -237,7 +238,7 @@ export default function PublishOffer({ children, ...props }) {
                 statusNotSet: '',
             }));
 
-            return () => (componentMounted.current = false);
+            return () => componentIsMounted;
         }
     };
 
