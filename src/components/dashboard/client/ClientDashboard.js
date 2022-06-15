@@ -107,7 +107,7 @@ export default function ClientDashboard() {
                             </Link>
                         </div>
                         <div className="actions action-2 border-r border-black">
-                            <Link to="/client/offers/offer/publish">
+                            <Link to="/client/dashboard">
                                 <h2 className="font-bold">
                                     <div className="action-icon-container">
                                         <img src={createList} alt="" />

@@ -30,18 +30,16 @@ import {
 import { saveInvestorListAction } from "../../../redux/investorListSlice";
 
 import { Danger, Success } from "../../alert";
+import PublishModal from "./modal/PublishModal";
+import SaveListModal from "./modal/SaveListModal";
 
 export default function PublishOffer({ children, ...props }) {
 	// Scroll window to the top
-	window.scroll(0, 0);
+	// window.scroll(0, 0);
 
 
 	const pageName = "Publish offer";
-
 	const params = useParams();
-	const saveListModalRef = createRef();
-	const componentMounted = useRef(true);
-	const publishSuccessModalRef = createRef();
 	const alert = useAlert();
 	const dispatch = useDispatch();
 
@@ -52,8 +50,10 @@ export default function PublishOffer({ children, ...props }) {
 	const investorCategories = useSelector(
 		(state) => state.investorsCategories.categories
 	);
-	const currentOffer = useSelector(state => state.loan.currentOffer);
-	const serverError = useSelector(state => state.message.server)
+	const serverError = useSelector(state => state.message.server);
+	const currentOfferObj = localStorage.getItem("CURRENT_OFFER");
+
+    const currentOffer = currentOfferObj !== null ? JSON.parse(currentOfferObj) : null;
 
 	const [state, setState] = useState({
 		investorSelected: null,
@@ -73,6 +73,12 @@ export default function PublishOffer({ children, ...props }) {
 		statusNotSet: ""
 	});
 
+	const [isLoading, setIsLoading] = useState(false);
+
+    const [publishModal, showPublishModal] = useState(false);
+
+    const [saveListModal, showSaveListModal] = useState(false);
+
 	// Get all investors categories
 	useEffect(function getCategories() {
 		dispatch(getInvestorsCategoriesAction());
@@ -80,25 +86,30 @@ export default function PublishOffer({ children, ...props }) {
 	}, [dispatch]);
 
 	// Get all categories IDs
-	useEffect(() => {
-		getCategoriesIds();
+	useEffect(function getCategoriesID() {
+		let componentIsMounted = true;
+
+		const IDs = state.categoryCheckbox.length > 0
+			? state.categoryCheckbox.map((category) => {
+				return Number(category.split("_")[1]);
+			})
+		: [];
+
+		if (componentIsMounted) setCategoriesIds((state) => [...IDs]);
+
+		componentIsMounted = false;
+
+		return () => componentIsMounted;
 	}, [state.categoryCheckbox]);
 
 	// Generate request based on categories clicked
-	useEffect(function muiltiInvestorsRequest() {
+	useEffect(function multiInvestorsRequest() {
 		genMultiInvestorsRequests();
 	}, [categoriesIds]);
 
-	// useEffect(function getOffer() {
-	// 	const req = dispatch(getOfferAction({id: params['id'], dealType: params["deal_type"]}));
-
-	// 	console.log(req);
-
-	// 	if (req.meta.requestStatus === "fulfilled") {
-	// 		const payload = req.payload !== undefined && req.payload;
-	// 		setCurrentOffer(payload);
-	// 	}
-	// }, [dispatch, params])
+	useEffect(function getOffer() {
+		dispatch(getOfferAction({id: params.id, dealType: params.dealType}));
+	}, [dispatch, params])
 
 	const handleInvestorChange = (selected) => {
 		setState((state) => {
@@ -144,23 +155,8 @@ export default function PublishOffer({ children, ...props }) {
 		}
 	};
 
-	// Save list modal trigger
-	const FavouriteListModal = () => {
-		saveListModalRef.current.classList.add("accept-modal");
-	};
-	const removeFavouriteListModal = () => {
-		saveListModalRef.current.classList.remove("accept-modal");
-	};
-
-	// Publish successful modal trigger
-	const publishSuccessModal = () => {
-		publishSuccessModalRef.current.classList.add("accept-modal");
-	};
-
 	/*Save list as favourite*/
 	const saveFavouriteList = () => {
-		// const investorValues = state.investorSelected;
-		// const categoryValues = state.categoryCheckbox;
 
 		// const clientInvestorsList = {};
 		const serverInvestorsList = {};
@@ -176,7 +172,7 @@ export default function PublishOffer({ children, ...props }) {
 			let availability;
 
 			if (state.saveAsOpen) availability = "open";
-			if (state.saveAsComing) availability = "Coming soon";
+			if (state.saveAsComing) availability = "coming soon";
 
 			serverInvestorsList.name = state.favouriteListName;
 			serverInvestorsList.descripption = state.favouriteListDescription;
@@ -189,17 +185,17 @@ export default function PublishOffer({ children, ...props }) {
 			});
 
 			// Removes save list modal
-			removeFavouriteListModal();
+			// removeFavouriteListModal();
 		}
 	};
 
 	// Assign and Publish investors
-	const assignInvestors = (loanOfferId) => {
+	const assignInvestors = async (loanOfferId) => {
 		const investorsValue = state.investorSelected;
 		let availability;
 
 		if (state.saveAsOpen) availability = "open";
-		if (state.saveAsComing) availability = "Coming soon";
+		if (state.saveAsComing) availability = "coming soon";
 
 		if (investorsValue === null) {
 			setFeedBack((state) => ({
@@ -222,6 +218,8 @@ export default function PublishOffer({ children, ...props }) {
 			}));
 			return;
 		} else {
+			let componentIsMounted = true;
+		
 			const investorsId = investorsInCategory.map(
 				(investor) => investor.id
 			);
@@ -232,17 +230,20 @@ export default function PublishOffer({ children, ...props }) {
 			};
 
 			// Assign investors
-			dispatch(AddInvestorsAction({ loanOfferId, data }));
+			await dispatch(AddInvestorsAction({ loanOfferId, data }));
 
 			// Publish offers
-			dispatch(publishOfferAction(loanOfferId));
+			const publishOffer = await dispatch(publishOfferAction(loanOfferId));
 
-			if (componentMounted.current) {
+			if (publishOffer.meta.requestStatus === "fulfilled") {
 				// Show modal
-				if (serverError !== "" || serverError !== null) {
-					publishSuccessModal()
-				};
+				console.log("Loan published!");
+
+				// Show publish modal
+				if (componentIsMounted) showPublishModal(true);
 			}
+
+			componentIsMounted = false;
 
 			setFeedBack((state) => ({
 				investorsNotAssigned: "",
@@ -251,34 +252,29 @@ export default function PublishOffer({ children, ...props }) {
 				statusNotSet: ""
 			}));
 
-			return () => componentMounted.current = false;
+			return () => componentIsMounted;
 		}
 	};
 
 	// Publish offer
 	const publishOffer = () => {
+		setIsLoading(true);
+
 		if (currentOffer !== null) {
 			const { id } = currentOffer;
 
-			// Pass offer reference to assigned investors
+			// assign loan to investor
 			assignInvestors(id);
 
 			return
 		}
 
-		assignInvestors();
+		// assignInvestors();
 	}
 
-	// Get categories ID
-	const getCategoriesIds = () => {
-		const IDs =
-			state.categoryCheckbox.length > 0
-				? state.categoryCheckbox.map((category) => {
-					return Number(category.split("_")[1]);
-				})
-				: [];
-
-		setCategoriesIds((state) => [...IDs]);
+	//Remove list modal trigger
+	const removeFavouriteListModal = () => {
+		showSaveListModal(false);
 	};
 
 	/* React-select customization start */
@@ -379,7 +375,7 @@ export default function PublishOffer({ children, ...props }) {
 					className="bg-white px-16 py-10 shadow-md flex items-start"
 				>
 					<div id="loan" className="dropdown-container underline mr-5">
-						<Link to={`/client/offers/offer/edit/${id}/${dealType.toLowerCase()}/`}>View offers</Link>
+						<Link to={`/client/offers/offer/edit/${id}/${dealType}/`}>View offers</Link>
 					</div>
 					{" "}
 					{/*<div id="investor" className="dropdown-container">
@@ -562,7 +558,7 @@ export default function PublishOffer({ children, ...props }) {
 								</label>
 							</div>
 
-							<div className="col-span-2 sm:col-span-1 text-right checkboxes">
+							<div className="col-span-2 sm:col-span-1 text-left sm:text-right checkboxes">
 								<input
 									type="checkbox"
 									id="save-as-now-coming"
@@ -575,7 +571,7 @@ export default function PublishOffer({ children, ...props }) {
 									htmlFor="save-as-now-coming"
 									className="text-white text-xl"
 								>
-									Mark as now coming
+									Mark as coming soon
 								</label>
 							</div>
 						</div>
@@ -588,7 +584,7 @@ export default function PublishOffer({ children, ...props }) {
 							title="Save list as favourite"
 							type="submit"
 							buttonClass="save-list bg-gray-400 mb-5 sm:mb-0 sm:mr-5 py-5 text-center"
-							handleClick={FavouriteListModal}
+							handleClick={() => showSaveListModal(true)}
 						/>
 
 						<Button
@@ -596,108 +592,21 @@ export default function PublishOffer({ children, ...props }) {
 							type="submit"
 							buttonClass="publish-loan bg-green-700 py-5 text-center mr-5"
 							handleClick={publishOffer}
-						/>
+						>
+							Publish <i className={`${isLoading && "fa fa-spinner fa-pulse fa-1x fa-fw"}`}></i>
+						</Button>
 					</div>
 
 					{/*Save list modal*/}
-					<div
-						id="save-list-modal"
-						className="h-60"
-						ref={saveListModalRef}
-					>
-						<div id="modal-content" className="">
-							<h4 className="font-bold text-2xl self-start my-5">
-								New list
-							</h4>
-
-							<div className="grid grid-cols-2 gap-4 mb-10">
-								<div className="col-span-2">
-									<input
-										type="text"
-										name="favouriteListName"
-										value={state.favouriteListName}
-										onChange={(e) =>
-											setState((state) => ({
-												...state,
-												[e.target.name]: e.target.value,
-											}))
-										}
-										placeholder="Title"
-										className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
-									/>
-								</div>
-								<div className="col-span-2">
-									<input
-										type="text"
-										name="favouriteListDescription"
-										value={state.favouriteListDescription}
-										onChange={(e) =>
-											setState((state) => ({
-												...state,
-												[e.target.name]: e.target.value,
-											}))
-										}
-										placeholder="Description (optional)"
-										className="w-full border-l-0 border-t-0 border-r-0 focus:border-white"
-									/>
-								</div>
-							</div>
-
-							<div
-								id="modal-buttons"
-								className="flex justify-end pr-5"
-							>
-								<Button
-									title="Cancel"
-									buttonClass="cancel mr-5"
-									handleClick={removeFavouriteListModal}
-								/>
-
-								<Button
-									title="Create"
-									buttonClass="create"
-									handleClick={saveFavouriteList}
-								/>
-							</div>
-						</div>
-					</div>
+					<SaveListModal
+						listState={{ state, setState }}
+                        class={saveListModal ? "accept-modal" : ""}
+                        saveListFunc={saveFavouriteList}
+                        removeModal={removeFavouriteListModal}
+					/>
 
 					{/*Publish succesful Modal*/}
-					<div
-						id="publish-success-modal"
-						className="h-40"
-						ref={publishSuccessModalRef}
-					>
-						<div id="modal-content" className="">
-							<h4 className="font-bold text-2xl text-center my-5">
-								Congratulations
-							</h4>
-
-							<p
-								className="text-center mb-5 font-bold"
-								id="message"
-							>
-								Your loan offer has been published
-							</p>
-
-							<div
-								id="modal-buttons"
-								className="flex justify-center pr-5"
-							>
-								<Button
-									title="View orders"
-									link="/client/offers/"
-									buttonClass="view-orders mr-5  rounded w-full"
-								/>
-
-								{/*<Button
-									title="Go home"
-									link="/"
-									buttonClass="go-home create"
-								/>*/}
-							</div>
-						</div>
-					</div>
+					<PublishModal class={publishModal ? "accept-modal" : ""} />
 				</div>
 			</OrderbookLayout>
 		</>
