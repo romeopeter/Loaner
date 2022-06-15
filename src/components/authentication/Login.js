@@ -20,8 +20,10 @@ export default function Login() {
 	const dispatch = useDispatch();
 
 	const { isLoggedIn } = useSelector((state) => state.auth);
-	const { message: serverMessage } = useSelector((state) => state.message.server);
-	const {client: clientMessage}  = useSelector(state => state.message);
+	const serverMessage = useSelector((state) => state.message.server);
+
+	// const {client: clientMessage}  = useSelector(state => state.message);
+	const clientMessage = JSON.parse(localStorage.getItem("ORDERBOOK_EXPIRED_TOKEN"));
 
 	const [form, setForm] = useState({
 		emailAddress: "",
@@ -79,6 +81,9 @@ export default function Login() {
 
 		if (req.meta.requestStatus === "fulfilled") {
 			const { user } = JSON.parse(localStorage.getItem("USER"));
+
+			// Cleared stored expired token
+			localStorage.removeItem("ORDERBOOK_EXPIRED_TOKEN");
 
 			if (user !== undefined && "groups" in user) {
 				const userType = user.groups[0].name;
