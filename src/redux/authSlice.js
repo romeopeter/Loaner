@@ -55,10 +55,10 @@ export const authSlice = createSlice({
 		[signInAction.fulfilled]: (state, action) => {
 			const payload = action.payload !== undefined && action.payload;
 
-			// Store user object in browser storage
+			// Store user object in browser storage.
 			localStorage.setItem("USER", JSON.stringify(payload));
 
-			// Set default headers token
+			// Set default headers token.
 			const accessToken = payload.tokens.access;
 			axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
