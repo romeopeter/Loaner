@@ -4,7 +4,7 @@ import {
 	assignInvestorsToCategories,
 	mergeInvestorsInCategories
 } from "../services/loan.service.js";
-import handleRequestError from "./errorResponse";
+import handleRequestError from "./errorHandler";
 
 // All investors regardless of category
 export const getInvestorsInCategoryAction = createAsyncThunk(

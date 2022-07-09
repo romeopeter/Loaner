@@ -2,7 +2,7 @@
     Also called the assigning-invetor component/page
 */
 
-import React, {useState, useEffect, useRef } from "react";
+import React, {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { components } from "react-select";

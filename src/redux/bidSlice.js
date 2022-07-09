@@ -99,6 +99,8 @@ export const bidSlice = createSlice({
         [getBidAction.fulfilled]: (state, action) => {
             const payload = action.payload !== undefined && action.payload;
             state.bid = payload;
+
+            console.log(payload);
         },
 
         // CREATE BID

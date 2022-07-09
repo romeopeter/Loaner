@@ -15,9 +15,7 @@ export default function Table({ columns, data }) {
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
               <th {...column.getHeaderProps()}>
-                {column.render("header") === "TableBtn" ? (
-                  " "
-                ) : column.render("header") === "Name" ? (
+                {column.render("Header") === "Name" && (
                   <div className="w-full">
                     <input
                       type="checkbox"
@@ -25,11 +23,12 @@ export default function Table({ columns, data }) {
                       className="checkbox rounded float-left ml-5"
                       title="checkbox"
                     />
-                    <h6 className="inline-block">{column.render("header")}</h6>
+                    <h6 className="inline-block">{column.render("Header")}</h6>
                   </div>
-                ) : (
-                 <h6>{ column.render("header")}</h6>
                 )}
+                {column.render("Header") === "Description" &&
+                  column.render("Header")}
+                {column.render("Header") === "TableBtn" && "btn"}
               </th>
             ))}
           </tr>
@@ -43,57 +42,46 @@ export default function Table({ columns, data }) {
             <tr {...row.getRowProps()} key={index}>
               {row.cells.map((cell, index) => {
                 return (
-             
-                    <td
-                      {...cell.getCellProps()}
-                      className={`${
-                        cell.column.header === "Name"
-                          ? "offer-name"
-                          : cell.column.header === "TableBtn"
-                          ? "offer-btn"
-                          : "offer-description"
-                      }`}
+                  <td
+                    {...cell.getCellProps()}
+                    className={`${cell.column.id === "name" && "offer-name"} ${
+                      cell.column.id === "description" && "offer-description"
+                    } ${cell.column.id === "tableBtn" && "offer-btn"}`}
+                    key={index}
+                  >
+                    {cell.column.id === "name" && (
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name="checkbox"
+                          className="checkbox rounded"
+                          title="checkbox"
+                        />
+                        <img
+                          src={offerImage}
+                          alt=""
+                          className="rounded h-10 w-10 hidden sm:block"
+                        />
+                        <h6>{cell.render("Cell")}</h6>
+                      </div>
+                    )}
 
-                      key={index}
-                    >
-                      {cell.column.header === "Name" ? (
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name="checkbox"
-                            className="checkbox rounded"
-                            title="checkbox"
-                          />
-                          <img
-                            src={offerImage}
-                            alt=""
-                            className="rounded h-10 w-10 hidden sm:block"
-                          />
-                          <h6>{cell.render("Cell")}</h6>
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                    {cell.column.id === "description" && (
+                      <p className="text-left">{cell.render("Cell")}</p>
+                    )}
 
-                      {cell.column.header === "Description" ? (
-                        <p className="text-left">{cell.render("Cell")}</p>
-                      ) : (
-                        ""
-                      )}
-
-                      {cell.column.header === "TableBtn" ? (
-                        <div className="flex justify-center items-center">
-                          <Button
-                            title={cell.render("Cell")}
-                            link="#"
-                            buttonClass="bg-green-600 rounded hover:bg-white successful-btn"
-                          />
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </td>
-                 
+                    {cell.column.id === "tableBtn" && (
+                      <div className="flex justify-center items-center">
+                        <Button
+                         title="View details"
+                         link={`/investor/dashboard/offers/${
+                           cell.render("Cell").props.value
+                         }/open`}
+                         buttonClass="bg-green-600 rounded hover:bg-white successful-btn"
+                        />
+                     </div>
+                    )}
+                  </td>
                 );
               })}
             </tr>

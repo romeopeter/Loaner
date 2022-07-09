@@ -1,157 +1,111 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ReactPaginate from "react-paginate";
 import Button from "../../Button";
-
-import offerImage from "../../../assets/images/offerImage.png";
+import Table from "./Table";
 
 export default function ShowAllOpenedOffers({ openOffers }) {
-	// Pagination
-	const [paginateState, setPaginateState] = useState({
-		list: [],
-		perPage: 9,
-		page: 0,
-		pages: 0,
-	});
+	console.log(openOffers);
 
-	useEffect(() => {
-		if (openOffers !== null) {
-			setPaginateState({
-				list: openOffers,
-				perPage: 6,
-				page: 0,
-				pages: Math.floor(openOffers.length / 6),
-			});
-		}
-	}, []);
+  // Pagination
+  const [paginateState, setPaginateState] = useState({
+    list: [],
+    perPage: 9,
+    page: 0,
+    pages: 0,
+  });
 
-	const { page, perPage, pages, list } = paginateState;
-	let items = list.slice(page * perPage, (page + 1) * perPage);
+  useEffect(() => {
+    if (openOffers !== null) {
+      setPaginateState({
+        list: openOffers,
+        perPage: 6,
+        page: 0,
+        pages: Math.floor(openOffers.length / 6),
+      });
+    }
+  }, [openOffers]);
 
-	const handlePageClick = (event) => {
-		let page = event.selected;
-		setPaginateState((state) => ({ ...state, page: page }));
-	};
+  const { page, perPage, pages, list } = paginateState;
+  let items = list.slice(page * perPage, (page + 1) * perPage);
 
-	return (
-		<div className="mb-5">
-			<div id="table-container" style={{ overflowX: "auto" }}>
-				{items.length > 0 ? (
-					<>
-						<div
-							id="table-action"
-							className="bg-white py-5 px-2 w-full"
-						>
-							<select
-								name="table-action"
-								id="select-table-action"
-								className="mr-2 mt-1 focus:ring-white focus:border-black border-2 border-black"
-							>
-								<option defaultValue="value 1">
-									Select action
-								</option>
-								<option value="value 1">Option 1</option>
-								<option value="vallue 2">Option 2</option>
-								<option value="value 3">Option 3</option>
-							</select>
-							<Button
-								title="Apply"
-								buttonClass="bg-gray-500 action-btn"
-							/>
-						</div>
-						<table className="bg-white table-auto w-full">
-							<thead className="bg-gray-300">
-								<th className="pl-10 py-5 text-left">
-									<input
-										type="checkbox"
-										name="checkbox"
-										className="checkbox rounded mr-5"
-									/>
-									<span>Name</span>
-								</th>
-								<th className="pl-5 py-5" colspan="2">
-									Description
-								</th>
-							</thead>
-							<tbody>
-								{items.map((item, index) => {
-									return (
-										<tr key={index}>
-											<td className="offer-name">
-												<input
-													type="checkbox"
-													name="checkbox"
-													className="checkbox rounded"
-												/>
-												<img
-													src={offerImage}
-													alt=""
-													className="h-10 w-10 rounded mx-2"
-													id="offer-image"
-												/>
-												<span>{item.deal_name}</span>
-											</td>
-											<td>
-												<p className="text-left">
-													Lorem ipsum dolor sit amet,
-													consectetur adipisicing
-													elit, sed do eiusmod tempor
-													incididunt ut labore et
-													dolore magna aliqua. Ut enim
-													ad minim veniam, quis
-													nostrud exercitation ullamco
-													laboris nisi ut aliquip ex
-													ea commodo consequat. Duis
-													aute irure dolor in
-													reprehenderit in voluptate
-													velit esse cillum dolore eu
-													fugiat nulla pariatur.
-													Excepteur sint occaecat
-													cupidatat non proident, sunt
-													in culpa qui officia
-													deserunt mollit anim id est
-													laborum.
-												</p>
-											</td>
-											<td>
-												<Button
-													title="View details"
-													link={`/investor/dashboard/offers/${item.id}/`}
-													buttonClass={`action-btn bg-green-400 rounded-sm ${item.availability.replace(
-														" ",
-														"-"
-													)}`}
-												/>
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</>
-				) : (
-					<div className="bg-white text-center h-60">
-						<h5 className="h-full flex justify-center items-center text-2xl text-gray-400">
-							Loading open offers {""}
-							<i
-								className="fa fa-spinner fa-pulse fa-3x fa-fw"
-								style={{ fontSize: 20 }}
-							></i>
-						</h5>
-					</div>
-				)}
-			</div>
+  const handlePageClick = (event) => {
+    let page = event.selected;
+    setPaginateState((state) => ({ ...state, page: page }));
+  };
 
-			{items.length === paginateState.perPage && (
-				<div id="paginate-offers" className="bg-white">
-					<ReactPaginate
-						previousLabel={"<"}
-						nextLabel={">"}
-						pageCount={pages}
-						containerClassName={"pagination"}
-						onPageChange={(e) => handlePageClick(e)}
-					/>
-				</div>
-			)}
-		</div>
-	);
+  const tableColumns = useMemo(
+    () => [
+		{
+		  Header: "Name",
+		  accessor: "name",
+		},
+		{
+		  Header: "Description",
+		  accessor: "description",
+		},
+		{
+		  Header: "TableBtn",
+		  accessor: "tableBtn",
+		},
+	],
+	[]
+  );
+
+  const tableData = useMemo(() => {
+    const data =  openOffers.map((offer) => {
+		return {
+			name: offer["deal_name"],
+			description: "***",
+			tableBtn: `${offer.id}/${offer["deal_type"].toLowerCase()}`
+		};
+    });
+
+	if (data.length === openOffers.length) return data
+  },[openOffers]);
+
+  return (
+    <div className="mb-5">
+      <div id="table-container" style={{ overflowX: "auto" }}>
+        {items.length > 0 ? (
+          <>
+            <div id="table-action" className="bg-white py-5 px-2 w-full">
+              <select
+                name="table-action"
+                id="select-table-action"
+                className="mr-2 mt-1 focus:ring-white focus:border-black border-2 border-black"
+              >
+                <option defaultValue="value 1">Select action</option>
+                <option value="value 1">Option 1</option>
+                <option value="vallue 2">Option 2</option>
+                <option value="value 3">Option 3</option>
+              </select>
+              <Button title="Apply" buttonClass="bg-gray-500 action-btn" />
+            </div>
+			{openOffers.length > 0 && (<Table columns={tableColumns} data={tableData} />)}
+          </>
+        ) : (
+          <div className="bg-white text-center h-60">
+            <h5 className="h-full flex justify-center items-center text-2xl text-gray-400">
+              <i
+                className="fa fa-spinner fa-pulse fa-3x fa-fw"
+                style={{ fontSize: 40 }}
+              ></i>
+            </h5>
+          </div>
+        )}
+      </div>
+
+      {items.length === paginateState.perPage && (
+        <div id="paginate-offers" className="bg-white">
+          <ReactPaginate
+            previousLabel={"<"}
+            nextLabel={">"}
+            pageCount={pages}
+            containerClassName={"pagination"}
+            onPageChange={(e) => handlePageClick(e)}
+          />
+        </div>
+      )}
+    </div>
+  );
 }

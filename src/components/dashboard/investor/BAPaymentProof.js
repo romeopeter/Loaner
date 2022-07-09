@@ -183,7 +183,7 @@ export default function BAProofPyament() {
                       title="View offer"
                       link={`/investor/dashboard/offers/${
                         offer !== null && offer["id"]
-                      }/${offer !== null && offer["deal_type"].toLowerCase()}`}
+                      }/${offer !== null && offer["deal_type"].toLowerCase()}/open`}
                       buttonClass="view-offer sm:mb-0 mb-5 rounded"
                     />
                     <Button

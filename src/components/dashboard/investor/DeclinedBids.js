@@ -92,7 +92,7 @@ export default function DeclinedBids() {
 						</h3>
 
 						{isLoading ? (<div className="bg-white w-full h-auto">
-							<p className="text-3xl text-center h-40 flex justify-center items-center text-gray-500">Loading {" "}{" "}
+							<p className="text-3xl text-center h-40 flex justify-center items-center text-gray-500">
 								<i className="fa fa-spinner fa-pulse fa-3x fa-fw"
 									style={{ fontSize: 20 }}></i>
 							</p>
@@ -121,7 +121,7 @@ export default function DeclinedBids() {
 												className="py-5 text-center text-3xl text-gray-400 h-40 flex justify-center items-center"
 												style={{fontSize: "1.875rem"}}
 											>
-											You have declined bids
+											You have no declined bids
 												<i class="fa fa-times ml-2" aria-hidden="true"></i>
 											</p>
 											</div>

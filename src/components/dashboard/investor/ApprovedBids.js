@@ -64,15 +64,15 @@ export default function ApprovedBids() {
   const tableColumn = useMemo(
     () => [
       {
-        header: "Name",
+        Header: "Name",
         accessor: "name",
       },
       {
-        header: "Description",
+        Header: "Description",
         accessor: "description",
       },
       {
-        header: "TableBtn",
+        Header: "TableBtn",
         accessor: "tableBtn",
       },
     ],
@@ -88,6 +88,7 @@ export default function ApprovedBids() {
           ? "cp"
           : "bonds";
       const bidName = bid["loan_request"]["deal_name"] !== undefined ? bid["loan_request"]["deal_name"] : bid["loan_request"]["tranche_name"];
+
       return {
         name: bidName,
         description: "***",

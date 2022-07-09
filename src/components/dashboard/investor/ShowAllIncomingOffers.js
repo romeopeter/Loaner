@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ReactPaginate from "react-paginate";
 import Button from "../../Button";
-
-import offerImage from "../../../assets/images/offerImage.png";
+import Table from "./Table";
 
 export default function ShowAllIncomingOffers({ incomingOffers }) {
 	// Pagination
@@ -22,7 +21,7 @@ export default function ShowAllIncomingOffers({ incomingOffers }) {
 				pages: Math.floor(incomingOffers.length / 9),
 			});
 		}
-	}, []);
+	}, [incomingOffers]);
 
 	const { page, perPage, pages, list } = paginateState;
 	let items = list.slice(page * perPage, (page + 1) * perPage);
@@ -31,6 +30,34 @@ export default function ShowAllIncomingOffers({ incomingOffers }) {
 		let page = event.selected;
 		setPaginateState((state) => ({ ...state, page: page }));
 	};
+
+	const tableColumns = useMemo(
+		() => [
+			{
+			  Header: "Name",
+			  accessor: "name",
+			},
+			{
+			  Header: "Description",
+			  accessor: "description",
+			},
+			{
+			  Header: "TableBtn",
+			  accessor: "tableBtn",
+			},
+		],
+		[]
+	  );
+	
+	const tableData = useMemo(() => {
+		return incomingOffers.map((offer) => {
+			return {
+				name: offer["deal_name"],
+				description: "***",
+				tableBtn: `${offer.id}/${offer["deal_type"].toLowerCase()}`
+			};
+		});
+	},[incomingOffers]);
 
 	return (
 		<div className="mb-5">
@@ -58,88 +85,15 @@ export default function ShowAllIncomingOffers({ incomingOffers }) {
 								buttonClass="bg-gray-500 action-btn"
 							/>
 						</div>
-						<table className="bg-white table-auto w-full">
-							<thead className="bg-gray-300">
-								<th className="pl-10 py-5 text-left">
-									<input
-										type="checkbox"
-										name="checkbox"
-										className="checkbox rounded mr-5"
-									/>
-									<img
-										src={offerImage}
-										alt=""
-										className="h-10 w-10 rounded mx-2"
-										id="offer-image"
-									/>
-									<span>Name</span>
-								</th>
-								<th className="pl-5 py-5" colspan="2">
-									Description
-								</th>
-							</thead>
-							<tbody>
-								{items.map((item, index) => {
-									return (
-										<tr key={index}>
-											<td className="offer-name">
-												<input
-													type="checkbox"
-													name="checkbox"
-													className="checkbox rounded"
-												/>
-												<img
-													src={offerImage}
-													alt=""
-													className="rounded h-10 w-10"
-												/>
-												<span>{item.deal_name}</span>
-											</td>
-											<td>
-												<p className="text-left">
-													Lorem ipsum dolor sit amet,
-													consectetur adipisicing
-													elit, sed do eiusmod tempor
-													incididunt ut labore et
-													dolore magna aliqua. Ut enim
-													ad minim veniam, quis
-													nostrud exercitation ullamco
-													laboris nisi ut aliquip ex
-													ea commodo consequat. Duis
-													aute irure dolor in
-													reprehenderit in voluptate
-													velit esse cillum dolore eu
-													fugiat nulla pariatur.
-													Excepteur sint occaecat
-													cupidatat non proident, sunt
-													in culpa qui officia
-													deserunt mollit anim id est
-													laborum.
-												</p>
-											</td>
-											<td>
-												<Button
-													title="View details"
-													link={`/investor/dashboard/offers/${item.id}/`}
-													buttonClass={`action-btn bg-green-400 rounded-sm ${item.availability.replace(
-														" ",
-														"-"
-													)}`}
-												/>
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
+						
+						{incomingOffers.length > 0 && <Table columns={tableColumns} data={tableData} />}
 					</>
 				) : (
 					<div className="bg-white text-center h-60">
 						<h5 className="h-full flex justify-center items-center text-gray-400 text-2xl">
-							Loading incoming offers {""}
 							<i
 								className="fa fa-spinner fa-pulse fa-3x fa-fw"
-								style={{ fontSize: 20 }}
+								style={{ fontSize: 40 }}
 							></i>
 						</h5>
 					</div>

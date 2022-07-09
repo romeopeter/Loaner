@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { uploadPayment } from "../services/payment.service.js";
 import { setServerMessage } from "./messageSlice";
-import handleRequestError from "./errorResponse";
+import handleRequestError from "./errorHandler";
 
 export const uploadPaymentAction = createAsyncThunk(
 	"payment/uploadPaymentAction", 

@@ -37,9 +37,8 @@ export default function AllOffers() {
 
 	let [isLoading, setisLoading] = useState(true);
 
-	let componentIsMounted = useRef(true);
-
-	useEffect(function getAllInvestorOffers() {
+	useEffect(function getAllOffers() {
+		let componentIsMounted = true;
 
 		(async function () {
 			const req = await dispatch(
@@ -48,7 +47,7 @@ export default function AllOffers() {
 
 			if (req.meta.requestStatus === "fulfilled") {
 
-				if (componentIsMounted.current) {
+				if (componentIsMounted) {
 					setPaginateState((state) => {
 						return {
 							...state,

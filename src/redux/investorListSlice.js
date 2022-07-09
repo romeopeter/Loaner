@@ -4,7 +4,7 @@ import {
 	getInvestorsList,
 	getInvestor,
 } from "../services/loan.service.js";
-import handleRequestError from "./errorResponse";
+import handleRequestError from "./errorHandler";
 
 export const saveInvestorListAction = createAsyncThunk(
 	"investorsList/saveInvestorListAction",
