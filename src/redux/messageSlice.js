@@ -21,7 +21,7 @@ export const messageSlice = createSlice({
   },
   reducers: {
     setServerMessage: (state, action) => {
-      state.server.message = action.payload;
+      state.server = action.payload;
     },
     setClientMessage: (state, action) => {
       state.client = action.payload;
