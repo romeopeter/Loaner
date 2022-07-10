@@ -111,7 +111,7 @@ export const publishOfferAction = createAsyncThunk(
 export const loanSlice = createSlice({
     name: "loan",
     initialState: {
-        offers: [],
+        offers: null,
         currentOffer: null,
         updatedOffer: null,
     },
