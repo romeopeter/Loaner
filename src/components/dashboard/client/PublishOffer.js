@@ -205,6 +205,7 @@ export default function PublishOffer({ children, ...props }) {
 	const assignInvestors = async (loanOfferId) => {
 		const investorsValue = state.investorSelected;
 		let availability;
+		let componentIsMounted = true;
 
 		if (state.saveAsOpen) availability = "open";
 		if (state.saveAsComing) availability = "coming soon";
@@ -215,12 +216,17 @@ export default function PublishOffer({ children, ...props }) {
 				investorsNotAssigned:
 					"Can't publish offer. Investors not assigned!",
 			}));
+
+			if (componentIsMounted) setIsLoading(false);
+
 			return;
 		} else if (availability === undefined) {
 			setFeedBack(state => ({
 				...state,
-				statusNotSet: "Cant't Publish offer. Offer is not saved as opened or comming soon!"
-			}))
+				statusNotSet: "Can't Publish offer. Offer is not saved as now open or comming soon!"
+			}));
+
+			if (componentIsMounted) setIsLoading(false);
 
 			return
 		} else if (loanOfferId === undefined || loanOfferId === null) {
@@ -228,9 +234,11 @@ export default function PublishOffer({ children, ...props }) {
 				...state,
 				offerNotCreated: "Can't assign investors to nonexistent offer!",
 			}));
+
+			if (componentIsMounted) setIsLoading(false);
+
 			return;
 		} else {
-			let componentIsMounted = true;
 		
 			const investorsId = investorsInCategory.map(
 				(investor) => investor.id
@@ -252,7 +260,10 @@ export default function PublishOffer({ children, ...props }) {
 				console.log("Loan published!");
 
 				// Show publish modal
-				if (componentIsMounted) showPublishModal(true);
+				if (componentIsMounted) {
+					showPublishModal(true);
+					setIsLoading(false);
+				};
 			}
 
 			componentIsMounted = false;
