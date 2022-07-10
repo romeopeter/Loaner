@@ -345,9 +345,13 @@ export default function RequestForm({ requestFormState, showSummary }) {
                 if (offerType["fixedPrice"]["rate"] === "") {
                     alert.error("Discount rate field is empty!");
                     setState((state) => ({ ...state, isValidated: true }));
-
                     return
                 }
+
+				if (offerType["fixedPrice"]["rate"].length > 3) {
+					alert.error("Discount rate is more than 3 digits!");
+					return
+				}
 
 				if (formState["dealType"] === "CP" && offerType["name"] === "book build") {
                     alert.error("Change offer type to 'Fixed price'");
@@ -1248,8 +1252,8 @@ export default function RequestForm({ requestFormState, showSummary }) {
 												className="error-label text-sm text-gray-300"
 												htmlFor="discount-rate"
 											>
-												Value shouldn't be more than 4
-												digits e.g: 1000
+												rate value shouldn't be more than 3
+												digits e.g: 100
 											</label>
 										</div>
 
