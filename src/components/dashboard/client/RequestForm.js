@@ -385,35 +385,36 @@ export default function RequestForm({ requestFormState, showSummary }) {
             }
 
             if(typeof formState[prop] === "object" && prop === "timing") {
-                if (formState[prop]["offerStart"] === "") {
+				console.log(formState[prop])
+                if (formState[prop]["offerStart"] === undefined || formState[prop]["offerStart"] === "") {
                     alert.error("Offer start field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                if (formState[prop]["offerEnd"] === undefined) {
+                if (formState[prop]["offerEnd"] === undefined || formState[prop]["offerEnd"] === "") {
                     alert.error("Offer end field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                if (formState[prop]["allotmentDate"] === undefined) {
+                if (formState[prop]["allotmentDate"] === undefined || formState[prop]["allotmentDate"] === "") {
                     alert.error("Allotment date field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                if (formState[prop]["settlementDate"] === undefined) {
+                if (formState[prop]["settlementDate"] === undefined || formState[prop]["settlementDate"] === "") {
                     alert.error("Settlement date field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
 
                     return
                 }
 
-                if (formState[prop]["maturityDate"] === undefined) {
+                if (formState[prop]["maturityDate"] === undefined || formState[prop]["maturityDate"] === "") {
                     alert.error("Maturity date field is empty");
                     setState((state) => ({ ...state, isValidated: true }));
 
