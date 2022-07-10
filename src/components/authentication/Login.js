@@ -174,7 +174,7 @@ export default function Login() {
 								id="login-title"
 								className="bg-white px-6 mb-3 self-start flex items-center justify-center shadow-md orderbook-icon"
 							>
-								Orderbook
+								Orderbook Onlines
 							</div>
 							<h1 className="shadow-sm">
 								Welcome to your go to financial platform
