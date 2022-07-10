@@ -89,7 +89,7 @@ export default function Offers() {
 										<p className="offer-description">
 											{offer.deal_name}
 										</p>
-										{offer['availability'] === null && (
+										{offer['availability'] === "coming soon" && (
 											<div className="offer-button">
 
 												<Button
