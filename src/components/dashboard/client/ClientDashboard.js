@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { getOffersAction } from "../../../redux/loanSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,7 @@ import allLoans from "../../../assets/images/allLoans.png";
 import approvedLoans from "../../../assets/images/approvedLoans.png";
 import declineLoans from "../../../assets/images/declineLoans.png";
 
-function OffersComp({ offers, handleChange, offerStatus }) {
+const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
   // Keep track of offers based on status
   const publishedOfferIndex = [];
   const draftedOfferIndex = [];
@@ -26,7 +26,9 @@ function OffersComp({ offers, handleChange, offerStatus }) {
   if (offers === null) {
     return (
       <>
-        <p className="text-gray-300 text-center text-3xl">Loading offers</p>
+        <div className="text-gray-300 text-center h-50 flex items-center justify-center" style={{height: 450}}>
+          <i className="fa fa-spinner fa-pulse fa-1x fa-fw" style={{fontSize: 50}}></i>
+        </div>
       </>
     );
   }
@@ -194,7 +196,7 @@ function OffersComp({ offers, handleChange, offerStatus }) {
       </>
     );
   }
-}
+})
 
 export default function ClientDashboard() {
   const pageName = "Dashboard";
@@ -219,16 +221,15 @@ export default function ClientDashboard() {
     [dispatch, authToken.access]
   );
 
+  const handleOfferStatusChange = useCallback((e) => {
+    const value = e.target.value === "" ? null : e.target.value;
+    // Update offer status
+    setOfferStatus(value);
+  },[])
+
   if (!currentUser) {
     return <Navigate replace to="login" />;
   }
-
-  const handleChange = (e) => {
-    const value = e.target.value === "" ? null : e.target.value;
-
-    // Update offer status
-    setOfferStatus(value);
-  };
 
   return (
     <>
@@ -357,7 +358,7 @@ export default function ClientDashboard() {
           <div id="offers" className="bg-black p-14">
             <OffersComp
               offers={offers}
-              handleChange={handleChange}
+              handleChange={handleOfferStatusChange}
               offerStatus={offerStatus}
             />
           </div>
