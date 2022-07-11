@@ -6,7 +6,7 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
-import { Info, Danger } from "../../alert.js";
+// import { Info, Danger } from "../../alert.js";
 import offerImage from "../../../assets/images/offerImage.png";
 
 import {
