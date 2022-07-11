@@ -530,7 +530,7 @@ export default function FullEdit() {
                     <div className="grid grid-cols-2 gap-3 mt-5 mb-5">
                       <Button
                         type="button"
-                        title="Save as draft"
+                        title="Edit"
                         buttonClass="col-span-2 bg-gray-400 rounded"
                       />
                     </div>
