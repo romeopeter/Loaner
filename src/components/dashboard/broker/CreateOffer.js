@@ -38,6 +38,7 @@ export default function LoanRequest() {
         dealTeam: "",
         status: "",
         trancheName: "",
+        dealDescription: "",
         trancheSize: {
             currency: "NGN",
             value: "",

@@ -216,61 +216,68 @@ export default function RequestForm({ requestFormState, showSummary }) {
         for (let prop in formState) {
 
             if (prop === "dealType" && formState[prop] === "") {
-                alert.error("Deal type can not be empty!");
+                alert.error("Deal type is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "guarantor" && formState[prop] === "") {
-                alert.error("Guarantor can not be empty!");
+                alert.error("Guarantor is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "dealName" && formState[prop] === "") {
-                alert.error("Deal name can not be empty!");
+                alert.error("Deal name is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "projectName" && formState[prop] === "") {
-                alert.error("Project name can not be empty!");
+                alert.error("Project name id empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "dealOwner" && formState[prop] === "") {
-                alert.error("Deal Owner field can not be empty!");
+                alert.error("Deal Owner field is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "dealTeam" && formState[prop] === "") {
-                alert.error("Deal team field can not be empty!");
+                alert.error("Deal team field is empty!");
+                setState((state) => ({ ...state, isValidated: true }));
+
+                return
+            }
+
+            if (prop === "description" && formState[prop] === "") {
+                alert.error("Deal description field is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "status" && formState[prop] === "") {
-                alert.error("Status field can not be empty!");
+                alert.error("Status field is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             }
 
             if (prop === "trancheName" && formState[prop] === "") {
-                alert.error("Tranche name field can not be empty!");
+                alert.error("Tranche name field is empty!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
             } else if (typeof formState[prop] === "number") {
-                alert.error("Tranche name can not contain number!");
+                alert.error("Tranche name can't have numbers!");
                 setState((state) => ({ ...state, isValidated: true }));
 
                 return
@@ -699,6 +706,26 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     placeholder="Enter deal team name"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
                                     value={formState !== undefined && formState.dealTeam}
+                                    onChange={(e) =>
+                                        handleChange(e, "generalTerms")
+                                    }
+                                // required
+                                />
+                            </div>
+
+                            <div
+                                className="col-span-12 mt-1"
+                                style={form1ErrorStyle}
+                            >
+                                <textarea
+                                    type="textarea"
+                                    name="dealDescription"
+                                    id="dealDescription"
+                                    placeholder="Enter deal description (disabled)"
+                                    className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
+                                    style={{cursor: "not-allowed"}}
+                                    value={formState !== undefined && formState.dealDescription}
+                                    disabled={true}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
