@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import OrderbookLayout from '../../OrderbookLayout';
 import DocumentHead from '../../DocumentHead';
@@ -21,8 +21,12 @@ import {
 
 let PageSize = 10;
 const AllClients = () => {
+  // Used for Pagination
   const [clients, setClients] = useState([]);
+
+  // Used for Rendering to the UI
   const [getValue, setGetValue] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,7 +46,7 @@ const AllClients = () => {
         }
       });
   }, []);
-  console.log(clients);
+
   // Dropdown
   const [isOpen, setOpen] = useState({ client: false, investor: false });
   const toggleDropdownClient = () =>
