@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { CloseIcon } from '@chakra-ui/icons';
+// import { CloseIcon } from '@chakra-ui/icons';
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
 
