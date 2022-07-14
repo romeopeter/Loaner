@@ -336,7 +336,7 @@ export default function PublishOffer({ children, ...props }) {
             <OrderbookLayout PageNav={NavMenu}>
                 <div
                     id="loan-invest-dropdown"
-                    class="bg-white px-16 py-10 shadow-md flex items-start"
+                    className="bg-white px-16 py-10 shadow-md flex items-start"
                 >
                     <div id="loan" className="dropdown-container underline mr-5">
                         <Link to={`/broker/dashboard/loan-offer-draft/${id}/${dealType}/`}>View offer</Link>
@@ -521,13 +521,13 @@ export default function PublishOffer({ children, ...props }) {
                     {/*Save list modal*/}
                     <ListModal
                         listState={{ state, setState }}
-                        class={saveListModal ? "accept-modal" : ""}
+                        className={saveListModal ? "accept-modal" : ""}
                         saveListFunc={saveFavouriteList}
                         removeModal={removeFavouriteListModal}
                     />
 
                     {/*Publish succesful Modal*/}
-                    <PublishModal class={publishModal ? "accept-modal" : ""} />
+                    <PublishModal className={publishModal ? "accept-modal" : ""} />
                 </div>
             </OrderbookLayout>
         </>
