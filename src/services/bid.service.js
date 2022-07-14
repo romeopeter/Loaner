@@ -9,7 +9,6 @@ const getBid = (id) => {
 };
 
 const createBid = (data) => {
-    console.log(data);
     return axios.post("/v1/bids/", data).catch(error => error);
 };
 

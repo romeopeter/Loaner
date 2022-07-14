@@ -173,7 +173,7 @@ export default function SingleOffer() {
         () =>
           setError({
             tcNotCheckedMessage:
-              "Please click check box and agree to bid terms",
+              "Please click checkbox to agree to offer terms",
           }),
         800
       );
@@ -610,12 +610,14 @@ export default function SingleOffer() {
               </div>
             </div>
 
-            {bid !== null || bid !== undefined ? null : (
+            {(bid === undefined) ? (
               <>
                 <div
+                  
                   id="offer-btns"
                   className="h-40 md:h-20 flex flex-col sm:flex-row justify-center"
                 >
+                  {console.log(bid)}
                   <Button
                     title="Place your bid"
                     buttonClass="mr-0 mb-2 md:mr-5 md:mb-0 self-center rounded place-bid"
@@ -635,7 +637,7 @@ export default function SingleOffer() {
                   />
                 </div>
               </>
-            )}
+            ):null}
           </div>
 
           {/*Place bid*/}

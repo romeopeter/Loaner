@@ -60,7 +60,7 @@ export default function OrderbookLayout({ children, PageNav }) {
             {children}
             <footer id='orderbook-footer'>
                 <div id='orderbook-about-us'>
-                    <h4 id='logo'>Orderbook</h4>
+                    <h4 id='logo'>Orderbook Online</h4>
                     <p id='about-us'>
                         Dui faucibus in ornare quam viverra orci sagittis. Habitasse platea dictumst vestibulum rhoncus
                         est pellentesque elit ullamcorper. In nulla posuere sollicitudin aliquam ultrices sagittis orci
