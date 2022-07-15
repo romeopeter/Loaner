@@ -28,7 +28,7 @@ export default function Table({ columns, data }) {
                 )}
                 {column.render("Header") === "Description" &&
                   column.render("Header")}
-                {column.render("Header") === "TableBtn" && "btn"}
+                {column.render("Header") === "TableBtn" && ""}
               </th>
             ))}
           </tr>
