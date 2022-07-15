@@ -47,6 +47,7 @@ export const investorSlce = createSlice({
             console.log("Rejected");
         },
         [getOfferAction.fulfilled]: (state, action) => {
+			console.log("Fulfilled");
             const payload = action.payload !== undefined && action.payload;
             state.currentOffer = payload;
         },
@@ -59,6 +60,7 @@ export const investorSlce = createSlice({
 			console.log("Rejected");
 		},
 		[getInvestorAllOffersAction.fulfilled]: (state, action) => {
+			console.log("Fulfilled");
 			const payload = action.payload !== undefined && action.payload;
 			state.allOffers = payload;
 		}
