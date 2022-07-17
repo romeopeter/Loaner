@@ -8,26 +8,31 @@ export default function OrderbookLayout({ children, PageNav }) {
 
     let navMenuRef = createRef();
 
-    const respondsiveNav = () => {
-        navMenuRef.current.classList.toggle('responsive-nav-menu');
+    const responsiveNav = () => {
+        const navMenuClassList = navMenuRef.current.classList;
+
+        if (navMenuClassList.contains("hidden")) {
+            navMenuClassList.remove("hidden");
+            navMenuClassList.add("block");
+        } else {
+            navMenuClassList.remove("block");
+            navMenuClassList.add("hidden");
+        }
     };
 
     return (
         <section id='app'>
             {PageNav && isLoggedIn ? (
                 <PageNav />
-            ) : (
+            ) : (<>
                 <nav id='orderbook-nav'>
                     <div id='orderbook-logo'>
                         <Link to='/'>
                             <span>Orderbook Online</span>
                         </Link>
                     </div>
-                    <div id='burger-toggle' className='icon' onClick={() => respondsiveNav()}>
-                        &#9776;
-                    </div>
                     <div id='nav-menu'>
-                        <ul id='nav-menu-list' className='' ref={navMenuRef}>
+                        <ul id='nav-menu-list' className=''>
                             <li className='nav-menu-item'>
                                 <Link to='/'>Home</Link>
                             </li>
@@ -55,7 +60,44 @@ export default function OrderbookLayout({ children, PageNav }) {
                             )}
                         </ul>
                     </div>
+
+                    {/* Menu burger toggler */}
+                    <div id='burger-toggle' className='icon text-white text-2xl hidden cursor-pointer' onClick={() => responsiveNav()}>
+                        &#9776;
+                    </div>
                 </nav>
+
+                {/* Mobile navlist */}
+                <div id="orderbook-mobile-nav" className="hidden" ref={navMenuRef}>
+                        <ul id='nav-menu-list' className='text-white' ref={navMenuRef}>
+                            <li className='nav-menu-item'>
+                                <Link to='/'>Home</Link>
+                            </li>
+                            <li className='nav-menu-item'>
+                                <Link to='/'>How it works</Link>
+                            </li>
+                            <li className='nav-menu-item'>
+                                <Link to='/'>FAQs</Link>
+                            </li>
+                            <li className='nav-menu-item'>
+                                <Link to='/'>About Us</Link>
+                            </li>
+                            <li className='nav-menu-item'>
+                                <Link to='/'>Contact Us</Link>
+                            </li>
+                            {!isLoggedIn && (
+                                <>
+                                    <li className='nav-menu-item' id='login'>
+                                        <Link to='/login'>Login</Link>
+                                    </li>
+                                    <li className='nav-menu-item' id='register-cta'>
+                                        <Link to='/register'>Register</Link>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
+                </>
             )}
             {children}
             <footer id='orderbook-footer'>
