@@ -88,8 +88,6 @@ const AllLoanRequests = () => {
                             );
                                 })
                             }
-                    
-                            
                         </Tbody>
                         
                     </Table>
