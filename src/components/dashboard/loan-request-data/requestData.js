@@ -6,6 +6,7 @@ function cp(formState, currentUser) {
 			project_name: formState.projectName,
 			deal_owner: formState.dealOwner,
 			deal_team: formState.dealTeam,
+			description: formState.dealDescription,
 			user_id: currentUser ? currentUser.id : "",
 			tranche_id: {
 				status: formState.status,
@@ -66,6 +67,7 @@ function bond(formState, currentUser) {
 			project_name: formState.projectName,
 			deal_owner: formState.dealOwner,
 			deal_team: formState.dealTeam,
+			description: formState.dealDescription,
 			user_id: currentUser ? currentUser.id : "",
 			tranche_id: {
 				status: formState.status,
