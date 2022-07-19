@@ -356,13 +356,3 @@ const BrokerDashboard = () => {
 };
 
 export default BrokerDashboard;
-
-// {errorMessage ? (
-//     <p>Something Went Wrong</p>
-// ) : (
-// <div className='loader-div'>
-//     <p className='loader'></p>
-//     <p>Please Wait</p>
-// </div>
-// )}
-// {loanRequest.length === 0 && <p>No loan Requests at this time</p>}
