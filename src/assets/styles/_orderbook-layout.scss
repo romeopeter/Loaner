@@ -33,12 +33,54 @@
             background-color: $secondary-dark;
             
             #nav-menu-list {
-                .nav-menu-item {
+                /*Class name doesn't exist on HTML. 
+                It's pseudo class with shareable properties with selectors.*/
+                ._dropdown-style {
                     text-align: center;
                     margin-bottom: 10px;
                     padding: 10px 0;
+                    font-weight: normal !important;
                     a {display: block !important;}
+                }
 
+                .nav-menu-item {
+                    @extend ._dropdown-style;
+
+                    .dropdown-header {
+                        font-weight: bold;
+                    }
+
+                    a.dropdown-header { 
+                        color: $white;
+
+                        &:hover {
+                            color: $black;
+                        }
+                    }
+
+                    &#user-profile-menu-item {
+                        #user-profile-header {
+                            #profile-photo {
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 25px;
+                                margin: 0 10px 0 10px;
+                            }
+                        }
+                    }
+
+                    .sub-dropdown {
+                       .dropdown-item {
+                            @extend ._dropdown-style;
+                       }
+
+                        background: $black;
+                        color: $white;
+                        margin: 0 20px 0 20px;
+                        border-radius: 5px;
+                    }
+
+                    // Naviation shown to aunthenticated users
                     &:not(#register-cta):hover {
                         background: $white;
                         color: $black !important;
