@@ -13,8 +13,8 @@ import { createBidAction } from "../../../redux/bidSlice";
 import { getBidAction } from "../../../redux/bidSlice";
 
 import offerImage from "../../../assets/images/offerImage.png";
-import BidAccepted from "./modals/bidAccepted";
-import BidRejected from "./modals/bidRejected";
+import BidAccepted from "./modals/BidAccepted";
+import BidRejected from "./modals/BidRejected";
 
 export default function SingleOffer() {
   const pageName = "Investor offers";
