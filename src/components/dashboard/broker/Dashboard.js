@@ -130,7 +130,7 @@ const BrokerDashboard = () => {
                   className='dropdownbroker-header'
                   onClick={toggleDropdownInvestor}
                 >
-                  <h2 className='mr-2'>Investors</h2>
+                  <h2 className='mr-2'>Upload</h2>
                   <i
                     className={`fa fa-caret-down ${isOpen.investor && 'open'}`}
                   ></i>
@@ -139,10 +139,10 @@ const BrokerDashboard = () => {
                   className={`dropdownbroker-body ${isOpen.investor && 'open'}`}
                 >
                   <Link
-                    to='/broker/dashboard/uploadInvestor'
+                    to='/broker/dashboard/upload'
                     className='dropdownbroker-item '
                   >
-                    Upload Investors{' '}
+                  Bulk upload {' '}
                   </Link>
                 </div>
               </div>
