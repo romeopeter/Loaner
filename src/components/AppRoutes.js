@@ -15,6 +15,7 @@ import ArchivedDeals from './dashboard/ArchivedDeals';
 import SingleTrancheDeal from './dashboard/SingleTrancheDeal';
 import MultipleTrancheDeal from './dashboard/MultipleTrancheDeal';
 
+// Client components
 import ClientDashboard from './dashboard/client/ClientDashboard';
 import LoanRequest from './dashboard/client/LoanRequest';
 import Offers from './dashboard/client/Offers';
@@ -26,10 +27,11 @@ import ViewInvestor from './dashboard/client/ViewInvestor';
 import ShowBids from './dashboard/client/ShowBids';
 import ShowAllBids from './dashboard/client/ShowAllBids';
 
+// Investor components
 import Dashboard from './dashboard/investor/Dashboard';
 import AllOffers from './dashboard/investor/AllOffers';
 import IncomingOffer from './dashboard/investor/IncomingOffer';
-import ShowSingleOffer from './dashboard/investor/ShowSingleOffer';
+import OpenOffer from './dashboard/investor/OpenOffer';
 import BidApproved from './dashboard/investor/BidApproved';
 import BidRejected from './dashboard/investor/BidRejected';
 import BAPaymentProof from './dashboard/investor/BAPaymentProof';
@@ -37,6 +39,7 @@ import BAPaymentDetail from './dashboard/investor/BAPaymentDetail';
 import ApprovedBids from './dashboard/investor/ApprovedBids';
 import DeclinedBids from './dashboard/investor/DeclinedBids';
 
+// Broker components
 import BrokerDashboard from './dashboard/broker/Dashboard';
 import NewClient from './dashboard/broker/NewClient';
 import AllClients from './dashboard/broker/AllClients';
@@ -54,6 +57,7 @@ import SelectInvestor from './dashboard/broker/SelectInvestor';
 import NewClientSave from './dashboard/broker/NewClientSave';
 import UploadInvestor from './dashboard/broker/UploadInvestor';
 
+// Admin controls
 import AdminCurrencies from './dashboard/admin/AdminCurrencies';
 import AdminCompanies from './dashboard/admin/AdminCompanies';
 import AdminTranche from './dashboard/admin/AdminTranche';
@@ -201,7 +205,7 @@ export default function AppRoutes() {
                         path="/investor/dashboard/offers/:offerId/:dealType/open"
                         element={
                             <RequireAuth>
-                                <ShowSingleOffer />
+                                <OpenOffer />
                             </RequireAuth>
                         }
                     />

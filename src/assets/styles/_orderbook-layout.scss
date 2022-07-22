@@ -1,36 +1,109 @@
 #app {
     /*######## PORTRAIT & SMALL SCREENS ##########*/
+    @media only screen and (max-width: 767px) {
+        #orderbook-nav {
+            flex-direction: row;
+        }
+    }
 
-    // Custom breakpoint
-    @media (max-width: 1190px) {
-        #dashboard-nav {
-            #nav-menu {
-                #nav-menu-list {
-                    .nav-menu-item {
-                        #profile {
-                            #profile-image {
-                                img {
-                                }
-                            }
-                            img {
+    // Show mobile navigation
+    @media (max-width: 930px) {
+        #orderbook-nav {
+            flex-direction: initial !important;
+            justify-content: space-between;
+        }
+
+        #nav-menu {
+            display: none !important;
+        }
+
+        #orderbook-logo {
+            align-self: baseline !important;
+            font-size: 25px !important;
+            width: auto !important;
+        }
+
+        #burger-toggle {
+            display: block;
+            padding-right: 20px;
+        }
+
+        #orderbook-mobile-nav {
+            // display: block;
+            background-color: $secondary-dark;
+            
+            #nav-menu-list {
+                /*Class name doesn't exist on HTML. 
+                It's pseudo class with shareable properties with selectors.*/
+                ._dropdown-style {
+                    text-align: center;
+                    margin-bottom: 10px;
+                    padding: 10px 0;
+                    font-weight: normal !important;
+                    a {display: block !important;}
+                }
+
+                .nav-menu-item {
+                    @extend ._dropdown-style;
+
+                    .dropdown-header {
+                        font-weight: bold;
+                    }
+
+                    a.dropdown-header { 
+                        color: $white;
+
+                        &:hover {
+                            color: $black;
+                        }
+                    }
+
+                    &#user-profile-menu-item {
+                        #user-profile-header {
+                            #profile-photo {
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 25px;
+                                margin: 0 10px 0 10px;
                             }
                         }
                     }
+
+                    .sub-dropdown {
+                       .dropdown-item {
+                            @extend ._dropdown-style;
+                       }
+
+                        background: $black;
+                        color: $white;
+                        margin: 0 20px 0 20px;
+                        border-radius: 5px;
+                    }
+
+                    // Naviation shown to aunthenticated users
+                    &:not(#register-cta):hover {
+                        background: $white;
+                        color: $black !important;
+                    }
+
+                    &#login {
+                        font-weight: bold;
+                    }
+                }
+
+                #register-cta {
+                    background: $white;
+                    color: $black;
                 }
             }
         }
     }
 
-    // Custom breakpoint
+    // Responsive nav and footer on maximum width of 974px
     @media (max-width: 974px) {
-        // Fixes overflow div on the nav
-        #orderbook-logo {
-            flex-basis: 100%;
+        #orderbook-nav {
+            flex-direction: column;
         }
-        #nav-menu {
-            flex-basis: 0;
-        }
-        // -----------------------------
 
         #orderbook-footer {
             flex-direction: column !important;
@@ -41,22 +114,14 @@
                     font-size: 17px !important;
                 }
             }
-
+            
             #orderbook-footer-links {
                 justify-content: space-between !important;
             }
         }
     }
 
-    // Custom breakpoint
-    @media (max-width: 662px) {
-        #orderbook-footer {
-            #orderbook-footer-links {
-                flex-direction: column !important;
-            }
-        }
-    }
-
+    // Resizes logo font
     @media (max-width: 1150px) {
         #orderbook-nav {
             #orderbook-logo span {
@@ -65,119 +130,18 @@
         }
     }
 
-    @include respond-below(sm) {
-        #nav-menu {
-            width: 100% !important;
-
-            #nav-menu-list {
-                .dropdown {
-                    #deals-dropdown,
-                    #analysis-dropdown,
-                    #admin-dropdown,
-                    #help-dropdown {
-                        visibility: visible !important;
-                        background: none !important;
-                        position: static !important;
-                        top: 0 !important;
-
-                        &::after {
-                            display: none !important;
-                        }
-                    }
-                }
-
-                #user-profile-menu-item {
-                    width: 100% !important;
-
-                    #horizontal-divider {
-                        border-top: 1px solid lightgrey;
-                        margin: 15px 70px;
-                    }
-
-                    #profile-container {
-                        #profile-dropdown {
-                            width: 100% !important;
-
-                            #profile-photo {
-                                margin-left: 10px;
-                            }
-
-                            #profile-menu-nav {
-                                background: black;
-                                position: static !important;
-                                width: inherit !important;
-                                visibility: visible !important;
-                                margin-top: 15px;
-
-                                .menu-nav-container {
-                                    color: $white !important;
-
-                                    a {
-                                        color: $white !important;
-
-                                        &:hover {
-                                            background: none !important;
-                                        }
-                                    }
-
-                                    span:hover {
-                                        background: none !important;
-                                    }
-                                }
-
-                                &::after {
-                                    display: none !important;
-                                }
-                            }
-                        }
-
-                        #bank-photo {
-                            display: none !important;
-                        }
-                    }
-                }
-            }
-        }
-
-        #orderbook-nav {
-            padding: 20px 25px !important;
-            height: auto !important;
-
-            #burger-toggle {
-                display: block !important;
-            }
-
-            #orderbook-logo {
-                margin-bottom: 10px;
-                width: inherit !important;
-            }
-
-            #nav-menu {
-                #nav-menu-list {
-                    display: none !important;
-
-                    &.responsive-nav-menu {
-                        display: flex !important;
-                        width: 100% !important;
-                        flex-direction: column !important;
-                        height: auto !important;
-                        .nav-menu-item {
-                            margin: 5px 0px;
-                        }
-                    }
-                }
+    // Footer links as column
+    @media (max-width: 662px) {
+        #orderbook-footer {
+            #orderbook-footer-links {
+                flex-direction: column !important;
             }
         }
     }
 
     @include respond-below(sm) {
         #dashboard-nav {
-            // padding: 20px 25px !important;
             height: auto !important;
-
-            #burger-toggle {
-                display: block !important;
-            }
 
             #orderbook-logo {
                 margin-bottom: 10px;
@@ -211,24 +175,8 @@
         height: 130px;
         padding: 20px 0px 20px 40px;
 
-        // Fixes overflow div on the nav
-        @media only screen and (max-width: 980px) {
-            flex-direction: column;
-        }
-        @media only screen and (max-width: 767px) {
-            flex-direction: row;
-        }
-        // -------------------------------
-
-        #burger-toggle {
-            color: $white;
-            font-size: 30px;
-            // align-self: flex-end !important;
-            cursor: pointer;
-            display: none;
-        }
-
         #orderbook-logo {
+            display: inline-block;
             width: 40%;
             color: $white;
             font-family: $header-font;
@@ -467,9 +415,6 @@
                     font-family: $body-font;
                     color: $white;
                     margin-bottom: 30px;
-                }
-
-                &#site-links {
                 }
             }
         }

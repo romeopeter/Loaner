@@ -30,15 +30,14 @@ export default function LoanRequest() {
 
     const [formState, setFormState] = useState({
         dealType: "",
-        // issuer: "",
         guarantor: "",
         dealName: "",
         projectName: "",
         dealOwner: "",
         dealTeam: "",
+        dealDescription: "",
         status: "",
         trancheName: "",
-        dealDescription: "",
         trancheSize: {
             currency: "NGN",
             value: "",

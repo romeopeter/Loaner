@@ -16,8 +16,8 @@ import offerImage from "../../../assets/images/offerImage.png";
 import BidAccepted from "./modals/BidAccepted";
 import BidRejected from "./modals/BidRejected";
 
-export default function SingleOffer() {
-  const pageName = "Investor offers";
+export default function OpenOffer() {
+  const pageName = "Open offer";
 
   const currentUserObj = useSelector((state) => state.auth.user);
   const allBidsStatus = useSelector((state) => state.bid.allBidsStatus);
@@ -29,7 +29,7 @@ export default function SingleOffer() {
   const { user: currentUser } = currentUserObj;
   const { id: investorId } = currentUser["investor_details"];
 
-  // Acces all loan
+  // Get all loan offer from state
   const allLoanOffers = useSelector(function getAllOffers(state) {
     return state.investor.allOffers;
   });

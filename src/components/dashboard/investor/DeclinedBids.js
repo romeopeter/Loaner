@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -8,6 +8,7 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import Button from "../../Button";
 import NavMenu from "../NavMenu";
+import Table from "./Table";
 
 import offerImage from "../../../assets/images/offerImage.png";
 import { getDeclinedBidsAction } from "../../../redux/bidSlice";
@@ -25,7 +26,7 @@ export default function DeclinedBids() {
 	});
 
 	const { page, perPage, pages, list } = paginateState;
-	let approvedBids = list.slice(page * perPage, (page + 1) * perPage);
+	let declindBids = list.slice(page * perPage, (page + 1) * perPage);
 
 	const handlePageClick = (event) => {
 		let page = event.selected;
@@ -57,7 +58,43 @@ export default function DeclinedBids() {
 
 		return () => componentIsMounted;
 
-	}, [dispatch])
+	}, [dispatch]);
+
+	const tableColumn = useMemo(
+		() => [
+		  {
+			Header: "Name",
+			accessor: "name",
+		  },
+		  {
+			Header: "Description",
+			accessor: "description",
+		  },
+		  {
+			Header: "TableBtn",
+			accessor: "tableBtn",
+		  },
+		],
+		[]
+	);
+
+	const tableData = useMemo(() => {
+		return declindBids.map(bid => {
+	
+		  const dealId = bid["loan_request"]["id"];
+		  const dealType =
+			bid["loan_request"]["deal_type"] === "Commercial Paper"
+			  ? "cp"
+			  : "bonds";
+		  const bidName = bid["loan_request"]["deal_name"] !== undefined ? bid["loan_request"]["deal_name"] : bid["loan_request"]["tranche_name"];
+	
+		  return {
+			name: bidName,
+			description: "***",
+			tableBtn: `${dealId}/${dealType.toLowerCase()}`
+		  };
+		});
+	},[declindBids]);
 
 	return (
 		<>
@@ -94,10 +131,10 @@ export default function DeclinedBids() {
 						{isLoading ? (<div className="bg-white w-full h-auto">
 							<p className="text-3xl text-center h-40 flex justify-center items-center text-gray-500">
 								<i className="fa fa-spinner fa-pulse fa-3x fa-fw"
-									style={{ fontSize: 20 }}></i>
+									style={{fontSize: 50}}></i>
 							</p>
 						</div>) : (
-							<div id="table-container" style={{ overflowX: "auto" }}>
+							<div id="table-container" className="bg-white" style={{ overflowX: "auto" }}>
 
 								<div id="table-action" className="bg-white py-5 px-2 w-full">
 									<select
@@ -112,56 +149,22 @@ export default function DeclinedBids() {
 									</select>
 									<Button title="Apply" buttonClass="bg-gray-500 action-btn" />
 								</div>
-
-								<table className="bg-white table-auto w-full">
-									<tbody>
-										{approvedBids.length === 0 ? (
-											<div>
-												<p 
-												className="py-5 text-center text-3xl text-gray-400 h-40 flex justify-center items-center"
-												style={{fontSize: "1.875rem"}}
-											>
-											You have no declined bids
-												<i class="fa fa-times ml-2" aria-hidden="true"></i>
-											</p>
-											</div>
-										) : approvedBids.map((item, index) => {
-
-											return (
-												<tr key={item.id}>
-													<td className="offer-name">
-														<div>
-															<input
-																type="checkbox"
-																name="checkbox"
-																className="checkbox rounded"
-																title="checkbox"
-															/>
-															<img
-																src={offerImage}
-																alt=""
-																className="rounded h-10 w-10 hidden sm:block"
-															/>
-															<span>{item["loan_request"]["tranche_name"]}</span>
-														</div>
-													</td>
-													<td className="offer-description">
-														<p className="text-center" style={{ textAlign: "center" }}>{item["loan_request"]["tranche_name"]}{" "}description</p>
-													</td>
-													<td className="table-btn">
-														<Button
-															title="View details"
-															buttonClass="bg-green-600 rounded-md hover:bg-white successful-btn"
-														/>
-													</td>
-												</tr>
-											);
-										})}
-									</tbody>
-								</table>
+									{declindBids.length === 0 ? (
+										<div>
+											<p 
+											className="py-5 text-center text-3xl text-gray-400 h-40 flex justify-center items-center"
+											style={{ fontSize: "1.875rem" }}
+										>
+											You have no declined offers
+											<i class="fa fa-times ml-2" aria-hidden="true"></i>
+										</p>
+										</div>
+									) : (
+										<Table column={tableColumn} data={tableData} />
+									)}	
 							</div>)}
 
-						{approvedBids.length > 0 && (
+						{declindBids.length > 0 && (
 							<div id="paginate-bids" className="bg-white">
 								<ReactPaginate
 									previousLabel={"<"}

@@ -77,7 +77,7 @@ export default function InvestorDashboard() {
           >
             Dashboard
           </Link>
-          <Link
+          {/* <Link
             to="/investor/offers"
             id="home"
             className="dropdown-container mr-5 underline"
@@ -86,7 +86,7 @@ export default function InvestorDashboard() {
           </Link>
           <Link to="/" id="offers" className="dropdown-container">
             Payment
-          </Link>
+          </Link> */}
         </div>
         <section id="orderbook-investor-all-offers">
           <div id="offers">

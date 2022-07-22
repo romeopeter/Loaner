@@ -721,11 +721,10 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     type="textarea"
                                     name="dealDescription"
                                     id="dealDescription"
-                                    placeholder="Enter deal description (disabled)"
+                                    placeholder="Enter deal description"
                                     className="focus:ring-white block w-full sm:text-sm bg-gray-300 form-field general-issuer-terms"
-                                    style={{cursor: "not-allowed"}}
+                                    style={{resize: "none"}}
                                     value={formState !== undefined && formState.dealDescription}
-                                    disabled={true}
                                     onChange={(e) =>
                                         handleChange(e, "generalTerms")
                                     }
