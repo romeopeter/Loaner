@@ -17,6 +17,15 @@ This README would normally document whatever steps are necessary to get your app
 * How to run tests
 * Deployment instructions
 
+### Codebase structure
+Folder structure in the _src_ folder.
+
+* **Assets:** - holds app's static files like. E.g: images,styles and icons.
+* **Components:** - houses all component that are shared among app's pages.
+* **Data:** - contains Mockup data JSON data to in place of backend data
+* **Hooks** - All custom hooks with that share with components pages
+* **Layouts** - contains app's layouts that are used in all pages. E.g: Navbar and footer.
+
 ### Contribution guidelines ###
 
 * Writing tests
