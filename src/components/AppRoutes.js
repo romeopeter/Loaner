@@ -337,7 +337,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/uploadInvestor/'
+                        path='/broker/dashboard/upload/'
                         element={
                             <RequireAuth>
                                 <UploadInvestor />
