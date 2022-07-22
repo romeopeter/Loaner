@@ -50,32 +50,40 @@ const Bids = () => {
     isLoading: true,
     error: undefined,
   });
+
   // Checkbox
   const [checkedBid, setCheckedBid] = useState([]);
+
   // Disagree modal state
   const [disModal, setDisModal] = useState({
     modal: false,
     isLoading: undefined,
     error: undefined,
   });
+
   // Edit Modal
   const [editModal, setEditModal] = useState({ modal: false });
+
   //  Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+
   //  delete modal state
   const [deleteModal, setDeleteModal] = useState({
     modal: false,
     data: undefined,
     isLoading: undefined,
   });
+
   // Approve & Reject modal success state
   const [state, setState] = useState({ modal: false, successState: false });
+
   // Select Filter state
   const [selectFilter, setSelectFilter] = useState({
     value: undefined,
     modal: false,
     isLoading: undefined,
   });
+
   // notification state
   const [notification, setNotification] = useState({
     isLoading: undefined,
@@ -170,6 +178,7 @@ const Bids = () => {
     },
     [notification.dataDisagree, disModal]
   );
+
   // delete bid
   const handleDelete = () => {
     setDeleteModal({ ...deleteModal, isLoading: true });
@@ -189,7 +198,6 @@ const Bids = () => {
   };
 
   // console.log(bidsData);
-
   const handleApply = useCallback(
     (e) => {
       e.preventDefault();
@@ -349,7 +357,7 @@ const Bids = () => {
     }, 1000);
     setCheckedBid([]);
   };
-  console.log(bidsData);
+
   return (
     <div>
       <DocumentHead title='Bids' />
@@ -444,7 +452,7 @@ const Bids = () => {
                   disabled={!disableApproved}
                   className='mid-nav--viewPayment'
                 >
-                  View Paymemt
+                  View Payment
                 </button>
               </Link>
               <Link
