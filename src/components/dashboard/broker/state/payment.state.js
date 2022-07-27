@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 /*Reducer function and initialization state for 'Payment' component.
 This is abstracted because of complex state structure.*/ 
 
