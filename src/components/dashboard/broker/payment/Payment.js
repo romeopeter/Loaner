@@ -7,7 +7,7 @@ import { getapprovedBid } from "../../../../services/bid.service";
 import { getPayments, updatePayment } from "../../../../services/payment.service";
 
 import { Box} from "@chakra-ui/react";
-import Table from "./Table";
+import {default as Table } from "./Table";
 
 import { useParams } from "react-router-dom";
 
@@ -257,7 +257,7 @@ const Payment = () => {
             </div>
 
             <select className="mid-nav--filter rounded" onChange={(e) => dispatch({
-              type: "MARKED_BIDS_VIEW_FILTER", 
+              type: "MARKED_PAYMENT_VIEW_FILTER", 
               payload: e.target.value
             })}>
               <option defaultValue={"Select action"}>Filter payment</option>
@@ -299,26 +299,20 @@ const Payment = () => {
                       </p>
                     );
                   }
+                
+                  return (
+                    <Table
+                      state={state}
+                      tableData={currentTableData}
+                      filterAction={state.markedPaymentsViewFilter}
+                      disableApproved={disableApproved}
+                      handleCheckFunc={handleCheck}
+                      openPaymentModalFunc={openPaymentModal}
+                      openModalApprovedFunc={openModalApproved}
+                      openModalRejectedFunc={openModalRejected}
+                    />
 
-                  return currentTableData.map(data => {
-                    if (data["current_status"] === state.markedBidsViewFilter) {
-
-                      return (
-                        <Table
-                          state={state}
-                          tableData={currentTableData}
-                          disableApproved={disableApproved}
-                          handleCheckFunc={handleCheck}
-                          openPaymentModalFunc={openPaymentModal}
-                          openModalApprovedFunc={openModalApproved}
-                          openModalRejectedFunc={openModalRejected}
-                        />
-                      );
-                    }
-                    
-                    return null
-                  })
-
+                  );
 
                 })()}
 
