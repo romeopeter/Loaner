@@ -27,7 +27,7 @@ const paymentStateInit = {
         modal: false,
         isLoading: undefined
     },
-    markedBidsViewFilter: undefined
+    markedPaymentsViewFilter: "Filter payment"
 }
 
 function paymentStateReducer(state, action) {
@@ -68,7 +68,7 @@ function paymentStateReducer(state, action) {
         case "MARKED_BIDS":
             return {
                 ...state,
-                markedBids: action.payload ? action.paylod : []
+                markedBids: action.payload
             }
             break;
         case "MARKED_BIDS_ACTION_FILTER":
@@ -88,6 +88,12 @@ function paymentStateReducer(state, action) {
                     successState: action.payload.successState ? true : false,
                     value: action.payload.value ? action.payload.value : undefined
                 }
+            }
+            break;
+        case "MARKED_PAYMENT_VIEW_FILTER":
+            return {
+                ...state,
+                markedPaymentsViewFilter: action.payload,
             }
             break;
         case "OPEN_PAYMENT_MODAL":
