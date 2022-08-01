@@ -22,6 +22,10 @@ const getapprovedBids = () => {
     return axios.get("/v1/bids/?status=approved").catch(err => err);
 }
 
+const getapprovedBid = (id) => {
+    return axios.get(`/v1/bids/?loan_request=${id}&status=approved`);
+}
+
 const getDeclinedBids = () => {
     return axios.get("/v1/bids/?status=declined").catch(err => err);
 }
@@ -35,7 +39,8 @@ export {
     getBids, 
     getBid, 
     createBid, 
-    updateBids, 
+    updateBids,
+    getapprovedBid, 
     getapprovedBids, 
     getDeclinedBids, 
     getAllOffersStatus 
