@@ -50,7 +50,7 @@ import LoanSummary from './dashboard/broker/LoanSummary';
 import BrokerOffers from './dashboard/broker/BrokerOffers';
 import Bids from './dashboard/broker/Bids';
 import AddNewBid from './dashboard/broker/AddNewBid';
-import Payment from './dashboard/broker/Payment';
+import Payment from './dashboard/broker/payment/Payment';
 import LoanOfferDraft from './dashboard/broker/LoanOfferDraft';
 import LoanOfferPublished from './dashboard/broker/LoanOfferPublished';
 import SelectInvestor from './dashboard/broker/SelectInvestor';
