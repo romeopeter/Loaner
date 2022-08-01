@@ -1,93 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import Arrow from '../../../assets/images/Arrow.png';
-import OrderbookLayout from '../../OrderbookLayout';
-import DocumentHead from '../../DocumentHead';
-// import Button from '../../Button';
-import NavMenu from '../NavMenu';
-import offerImage from '../../../assets/images/offerImage.png';
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
+
+import DocumentHead from '../../DocumentHead';
+import OrderbookLayout from '../../OrderbookLayout';
+import NavMenu from '../NavMenu';
+import { getOffer } from '../../../services/loan.service';
+import { getBid } from '../../../services/bid.service';
+import Arrow from '../../../assets/images/Arrow.png';
+import SubNavBar from './layouts/SubNavBar';
+import offerImage from '../../../assets/images/offerImage.png';
 
 const LoanOfferPublished = () => {
   const pageName = 'Loan Published';
-  let { id } = useParams();
+  let { id, dealType } = useParams();
+
   const [bidsData, setBidsData] = useState([]);
   const [data, setData] = useState(null);
 
-  console.log(data);
-
   useEffect(() => {
-    axios.get('/v1/loan_request/').then((response) => {
-      let index = response.data.findIndex((loan) => loan.id === parseInt(id));
-      setData(response.data[index]);
-    });
-
-    axios.get(`v1/bids/?loan_request_id=${id}`).then((res) => {
-      setBidsData(res.data);
-    });
     window.scroll(0, 0);
-  }, [id]);
 
-  // Dropdown
-  const [isOpen, setOpen] = useState({ client: false, investor: false });
-  const toggleDropdownClient = () =>
-    isOpen.client
-      ? setOpen({ ...isOpen, client: false })
-      : setOpen({ investor: false, client: true });
-  const toggleDropdownInvestor = () =>
-    isOpen.investor
-      ? setOpen({ ...isOpen, investor: false })
-      : setOpen({ client: false, investor: true });
+    let componentIsMounted = true;
+    (async function getLoanOffer() {
+      const res = await getOffer(dealType, id);
+      
+      if (res.statusText === "OK") {
+       if (componentIsMounted) setData(res.data);
+      }
+    })();
+    
+    (async function getLoanOfferBid() {
+      const res = await getBid(id);
+      if (res.statusText === "OK") {
+        if (componentIsMounted) setBidsData(res.data);
+      }
+    })();
+
+    return () => componentIsMounted = false;
+  }, [id, dealType]);
 
   return (
     <div>
       <DocumentHead title={pageName} />
       <OrderbookLayout PageNav={NavMenu}>
-        <div className=' bg-white px-16 py-10 shadow-md flex justify-start'>
-          <div className='dropdownbroker'>
-            <div
-              className='dropdownbroker-header'
-              onClick={toggleDropdownClient}
-            >
-              <h2 className='mr-2'>Clients</h2>
-              <i className={`fa fa-caret-down ${isOpen.client && 'open'}`}></i>
-            </div>
-            <div className={`dropdownbroker-body ${isOpen.client && 'open'}`}>
-              <Link
-                to='/broker/dashboard/new-client'
-                className='dropdownbroker-item '
-              >
-                New Client{' '}
-              </Link>
-              <Link
-                to='/broker/dashboard/allclients'
-                className='dropdownbroker-item '
-              >
-                Manage Clients{' '}
-              </Link>
-            </div>
-          </div>
-          <div className='dropdownbroker'>
-            <div
-              className='dropdownbroker-header'
-              onClick={toggleDropdownInvestor}
-            >
-              <h2 className='mr-2'>Investors</h2>
-              <i
-                className={`fa fa-caret-down ${isOpen.investor && 'open'}`}
-              ></i>
-            </div>
-            <div className={`dropdownbroker-body ${isOpen.investor && 'open'}`}>
-              <Link
-                to='/broker/dashboard/uploadInvestor'
-                className='dropdownbroker-item '
-              >
-                Upload Investors{' '}
-              </Link>
-            </div>
-          </div>
-        </div>
+
+        {/* Sub navbar */}
+        <SubNavBar />
+
         {!data ? (
           <p className='loader' style={{ margin: '100px auto' }}></p>
         ) : (
@@ -153,37 +113,19 @@ const LoanOfferPublished = () => {
                   <div className='px-5  col-span-12 lg:col-span-8'>
                     <p
                       style={{ fontWeight: '700', fontSize: '18px' }}
-                      className=' sm:mt-5'
+                      className='pb-3 sm:mt-5'
                     >
                       Description
                     </p>
                     <p
                       style={{
                         textAlign: 'justify',
-                        height: '250px !important',
+                        maxHeight: 200,
                         fontSize: '15px',
+                        overflowY: "scroll"
                       }}
                     >
-                      Rice is the most consumed commodity. Total global rice
-                      expenditure in 2020 was $350 billion. To put in
-                      perspective, total global crude oil in 2020 was just four
-                      times that amount at $1.3 trillion. Rice is the most
-                      consumed commodity. Total global rice expenditure in 2020
-                      was $350 billion. To put in perspective, totoal global
-                      crude oil in 2020 was just four times that amount at $1.3
-                      trillion. Rice is the most consumed commodity. Total
-                      global rice expenditure in 2020 was $350 billion. To put
-                      in perspective, totoal global crude oil in 2020 was just
-                      four times that amount at $1.3 trillion. Rice is the most
-                      consumed commodity. Total global rice expenditure in 2020
-                      was $350 billion. To put in perspective, totoal global
-                      crude oil in 2020 was just four times that amount at $1.3
-                      trillion. Rice is the most consumed commodity. Total
-                      global rice expenditure in 2020 was $350 billion. To put
-                      in perspective, totoal global crude oil in 2020 was just
-                      four times that amount at $1.3 trillion. Rice is the most
-                      consumed commodity. Total global rice expenditure in 2020
-                      was $350 billion.
+                      {data.description !== null ? data.description : "No description"}
                     </p>
 
                     <Flex
@@ -311,7 +253,6 @@ const LoanOfferPublished = () => {
                                               h='35px'
                                               borderRadius={'50%'}
                                               bg={'#555555'}
-                                              // m={['auto']}
                                               mr={[4]}
                                             ></Box>
                                             <Flex alignSelf={'center'}>
