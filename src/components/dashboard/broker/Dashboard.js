@@ -258,7 +258,7 @@ const BrokerDashboard = () => {
                           {data.tranche_id.eligible_investors.length > 0 ? (
                             <Td>
                               <Link
-                                to={`/broker/dashboard/loan-offer-published/${data.id}`}
+                                to={`/broker/dashboard/loan-offer-published/${data.deal_type.toLowerCase()}/${data.id}`}
                               >
                                 <button className='broker-cta'>
                                   View Offer
@@ -268,7 +268,7 @@ const BrokerDashboard = () => {
                           ) : (
                             <Td>
                               <Link
-                                to={`/broker/dashboard/loan-offer-draft/${data.id}/${data.deal_type}/`}
+                                to={`/broker/dashboard/loan-offer-draft/${data.id}/${data.deal_type.toLowerCase()}`}
                               >
                                 <button className='broker-cta'>
                                   View Draft
