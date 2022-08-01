@@ -365,7 +365,7 @@ export default function AppRoutes() {
                         }
                     />
                     <Route
-                        path='/broker/dashboard/loan-offer-published/:id'
+                        path='/broker/dashboard/loan-offer-published/:dealType/:id'
                         element={
                             <RequireAuth>
                                 <LoanOfferPublished />
