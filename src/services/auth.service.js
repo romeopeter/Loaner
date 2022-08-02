@@ -11,4 +11,8 @@ const signInRequest = (data) => {
   return axios.post("/v1/registration/sign_in/", data).catch((error) => error);
 };
 
-export { signUpRequest, signInRequest };
+const bulkUserUpload = (data) => {
+  return axios.post("/v1/registration/sign_up/in_bulk/", data);
+}
+
+export { signUpRequest, signInRequest,  bulkUserUpload};
