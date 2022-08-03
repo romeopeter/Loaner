@@ -464,7 +464,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
             ? "900px"
             : state.lastSlideIn
                 ? "800px"
-                : "1300px",
+                : "2000px",
     };
 
     if (typeof formState === "object" && formState !== undefined) {
