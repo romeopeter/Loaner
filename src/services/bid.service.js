@@ -9,9 +9,9 @@ const getBid = (id) => {
 };
 
 const createBid = (data) => {
-    return axios.post("/v1/bids/", data).catch(error => error);
+    return axios.post("/v1/bids/", data);
 };
-
+    
 const updateBids = (id) => {
     return axios
         .put(`/v1/payments/${id}/`)
