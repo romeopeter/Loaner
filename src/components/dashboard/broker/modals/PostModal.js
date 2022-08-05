@@ -1,8 +1,9 @@
 import React from 'react';
 import bidRejected from '../../../../assets/images/bidRejected.png';
 import bidApproved from '../../../../assets/images/bidApproved.png';
+import { Link } from 'react-router-dom';
 
-const PostModal = ({ responsedata, closeModal }) => {
+const PostModal = ({ responsedata, closeModal, bidParamID }) => {
     const className = responsedata.modal ? 'open' : '';
 
     return (
@@ -14,7 +15,6 @@ const PostModal = ({ responsedata, closeModal }) => {
                     style={{
                         borderBottom: 'none',
                         marginBottom: '10px',
-
                         fontWeight: '100',
                         textAlign: 'center',
                     }}
@@ -29,25 +29,29 @@ const PostModal = ({ responsedata, closeModal }) => {
                             );
                         } else if (responsedata.status || responsedata.error) {
                             return (
-                                <p
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-around',
-                                        alignItems: 'center',
-                                        fontSize: '14px',
-                                    }}
-                                >
-                                    <img
-                                        alt=''
-                                        src={responsedata.error ? bidRejected : bidApproved}
-                                        style={{ height: '30px', width: '30px', marginRight: '10px' }}
-                                    />
-                                    {responsedata.error ? responsedata.error : responsedata.status}
-                                </p>
+                                <>
+                                    <p
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-around',
+                                            alignItems: 'center',
+                                            fontSize: '14px',
+                                            marginBottom: "10px"
+                                        }}
+                                    >
+                                        <img
+                                            alt=''
+                                            src={responsedata.error ? bidRejected : bidApproved}
+                                            style={{ height: '30px', width: '30px', marginRight: '10px' }}
+                                        />
+                                        {responsedata.error ? responsedata.error : responsedata.status}
+                                    </p>
+                                </>
                             );
                         }
                     })()}
                 </div>
+
                 {!responsedata.isLoading && (
                     <button
                         onClick={closeModal}
@@ -58,7 +62,7 @@ const PostModal = ({ responsedata, closeModal }) => {
                             background: 'rgba(0, 0, 0, 0.5)',
                         }}
                     >
-                        Okay
+                        {responsedata.status ? (<Link to={`/broker/dashboard/bids/${bidParamID}`}>Go to bids</Link>) : "Okay"}
                     </button>
                 )}
             </div>
