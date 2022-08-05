@@ -159,7 +159,12 @@ const AddNewBid = () => {
             // Creater User
             const res = await bulkUserUpload(userObj);
 
-            if (res.statusText === "Created") {
+            // Loading
+            if (res.request.readyState === 3) {
+                setResponsedata({ ...responsedata, isLoading: true, modal: true });
+            }
+
+            if (res.request.readyState === 4 && res.statusText === "Created") {
                 try {
                     const bidRes = await createBid({
                         amount: values.bidValue,
@@ -171,9 +176,10 @@ const AddNewBid = () => {
                         setResponsedata({
                             ...responsedata,
                             modal: true,
-                            status: "Investor created!",
+                            status: "Investor created successfully and bid has been placed!",
                         });
                     }
+
                 } catch (err) {
                     catchRequestError(err, "Investor created but unable to create bid. Please check fields");
                 }
@@ -182,8 +188,13 @@ const AddNewBid = () => {
         } catch (err) {
             catchRequestError(err, "Unable to create investor. Please check fields");
         }
+
+        Object.keys(values).forEach((key, index) => {
+           if( values[key] !== undefined) values[key] = "";
+        });
     }
   };
+
 
   return (
     <>
@@ -443,8 +454,8 @@ const AddNewBid = () => {
               </Formik>
             </div>
           </div>
-
-          <PostModal responsedata={responsedata} closeModal={closeModal} />
+                        
+          <PostModal responsedata={responsedata} closeModal={closeModal} bidParamID={id} />
         </div>
       </OrderbookLayout>
     </>
