@@ -1,20 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// Temp to create deadlinks
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import OrderbookLayout from '../../OrderbookLayout';
-import DocumentHead from '../../DocumentHead';
-import BidsModal from '../broker/modals/BidsModal';
-import DeleteModal from '../broker/modals/DeleteModal';
-import DisagreeModal from './modals/DisagreeModal';
-import EditModal from './modals/EditModal';
-import SelectModal from './modals/SelectModal';
-import bidRejected from '../../../assets/images/bidRejected.png';
-import NavMenu from '../NavMenu';
-import Pagination from './pagination/Pagination';
-import { Link, useParams } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-import SubNavBar from './layouts/SubNavBar';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 import {
   Flex,
   Box,
@@ -28,12 +15,33 @@ import {
   Divider,
 } from '@chakra-ui/react';
 
+import OrderbookLayout from '../../OrderbookLayout';
+import DocumentHead from '../../DocumentHead';
+import NavMenu from '../NavMenu';
+import Pagination from './pagination/Pagination';
+import SubNavBar from './layouts/SubNavBar';
+import bidRejected from '../../../assets/images/bidRejected.png';
+
+import BidsModal from '../broker/modals/BidsModal';
+import DeleteModal from '../broker/modals/DeleteModal';
+import DisagreeModal from './modals/DisagreeModal';
+import EditModal from './modals/EditModal';
+import SelectModal from './modals/SelectModal';
+
+import { getBid } from '../../../services/bid.service';
+import { getOffer } from '../../../services/loan.service';
+
+import { humanNumber } from '../../../utils/HRN';
+
 let PageSize = 10;
 const Bids = () => {
-    let alert = useAlert()
+  let alert = useAlert()
   let { id } = useParams();
 
-  // Fetched data
+  // Offer data
+  const [loanOffer, setLoanOffer] = useState();
+
+  // Fetched bids data
   const [bidsData, setBidsData] = useState([]);
   const [dataState, setDataState] = useState({
     isLoading: true,
@@ -239,23 +247,30 @@ const Bids = () => {
 
   //  Call Fetched data
   useEffect(() => {
-    axios
-      .get(`v1/bids/?loan_request_id=${id}`)
-      .then((response) => {
-        setBidsData(response.data);
-        response.statusText === 'OK' &&
-          setDataState({ error: '', isLoading: false });
-      })
-      .catch((e) => {
-        console.log(e);
-        if (e.message === 'Network Error') {
+    let componentIsMounted = true;;
+
+    (async function getOfferBid() {
+      try {
+        const res = await getBid(id);
+
+        if (res.statusText === "OK") {
+          if (componentIsMounted) {
+            setBidsData(res.data);
+            setDataState({ error: '', isLoading: false });
+          }
+        }
+      } catch (err) {
+        if (err.message === 'Network Error') {
           setDataState({ error: 'Network Error', isLoading: false });
-        } else
+        } else {
           setDataState({
             error: 'Something went wrong, please try again.',
             isLoading: false,
           });
-      });
+        }
+      }
+    })();
+    return () => componentIsMounted = false;
   }, [
     updatedataApproved,
     updatedataRejected,
@@ -265,6 +280,35 @@ const Bids = () => {
     id,
     handleApply,
   ]);
+
+  useEffect(() => {
+    let componentIsMounted = true;
+
+    (async function () {
+      const loanRequest = bidsData[0]["loan_request"];
+      const dealType = loanRequest.deal_type === "Commercial Paper" ? "cp":"bond";
+
+      try {
+        const res = await getOffer(dealType, id);
+
+        if (res.statusText === "OK") {
+          if (componentIsMounted) setLoanOffer(res.data);
+        }
+
+      } catch (err) {
+        if (err.message === 'Network Error') {
+          setDataState({ error: 'Network Error', isLoading: false });
+        } else {
+          setDataState({
+            error: 'Something went wrong, please try again.',
+            isLoading: false,
+          });
+        }
+      }
+    })()
+   
+    return () => componentIsMounted = false;
+  }, [bidsData, id])
 
   // pagination
   const currentTableData = useMemo(() => {
@@ -351,6 +395,10 @@ const Bids = () => {
     setCheckedBid([]);
   };
 
+  // Prorated amount for all
+  const clientAmount = loanOffer !== undefined && Number(loanOffer.tranche_id.size.minimum_subscription.amount);
+  const proratedAmount = bidsData !== undefined && (clientAmount/bidsData.length);
+
   return (
     <div>
       <DocumentHead title='Bids' />
@@ -381,6 +429,17 @@ const Bids = () => {
               </Center>
             </div>
           </div>
+
+          <div className='expected-offer-amount'>
+           {(() => {
+              if(loanOffer !== undefined) {
+                const amount = loanOffer.tranche_id.size.minimum_subscription.amount;
+                
+                return (<p className='text-center py-5' style={{fontSize: 17, color:"#555"}}>Amount expected by client: NGR {humanNumber(amount)}</p>)
+              }
+           })()}
+          </div>
+
           <div className='mid-nav'>
             <div className={`${className} mid-nav--dropdown`}>
               <select onChange={handleChange}>
@@ -475,7 +534,8 @@ const Bids = () => {
                             <Th className='border'>Name </Th>
                             <Th className='border'>Tranche</Th>
                             <Th className='border'>Duration</Th>
-                            <Th className='border'>Amount</Th>
+                            <Th className='border'>Initial amount</Th>
+                            <Th className='border'>Prorated amount</Th>
                             <Th className='border'>Status</Th>
                             <Th>Actions</Th>
                           </Tr>
@@ -513,7 +573,6 @@ const Bids = () => {
                                       h='40px'
                                       borderRadius={'50%'}
                                       bg={'#555555'}
-                                      // m={['auto']}
                                       mr={[4]}
                                     ></Box>
 
@@ -523,11 +582,12 @@ const Bids = () => {
                                     </Flex>
                                   </Flex>
                                 </Td>
-                                <Td className='border'>{data.tranche}</Td>
+                                <Td className='border'>{data.loan_request.tranche_name}</Td>
                                 <Td className='border'>
                                   {data.loan_request.duration} Days
                                 </Td>
-                                <Td className='border'>NGN {data.amount}</Td>
+                                <Td className='border'>NGN {humanNumber(data.amount)}</Td>
+                                <Td className='border'>NGN {humanNumber(proratedAmount)}</Td>
 
                                 {(() => {
                                   if (data && data.current_status) {
@@ -672,7 +732,7 @@ const Bids = () => {
                     );
                   }
                 })()}
-              </div>
+              </div>   
               <Pagination
                 className='pagination-bar'
                 currentPage={currentPage}
@@ -715,6 +775,7 @@ const Bids = () => {
               checkbox={checkedBid}
             />
           </section>
+
         </main>
       </OrderbookLayout>
     </div>
