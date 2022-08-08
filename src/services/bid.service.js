@@ -5,7 +5,7 @@ const getBids = () => {
 };
 
 const getBid = (id) => {
-    return axios.get(`/v1/bids/?loan_request_id=${id}`).catch(error => error);
+    return axios.get(`/v1/bids/?loan_request_id=${id}`);
 };
 
 const createBid = (data) => {
