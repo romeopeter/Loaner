@@ -28,7 +28,7 @@ export default function Prorated({
       name: `${data.owner.first_name} ${data.owner.last_name}`,
       tranche: data.loan_request.tranche_name,
       duration: `${data.loan_request.duration} days`,
-      "initial amount": data.amount,
+      "initial amount": humanNumber(data.amount),
       "prorated amount": humanNumber(proratedAmount ),
       status: data.current_status
     }));
