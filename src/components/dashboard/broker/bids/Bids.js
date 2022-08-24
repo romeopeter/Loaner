@@ -1,37 +1,35 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { useAlert } from 'react-alert';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
-import {
-  Box,
-  Center,
-  Divider,
-} from '@chakra-ui/react';
+import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { useAlert } from "react-alert";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { Box, Center, Divider } from "@chakra-ui/react";
 
-import OrderbookLayout from '../../../OrderbookLayout';
-import DocumentHead from '../../../DocumentHead';
-import NavMenu from '../../NavMenu';
-import Pagination from '../pagination/Pagination';
-import SubNavBar from '../layouts/SubNavBar';
-import bidRejected from '../../../../assets/images/bidRejected.png';
+import OrderbookLayout from "../../../OrderbookLayout";
+import DocumentHead from "../../../DocumentHead";
+import NavMenu from "../../NavMenu";
+import Pagination from "../pagination/Pagination";
+import SubNavBar from "../layouts/SubNavBar";
+import bidRejected from "../../../../assets/images/bidRejected.png";
 
-import BidsModal from '../../broker/modals/BidsModal';
-import DeleteModal from '../../broker/modals/DeleteModal';
-import DisagreeModal from '../modals/DisagreeModal';
-import EditModal from '../modals/EditModal';
-import SelectModal from '../modals/SelectModal';
+import BidsModal from "../../broker/modals/BidsModal";
+import DeleteModal from "../../broker/modals/DeleteModal";
+import DisagreeModal from "../modals/DisagreeModal";
+import EditModal from "../modals/EditModal";
+import SelectModal from "../modals/SelectModal";
 
-import Prorated from '../bids/Prorated';
-import OrderedListing from "../bids/OrderedListing"
+import Prorated from "../bids/Prorated";
+import OrderedListing from "../bids/OrderedListing";
+import ManualListing from "./manualList/ManualListing";
+import DropRejectedBids from "./manualList/DropRejectedBids";
 
-import { getBid } from '../../../../services/bid.service';
-import { getOffer } from '../../../../services/loan.service';
+import { getBid } from "../../../../services/bid.service";
+import { getOffer } from "../../../../services/loan.service";
 
-import { humanNumber } from '../../../../utils/HRN';
+import { humanNumber } from "../../../../utils/HRN";
 
 let PageSize = 10;
 const Bids = () => {
-  let alert = useAlert()
+  let alert = useAlert();
   let { id } = useParams();
 
   // Offer data
@@ -96,8 +94,8 @@ const Bids = () => {
 
     const detail = {
       status: {
-        name: 'approved',
-        message: 'Please take heed to this',
+        name: "approved",
+        message: "Please take heed to this",
       },
     };
 
@@ -124,10 +122,11 @@ const Bids = () => {
 
       isLoading: true,
     });
+
     const detail = {
       status: {
-        name: 'rejected',
-        message: 'Rejected',
+        name: "rejected",
+        message: "Rejected",
       },
     };
     data &&
@@ -154,7 +153,7 @@ const Bids = () => {
       let data = notification.dataDisagree;
       const detail = {
         status: {
-          name: 'disagreed',
+          name: "disagreed",
           message: values.textArea,
         },
       };
@@ -163,12 +162,12 @@ const Bids = () => {
           .patch(`v1/bids/${data.id}/`, detail)
           .then((response) => {
             console.log(response);
-            response.statusText === 'OK' &&
+            response.statusText === "OK" &&
               setDisModal({ ...disModal, isLoading: false });
           })
           .catch((err) => {
             err &&
-              setDisModal({ isLoading: false, error: 'Something Went Wrong' });
+              setDisModal({ isLoading: false, error: "Something Went Wrong" });
           });
     },
     [notification.dataDisagree, disModal]
@@ -187,7 +186,7 @@ const Bids = () => {
       .catch((error) => {
         if (error) {
           setDeleteModal({ ...deleteModal, modal: false, isLoading: false });
-            alert.error('You are not allowed to delete this bid')
+          alert.error("You are not allowed to delete this bid");
         }
       });
   };
@@ -208,7 +207,7 @@ const Bids = () => {
   const handleChange = (e) => {
     e.preventDefault();
     let value = e.target.value;
-    value === 'Select action'
+    value === "Select action"
       ? setSelectFilter({ value: undefined })
       : setSelectFilter({ value });
   };
@@ -217,13 +216,13 @@ const Bids = () => {
     const { name, checked } = e.target;
 
     if (checked) {
-      if (name === 'allSelect') {
+      if (name === "allSelect") {
         setCheckedBid(bidsData);
       } else {
         setCheckedBid([...checkedBid, data]);
       }
     } else {
-      if (name === 'allSelect') {
+      if (name === "allSelect") {
         setCheckedBid([]);
       } else {
         let temp = checkedBid.filter((item) => item.id !== data.id);
@@ -232,18 +231,18 @@ const Bids = () => {
     }
   };
 
-  const className = checkedBid.length < 2 ? 'disable' : '';
+  const className = checkedBid.length < 2 ? "disable" : "";
 
   let disableApproved;
   bidsData.some((bid) => {
-    return (disableApproved = bid.current_status === 'approved');
+    return (disableApproved = bid.current_status === "approved");
   });
 
   // checbox action end
 
   //  Call Fetched data
   useEffect(() => {
-    let componentIsMounted = true;;
+    let componentIsMounted = true;
 
     (async function getOfferBid() {
       try {
@@ -252,21 +251,21 @@ const Bids = () => {
         if (res.statusText === "OK") {
           if (componentIsMounted) {
             setBidsData(res.data);
-            setDataState({ error: '', isLoading: false });
+            setDataState({ error: "", isLoading: false });
           }
         }
       } catch (err) {
-        if (err.message === 'Network Error') {
-          setDataState({ error: 'Network Error', isLoading: false });
+        if (err.message === "Network Error") {
+          setDataState({ error: "Network Error", isLoading: false });
         } else {
           setDataState({
-            error: 'Something went wrong, please try again.',
+            error: "Something went wrong, please try again.",
             isLoading: false,
           });
         }
       }
     })();
-    return () => componentIsMounted = false;
+    return () => (componentIsMounted = false);
   }, [
     updatedataApproved,
     updatedataRejected,
@@ -282,7 +281,8 @@ const Bids = () => {
 
     (async function () {
       const loanRequest = bidsData[0]["loan_request"];
-      const dealType = loanRequest.deal_type === "Commercial Paper" ? "cp":"bond";
+      const dealType =
+        loanRequest.deal_type === "Commercial Paper" ? "cp" : "bond";
 
       try {
         const res = await getOffer(dealType, id);
@@ -290,21 +290,20 @@ const Bids = () => {
         if (res.statusText === "OK") {
           if (componentIsMounted) setLoanOffer(res.data);
         }
-
       } catch (err) {
-        if (err.message === 'Network Error') {
-          setDataState({ error: 'Network Error', isLoading: false });
+        if (err.message === "Network Error") {
+          setDataState({ error: "Network Error", isLoading: false });
         } else {
           setDataState({
-            error: 'Something went wrong, please try again.',
+            error: "Something went wrong, please try again.",
             isLoading: false,
           });
         }
       }
-    })()
-   
-    return () => componentIsMounted = false;
-  }, [bidsData, id])
+    })();
+
+    return () => (componentIsMounted = false);
+  }, [bidsData, id]);
 
   // pagination
   const paginationData = useMemo(() => {
@@ -322,7 +321,7 @@ const Bids = () => {
   const prorated = () => {
     setBidsTab({ manual: false, ordered: false, prorated: true });
     setBidsData(bidsData);
-  };
+  }; 
   const manualListing = () => {
     setBidsTab({ ordered: false, prorated: false, manual: true });
     setBidsData(bidsData);
@@ -333,9 +332,9 @@ const Bids = () => {
     setBidsData(bidsData);
   };
 
-  const proratedActive = bidsTab.prorated ? 'active' : '';
-  const manualActive = bidsTab.manual ? 'active' : '';
-  const orderedActive = bidsTab.ordered ? 'active' : '';
+  const proratedActive = bidsTab.prorated ? "active" : "";
+  const manualActive = bidsTab.manual ? "active" : "";
+  const orderedActive = bidsTab.ordered ? "active" : "";
 
   // Modals
   const openModalApproved = (data) => {
@@ -391,29 +390,28 @@ const Bids = () => {
 
   return (
     <div>
-      <DocumentHead title='Bids' />
+      <DocumentHead title="Bids" />
       <OrderbookLayout PageNav={NavMenu}>
-        
         {/* Sub-navbar */}
         <SubNavBar />
 
-        <main className='bids'>
-          <div className='bids-heading'>
+        <main className="bids">
+          <div className="bids-heading">
             <h1>
-              {' '}
+              {" "}
               {bidsData.length > 0 && bidsData[0].loan_request.tranche_name}
             </h1>
 
-            <div className='bids-heading--links'>
-              <Center className='bids-heading--mod'>
+            <div className="bids-heading--links">
+              <Center className="bids-heading--mod">
                 <button onClick={prorated} className={`${proratedActive}`}>
                   Prorated
                 </button>
-                <Divider orientation='vertical' />
+                <Divider orientation="vertical" />
                 <button onClick={manualListing} className={`${manualActive}`}>
                   Manual Listing
                 </button>
-                <Divider orientation='vertical' />
+                <Divider orientation="vertical" />
                 <button onClick={orderedListing} className={`${orderedActive}`}>
                   Ordered Listing
                 </button>
@@ -421,84 +419,95 @@ const Bids = () => {
             </div>
           </div>
 
-          <div className='expected-offer-amount'>
-           {(() => {
-              if(loanOffer !== undefined) {
-                const amount = loanOffer.tranche_id.size.minimum_subscription.amount;
-                
-                return (<p className='text-center py-5' style={{fontSize: 17, color:"#555"}}>Amount expected by client: NGR {humanNumber(amount)}</p>)
+          <div className="expected-offer-amount">
+            {(() => {
+              if (loanOffer !== undefined) {
+                const amount =
+                  loanOffer.tranche_id.size.minimum_subscription.amount;
+
+                return (
+                  <div className="mb-5">
+                  <p
+                    className="text-center pt-5"
+                    style={{ fontSize: 17, color: "#555" }}
+                  >
+                    Amount expected by client: NGR {humanNumber(amount)}
+                  </p>
+                  <span className="block border-b border-gray-300 my-0 mx-auto w-96"></span>
+                  </div>
+                );
               }
-           })()}
+            })()}
           </div>
 
-          <div className='mid-nav'>
+          <div className={`mid-nav ${bidsTab.manual && "hidden"}`}>
             <div className={`${className} mid-nav--dropdown`}>
               <select onChange={handleChange}>
-                <option defaultValue={'Select action'}> Select action</option>
-                <option value='approve all'>Approve all</option>
-                <option value='reject all'>Reject all</option>
+                <option defaultValue={"Select action"}> Select action</option>
+                <option value="approve all">Approve all</option>
+                <option value="reject all">Reject all</option>
               </select>
 
               <button
-                className='mid-nav-button'
-                title='Select an action to apply'
+                className="mid-nav-button"
+                title="Select an action to apply"
                 onClick={handleApply}
               >
                 Apply
               </button>
             </div>
 
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: "flex" }}>
               <Link to={`/broker/dashboard/bids/payment/${id}`}>
                 <button
                   disabled={!disableApproved}
-                  className='mid-nav--viewPayment'
+                  className="mid-nav--viewPayment"
                 >
                   View Payment
                 </button>
               </Link>
               <Link
                 to={`/broker/dashboard/bids/addnewbid/${id}`}
-                style={{ marginLeft: '20px' }}
+                style={{ marginLeft: "20px" }}
               >
-                <button className='mid-nav--addNewBid'>Add New Bid</button>
+                <button className="mid-nav--addNewBid">Add New Bid</button>
               </Link>
             </div>
           </div>
 
-          <section style={{ paddingBottom: '10%' }}>
+          <section style={{ paddingBottom: "10%" }}>
             <Box>
-              <div className='tableScroll'>
+              <div className="tableScroll">
                 {(() => {
                   if (dataState.isLoading) {
                     return (
                       <p
-                        className='loader'
-                        style={{ margin: '100px auto' }}
+                        className="loader"
+                        style={{ margin: "100px auto" }}
                       ></p>
                     );
                   }
-                  
+
                   if (dataState.error) {
                     return (
-                      <p className='responseMessage'>
+                      <p className="responseMessage">
                         <img
-                          alt=''
+                          alt=""
                           src={bidRejected}
-                          style={{ height: '30px', width: '30px' }}
+                          style={{ height: "30px", width: "30px" }}
                         />
                         {dataState.error}
                       </p>
                     );
                   }
-                  
+
                   if (bidsData.length === 0) {
                     return (
                       <p
-                        className='responseMessage'
+                        className="responseMessage"
                         style={{
-                          alignItems: 'center',
-                          margin: '100px auto',
+                          alignItems: "center",
+                          margin: "100px auto",
                         }}
                       >
                         No bids available. Add a new bid.
@@ -508,58 +517,89 @@ const Bids = () => {
 
                   if (bidsTab.prorated) {
                     return (
-                        <Prorated 
-                          tableStateObj={{bidsData, checkedBid, paginationData, loanOffer}} 
-                          tableFuncObj={{
-                            handleCheck, 
-                            openModalApproved, 
-                            openModalRejected, 
-                            openModalDisagree, 
-                            openModalEdit, 
-                            openDeleteModal
-                          }} 
-                        />
-                    ); 
-                  }
-
-                  if (bidsTab.manual) {
-                    return (<p
-                      className='responseMessage'
-                      style={{
-                        alignItems: 'center',
-                        margin: '100px auto',
-                      }}
-                    >
-                      No available
-                    </p>)
+                      <Prorated
+                        tableStateObj={{
+                          bidsData,
+                          checkedBid,
+                          paginationData,
+                          loanOffer,
+                        }}
+                        tableFuncObj={{
+                          handleCheck,
+                          openModalApproved,
+                          openModalRejected,
+                          openModalDisagree,
+                          openModalEdit,
+                          openDeleteModal,
+                        }}
+                      />
+                    );
                   }
 
                   if (bidsTab.ordered) {
                     return (
-                      <OrderedListing 
-                        tableStateObj={{bidsData, checkedBid, paginationData}} 
+                      <OrderedListing
+                        tableStateObj={{ bidsData, checkedBid, paginationData }}
                         tableFuncObj={{
-                          handleCheck, 
-                          openModalApproved, 
-                          openModalRejected, 
-                          openModalDisagree, 
-                          openModalEdit, 
-                          openDeleteModal
-                        }} 
+                          handleCheck,
+                          openModalApproved,
+                          openModalRejected,
+                          openModalDisagree,
+                          openModalEdit,
+                          openDeleteModal,
+                        }}
                       />
-                  ); 
+                    );
                   }
                 })()}
               </div>
-                 
-            <Pagination
-              className='pagination-bar'
-              currentPage={currentPage}
-              totalCount={bidsData.length}
-              pageSize={PageSize}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
+
+              {(() => {
+                if (bidsTab.manual) {
+                  return (
+                    <>
+                    <p className="text-center py-3 text-lg text-gray-500">Drag the bids you want to reject to table below.</p>
+                    <div
+                      className="tableScroll shadow-sm mx-5 py-5 p-2 rounded-md border-2 border-blue-600"
+                      style={{ height: 350 }}
+                    >
+                      <ManualListing
+                        tableStateObj={{
+                          bidsData,
+                          checkedBid,
+                          paginationData,
+                          loanOffer,
+                        }}
+                        tableFuncObj={{
+                          handleCheck,
+                          openModalApproved,
+                          openModalRejected,
+                          openModalDisagree,
+                          openModalEdit,
+                          openDeleteModal,
+                        }}
+                      />
+                    </div>
+                    </>
+                  );
+                }
+              })()}
+
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={bidsData.length}
+                pageSize={PageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+
+              {(() => {
+                if (bidsTab.manual) {
+                  return <DropRejectedBids bidsData={bidsData} />
+                }
+              })()}
             </Box>
+
             <BidsModal
               closeModal={closeModal}
               state={state}
@@ -594,7 +634,6 @@ const Bids = () => {
               checkbox={checkedBid}
             />
           </section>
-
         </main>
       </OrderbookLayout>
     </div>
