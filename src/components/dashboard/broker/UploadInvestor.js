@@ -14,6 +14,7 @@ import PostModal from "../broker/modals/PostModal";
 import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
+import SubNavBar from "./layouts/SubNavBar";
 import { useCSVReader } from "react-papaparse";
 
 const UploadInvestor = () => {
@@ -125,6 +126,9 @@ const UploadInvestor = () => {
     <div>
       <DocumentHead title="New Client" />
       <OrderbookLayout PageNav={NavMenu}>
+        {/* Sub-nav bar */}
+        <SubNavBar />
+
         <CSVReader onUploadAccepted={onUploadAccepted}>
           {({
             getRootProps,
@@ -133,7 +137,7 @@ const UploadInvestor = () => {
             getRemoveFileProps,
           }) => (
             <div className="csvReader">
-              {/* {console.log(acceptedFile)} */}
+              
               <div className="bulk-upload-container flex justify-evenly mb-10 border-2 py-1 rounded-lg bg-slate-100">
                 <h1 className="my-0">Bulk upload</h1>
                 <Select
