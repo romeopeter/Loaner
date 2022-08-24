@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
 	getInvestorsInCategory,
-	assignInvestorsToCategories,
 	mergeInvestorsInCategories
 } from "../services/loan.service.js";
 import handleRequestError from "./errorHandler";
