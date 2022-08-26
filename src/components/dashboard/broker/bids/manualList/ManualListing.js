@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 
 import AllBids from "./AllBids";
 import { humanNumber } from "../../../../../utils/HRN";
