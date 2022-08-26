@@ -38,7 +38,7 @@ const getAllOffersStatus = (requestsArr) => {
 const rejectManualListingBids = (requestArr, rejectedMessage) => {
   return axios
     .all(requestArr.map((req) => axios.patch(req,rejectedMessage)))
-    .then((responses) => responses.map((res) => console.log(res)));
+    .then((responses) => responses.map((res) => res));
 };
 
 export {
