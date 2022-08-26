@@ -1,15 +1,29 @@
 import React, { useState, useRef } from "react";
 import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
-import { rejectManualListingBids } from "../../../../../services/bid.service";
 
-export default function DropRejectedBids({ bidsData }) {
+import { rejectManualListingBids } from "../../../../../services/bid.service";
+import BatchRejectBidsModal from "../../modals/BatchRejectBidsModal";
+
+export default function DropRejectedBids({ bidsData, tableFuncObj }) {
   const [rejectedBidsID, setRejectedBidsID] = useState([]);
+  const [trigger, setTrigger] = useState({
+    disableRejectBtn: false,
+    showModal: false,
+    isLoading: undefined,
+    rejectedBids: null,
+  });
 
   /*Drag/drop functions starts*/
   let dropObjectParent = useRef();
 
   const drag = (e) => {
     e.dataTransfer.setData("text", e.target.id);
+
+    if (Array.from(dropObjectParent.current.childNodes).length === 0) {
+      setTrigger({...trigger, disableRejectBtn: true});
+    }
+
+    console.log(dropObjectParent);
   };
 
   const allowDrop = (e) => e.preventDefault();
@@ -30,9 +44,12 @@ export default function DropRejectedBids({ bidsData }) {
         // Add drag function to appended nodes
         child.ondragstart = drag;
 
-        // Remove cells for table buttons
+        // Remove buttons cells copied from HTML dragged element
         const tableRowNodes = child.childNodes;
         tableRowNodes[tableRowNodes.length - 1].classList.add("hidden");
+
+        // Remove checkbox copied from dragged HTML element
+        tableRowNodes[1].childNodes[0].childNodes[2].classList.add("hidden");
       });
 
       // DropObjectParent child nodes
@@ -50,7 +67,8 @@ export default function DropRejectedBids({ bidsData }) {
 
   /*Drag/drop functions ends*/
 
-  const rejectBids = (e) => {
+  const rejectBids = async (e) => {
+    setTrigger({...trigger, showModal:true, isLoading: true});
     const sortedBids = bidsData.sort((a, b) => a.id - b.id);
 
     /* Filter out main bids data that don't match 
@@ -62,6 +80,7 @@ export default function DropRejectedBids({ bidsData }) {
         message: "bid rejected",
       },
     };
+
     sortedBids.filter((data) => {
       if (rejectedBidsID.includes(data.id)) {
         /* Create reject request strings for each bids */
@@ -72,8 +91,19 @@ export default function DropRejectedBids({ bidsData }) {
     });
 
     if (requestArr.length > 0) {
-      rejectManualListingBids(requestArr, detail);
+      const res = await rejectManualListingBids(requestArr, detail);
+
+      if (res[0].status === 200) {
+        // Set Modal trigger
+        setTrigger({...trigger, showModal:true, isLoading: false, rejectedBids: res});
+      }
     }
+  };
+
+  const closeModal = () =>  {
+    setTrigger({...trigger, showModal: false});
+
+    window.location.reload();
   };
 
   const tableColumn = ["name", "tranche", "duration", "amount", "status"];
@@ -106,7 +136,7 @@ export default function DropRejectedBids({ bidsData }) {
                   checked={checkedBid?.length === bidsData?.length}
                   onChange={(e) => handleCheck(e, bidsData)}
                 /> */}
-                 <i class="fa fa-hand-rock-o font-bold text-2xl" aria-hidden="true"></i>
+                 <i className="fa fa-hand-rock-o font-bold text-lg" aria-hidden="true"></i>
               </Th>
               {tableColumn.map((column, index) => {
                 return (
@@ -133,16 +163,20 @@ export default function DropRejectedBids({ bidsData }) {
       >
         <button
           className={`cta-buttons--unapproved ${
-            rejectedBidsID.length === 0
+           rejectedBidsID.length === 0
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-gray-600"
           } text-white p-1 text-sm rounded sm:w-32 w-full h-11`}
-          onClick={rejectBids}
-          disabled={rejectedBidsID.length === 0 && true}
+          onClick={(e) => {
+            if(rejectedBidsID.length > 0) rejectBids(e)
+          }}
+          disabled={rejectedBidsID.length === 0 && trigger.disableRejectBtn}
         >
           Reject all bids
         </button>
       </div>
+
+      <BatchRejectBidsModal trigger={trigger} closeModal={closeModal} />
     </>
   );
 }

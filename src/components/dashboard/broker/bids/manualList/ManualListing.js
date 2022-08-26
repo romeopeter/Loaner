@@ -4,17 +4,16 @@ import AllBids from "./AllBids";
 import { humanNumber } from "../../../../../utils/HRN";
 
 export default function ManualListing({ tableStateObj, tableFuncObj }) {
-  const { bidsData, paginationData } = tableStateObj;
+  const { paginationData } = tableStateObj;
 
   const tableColumn = useMemo(
     () => ["name", "tranche", "duration", "amount", "status"],
     []
   );
 
-  console.log(paginationData);
-
   const tableData = useMemo(() => {
     return paginationData.map((data, index) => {
+      
       return {
         id: data.id,
         name: `${data.owner.first_name} ${data.owner.last_name}`,
@@ -26,8 +25,6 @@ export default function ManualListing({ tableStateObj, tableFuncObj }) {
     });
   }, [paginationData]);
 
-  const disableApproved = useCallback(() => bidsData.some((bid) => bid.status === "approved"),[bidsData]);
-
   return (
     <>
       <AllBids 
@@ -35,7 +32,6 @@ export default function ManualListing({ tableStateObj, tableFuncObj }) {
         tableColumn={tableColumn} 
         tableStateObj={tableStateObj} 
         tableFuncObj={tableFuncObj}
-        disableApproved={disableApproved}
       />
     </>
   );

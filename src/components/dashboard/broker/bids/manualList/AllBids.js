@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
 import { capitalizeFirstLetter } from "../../../../../utils/general";
@@ -8,9 +8,7 @@ export default function AllBids({
   tableColumn,
   tableStateObj,
   tableFuncObj,
-  disableApproved,
 }) {
-  const { bidsData, checkedBid } = tableStateObj;
   const {
     handleCheck,
     openModalApproved,
@@ -20,15 +18,14 @@ export default function AllBids({
     openDeleteModal,
   } = tableFuncObj;
 
+  const { checkedBid, bidsData } = tableStateObj;
+
   /*Drag/drop functions starts*/
   let dropObjectParent = useRef();
 
   const drag = (e) => {
-    // console.log(e);
     e.dataTransfer.setData("text", e.target.id);
   };
-
-  const allowDrop = (e) => e.preventDefault();
 
   const drop = (e) => {
     e.preventDefault();
@@ -41,25 +38,50 @@ export default function AllBids({
       dropObjectParent.current !== undefined
     ) {
       dropObjectParent.current.appendChild(document.getElementById(data));
+
+      dropObjectParent.current.childNodes.forEach((child) => {
+        // Remove buttons cells copied from HTML dragged element
+        const tableRowNodes = child.childNodes;
+        tableRowNodes[tableRowNodes.length - 1].classList.remove("hidden");
+
+        // // Remove checkbox copied from dragged HTML element
+        tableRowNodes[1].childNodes[0].childNodes[2].classList.remove("hidden");
+      });
     }
   };
   /*Drag/drop functions ends*/
 
+  // const disableApproved = useCallback(
+  //   () => bidsData.some((bid) => bid.status === "approved"),
+  //   [bidsData]
+  // );
+
   return (
-    <Table size="sm" colorScheme={"blackAlpha"} onDragOver={allowDrop} onDrop={drop}>
+    <Table
+      size="sm"
+      colorScheme={"blackAlpha"}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={drop}
+    >
       <Thead bg="#F0F0F0" h="80px">
         <Tr fontWeight={"extrabold"} fontSize={["1.9em"]}>
           <Th></Th>
           <Th>
-            {/* <input
-              type="checkbox"
-              className={`broker-checkbox  `}
-              name="allSelect"
-              //   disabled={disableApproved}
-              checked={checkedBid?.length === bidsData?.length}
-              onChange={(e) => handleCheck(e, bidsData)}
-            /> */}
-            <i class="fa fa-hand-rock-o font-bold text-2xl" aria-hidden="true"></i>
+            <Flex>
+              <span className="mr-1">
+                <i
+                  className="fa fa-hand-rock-o font-bold text-lg"
+                  aria-hidden="true"
+                ></i>
+              </span>{" "}
+              <input
+                type="checkbox"
+                className={`broker-checkbox self-center`}
+                name="allSelect"
+                checked={checkedBid?.length === bidsData?.length}
+                onChange={(e) => handleCheck(e, bidsData)}
+              />
+            </Flex>
           </Th>
           {tableColumn.map((column, index) => {
             return (
@@ -74,6 +96,7 @@ export default function AllBids({
 
       <Tbody ref={dropObjectParent}>
         {tableData.map((data, index) => {
+
           return (
             <Tr
               id={`drag-object-${data.id}`}
@@ -96,15 +119,15 @@ export default function AllBids({
                       version="1.1"
                       width="16"
                       data-view-component="true"
-                      class="octicon octicon-grabber"
+                      className="octicon octicon-grabber"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M10 13a1 1 0 100-2 1 1 0 000 2zm-4 0a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zm3 1a1 1 0 100-2 1 1 0 000 2zm1-5a1 1 0 11-2 0 1 1 0 012 0zM6 5a1 1 0 100-2 1 1 0 000 2z"
                       ></path>
                     </svg>
                   </span>{" "}
-                  {/* <input
+                  <input
                     name={data["id"]}
                     type="checkbox"
                     className="broker-checkbox"
@@ -115,7 +138,7 @@ export default function AllBids({
                       checkedBid.some((item) => item?.id === data.id)
                     }
                     onChange={(e) => handleCheck(e, data)}
-                  /> */}
+                  />
                 </Flex>
               </Td>
               <Td className="border">
@@ -156,11 +179,15 @@ export default function AllBids({
               <Td className="cta-buttons">
                 {(() => {
                   if (data.status && data.status === "approved") {
+                    const bidData = bidsData.filter(
+                      (bid) => data.id === bid.id
+                    )[0];
+
                     return (
                       <div>
                         <button
                           onClick={() => {
-                            openModalEdit(data);
+                            openModalEdit(bidData);
                           }}
                           className="cta-buttons--edit"
                         >
@@ -176,11 +203,15 @@ export default function AllBids({
                     );
                   }
                   if (data.status && data.status === "rejected") {
+                    const bidData = bidsData.filter(
+                      (bid) => data.id === bid.id
+                    )[0];
+
                     return (
                       <div>
                         <button
                           onClick={() => {
-                            openModalApproved(data);
+                            openModalApproved(bidData);
                           }}
                           className="cta-buttons--approve"
                         >
@@ -188,7 +219,7 @@ export default function AllBids({
                         </button>
                         <button
                           onClick={() => {
-                            openModalEdit(data);
+                            openModalEdit(bidData);
                           }}
                           className="cta-buttons--edit"
                         >
@@ -203,11 +234,15 @@ export default function AllBids({
                       </div>
                     );
                   } else {
+                    const bidData = bidsData.filter(
+                      (bid) => data.id === bid.id
+                    )[0];
+
                     return (
                       <div>
                         <button
                           onClick={() => {
-                            openModalApproved(data);
+                            openModalApproved(bidData);
                           }}
                           className="cta-buttons--approve"
                         >
@@ -225,7 +260,7 @@ export default function AllBids({
 
                         <button
                           onClick={() => {
-                            openModalEdit(data);
+                            openModalEdit(bidData);
                           }}
                           className="cta-buttons--edit"
                         >
