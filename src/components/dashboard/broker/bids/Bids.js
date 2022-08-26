@@ -279,7 +279,7 @@ const Bids = () => {
   useEffect(() => {
     let componentIsMounted = true;
 
-    (async function () {
+    (async function getLoanOffer() {
       const loanRequest = bidsData[0]["loan_request"];
       const dealType =
         loanRequest.deal_type === "Commercial Paper" ? "cp" : "bond";
@@ -321,7 +321,7 @@ const Bids = () => {
   const prorated = () => {
     setBidsTab({ manual: false, ordered: false, prorated: true });
     setBidsData(bidsData);
-  }; 
+  };
   const manualListing = () => {
     setBidsTab({ ordered: false, prorated: false, manual: true });
     setBidsData(bidsData);
@@ -345,6 +345,11 @@ const Bids = () => {
     setState({ modal: true, successState: false });
     setNotification({ ...notification, dataRejected: data });
   };
+  const openModalForBatcReject = (data) => {
+    setState({ modal: true, successState: true });
+    setNotification({ ...notification, isLoading: false, dataRejected: data });
+  };
+
   const openModalEdit = (data) => {
     setEditModal({ modal: true });
     setNotification({ ...notification, dataEditted: data });
@@ -427,20 +432,20 @@ const Bids = () => {
 
                 return (
                   <div className="mb-5">
-                  <p
-                    className="text-center pt-5"
-                    style={{ fontSize: 17, color: "#555" }}
-                  >
-                    Amount expected by client: NGR {humanNumber(amount)}
-                  </p>
-                  <span className="block border-b border-gray-300 my-0 mx-auto w-96"></span>
+                    <p
+                      className="text-center pt-5"
+                      style={{ fontSize: 17, color: "#555" }}
+                    >
+                      Amount expected by client: NGR {humanNumber(amount)}
+                    </p>
+                    <span className="block border-b border-gray-300 my-0 mx-auto w-96"></span>
                   </div>
                 );
               }
             })()}
           </div>
 
-          <div className={`mid-nav ${bidsTab.manual && "hidden"}`}>
+          <div className={`mid-nav`}>
             <div className={`${className} mid-nav--dropdown`}>
               <select onChange={handleChange}>
                 <option defaultValue={"Select action"}> Select action</option>
@@ -558,28 +563,30 @@ const Bids = () => {
                 if (bidsTab.manual) {
                   return (
                     <>
-                    <p className="text-center py-3 text-lg text-gray-500">Drag the bids you want to reject to table below.</p>
-                    <div
-                      className="tableScroll shadow-sm mx-5 py-5 p-2 rounded-md border-2 border-blue-600"
-                      style={{ height: 350 }}
-                    >
-                      <ManualListing
-                        tableStateObj={{
-                          bidsData,
-                          checkedBid,
-                          paginationData,
-                          loanOffer,
-                        }}
-                        tableFuncObj={{
-                          handleCheck,
-                          openModalApproved,
-                          openModalRejected,
-                          openModalDisagree,
-                          openModalEdit,
-                          openDeleteModal,
-                        }}
-                      />
-                    </div>
+                      <p className="text-center py-3 text-lg text-gray-500">
+                        Drag the bids you want to reject to table below.
+                      </p>
+                      <div
+                        className="tableScroll shadow-sm mx-5 py-5 p-2 rounded-md border-2 border-blue-600"
+                        style={{ height: 350 }}
+                      >
+                        <ManualListing
+                          tableStateObj={{
+                            bidsData,
+                            checkedBid,
+                            paginationData,
+                            loanOffer,
+                          }}
+                          tableFuncObj={{
+                            handleCheck,
+                            openModalApproved,
+                            openModalRejected,
+                            openModalDisagree,
+                            openModalEdit,
+                            openDeleteModal,
+                          }}
+                        />
+                      </div>
                     </>
                   );
                 }
@@ -595,7 +602,12 @@ const Bids = () => {
 
               {(() => {
                 if (bidsTab.manual) {
-                  return <DropRejectedBids bidsData={bidsData} />
+                  return (
+                    <DropRejectedBids
+                      bidsData={bidsData}
+                      tableFuncObj={{ openModalForBatcReject }}
+                    />
+                  );
                 }
               })()}
             </Box>
