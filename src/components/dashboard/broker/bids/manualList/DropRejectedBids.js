@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
 
 import { rejectManualListingBids } from "../../../../../services/bid.service";
@@ -11,38 +11,63 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
     showModal: false,
     isLoading: undefined,
     rejectedBids: null,
+    rejectBidStatus: null,
   });
 
   /*Drag/drop functions starts*/
   let dropObjectParent = useRef();
 
+  useEffect(() => {
+    let componentIsMounted = true;
+
+    if (trigger.rejectBidStatus !== null) {
+      dropObjectParent.current.childNodes.forEach((child) => {
+        const tableRow = child.childNodes;
+
+        // Table row
+        const updateStatus = tableRow[child.childElementCount - 2];
+        updateStatus.classList.add("text-red-500");
+        updateStatus.innerHTML = trigger.rejectBidStatus;
+      });
+
+      if (componentIsMounted) {
+        // Set Modal trigger
+        setTrigger({
+          ...trigger,
+          showModal: true,
+          rejectBidStatus: null
+        });
+      }
+    }
+
+    return () => componentIsMounted = false;
+  }, [trigger.rejectBidStatus]);
+
   const drag = (e) => {
     e.dataTransfer.setData("text", e.target.id);
 
     if (Array.from(dropObjectParent.current.childNodes).length === 0) {
-      setTrigger({...trigger, disableRejectBtn: true});
+      setTrigger({ ...trigger, disableRejectBtn: true });
     }
-
-    console.log(dropObjectParent);
   };
-
-  const allowDrop = (e) => e.preventDefault();
 
   const drop = (e) => {
     e.preventDefault();
 
-    // Append data to state.
+    // Get dropped element data
     const data = e.dataTransfer.getData("text");
 
     if (
       dropObjectParent.current !== null ||
       dropObjectParent.current !== undefined
     ) {
+      // Append data to state.
       dropObjectParent.current.appendChild(document.getElementById(data));
 
       dropObjectParent.current.childNodes.forEach((child) => {
         // Add drag function to appended nodes
         child.ondragstart = drag;
+        child.ondrop = drop
 
         // Remove buttons cells copied from HTML dragged element
         const tableRowNodes = child.childNodes;
@@ -57,7 +82,11 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
 
       // Get rejected bids ID
       const bidsIDs = childNodes.map((child) => {
-        return parseInt(child.attributes.id.nodeValue.split("-")[2]);
+        // Modify ID
+        const ID = child.attributes.id.nodeValue.split("-")[3];
+        child.attributes.id.nodeValue = `rejectBids-drag-object-${ID}`;
+
+        return parseInt(child.attributes.id.nodeValue.split("-")[3]);
       });
 
       // Update state
@@ -68,7 +97,7 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
   /*Drag/drop functions ends*/
 
   const rejectBids = async (e) => {
-    setTrigger({...trigger, showModal:true, isLoading: true});
+    setTrigger({ ...trigger, showModal: true, isLoading: true });
     const sortedBids = bidsData.sort((a, b) => a.id - b.id);
 
     /* Filter out main bids data that don't match 
@@ -95,15 +124,18 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
 
       if (res[0].status === 200) {
         // Set Modal trigger
-        setTrigger({...trigger, showModal:true, isLoading: false, rejectedBids: res});
+        setTrigger({
+          ...trigger,
+          isLoading: false,
+          rejectedBids: res,
+          rejectBidStatus: "Rejected"
+        });
       }
     }
   };
 
-  const closeModal = () =>  {
-    setTrigger({...trigger, showModal: false});
-
-    window.location.reload();
+  const closeModal = () => {
+    setTrigger({ ...trigger, showModal: false });
   };
 
   const tableColumn = ["name", "tranche", "duration", "amount", "status"];
@@ -117,15 +149,21 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
       <div
         className="tableScroll shadow-sm mx-5 py-5 p-2 rounded-md border-2 border-red-600 mt-2"
         style={{ height: 350 }}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={drop}
       >
         <Table
           size="sm"
-          bgColor={"blackAlpha.100"}
-          onDragOver={allowDrop}
+          // bgColor={"blackAlpha"}
+          onDragOver={(e) => e.preventDefault()}
           onDrop={drop}
         >
           <Thead bg="F0F0F0" h="80px">
-            <Tr fontWeight={"extrabold"} fontSize={["1.9em"]}>
+            <Tr
+              fontWeight={"extrabold"}
+              fontSize={["1.9em"]}
+              bgColor={"blackAlpha.100"}
+            >
               <Th></Th>
               <Th>
                 {/* <input
@@ -136,7 +174,10 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
                   checked={checkedBid?.length === bidsData?.length}
                   onChange={(e) => handleCheck(e, bidsData)}
                 /> */}
-                 <i className="fa fa-hand-rock-o font-bold text-lg" aria-hidden="true"></i>
+                <i
+                  className="fa fa-hand-rock-o font-bold text-lg"
+                  aria-hidden="true"
+                ></i>
               </Th>
               {tableColumn.map((column, index) => {
                 return (
@@ -163,12 +204,12 @@ export default function DropRejectedBids({ bidsData, tableFuncObj }) {
       >
         <button
           className={`cta-buttons--unapproved ${
-           rejectedBidsID.length === 0
+            rejectedBidsID.length === 0
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-gray-600"
           } text-white p-1 text-sm rounded sm:w-32 w-full h-11`}
           onClick={(e) => {
-            if(rejectedBidsID.length > 0) rejectBids(e)
+            if (rejectedBidsID.length > 0) rejectBids(e);
           }}
           disabled={rejectedBidsID.length === 0 && trigger.disableRejectBtn}
         >
