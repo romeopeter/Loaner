@@ -99,7 +99,7 @@ export default function AllBids({
 
           return (
             <Tr
-              id={`drag-object-${data.id}`}
+              id={`allbids-drag-object-${data.id}`}
               key={index}
               draggable={true}
               onDragStart={drag}
