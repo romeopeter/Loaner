@@ -17,7 +17,7 @@ const EditModal = ({ closeModal, editModal, data, notification }) => {
         e.preventDefault();
 
         setIsLoading(true);
-        console.log(update.duration);
+        // console.log(update.duration);
         const detail = {
             amount: update.amount,
         };
