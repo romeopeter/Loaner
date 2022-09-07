@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef } from "react";
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
 import { capitalizeFirstLetter } from "../../../../../utils/general";
