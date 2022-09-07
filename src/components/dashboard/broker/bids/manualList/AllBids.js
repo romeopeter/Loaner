@@ -51,11 +51,6 @@ export default function AllBids({
   };
   /*Drag/drop functions ends*/
 
-  // const disableApproved = useCallback(
-  //   () => bidsData.some((bid) => bid.status === "approved"),
-  //   [bidsData]
-  // );
-
   return (
     <Table
       size="sm"
@@ -157,7 +152,7 @@ export default function AllBids({
 
               <Td className="border">{data["tranche"]}</Td>
               <Td className="border">{data["duration"]}</Td>
-              <Td className="border">NGR {data["amount"]}</Td>
+              <Td className="border">NGN {data["amount"]}</Td>
 
               {(() => {
                 if (data["status"]) {
@@ -175,7 +170,7 @@ export default function AllBids({
                 }
               })()}
 
-              {/**Use render props CTA BUTTONS */}
+              {/** Use render props CTA BUTTONS */}
               <Td className="cta-buttons">
                 {(() => {
                   if (data.status && data.status === "approved") {
