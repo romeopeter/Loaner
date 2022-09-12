@@ -5,7 +5,7 @@ export default function ListModal(props) {
     const { state, setState } = props.listState;
 
     return (
-        <div id='save-list-modal' className={`h-60 ${props.class}`}>
+        <div id='save-list-modal' className={`${props.class}`}>
             <div id='modal-content' className=''>
                 <h4 className='font-bold text-2xl self-start my-5'>New list</h4>
 
