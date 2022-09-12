@@ -273,6 +273,7 @@ export default function EditBrokerOffer() {
   const CalculateLoanTenure = (startDate, EndDate) => {
     let tenure = "";
 
+    // eslint-disable-next-line no-unused-vars
     const currentDate = new Date();
     const loanStartDate = new Date(startDate);
     const loanEndDate = new Date(EndDate);
