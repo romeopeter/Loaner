@@ -3,7 +3,7 @@ import Button from "../../../Button";
 
 export default function PublishModal(props) {
     return (
-        <div id='publish-success-modal' className={`h-40 ${props.class}`}>
+        <div id='publish-success-modal' className={`${props.class}`}>
             <div id='modal-content' className=''>
                 <h4 className='font-bold text-2xl text-center my-5'>Congratulations</h4>
 
@@ -14,11 +14,9 @@ export default function PublishModal(props) {
                 <div id='modal-buttons' className='flex justify-center pr-5'>
                     <Button
                         title='View offers'
-                        link='/broker/dashboard'
+                        link='/client/dashboard'
                         buttonClass='view-orders mr-5  rounded w-full'
                     />
-
-                    {/* <Button title='View offer' link='/' buttonClass='go-home rounded create' /> */}
                 </div>
             </div>
         </div>
