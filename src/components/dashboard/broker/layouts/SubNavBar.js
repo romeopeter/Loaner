@@ -21,7 +21,7 @@ export default function SubNavBar({ breadCrumb }) {
     <>
       <div
         id="sub-navbar"
-        className="bg-white px-16 py-10 shadow-md flex justify-start"
+        className="bg-white px-16 py-10 shadow-sm flex justify-start"
       >
         <div className="dropdownbroker navbar-item">
           <div className="dropdownbroker-header" onClick={toggleDropdownClient}>
