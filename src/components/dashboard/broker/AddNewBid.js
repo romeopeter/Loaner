@@ -10,6 +10,7 @@ import OrderbookLayout from "../../OrderbookLayout";
 import DocumentHead from "../../DocumentHead";
 import NavMenu from "../NavMenu";
 import PostModal from "../broker/modals/PostModal";
+import SubNavBar from "./layouts/SubNavBar";
 import { bulkUserUpload } from "../../../services/auth.service";
 import { createBid } from "../../../services/bid.service";
 import Arrow from "../../../assets/images/Arrow.png";
@@ -29,7 +30,7 @@ const AddNewBid = () => {
   const [active, setActive] = useState(false);
   const [investors, setInvestors] = useState(null);
   const [select, setSelect] = useState(null);
-  // const [newInvestor, setnewInvestor] = useState()
+  const [newInvestor, setnewInvestor] = useState();
   const [responsedata, setResponsedata] = useState({
     status: undefined,
     isLoading: undefined,
@@ -200,6 +201,20 @@ const AddNewBid = () => {
     <>
       <DocumentHead title="Add New Bid" />
       <OrderbookLayout PageNav={NavMenu}>
+        <SubNavBar breadCrumb={[
+          {
+            name: "Dashboard",
+            link: "Broker/dashboard"
+          },
+          {
+            name: "Offer",
+            link: `/broker/dashboard/loan-offer-published/cp/${id}`
+          },
+          {
+            name: "Bid",
+            link: `/broker/dashboard/bids/${id}`
+          }
+        ]} />
         <div className="NewBid">
           <div className="NewBid--form">
             <Link to={`/broker/dashboard/bids/${id}`}>
