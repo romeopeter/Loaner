@@ -585,7 +585,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
             <form
                 id="loan-summary-form"
                 className="h-full pb-5"
-                // onSubmit={handleValidation}
                 style={formHeightstyle}
             >
                 <div id="loan-request-steps">
@@ -606,7 +605,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                         <div className="grid grid-cols-1 gap-4">
                             <div className="col-span-12" style={form1ErrorStyle}>
-
+                                <label className="text-white">Deal type</label>
                                 <select
                                     name="dealType"
                                     id="dealType"
@@ -627,6 +626,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="col-span-12" style={form1ErrorStyle}>
+                                <label className="text-white">Guarantor name</label>
                                 <input
                                     type="text"
                                     name="guarantor"
@@ -645,6 +645,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 className="col-span-12 mt-1"
                                 style={form1ErrorStyle}
                             >
+                                <label className="text-white">Deal name</label>
                                 <input
                                     type="text"
                                     name="dealName"
@@ -663,6 +664,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 className="col-span-12 mt-1"
                                 style={form1ErrorStyle}
                             >
+                                <label className="text-white">Project name</label>
                                 <input
                                     type="text"
                                     name="projectName"
@@ -681,6 +683,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 className="col-span-12 mt-1"
                                 style={form1ErrorStyle}
                             >
+                                <label className="text-white">Deal owner</label>
                                 <input
                                     type="text"
                                     name="dealOwner"
@@ -699,6 +702,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 className="col-span-12 mt-1"
                                 style={form1ErrorStyle}
                             >
+                                <label className="text-white">Deal team</label>
                                 <input
                                     type="text"
                                     name="dealTeam"
@@ -717,6 +721,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 className="col-span-12 mt-1"
                                 style={form1ErrorStyle}
                             >
+                                <label className="text-white">Deal description</label>
                                 <textarea
                                     type="textarea"
                                     name="dealDescription"
@@ -746,6 +751,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         className="col-span-2 mt-1"
                                         style={form1ErrorStyle}
                                     >
+                                        <label className="text-white">Loan status</label>
                                         <select
                                             name="status"
                                             id="status"
@@ -779,6 +785,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         className="col-span-2 mt-1"
                                         style={form1ErrorStyle}
                                     >
+                                        <label className="text-white">Tranche name</label>
                                         <input
                                             type="text"
                                             name="trancheName"
@@ -822,6 +829,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="col-span-1 mt-1">
+                                <label className="text-white">Offer start</label>
                                 <input
                                     type="text"
                                     name="offerStart"
@@ -836,6 +844,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="col-span-1 mt-1">
+                                <label className="text-white">Offer end</label>
                                 <input
                                     type="text"
                                     name="offerEnd"
@@ -850,6 +859,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="col-span-1 mt-1">
+                                <label className="text-white">Allotment date</label>
                                 <input
                                     type="text"
                                     name="allotmentDate"
@@ -864,6 +874,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="col-span-1 mt-1">
+                                <label className="">Settlement date</label>
                                 <input
                                     type="text"
                                     name="settlementDate"
@@ -879,6 +890,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                         </div>
 
                         <div className="col-span-12 mt-5">
+                            <label className="text-white">Maturity date</label>
                             <input
                                 type="text"
                                 name="maturityDate"
@@ -903,6 +915,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     className="col-span-2 mt-1"
                                     style={form2ErrorStyle}
                                 >
+                                    <label className="text-white">Currency</label>
                                     <select
                                         name="currency"
                                         id="currency"
@@ -922,6 +935,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                 <div className="col-span-1 mt-1">
                                     <div className="" style={form2ErrorStyle}>
+                                        <label className="text-white">Face value</label>
                                         <input
                                             type="number"
                                             name="faceValue"
@@ -947,6 +961,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                 <div className="col-span- mt-1">
                                     <div className="" style={form2ErrorStyle}>
+                                    <label className="text-white">Discount value</label>
                                         <input
                                             name="discountValue"
                                             type="number"
@@ -984,6 +999,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     className="col-span-2 mt-1"
                                     style={form2ErrorStyle}
                                 >
+                                    <label className="text-white">Minimum Subscription</label>
                                     <select
                                         name="minSubscription"
                                         id="min-subscription"
@@ -1027,6 +1043,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 <div className="col-span-2 mt-1">
                                     {hiddenFieldTrigger.customMinimumSub ? (
                                         <div style={form2ErrorStyle}>
+                                            <label className="text-white">Custom minimum subscription</label>
                                             <input
                                                 type="number"
                                                 id="custom-min-subscription"
@@ -1074,6 +1091,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 className=""
                                                 style={form2ErrorStyle}
                                             >
+                                                <label className="text-white">Coupon Type</label>
                                                 <select
                                                     id="coupon-type"
                                                     name="couponType"
@@ -1107,6 +1125,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 className=""
                                                 style={form2ErrorStyle}
                                             >
+                                                <label className="text-white">Benchmark</label>
                                                 <input
                                                     type="number"
                                                     name="Enter benchmark"
@@ -1164,6 +1183,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         } mt-1`}
                                     style={form2ErrorStyle}
                                 >
+                                    <label className="text-white">Day count</label>
                                     <select
                                         name="dayCount"
                                         id="day-count"
@@ -1196,6 +1216,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                         } mt-1`}
                                     style={form2ErrorStyle}
                                 >
+                                    <label className="text-white">Offer type</label>
                                     <select
                                         name="offerType"
                                         id="offer-type"
@@ -1224,6 +1245,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     <>
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
+                                                <label className="text-white">Discount rate</label>
                                                 <input
                                                     type="number"
                                                     name="discountRate"
@@ -1276,6 +1298,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
+                                                <label className="text-white">Implied yield</label>
                                                 <input
                                                     type="number"
                                                     name="impliedYield"
@@ -1333,6 +1356,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                     <>
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
+                                                <label className="text-white">Discount rate range</label>
                                                 <input
                                                     type="number"
                                                     name="discountRateRange"
@@ -1385,6 +1409,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
 
                                         <div className="col-span-1 mt-1">
                                             <div style={form2ErrorStyle}>
+                                                <label className="text-white">Yield</label>
                                                 <input
                                                     type="number"
                                                     name="yield"
@@ -1415,6 +1440,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                             className="col-span-2 mt-1"
                                             style={form2ErrorStyle}
                                         >
+                                            <label className="text-white">Coupon frequency</label>
                                             <select
                                                 id="coupon-frequency"
                                                 name="couponFrequency"
@@ -1506,6 +1532,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                                 className="col-span-2 mt-1"
                                                 style={form2ErrorStyle}
                                             >
+                                                <label className="text-white">Call option</label>
                                                 <input
                                                     type="text"
                                                     name="callOption"
@@ -1552,6 +1579,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                     <div className="form-slide slide-3" ref={lastSlideRef}>
                         <div className="grid grid-cols-1 gap-4 mt-5">
                             <div className="col-span-12 mt-1">
+                            <label className="text-white">Use of proceeds</label>
                                 <input
                                     type="text"
                                     name="useOfProceeds"
@@ -1563,6 +1591,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 />
                             </div>
                             <div className="col-span-12 mt-1">
+                                <label className="text-white">Tax consideration</label>
                                 <input
                                     type="text"
                                     name="taxConsideration"
@@ -1575,6 +1604,7 @@ export default function RequestForm({ requestFormState, showSummary }) {
                             </div>
 
                             <div className="col-span-12 mt-1">
+                                <label className="text-white">Eligible investor</label>
                                 <select
                                     name="eligibleInvestors"
                                     id="eligible-investor"
@@ -1654,7 +1684,6 @@ export default function RequestForm({ requestFormState, showSummary }) {
                                 <div className="col-span-2 mt-5">
                                     <Button
                                         title="View offer summary"
-                                        // type="submit"
                                         style={{
                                             visibility: state.lastSlideIn
                                                 ? "visible"
