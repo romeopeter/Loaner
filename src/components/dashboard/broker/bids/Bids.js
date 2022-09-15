@@ -398,7 +398,16 @@ const Bids = () => {
       <DocumentHead title="Bids" />
       <OrderbookLayout PageNav={NavMenu}>
         {/* Sub-navbar */}
-        <SubNavBar />
+        <SubNavBar breadCrumb={[
+          {
+            name: "Dashboard",
+            link: "/Broker/dashboard"
+          },
+          {
+            name: "Offer",
+            link: `/broker/dashboard/loan-offer-published/cp/${id}`
+          }
+        ]} />
 
         <main className="bids">
           <div className="bids-heading">

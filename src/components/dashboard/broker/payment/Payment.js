@@ -1,13 +1,19 @@
 import React, { useMemo, useEffect, useCallback } from "react";
 
 import { useStateReducer } from "../../../../hooks/useStateReducer";
-import { paymentStateInit, paymentStateReducer } from "../state/payment.state";
+import {
+  paymentStateInit,
+  paymentStateReducer,
+} from "../brokerState/payment.state";
 
 import { getapprovedBid } from "../../../../services/bid.service";
-import { getPayments, updatePayment } from "../../../../services/payment.service";
+import {
+  getPayments,
+  updatePayment,
+} from "../../../../services/payment.service";
 
-import { Box} from "@chakra-ui/react";
-import {default as Table } from "./Table";
+import { Box } from "@chakra-ui/react";
+import { default as Table } from "./Table";
 
 import { useParams } from "react-router-dom";
 
@@ -23,7 +29,6 @@ import bidRejected from "../../../../assets/images/bidRejected.png";
 
 const Payment = () => {
   let { id } = useParams();
-  const pageSize = 10;
 
   const [state, dispatch] = useStateReducer(
     paymentStateReducer,
@@ -79,14 +84,14 @@ const Payment = () => {
       e.preventDefault();
 
       if (state.markedBidsActionFilter.value === undefined) {
-        dispatch({type: "MARKED_BIDS_ACTION_FILTER"});
+        dispatch({ type: "MARKED_BIDS_ACTION_FILTER" });
       } else
         dispatch({
-            type: "MARKED_BIDS_ACTION_FILTER_MODIFIED",
-            payload: {
-                modal: true,
-                successState: true
-            }
+          type: "MARKED_BIDS_ACTION_FILTER_MODIFIED",
+          payload: {
+            modal: true,
+            successState: true,
+          },
         });
     },
     [dispatch, state.markedBidsActionFilter.value]
@@ -98,12 +103,12 @@ const Payment = () => {
 
     let value = e.target.value;
     if (value === "Select action") {
-        dispatch({type: "MARKED_BIDS_ACTION_FILTER"})
+      dispatch({ type: "MARKED_BIDS_ACTION_FILTER" });
     } else {
-        dispatch({
-            type: "MARKED_BIDS_ACTION_FILTER_MODIFIED",
-            payload: value
-        });
+      dispatch({
+        type: "MARKED_BIDS_ACTION_FILTER_MODIFIED",
+        payload: value,
+      });
     }
   };
 
@@ -112,23 +117,26 @@ const Payment = () => {
 
     if (checked) {
       if (name === "allSelect") {
-        dispatch({type: "MARKED_BIDS", payload: state.approvedBids});
+        dispatch({ type: "MARKED_BIDS", payload: state.approvedBids });
       } else {
-        dispatch({type: "MARKED_BIDS", payload: [...state.markedBids, data]});
-      } 
+        dispatch({ type: "MARKED_BIDS", payload: [...state.markedBids, data] });
+      }
     }
 
     if (!checked) {
       if (name === "allSelect") {
-        dispatch({type: "MARKED_BIDS", payload: []});
+        dispatch({ type: "MARKED_BIDS", payload: [] });
       } else {
         let temp = state.markedBids.filter((item) => item.id !== data.id);
-        dispatch({type: "MARKED_BIDS", payload: temp});
+        dispatch({ type: "MARKED_BIDS", payload: temp });
       }
     }
   };
 
-  const className = (state.markedBids !== undefined && state.markedBids.length) < 2 ? "disable" : "";
+  const className =
+    (state.markedBids !== undefined && state.markedBids.length) < 2
+      ? "disable"
+      : "";
 
   let disableApproved;
   state.approvedBids.some((bid) => {
@@ -139,8 +147,9 @@ const Payment = () => {
   // Handle status update approved
   const updatedataApproved = useCallback(() => {
     let data = state.notification.dataApproved;
+
     // Update Notification state
-    dispatch({type: "SET_PAYMENT_NOTIFICATION", payload: false});
+    dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: false });
 
     (async function () {
       if (data) {
@@ -154,13 +163,13 @@ const Payment = () => {
             },
           });
 
-            if (res.statusText === "OK") {
-                // Update Notification state
-                dispatch({type: "SET_PAYMENT_NOTIFICATION", payload: false});
-            }
-        } catch (_) {
+          if (res.statusText === "OK") {
             // Update Notification state
-            dispatch({type: "SET_PAYMENT_NOTIFICATION", payload: true});
+            dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: false });
+          }
+        } catch (_) {
+          // Update Notification state
+          dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: true });
         }
       }
     })();
@@ -220,20 +229,38 @@ const Payment = () => {
     return () => (componentIsMounted = false);
   }, [id, handleApply, dispatch]);
 
+  // Pagination logic
+  const pageSize = 10;
   const currentTableData = useMemo(() => {
-    if (state.approvedBids !== undefined) {
+    if (state.approvedBids.length > 0) {
       const firstPageIndex = (state.currentPage - 1) * pageSize;
       const lastPageIndex = firstPageIndex + pageSize;
       return state.approvedBids.slice(firstPageIndex, lastPageIndex);
     }
-  }, [state.currentPage, state.approvedBids, pageSize]);
+  }, [state.currentPage, state.approvedBids]);
 
   return (
     <div>
       <DocumentHead title="Payments" />
       <OrderbookLayout PageNav={NavMenu}>
+        
         {/* Sub-navbar */}
-        <SubNavBar />
+        <SubNavBar
+          breadCrumb={[
+           {
+             name: "Dashboard",
+             link:  `/Broker/dashaboard`
+            },
+            {
+              name: "Offer",
+              link: `/broker/dashboard/loan-offer-published/cp/${id}`
+            },
+            {
+              name: "Bids",
+              link: `/broker/dashboard/bids/${id}`
+            },
+          ]}
+        />
 
         <main className="bids">
           <div className="bids-heading">
@@ -256,10 +283,15 @@ const Payment = () => {
               </button>
             </div>
 
-            <select className="mid-nav--filter rounded" onChange={(e) => dispatch({
-              type: "MARKED_PAYMENT_VIEW_FILTER", 
-              payload: e.target.value
-            })}>
+            <select
+              className="mid-nav--filter rounded"
+              onChange={(e) =>
+                dispatch({
+                  type: "MARKED_PAYMENT_VIEW_FILTER",
+                  payload: e.target.value,
+                })
+              }
+            >
               <option defaultValue={"Select action"}>Filter payment</option>
               <option value="approved">Approved</option>
               <option value="pending">Pending</option>
@@ -278,7 +310,7 @@ const Payment = () => {
                       ></p>
                     );
                   }
-                  
+
                   if (state.dataState.error) {
                     return (
                       <p
@@ -299,7 +331,7 @@ const Payment = () => {
                       </p>
                     );
                   }
-                
+
                   return (
                     <Table
                       state={state}
@@ -311,11 +343,8 @@ const Payment = () => {
                       openModalApprovedFunc={openModalApproved}
                       openModalRejectedFunc={openModalRejected}
                     />
-
                   );
-
                 })()}
-
               </div>
               <Pagination
                 className="pagination-bar"

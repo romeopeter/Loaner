@@ -18,6 +18,7 @@ export default function Prorated({
     openDeleteModal,
   } = tableFuncObj;
 
+  console.log(bidsData);
   const clientAmount = loanOffer !== undefined && Number(loanOffer.tranche_id.size.minimum_subscription.amount);
   const proratedAmount = bidsData !== undefined && (clientAmount/bidsData.length);
 
@@ -83,7 +84,7 @@ export default function Prorated({
                   onChange={(e) => handleCheck(e, data)}
                 />
               </Td>
-              <Td className="border">
+              <Td className="border text-center">
                 <Flex>
                   <Box
                     w="40px"
@@ -99,10 +100,10 @@ export default function Prorated({
                 </Flex>
               </Td>
 
-              <Td className="border">{data["tranche"]}</Td>
-              <Td className="border">{data["duration"]}</Td>
-              <Td className="border">NGR {data["initial amount"]}</Td>
-              <Td className="border">NGR {data["prorated amount"]}</Td>
+              <Td className="border text-center">{data["tranche"]}</Td>
+              <Td className="border text-center">{data["duration"]}</Td>
+              <Td className="border text-center">{data["initial amount"]}</Td>
+              <Td className="border text-center">{data["prorated amount"]}</Td>
 
               {(() => {
                 if (data["status"]) {
@@ -115,7 +116,7 @@ export default function Prorated({
                       ? "cta-status--rejected"
                       : "";
                   return (
-                    <Td className={`border ${approved} ${rejected}`}>
+                    <Td className={`border ${approved} ${rejected} text-center`}>
                       {capitalizeFirstLetter(data["status"])}
                     </Td>
                   );

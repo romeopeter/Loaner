@@ -46,7 +46,12 @@ const LoanOfferPublished = () => {
       <OrderbookLayout PageNav={NavMenu}>
 
         {/* Sub navbar */}
-        <SubNavBar />
+        <SubNavBar breadCrumb={[
+          {
+            name: "Dashboard",
+            link: "Broker/dashboard"
+          }
+        ]} />
 
         {!data ? (
           <p className='loader' style={{ margin: '100px auto' }}></p>

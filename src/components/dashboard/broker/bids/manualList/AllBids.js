@@ -136,7 +136,7 @@ export default function AllBids({
                   />
                 </Flex>
               </Td>
-              <Td className="border">
+              <Td className="border text-center">
                 <Flex>
                   <Box
                     w="40px"
@@ -150,9 +150,9 @@ export default function AllBids({
                 </Flex>
               </Td>
 
-              <Td className="border">{data["tranche"]}</Td>
-              <Td className="border">{data["duration"]}</Td>
-              <Td className="border">NGN {data["amount"]}</Td>
+              <Td className="border text-center">{data["tranche"]}</Td>
+              <Td className="border text-center">{data["duration"]}</Td>
+              <Td className="border text-center">{data["amount"]}</Td>
 
               {(() => {
                 if (data["status"]) {
@@ -161,7 +161,7 @@ export default function AllBids({
                   const rejected =
                     data["status"] === "rejected" ? "cta-status--rejected" : "";
                   return (
-                    <Td className={`border ${approved} ${rejected}`}>
+                    <Td className={`border ${approved} ${rejected} text-center`}>
                       {capitalizeFirstLetter(data["status"])}
                     </Td>
                   );

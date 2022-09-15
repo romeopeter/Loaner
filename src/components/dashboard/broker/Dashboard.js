@@ -1,18 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import axios from 'axios';
-
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signOutAsync } from '../../../redux/authSlice';
-import NavMenu from '../NavMenu';
-import OrderbookLayout from '../../OrderbookLayout';
-import DocumentHead from '../../DocumentHead';
-import newOrder from '../../../assets/images/newOrder.png';
-import newClient from '../../../assets/images/newClient.png';
-import Pagination from './pagination/Pagination';
-import bidRejected from '../../../assets/images/bidRejected.png';
-import SubNavBar from './layouts/SubNavBar';
-
 import {
   Flex,
   Box,
@@ -26,6 +15,18 @@ import {
   Th,
   Td,
 } from '@chakra-ui/react';
+
+import { signOutAsync } from '../../../redux/authSlice';
+
+import OrderbookLayout from '../../OrderbookLayout';
+import DocumentHead from '../../DocumentHead';
+import newOrder from '../../../assets/images/newOrder.png';
+import newClient from '../../../assets/images/newClient.png';
+import Pagination from './pagination/Pagination';
+import bidRejected from '../../../assets/images/bidRejected.png';
+import NavMenu from '../NavMenu';
+import SubNavBar from './layouts/SubNavBar';
+import {humanNumber} from "../../../utils/HRN";
 
 let PageSize = 10;
 const BrokerDashboard = () => {
@@ -210,7 +211,6 @@ const BrokerDashboard = () => {
                       fontSize={['1.9em']}
                     >
                       <Th></Th>
-
                       <Th></Th>
                       <Th>Name</Th>
                       <Th>Tranche Status </Th>
@@ -246,8 +246,8 @@ const BrokerDashboard = () => {
                             {data.tranche_id.timing.offer_end}
                           </Td>
                           <Td>
-                            {data.tranche_id.size.currency}
-                            {data.tranche_id.size.par_value}
+                            {data.tranche_id.size.currency}{" "}
+                            {humanNumber(data.tranche_id.size.par_value)}
                           </Td>
 
                           {data.tranche_id.eligible_investors.length > 0 ? (

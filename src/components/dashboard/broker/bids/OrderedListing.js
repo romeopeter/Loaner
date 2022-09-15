@@ -30,6 +30,7 @@ export default function OrderedListing({ tableStateObj, tableFuncObj }) {
             tranche: data.loan_request.tranche_name,
             duration: `${data.loan_request.duration} days`,
             amount: humanNumber(data.amount),
+            currency: ``,
             status: data.current_status,
         }
     });
@@ -85,7 +86,7 @@ export default function OrderedListing({ tableStateObj, tableFuncObj }) {
                   onChange={(e) => handleCheck(e, data)}
                 />
               </Td>
-              <Td className="border">
+              <Td className="border text-center">
                 <Flex>
                   <Box
                     w="40px"
@@ -99,9 +100,9 @@ export default function OrderedListing({ tableStateObj, tableFuncObj }) {
                 </Flex>
               </Td>
 
-              <Td className="border">{data["tranche"]}</Td>
-              <Td className="border">{data["duration"]}</Td>
-              <Td className="border">NGR {data["amount"]}</Td>
+              <Td className="border text-center">{data["tranche"]}</Td>
+              <Td className="border text-center">{data["duration"]}</Td>
+              <Td className="border text-center">{data["amount"]}</Td>
 
               {(() => {
                 if (data["status"]) {
@@ -110,7 +111,7 @@ export default function OrderedListing({ tableStateObj, tableFuncObj }) {
                   const rejected =
                     data["status"] === "rejected" ? "cta-status--rejected" : "";
                   return (
-                    <Td className={`border ${approved} ${rejected}`}>
+                    <Td className={`border ${approved} ${rejected} text-center`}>
                       {capitalizeFirstLetter(data["status"])}
                     </Td>
                   );
