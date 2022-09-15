@@ -17,8 +17,7 @@ export default function Prorated({
     openModalEdit,
     openDeleteModal,
   } = tableFuncObj;
-
-  console.log(bidsData);
+  
   const clientAmount = loanOffer !== undefined && Number(loanOffer.tranche_id.size.minimum_subscription.amount);
   const proratedAmount = bidsData !== undefined && (clientAmount/bidsData.length);
 
