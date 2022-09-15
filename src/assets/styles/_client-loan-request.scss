@@ -24,10 +24,6 @@
 			overflow: hidden;
 			background-color: rgba(0,0,0,0.4) !important;
 
-			/*#request-loan-form {
-				display: none !important;
-			}*/
-
 			.modal-content {
 				margin: auto;
 				width: 100% !important;
@@ -109,8 +105,8 @@
 
 							.form-field {
 								border: none !important;
-								padding: 20px;
-								height: 100%;
+								padding: 15px;
+								// height: 100%;
 
 								&:focus {
 									border: none !important;
