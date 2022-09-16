@@ -60,17 +60,15 @@ export default function SubNavBar({ breadCrumb }) {
                 </Link>
               );
             }
-            
-            if (breadCrumb !== undefined && breadCrumb.length === 2) {
 
+            if (breadCrumb !== undefined && breadCrumb.length === 2) {
               return breadCrumb.map((crumb, index) => {
                 return index === 0 ? (
-                  <>
-                    <Link key={index} to={crumb.link} className="underline mx-2">
-                      {crumb.name}
-                    </Link>
-                    {" / "}
-                  </>
+                  <Link key={index} to={crumb.link} className="">
+                    <span className="underline">{crumb.name}</span>
+                    {"  "}
+                    <span className="">/</span>
+                  </Link>
                 ) : (
                   <Link key={index} to={crumb.link} className="underline mx-2">
                     {crumb.name}
@@ -78,22 +76,20 @@ export default function SubNavBar({ breadCrumb }) {
                 );
               });
             }
-            
-            if(breadCrumb !== undefined && breadCrumb.length > 2){
+
+            if (breadCrumb !== undefined && breadCrumb.length > 2) {
               return breadCrumb.map((crumb, index) => {
-                return (index + 1) % 2 === 0 ?(
-                  <>
-                  {" / "}
+                return (index + 1) % 2 === 0 ? (
+                  <Link key={index} to={crumb.link} className="">
+                    <span>/</span>{" "}
+                    <span className="underline">{crumb.name}</span>{" "}
+                    <span>/</span>
+                  </Link>
+                ) : (
                   <Link key={index} to={crumb.link} className="underline mx-2">
                     {crumb.name}
                   </Link>
-                  {" / "}
-                  </>
-                ):(
-                  <Link key={index} to={crumb.link} className="underline mx-2">
-                  {crumb.name}
-                  </Link>
-                )
+                );
               });
             }
           })()}
