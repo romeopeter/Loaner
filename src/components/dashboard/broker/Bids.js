@@ -463,7 +463,7 @@ const Bids = () => {
                   disabled={!disableApproved}
                   className='mid-nav--viewPayment'
                 >
-                  View Payment
+                  View Payments
                 </button>
               </Link>
               <Link

@@ -1,5 +1,7 @@
 import React from "react";
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import {capitalizeFirstLetter} from "../../../../utils/general";
+import { humanNumber } from "../../../../utils/HRN";
 
 export default function RenderTable(props) {
   const {
@@ -12,6 +14,8 @@ export default function RenderTable(props) {
     openModalApprovedFunc,
     openModalRejectedFunc,
   } = props;
+
+  console.log(tableData);
 
   return (
     <Table size="sm" colorScheme={"blackAlpha"}>
@@ -82,16 +86,14 @@ export default function RenderTable(props) {
                     </Flex>
                   </Td>
 
-                  <Td>{data.amount}</Td>
+                  <Td>{humanNumber(data.amount)}</Td>
                   <Td>
-                    {data.current_status.charAt(0).toUpperCase() +
-                      data.current_status.slice(1)}
+                    {capitalizeFirstLetter(data.current_status)}
                   </Td>
 
                   {bidPayment.status !== "" ? (
                     <Td color={"#008060"}>
-                      {bidPayment.status.charAt(0).toUpperCase() +
-                        data.current_status.slice(1)}
+                      {capitalizeFirstLetter(data.current_status)}
                     </Td>
                   ) : (
                     <Td color={"#eed202"}>Pending</Td>
@@ -102,10 +104,11 @@ export default function RenderTable(props) {
                       style={{
                         cursor: "pointer",
                         color: "#1C6CA6",
+                        textDecoration: "underline"
                       }}
                       onClick={() => openPaymentModalFunc(data)}
                     >
-                      View Payment
+                      View payment
                     </Td>
                   ) : (
                     <Td>-</Td>
