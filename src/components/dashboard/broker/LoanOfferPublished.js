@@ -49,7 +49,7 @@ const LoanOfferPublished = () => {
         <SubNavBar breadCrumb={[
           {
             name: "Dashboard",
-            link: "Broker/dashboard"
+            link: "/Broker/dashboard"
           }
         ]} />
 
@@ -63,7 +63,7 @@ const LoanOfferPublished = () => {
               </h3>
               <div id='the-offer'>
                 <div className='mb-8'>
-                  <Link to='/broker/dashboard/all-offers/'>
+                  <Link to='/Broker/dashboard'>
                     <img alt='' src={Arrow} className='backArrow' />
                   </Link>
                 </div>
