@@ -50,11 +50,11 @@ const EditModal = ({ closeModal, editModal, data, notification }) => {
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div>
                                         <h2>
-                                            Investor - {data.owner.first_name} {data.owner.last_name}
+                                            Investor - {data.name}
                                         </h2>
                                     </div>
 
-                                    <input placeholder={data.amount} onChange={onAmountChange} type='number' required />
+                                    <input placeholder={data["initial amount"]} onChange={onAmountChange} type='number' required />
                                     <button
                                         style={{
                                             padding: '7px 20px ',
