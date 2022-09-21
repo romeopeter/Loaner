@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useCallback} from "react";
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
 import { humanNumber } from "../../../../utils/HRN";
@@ -19,7 +19,14 @@ export default function Prorated({
   } = tableFuncObj;
   
   const clientAmount = loanOffer !== undefined && Number(loanOffer.tranche_id.size.minimum_subscription.amount);
-  const proratedAmount = bidsData !== undefined && (clientAmount/bidsData.length);
+
+  const proratedAmount = useCallback(() => {
+    if (bidsData !== undefined && bidsData.length > 1) {
+      return clientAmount/bidsData.length
+    };
+
+    return bidsData[0]["amount"]
+  },[bidsData, clientAmount]);
 
   const tableColumn = useMemo(() => ["name", "tranche", "duration", "initial amount", "prorated amount", "status"],[]);
   const tableData = useMemo(() => {
@@ -29,7 +36,7 @@ export default function Prorated({
       tranche: data.loan_request.tranche_name,
       duration: `${data.loan_request.duration} days`,
       "initial amount": humanNumber(data.amount),
-      "prorated amount": humanNumber(proratedAmount ),
+      "prorated amount": humanNumber(proratedAmount()),
       status: data.current_status
     }));
   },[paginationData, proratedAmount])
