@@ -84,7 +84,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                              "deal_type"
                            ].toLowerCase()}`}
                            type="button"
-                           buttonClass="h-2 p-2 bg-white"
+                           buttonClass="p-2 bg-white"
                            style={{ width: "100%" }}
                          />
                        )}
@@ -97,7 +97,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                                     "deal_type"
                                 ].toLowerCase()}`}
                                 type="button"
-                                buttonClass="h-2 p-2 bg-grey"
+                                buttonClass="p-2 bg-grey"
                                 />
                                 <Button
                                 title="Publish"
@@ -105,7 +105,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                                     offer.id
                                 }/${offer["deal_type"].toLowerCase()}`}
                                 type="button"
-                                buttonClass="h-2 p-2 bg-white"
+                                buttonClass="p-2 bg-white"
                                 />
                             </>
                         )}
@@ -133,7 +133,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                             "deal_type"
                           ].toLowerCase()}`}
                           type="button"
-                          buttonClass="h-2 p-2 bg-white"
+                          buttonClass="p-2 bg-white"
                           style={{ width: "100%" }}
                         />
                       </div>
@@ -163,7 +163,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                             "deal_type"
                           ].toLowerCase()}`}
                           type="button"
-                          buttonClass="h-2 p-2 bg-grey"
+                          buttonClass="p-2 bg-grey"
                         />
                         <Button
                           title="Publish"
@@ -171,7 +171,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
                             offer.id
                           }/${offer["deal_type"].toLowerCase()}`}
                           type="button"
-                          buttonClass="h-2 p-2 bg-white"
+                          buttonClass="p-2 bg-white"
                         />
                       </div>
                     </div>
@@ -183,7 +183,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
             })}
           </div>
 
-          {/* <div id="view-more" className="text-right">
+          <div id="view-more" className="text-right">
             <Link to="/client/offers" className="text-white text-lg font-bold">
               View more
             </Link>{" "}
@@ -191,7 +191,7 @@ const OffersComp = memo(({ offers, handleChange, offerStatus }) => {
               className="fa fa-long-arrow-right text-white"
               aria-hidden="true"
             ></i>
-          </div> */}
+          </div>
         </div>
       </>
     );

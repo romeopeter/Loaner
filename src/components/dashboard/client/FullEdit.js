@@ -1,4 +1,4 @@
-import React, { useState, createRef, useRef, useEffect } from 'react';
+import React, { useState, createRef, useRef, useEffect } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
@@ -16,330 +16,335 @@ import { getOfferAction, editOfferAction } from "../../../redux/loanSlice";
 import ShowLoanSummary from "./modal/ShowLoanSummary";
 
 export default function FullEdit() {
-    const pageName = "Full offer edit";
+  const pageName = "Full offer edit";
 
-    const { user } = JSON.parse(localStorage.getItem("USER"));
-    const userFullName = `${user.first_name} ${user.last_name}`;
+  const { user } = JSON.parse(localStorage.getItem("USER"));
+  const userFullName = `${user.first_name} ${user.last_name}`;
 
-    const alert = useAlert();
-    const params = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const requestContainerRef = createRef();
-    const componentMounted = useRef(true);
+  const alert = useAlert();
+  const params = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const requestContainerRef = createRef();
+  const componentMounted = useRef(true);
 
-    const serverError = useSelector((state) => state.message.server.message);
+  const serverError = useSelector((state) => state.message.server.message);
 
-    const [summaryState, setSummaryState] = useState(false);
-  
-    const [showModal, setShowModal] = useState(false);
-  
-    const [isLoading, setIsLoading] = useState(false);
+  const [summaryState, setSummaryState] = useState(false);
 
-    const [isOpen, setOpen] = useState({ client: false, investor: false });
-  
-    const [formState, setFormState] = useState({
-      dealType: "",
-      // issuer: "",
-      guarantor: "",
-      dealName: "",
-      projectName: "",
-      dealOwner: "",
-      dealTeam: "",
-      status: "",
-      trancheName: "",
-      trancheSize: {
-        currency: "NGN",
-        value: "",
-        faceValue: "",
-        discountValue: "",
-        parValue: 1000,
-        minSubscription: "",
-      },
-      pricing: {
-        dayCount: "",
-        couponType: "",
-        benchmark: "",
-        couponFrequency: "",
-        callOption: "",
-        offerType: {
-          name: "",
-          fixedPrice: {
-            rate: "", // Can be discount rate or rate range
-            yield: "", // Can be implied yield or yield type
-          },
+  const [showModal, setShowModal] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isOpen, setOpen] = useState({ client: false, investor: false });
+
+  const [formState, setFormState] = useState({
+    dealType: "",
+    // issuer: "",
+    guarantor: "",
+    dealName: "",
+    projectName: "",
+    dealOwner: "",
+    dealTeam: "",
+    status: "",
+    trancheName: "",
+    trancheSize: {
+      currency: "NGN",
+      value: "",
+      faceValue: "",
+      discountValue: "",
+      parValue: 1000,
+      minSubscription: "",
+    },
+    pricing: {
+      dayCount: "",
+      couponType: "",
+      benchmark: "",
+      couponFrequency: "",
+      callOption: "",
+      offerType: {
+        name: "",
+        fixedPrice: {
+          rate: "", // Can be discount rate or rate range
+          yield: "", // Can be implied yield or yield type
         },
       },
-      timing: {
-        offerStart: "",
-        offerEnd: "",
-        allotmentDate: "",
-        settlementDate: "",
-        maturityDate: "",
-      },
-      useOfProceeds: "",
-      taxConsideration: "",
-      eligibleInvestors: "",
-      rating: {
-        name: "",
-        scale: "",
-      },
-    });
+    },
+    timing: {
+      offerStart: "",
+      offerEnd: "",
+      allotmentDate: "",
+      settlementDate: "",
+      maturityDate: "",
+    },
+    useOfProceeds: "",
+    taxConsideration: "",
+    eligibleInvestors: "",
+    rating: {
+      name: "",
+      scale: "",
+    },
+  });
 
-    const handleModal = () => {
-        setShowModal(true);
-    };
+  const handleModal = () => {
+    setShowModal(true);
+  };
 
-    const handleSubmit = async () => {
-        const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
-    
-        for (let prop in formState) {
-          if (formState[prop] === "") {
-            alert.error("Empty field");
-            return;
-          }
-        }
-    
-        if (formState.dealType === "CP") {
-          const requestData = {
-            dealType: params.dealType.toLocaleLowerCase(),
-            id: params.id,
-            requestData: cp(formState, currentUser),
-          };
-    
-          const req = await dispatch(editOfferAction(requestData));
-    
-          if (componentMounted.current) setIsLoading(true);
-    
-          if (req.meta.requestStatus === "fulfilled") {
+  const handleSubmit = async () => {
+    const { user: currentUser } = JSON.parse(localStorage.getItem("USER"));
 
+    for (let prop in formState) {
+      if (formState[prop] === "") {
+        alert.error("Empty field");
+        return;
+      }
+    }
+
+    if (formState.dealType === "CP") {
+      const requestData = {
+        dealType: params.dealType.toLocaleLowerCase(),
+        id: params.id,
+        requestData: cp(formState, currentUser),
+      };
+
+      const req = await dispatch(editOfferAction(requestData));
+
+      if (componentMounted.current) setIsLoading(true);
+
+      if (req.meta.requestStatus === "fulfilled") {
+        const payload = req.payload;
+
+        // Loan is updated, Navigate to publish page
+        console.log("CP loan offer update successfully");
+
+        // if (componentMounted.current) setIsLoading(false);
+
+        navigate(
+          `/client/offers/offer/publish/${payload["id"]}/${payload[
+            "deal_type"
+          ].toLowerCase()}`
+        );
+      } else {
+        if (componentMounted.current) setIsLoading(false);
+
+        if (serverError) alert(serverError.detail);
+
+        return;
+      }
+
+      if (serverError.messageType === "network_error") {
+        if (componentMounted.current) setIsLoading(false);
+
+        alert(serverError.detail);
+
+        return;
+      }
+    }
+
+    if (formState.dealType === "BOND") {
+      const requestData = {
+        dealType: params.dealType,
+        id: params.id,
+        requestData: bond(formState, currentUser),
+      };
+
+      const req = await editOfferAction(requestData);
+
+      if (componentMounted.current) setIsLoading(true);
+
+      if (req.meta.requestStatus === "fulfilled") {
+        const payload = req.payload();
+
+        // Loan is updated, Navigate to publish page
+        console.log("Bond loan offer update successfully");
+
+        // if (componentMounted.current) setIsLoading(false);
+
+        navigate(
+          `/client/offers/offer/publish/${payload["id"]}/${payload[
+            "deal_type"
+          ].toLowerCase()}`
+        );
+      } else {
+        if (componentMounted.current) setIsLoading(false);
+
+        if (serverError) alert(serverError.detail);
+
+        return;
+      }
+
+      if (serverError.messageType === "network_error") {
+        if (componentMounted.current) setIsLoading(false);
+
+        alert(serverError.detail);
+
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    // Scroll window to the top
+    window.scrollTo(0, 0);
+
+    (async function populateOfferFields() {
+      const req = await dispatch(
+        getOfferAction({
+          id: params.id,
+          dealType: params.dealType.toLowerCase(),
+        })
+      );
+
+      if (req.meta.requestStatus === "fulfilled") {
+        // Store in component form state
+        setFormState((state) => {
+          if (req.payload !== undefined && typeof req.payload === "object") {
             const payload = req.payload;
+            const trancheObj = payload["tranche_id"];
 
-            // Loan is updated, Navigate to publish page
-            console.log("CP loan offer update successfully");
+            //  Determine offer rating based on deal type
+            let fixedPrice = {
+              ...state.pricing.offerType.fixedPrice,
+              rate: "",
+              yield: "",
+            };
+            if (trancheObj["pricing"]["offer_type"]["name"] === "fixed price") {
+              fixedPrice = {
+                ...state.pricing.offerType.fixedPrice,
+                rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
+                yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
+              };
+            }
+            if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
+              fixedPrice = {
+                ...state.pricing.offerType.fixedPrice,
+                rate: trancheObj["pricing"]["offer_type"][
+                  "discount_rate_range"
+                ],
+                yield: trancheObj["pricing"]["offer_type"]["type_yield"],
+              };
+            }
 
-            // if (componentMounted.current) setIsLoading(false);
-
-            navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
+            return {
+              ...state,
+              dealType: payload["deal_type"],
+              dealName: payload["deal_name"],
+              projectName: payload["project_name"],
+              dealOwner: payload["deal_owner"],
+              dealTeam: payload["deal_team"],
+              guarantor: payload["guarantor"],
+              status: trancheObj["status"],
+              trancheName: trancheObj["name"],
+              trancheSize: {
+                ...state.trancheSize,
+                currency: trancheObj["size"]["currency"],
+                value: trancheObj["size"]["value"]["value"],
+                faceValue: trancheObj["size"]["value"]["face_value"],
+                discountValue: trancheObj["size"]["value"]["discount_value"],
+                parValue: 1000,
+                minSubscription: Math.round(
+                  trancheObj["size"]["minimum_subscription"]["amount"]
+                ),
+              },
+              pricing: {
+                ...state.pricing,
+                dayCount: trancheObj["pricing"]["day_count"],
+                couponType: trancheObj["pricing"]["coupon_type"],
+                benchmark: trancheObj["pricing"]["benchmark"],
+                couponFrequency: trancheObj["pricing"]["coupon_frequency"],
+                callOption: trancheObj["pricing"]["call_option"],
+                offerType: {
+                  ...state.pricing.offerType,
+                  name: trancheObj["pricing"]["offer_type"]["name"],
+                  fixedPrice: fixedPrice,
+                },
+              },
+              timing: {
+                ...state.timing,
+                offerStart: trancheObj["timing"]["offer_start"],
+                offerEnd: trancheObj["timing"]["offer_end"],
+                allotmentDate: trancheObj["timing"]["allotment_date"],
+                settlementDate: trancheObj["timing"]["settlement_date"],
+                maturityDate: trancheObj["timing"]["maturity_date"],
+              },
+              useOfProceeds: trancheObj["use_of_proceeds"],
+              taxConsideration: trancheObj["tax_consideration"],
+              eligibleInvestors: trancheObj["eligible_investor"],
+              rating: {
+                ...state.rating,
+                name: trancheObj["ratings"]["name"],
+                scale: trancheObj["ratings"]["scale"],
+              },
+            };
           } else {
-            if (componentMounted.current) setIsLoading(false);
-    
-            if (serverError) alert(serverError.detail);
-    
-            return;
+            console.log("Network problem");
           }
-    
-          if (serverError.messageType === "network_error") {
-            if (componentMounted.current) setIsLoading(false);
-    
-            alert(serverError.detail);
-    
-            return;
-          }
-        }
-    
-        if (formState.dealType === "BOND") {
-          const requestData = {
-            dealType: params.dealType,
-            id: params.id,
-            requestData: bond(formState, currentUser),
-          };
-    
-          const req = await (editOfferAction(requestData));
-    
-          if (componentMounted.current) setIsLoading(true);
-    
-          if (req.meta.requestStatus === "fulfilled") {
-            const payload = req.payload();
+        });
+      }
+    })();
+  }, [dispatch, params.id, params.dealType]);
 
-            // Loan is updated, Navigate to publish page
-            console.log("Bond loan offer update successfully");
-            
-            // if (componentMounted.current) setIsLoading(false);
+  const CalculateLoanTenure = (startDate, EndDate) => {
+    let tenure = "";
 
-            navigate(`/client/offers/offer/publish/${payload["id"]}/${payload["deal_type"].toLowerCase()}`);
-          } else {
-            if (componentMounted.current) setIsLoading(false);
-    
-            if (serverError) alert(serverError.detail);
-    
-            return;
-          }
-    
-          if (serverError.messageType === "network_error") {
-            if (componentMounted.current) setIsLoading(false);
-    
-            alert(serverError.detail);
-    
-            return;
-          }
-        }
-    };
+    const currentDate = new Date();
+    const loanStartDate = new Date(startDate);
+    const loanEndDate = new Date(EndDate);
 
-    useEffect(() => {
-
-        // Scroll window to the top
-        window.scrollTo(0, 0);
-
-        (async function populateOfferFields() {
-          const req = await dispatch(
-            getOfferAction({
-              id: params.id,
-              dealType: params.dealType.toLowerCase(),
-            })
-          );
-    
-          if (req.meta.requestStatus === "fulfilled") {
-
-            // Store in component form state
-            setFormState((state) => {
-              if (req.payload !== undefined && typeof req.payload === "object") {
-                const payload = req.payload;
-                const trancheObj = payload["tranche_id"];
-    
-                //  Determine offer rating based on deal type
-                let fixedPrice = {
-                  ...state.pricing.offerType.fixedPrice,
-                  rate: "",
-                  yield: ""
-                };
-                if (trancheObj["pricing"]["offer_type"]["name"] === "fixed price") {
-                  fixedPrice = {
-                    ...state.pricing.offerType.fixedPrice,
-                    rate: trancheObj["pricing"]["offer_type"]["discount_rate"],
-                    yield: trancheObj["pricing"]["offer_type"]["implied_yield"],
-                  };
-                }
-                if (trancheObj["pricing"]["offer_type"]["name"] === "book build") {
-                  fixedPrice = {
-                    ...state.pricing.offerType.fixedPrice,
-                    rate: trancheObj["pricing"]["offer_type"][
-                      "discount_rate_range"
-                    ],
-                    yield: trancheObj["pricing"]["offer_type"]["type_yield"],
-                  };
-                }
-    
-                return {
-                  ...state,
-                  dealType: payload["deal_type"],
-                  dealName: payload["deal_name"],
-                  projectName: payload["project_name"],
-                  dealOwner: payload["deal_owner"],
-                  dealTeam: payload["deal_team"],
-                  guarantor: payload["guarantor"],
-                  status: trancheObj["status"],
-                  trancheName: trancheObj["name"],
-                  trancheSize: {
-                    ...state.trancheSize,
-                    currency: trancheObj["size"]["currency"],
-                    value: trancheObj["size"]["value"]["value"],
-                    faceValue: trancheObj["size"]["value"]["face_value"],
-                    discountValue: trancheObj["size"]["value"]["discount_value"],
-                    parValue: 1000,
-                    minSubscription: Math.round(
-                      trancheObj["size"]["minimum_subscription"]["amount"]
-                    ),
-                  },
-                  pricing: {
-                    ...state.pricing,
-                    dayCount: trancheObj["pricing"]["day_count"],
-                    couponType: trancheObj["pricing"]["coupon_type"],
-                    benchmark: trancheObj["pricing"]["benchmark"],
-                    couponFrequency: trancheObj["pricing"]["coupon_frequency"],
-                    callOption: trancheObj["pricing"]["call_option"],
-                    offerType: {
-                      ...state.pricing.offerType,
-                      name: trancheObj["pricing"]["offer_type"]["name"],
-                      fixedPrice: fixedPrice
-                    },
-                  },
-                  timing: {
-                    ...state.timing,
-                    offerStart: trancheObj["timing"]["offer_start"],
-                    offerEnd: trancheObj["timing"]["offer_end"],
-                    allotmentDate: trancheObj["timing"]["allotment_date"],
-                    settlementDate: trancheObj["timing"]["settlement_date"],
-                    maturityDate: trancheObj["timing"]["maturity_date"],
-                  },
-                  useOfProceeds: trancheObj["use_of_proceeds"],
-                  taxConsideration: trancheObj["tax_consideration"],
-                  eligibleInvestors: trancheObj["eligible_investor"],
-                  rating: {
-                    ...state.rating,
-                    name: trancheObj["ratings"]["name"],
-                    scale: trancheObj["ratings"]["scale"],
-                  },
-                };
-              } else {
-                console.log("Network problem");
-              }
-            });
-          }
-        })();
-    }, [dispatch, params.id, params.dealType]);
-    
-    const CalculateLoanTenure = (startDate, EndDate) => {
-        let tenure = "";
-    
-        const currentDate = new Date();
-        const loanStartDate = new Date(startDate);
-        const loanEndDate = new Date(EndDate);
-    
-        // Start Date cant be before the current year
-        /*if (loanStartDate.getTime() === currentDate.getFullYear()) {
+    // Start Date cant be before the current year
+    /*if (loanStartDate.getTime() === currentDate.getFullYear()) {
                 alert.error("Loan start year must be the current year");
     
                 return
             }*/
-    
-        /*
+
+    /*
              Get loan tenure. Time difference is calculated and divided by 
              number of miliseconds in a day to get day difference which
              becomes the tenure
             */
-        const timeDifference = loanEndDate.getTime() - loanStartDate.getTime();
-        const daysDiffernce = timeDifference / (1000 * 60 * 60 * 24);
-        tenure = daysDiffernce;
-    
-        /*
+    const timeDifference = loanEndDate.getTime() - loanStartDate.getTime();
+    const daysDiffernce = timeDifference / (1000 * 60 * 60 * 24);
+    tenure = daysDiffernce;
+
+    /*
              End date can't be the same as start date.
              If the the difference is days is 0 then loan end date is set to
              the same time as loan start date
              */
-        if (tenure === 0 || tenure < 0) {
-          alert.error("End date can not be the same as or less than start date!");
-    
-          return "***";
-        }
-    
-        return isNaN(tenure) === false && tenure;
-    };
+    if (tenure === 0 || tenure < 0) {
+      alert.error("End date can not be the same as or less than start date!");
 
-    /* Dropdown starts */
-    const toggleDropdownClient = () => {
-        if (isOpen.client) {
-          setOpen({ ...isOpen, client: false });
-          return;
-        }
-  
-        setOpen({ investor: false, client: true });
-      };
-  
-      const toggleDropdownInvestor = () => {
-        if (isOpen.investor) {
-          setOpen({ ...isOpen, investor: false });
-          return;
-        }
-  
-        setOpen({ client: false, investor: true });
-      };
-    /* Dropdown starts */
+      return "***";
+    }
+
+    return isNaN(tenure) === false && tenure;
+  };
+
+  /* Dropdown starts */
+  const toggleDropdownClient = () => {
+    if (isOpen.client) {
+      setOpen({ ...isOpen, client: false });
+      return;
+    }
+
+    setOpen({ investor: false, client: true });
+  };
+
+  const toggleDropdownInvestor = () => {
+    if (isOpen.investor) {
+      setOpen({ ...isOpen, investor: false });
+      return;
+    }
+
+    setOpen({ client: false, investor: true });
+  };
+  /* Dropdown starts */
 
   return (
     <>
-        <DocumentHead title={pageName} />
-        <OrderbookLayout PageNav={NavMenu}>
+      <DocumentHead title={pageName} />
+      <OrderbookLayout PageNav={NavMenu}>
         <section id="orderbook-loan-request">
           <div className=" bg-white px-16 py-10 shadow-md flex justify-start">
             <div className="dropdownbroker">
@@ -566,5 +571,5 @@ export default function FullEdit() {
         </section>
       </OrderbookLayout>
     </>
-  )
+  );
 }
