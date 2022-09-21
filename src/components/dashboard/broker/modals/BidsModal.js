@@ -52,8 +52,7 @@ const BidsModal = ({ closeModal, state, notification, updatedataApproved, update
 
                         {state.successState ? (
                             <p>
-                                You have approved {notification.dataApproved.owner.first_name}{' '}
-                                {notification.dataApproved.owner.last_name}'s bid offer.
+                                You have approved {notification.dataApproved.name}'s bid offer.
                             </p>
                         ) : (
                             <p>
