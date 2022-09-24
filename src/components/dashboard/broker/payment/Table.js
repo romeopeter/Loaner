@@ -1,6 +1,6 @@
 import React from "react";
 import { Flex, Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
-import {capitalizeFirstLetter} from "../../../../utils/general";
+import { capitalizeFirstLetter } from "../../../../utils/general";
 import { humanNumber } from "../../../../utils/HRN";
 
 export default function RenderTable(props) {
@@ -41,15 +41,23 @@ export default function RenderTable(props) {
 
       <Tbody>
         {/* CurrentTableData */}
-        {tableData.map((data, index) => {
-          // console.log(data);
 
+        {tableData.length === 0 && (
+          <Tr>
+            <Td colSpan={7} className="text-center py-5 text-xl">
+              You have no payment
+            </Td>
+          </Tr>
+        )}
+
+        {tableData.map((data, index) => {
           const bidPayment = data.payment;
 
           if (
             data["current_status"] === filterAction ||
             filterAction === "Filter payment"
           ) {
+
             if (bidPayment !== null) {
               return (
                 <Tr key={index}>
@@ -85,9 +93,7 @@ export default function RenderTable(props) {
                   </Td>
 
                   <Td>{humanNumber(data.amount)}</Td>
-                  <Td>
-                    {capitalizeFirstLetter(data.current_status)}
-                  </Td>
+                  <Td>{capitalizeFirstLetter(data.current_status)}</Td>
 
                   {bidPayment.status !== "" ? (
                     <Td color={"#008060"}>
@@ -102,7 +108,7 @@ export default function RenderTable(props) {
                       style={{
                         cursor: "pointer",
                         color: "#1C6CA6",
-                        textDecoration: "underline"
+                        textDecoration: "underline",
                       }}
                       onClick={() => openPaymentModalFunc(data)}
                     >
@@ -154,6 +160,15 @@ export default function RenderTable(props) {
                 </Tr>
               );
             } else {
+              return (
+                <Tr key={index}>
+                  {index === 0 && (
+                    <Td colSpan={7} className="text-center py-5 text-xl">
+                      No payment has been placed.
+                    </Td>
+                  )}
+                </Tr>
+              );
             }
           } else {
             return (
