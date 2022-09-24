@@ -15,8 +15,6 @@ export default function RenderTable(props) {
     openModalRejectedFunc,
   } = props;
 
-  console.log(tableData);
-
   return (
     <Table size="sm" colorScheme={"blackAlpha"}>
       <Thead bg="#F0F0F0" h="80px">
