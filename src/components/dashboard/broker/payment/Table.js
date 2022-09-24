@@ -42,14 +42,6 @@ export default function RenderTable(props) {
       <Tbody>
         {/* CurrentTableData */}
 
-        {tableData.length === 0 && (
-          <Tr>
-            <Td colSpan={7} className="text-center py-5 text-xl">
-              You have no payment
-            </Td>
-          </Tr>
-        )}
-
         {tableData.map((data, index) => {
           const bidPayment = data.payment;
 
@@ -182,7 +174,6 @@ export default function RenderTable(props) {
             );
           }
 
-          return null;
         })}
       </Tbody>
     </Table>
