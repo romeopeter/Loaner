@@ -11,12 +11,6 @@ export default function SubNavBar({ breadCrumb }) {
       : setOpen({ investor: false, client: true });
   };
 
-  const toggleDropdownInvestor = () => {
-    isOpen.investor
-      ? setOpen({ ...isOpen, investor: false })
-      : setOpen({ client: false, investor: true });
-  };
-
   return (
     <>
       <div
