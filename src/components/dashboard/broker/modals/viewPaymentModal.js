@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PaymentModal2 = ({
+const ViewPaymentModal = ({
     closePaymentModal,
     notification,
     openModalApproved,
@@ -50,4 +50,4 @@ const PaymentModal2 = ({
     );
 };
 
-export default PaymentModal2;
+ export default ViewPaymentModal;

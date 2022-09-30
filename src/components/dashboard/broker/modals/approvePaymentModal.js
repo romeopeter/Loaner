@@ -4,7 +4,7 @@ import React from 'react';
 import bidApproved from '../../../../assets/images/bidApproved.png';
 import bidRejected from '../../../../assets/images/bidRejected.png';
 
-const Modal = ({ closeModal, state, notification, updatedataApproved, updatedataRejected }) => {
+const ApprovedPaymentModal = ({ closeModal, state, notification, updatedataApproved, updatedataRejected }) => {
     const className = state.modal ? 'open' : '';
     const classSuccessState = state.successState ? 'h1Approved' : 'h1Rejected';
 
@@ -67,4 +67,4 @@ const Modal = ({ closeModal, state, notification, updatedataApproved, updatedata
     );
 };
 
-export default Modal;
+export default ApprovedPaymentModal;
