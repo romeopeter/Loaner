@@ -15,6 +15,14 @@ export default function RenderTable(props) {
     openModalRejectedFunc,
   } = props;
 
+  if (tableData.length === 0) {
+    return (
+      <div className="h-40 w-full">
+        <p className="font-medium py-10 text-center">No payment has been made yet.</p>
+      </div>
+    );
+  }
+
   return (
     <Table size="sm" colorScheme={"blackAlpha"}>
       <Thead bg="#F0F0F0" h="80px">
@@ -35,137 +43,136 @@ export default function RenderTable(props) {
           <Th>Bid Status</Th>
           <Th>Payment Status</Th>
           <Th>Payment Proof</Th>
-          <Th></Th>
+          <Th>Actions</Th>
         </Tr>
       </Thead>
 
       <Tbody>
         {/* CurrentTableData */}
 
-        {tableData.map((data, index) => {
-          const bidPayment = data.payment;
+        {tableData.map((data, idx) => {
+          const payment = data.payment;
 
           if (
-            data["current_status"] === filterAction ||
+            payment.status === filterAction ||
             filterAction === "Filter payment"
           ) {
-
-            if (bidPayment !== null) {
-              return (
-                <Tr key={index}>
-                  <Td></Td>
-                  <Td>
-                    {" "}
-                    <input
-                      name={data.id}
-                      type="checkbox"
-                      className="broker-checkbox"
-                      disabled={data.payment_status === "approved"}
-                      // checked when checkedBid contains checked object
-                      checked={
-                        data.payment_status !== "approved" &&
-                        state.markedBids.some((item) => item?.id === data.id)
-                      }
-                      onChange={(e) => handleCheckFunc(e, data)}
-                    />
-                  </Td>
-                  <Td>
-                    <Flex>
-                      <Box
-                        w="40px"
-                        h="40px"
-                        borderRadius={"50%"}
-                        bg={"#555555"}
-                        mr={[4]}
-                      ></Box>
-                      <Flex alignSelf={"center"}>
-                        {data.owner.first_name} {data.owner.last_name}
-                      </Flex>
+            return (
+              <Tr key={idx}>
+                <Td></Td>
+                <Td>
+                  {" "}
+                  <input
+                    name={payment.id}
+                    type="checkbox"
+                    className="broker-checkbox"
+                    disabled={payment.status === "approved"}
+                    // checked when checkedBid contains checked object
+                    checked={
+                      payment.status !== "approved" &&
+                      state.markedBids.some((item) => item?.id === payment.id)
+                    }
+                    onChange={(e) => handleCheckFunc(e, payment)}
+                  />
+                </Td>
+                <Td>
+                  <Flex>
+                    <Box
+                      w="40px"
+                      h="40px"
+                      borderRadius={"50%"}
+                      bg={"#555555"}
+                      mr={[4]}
+                    ></Box>
+                    <Flex alignSelf={"center"}>
+                    {data.owner.first_name} {data.owner.last_name}
                     </Flex>
+                  </Flex>
+                </Td>
+
+                <Td>{humanNumber(payment.amount)}</Td>
+                
+                {/* Bid status */}
+                {data["current_status"] !== "" ? (
+                  <Td color={"#008060"}>
+                    {capitalizeFirstLetter(data["current_status"])}
                   </Td>
+                ) : (
+                  <Td color={"#eed202"}>Pending</Td>
+                )}
 
-                  <Td>{humanNumber(data.amount)}</Td>
-                  <Td>{capitalizeFirstLetter(data.current_status)}</Td>
+                {/* Payment status */}
+                {payment.status !== "" ? (
+                  <Td color={"#008060"}>
+                    {capitalizeFirstLetter(payment.status)}
+                  </Td>
+                ) : (
+                  <Td color={"#eed202"}>Pending</Td>
+                )}
 
-                  {bidPayment.status !== "" ? (
-                    <Td color={"#008060"}>
-                      {capitalizeFirstLetter(data.current_status)}
-                    </Td>
-                  ) : (
-                    <Td color={"#eed202"}>Pending</Td>
-                  )}
+                {/* Proof of payment */}
+                {payment["proof_of_payment"]? (
+                  <Td
+                    style={{
+                      cursor: "pointer",
+                      color: "#1C6CA6",
+                      textDecoration: "underline",
+                    }}
+                    onClick={() => openPaymentModalFunc(data)}
+                  >
+                    View payment
+                  </Td>
+                ) : (
+                  <Td>-</Td>
+                )}
 
-                  {bidPayment["proof_of_payment"].length > 0 ? (
-                    <Td
-                      style={{
-                        cursor: "pointer",
-                        color: "#1C6CA6",
-                        textDecoration: "underline",
-                      }}
-                      onClick={() => openPaymentModalFunc(data)}
+                {payment.status === "approved" ? (
+                  <Td className="payment-cta">
+                    <button
+                      disabled={true}
+                      className="payment-cta--approve rounded"
+                      title="You can't approve an already approved payment"
+                      onClick={() => openModalApprovedFunc(data)}
                     >
-                      View payment
-                    </Td>
-                  ) : (
-                    <Td>-</Td>
-                  )}
+                      Approve payment
+                    </button>
 
-                  {bidPayment.status === "approved" ? (
-                    <Td className="payment-cta">
-                      <button
-                        disabled={true}
-                        className="payment-cta--approve rounded"
-                        title="Bid already approved"
-                      >
-                        Approve Payment
-                      </button>
+                    <button
+                      disabled={true}
+                      className="payment-cta--reject rounded"
+                      title="You can't reject an approved payment"
+                      onClick={() => {
+                        openModalRejectedFunc(data);
+                      }}
+                    >
+                      Reject payment
+                    </button>
+                  </Td>
+                ) : (
+                  <Td className="payment-cta">
+                    <button
+                      className="payment-cta--approve rounded"
+                      onClick={() => openModalApprovedFunc(data)}
+                    >
+                      Approve payment
+                    </button>
 
-                      <button
-                        disabled={true}
-                        className="payment-cta--reject rounded"
-                        title="Bid already approved"
-                      >
-                        Reject Payment
-                      </button>
-                    </Td>
-                  ) : (
-                    <Td className="payment-cta">
-                      <button
-                        disabled={true}
-                        className="payment-cta--approve rounded"
-                        onClick={() => openModalApprovedFunc(data)}
-                      >
-                        Approve Payment
-                      </button>
-
-                      <button
-                        disabled={true}
-                        className="payment-cta--reject rounded"
-                        onClick={() => {
-                          openModalRejectedFunc(data);
-                        }}
-                      >
-                        Reject Payment
-                      </button>
-                    </Td>
-                  )}
-                </Tr>
-              );
-            } else {
-              return (
-                <Tr key={index}>
-                  {index === 0 && (
-                    <Td colSpan={7} className="text-center py-5 text-xl">
-                      No payment has been placed.
-                    </Td>
-                  )}
-                </Tr>
-              );
-            }
+                    <button
+                      className="payment-cta--reject rounded"
+                      onClick={() => {
+                        openModalRejectedFunc(data);
+                      }}
+                    >
+                      Reject payment
+                    </button>
+                  </Td>
+                )}
+              </Tr>
+            );
           } else {
             return (
-              <Tr key={index}>
-                {index === 0 && (
+              <Tr key={idx}>
+                {idx === 0 && (
                   <Td colSpan={7} className="text-center py-5 text-xl">
                     You have no {filterAction} payment
                   </Td>
@@ -173,7 +180,6 @@ export default function RenderTable(props) {
               </Tr>
             );
           }
-
         })}
       </Tbody>
     </Table>
