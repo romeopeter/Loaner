@@ -8,6 +8,7 @@ const paymentStateInit = {
         error: undefined
     },
     bidPayment: [], // paymentData
+    bidsPayment: [],
     approvedBids: [],
     currentPage: 1, // Pagination
     modal: {
@@ -19,7 +20,9 @@ const paymentStateInit = {
     notification: {
         isLoading: undefined,
         dataApproved: undefined,
-        dataRejected: undefined
+        dataRejected: undefined,
+        requestSuccess: false,
+        error: false,
     },
     markedBids: [], // checkedBids
     markedBidsActionFilter: { // selecfilter
@@ -37,40 +40,58 @@ function paymentStateReducer(state, action) {
                ...state,
                bidPayment: action.payload 
             }
-            break;
+        case "BIDS_PAYMENT":
+            return {
+                ...state,
+                bidsPayment: action.payload
+            }
         case "APPROVED_BIDS":
             return {
                 ...state,
                 approvedBids: action.payload
             }
-            break;
         case "DATA_STATE":
             return {
                 ...state,
                 dataState: action.payload
             }
-            break;
         case "CURRENT_PAGE":
             return {
                 ...state,
                 currentPage: action.payload
             }
-            break;
         case "SET_PAYMENT_NOTIFICATION":
             return {
                 ...state,
                 notification: {
                     ...state.notification,
-                    isLoading: action.payload
+                    isLoading: action.payload,
+                    error: false
                 }
             }
-            break;
+        case "SET_PAYMENT_REQUEST_SUCCESS":
+            return {
+                ...state,
+                notification: {
+                    ...state.notification,
+                    requestSuccess: true
+                }
+            }
+        case "SET_PAYMENT_NOTIFICATION_ERROR":
+            return {
+                ...state,
+                notification: {
+                    ...state.notification,
+                    error: action.payload,
+                    isLoading: false,
+                    requestSuccess: false
+                }
+            }
         case "MARKED_BIDS":
             return {
                 ...state,
                 markedBids: action.payload
             }
-            break;
         case "MARKED_BIDS_ACTION_FILTER":
             return {
                 ...state,
@@ -78,7 +99,6 @@ function paymentStateReducer(state, action) {
                     ...state.markedBidsActionFilter,
                 }
             }
-            break;
         case "MARKED_BIDS_ACTION_FILTER_MODIFIED":
             return {
                 ...state,
@@ -89,13 +109,11 @@ function paymentStateReducer(state, action) {
                     value: action.payload.value ? action.payload.value : undefined
                 }
             }
-            break;
         case "MARKED_PAYMENT_VIEW_FILTER":
             return {
                 ...state,
                 markedPaymentsViewFilter: action.payload,
             }
-            break;
         case "OPEN_PAYMENT_MODAL":
             return {
                 ...state,
@@ -105,7 +123,6 @@ function paymentStateReducer(state, action) {
                     data: action.payload
                 }
             }
-            break;
         case "CLOSE_PAYMENT_MODAL":
             return {
                 ...state,
@@ -114,7 +131,6 @@ function paymentStateReducer(state, action) {
                     paymentModal: false
                 }
             }
-            break;
         case "OPEN_APPROVED_MODAL":
             return {
                 ...state,
@@ -125,7 +141,6 @@ function paymentStateReducer(state, action) {
                     paymentModal: false,
                 }
             }
-            break;
         case "OPEN_NOTIFICATION_APPROVED_MODAL":
             return {
                 ...state,
@@ -134,7 +149,6 @@ function paymentStateReducer(state, action) {
                     dataApproved: action.payload
                 }
             }
-            break;
         case "OPEN_REJECTED_MODAL":
             return {
                 ...state,
@@ -145,7 +159,6 @@ function paymentStateReducer(state, action) {
                     paymentModal: false,
                 }
             }
-            break;
         case "OPEN_NOTIFICATION_REJECTED_MODAL":
             return {
                 ...state,
@@ -154,7 +167,6 @@ function paymentStateReducer(state, action) {
                     dataRejected: action.payload
                 }
             }
-            break;
         case "CLOSE_MODAL":
             return {
                 ...state,
@@ -163,7 +175,6 @@ function paymentStateReducer(state, action) {
                     modal: false,
                 }
             }
-            break;
         case "CLOSE_NOTIFICATION_MODAL":
             return {
                 ...state,
@@ -172,7 +183,6 @@ function paymentStateReducer(state, action) {
                     isLoading: undefined,
                 }
             }
-            break;
         default:
             throw new Error();
     }
