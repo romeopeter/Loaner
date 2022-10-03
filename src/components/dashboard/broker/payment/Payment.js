@@ -6,7 +6,7 @@ import {
   paymentStateReducer,
 } from "../brokerState/payment.state";
 
-import { getapprovedBid } from "../../../../services/bid.service";
+import { getBid } from "../../../../services/bid.service";
 import {
   getPayments,
   updatePayment,
@@ -22,8 +22,8 @@ import NavMenu from "../../NavMenu";
 import SubNavBar from "../layouts/SubNavBar";
 
 import DocumentHead from "../../../DocumentHead";
-import PaymentModal1 from "../modals/PaymentModal1";
-import PaymentModal2 from "../modals/PaymentModal2";
+import ApprovedPaymentModal from "../modals/approvePaymentModal";
+import ViewPaymentModal from "../modals/viewPaymentModal";
 import Pagination from "../pagination/Pagination";
 import bidRejected from "../../../../assets/images/bidRejected.png";
 
@@ -149,13 +149,15 @@ const Payment = () => {
     let data = state.notification.dataApproved;
 
     // Update Notification state
-    dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: false });
+    dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: true });
 
     (async function () {
+
       if (data) {
         try {
+
           const res = await updatePayment({
-            id: data.id,
+            id: data.payment.id,
             data: {
               amount: data.amount,
               bid: data.id,
@@ -165,27 +167,45 @@ const Payment = () => {
 
           if (res.statusText === "OK") {
             // Update Notification state
-            dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: false });
+            dispatch({ type: "SET_PAYMENT_REQUEST_SUCCESS", payload: true });
           }
         } catch (_) {
           // Update Notification state
-          dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: true });
+          dispatch({ type: "SET_PAYMENT_NOTIFICATION_ERROR", payload: true });
         }
       }
     })();
   }, [dispatch, state.notification.dataApproved]);
+  
 
   useEffect(() => {
     let componentIsMounted = true;
 
     (async function approvedBid() {
       try {
-        const request = await getapprovedBid(id);
+        const request = await getBid(id);
 
         if (request.statusText === "OK") {
           if (componentIsMounted) {
-            // Update Approved Bids state
-            dispatch({ type: "APPROVED_BIDS", payload: request.data });
+            // Filter approved bids and update state.
+            const approvedBids = request.data.filter((bid, idx) => {
+              if (bid["current_status"] === "approved") {
+                return bid;
+              }
+
+              return null;
+            });
+
+            if (approvedBids.length > 0) {
+              dispatch({ type: "APPROVED_BIDS", payload: request.data });
+            }
+
+            // Filter bids with payment and update payment state.
+            const bidsWithPayment = request.data.filter((bid, idx) => bid.payment !== null);
+
+            if (bidsWithPayment.length > 0) {
+              dispatch({ type: "BIDS_PAYMENT", payload: bidsWithPayment });
+            }
 
             // Update Data State state
             dispatch({
@@ -215,49 +235,51 @@ const Payment = () => {
       try {
         const response = await getPayments();
 
-        if (response.statusText === "OK") {
-          dispatch({
-            type: "BID_PAYMENT",
-            payload: response.data,
-          });
+        if (componentIsMounted) {
+          if (response.statusText === "OK") {
+            dispatch({
+              type: "BID_PAYMENT",
+              payload: response.data,
+            });
+          } 
         }
       } catch (_) {
         // Do nothing
       }
     })();
-
     return () => (componentIsMounted = false);
   }, [id, handleApply, dispatch]);
 
   // Pagination logic
   const pageSize = 10;
   const currentTableData = useMemo(() => {
-    if (state.approvedBids.length > 0) {
+   if (state.bidsPayment.length === 0) return [];
+
+    if (state.bidsPayment.length > 0) {
       const firstPageIndex = (state.currentPage - 1) * pageSize;
       const lastPageIndex = firstPageIndex + pageSize;
-      return state.approvedBids.slice(firstPageIndex, lastPageIndex);
+      return state.bidsPayment.slice(firstPageIndex, lastPageIndex);
     }
-  }, [state.currentPage, state.approvedBids]);
+  }, [state.currentPage, state.bidsPayment]);
 
   return (
     <div>
       <DocumentHead title="Payments" />
       <OrderbookLayout PageNav={NavMenu}>
-        
         {/* Sub-navbar */}
         <SubNavBar
           breadCrumb={[
-           {
-             name: "Dashboard",
-             link:  `/Broker/dashaboard`
+            {
+              name: "Dashboard",
+              link: `/Broker/dashaboard`,
             },
             {
               name: "Offer",
-              link: `/broker/dashboard/loan-offer-published/cp/${id}`
+              link: `/broker/dashboard/loan-offer-published/cp/${id}`,
             },
             {
               name: "Bids",
-              link: `/broker/dashboard/bids/${id}`
+              link: `/broker/dashboard/bids/${id}`,
             },
           ]}
         />
@@ -335,7 +357,7 @@ const Payment = () => {
                   return (
                     <Table
                       state={state}
-                      tableData={currentTableData}
+                      tableData={state.bidsPayment}
                       filterAction={state.markedPaymentsViewFilter}
                       disableApproved={disableApproved}
                       handleCheckFunc={handleCheck}
@@ -346,7 +368,8 @@ const Payment = () => {
                   );
                 })()}
               </div>
-              <Pagination
+
+              {/* <Pagination
                 className="pagination-bar"
                 currentPage={state.currentPage}
                 totalCount={state.approvedBids.length}
@@ -354,15 +377,17 @@ const Payment = () => {
                 onPageChange={(page) =>
                   dispatch({ type: "CURRENT_PAGE", payload: page })
                 }
-              />
+              /> */}
             </Box>
-            <PaymentModal1
+
+            <ApprovedPaymentModal
               closeModal={closeModal}
               state={state.modal}
               notification={state.notification}
               updatedataApproved={updatedataApproved}
             />
-            <PaymentModal2
+
+            <ViewPaymentModal
               state={state.modal}
               closePaymentModal={closePaymentModal}
               notification={state.notification}
