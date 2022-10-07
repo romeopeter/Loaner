@@ -18,7 +18,9 @@ export default function RenderTable(props) {
   if (tableData.length === 0) {
     return (
       <div className="h-40 w-full">
-        <p className="font-medium py-10 text-center">No payment has been made yet.</p>
+        <p className="font-medium py-10 text-center">
+          No payment has been made yet.
+        </p>
       </div>
     );
   }
@@ -53,8 +55,10 @@ export default function RenderTable(props) {
         {tableData.map((data, idx) => {
           const payment = data.payment;
 
+          const selecAllPayment = state.markedBids.some((item) => item?.id === payment.id);
+
           if (
-            payment.status === filterAction ||
+            data["current_status"] === filterAction ||
             filterAction === "Filter payment"
           ) {
             return (
@@ -63,16 +67,15 @@ export default function RenderTable(props) {
                 <Td>
                   {" "}
                   <input
-                    name={payment.id}
+                    name={data.id}
                     type="checkbox"
                     className="broker-checkbox"
-                    disabled={payment.status === "approved"}
+                    disabled={data["current_status"] === "approved"}
                     // checked when checkedBid contains checked object
-                    checked={
-                      payment.status !== "approved" &&
-                      state.markedBids.some((item) => item?.id === payment.id)
-                    }
-                    onChange={(e) => handleCheckFunc(e, payment)}
+                    checked={(payment !== null && payment.status === "approved") && selecAllPayment}
+                    onChange={(e) => {
+                      payment !== null && handleCheckFunc(e, payment);
+                    }}
                   />
                 </Td>
                 <Td>
@@ -85,13 +88,19 @@ export default function RenderTable(props) {
                       mr={[4]}
                     ></Box>
                     <Flex alignSelf={"center"}>
-                    {data.owner.first_name} {data.owner.last_name}
+                      {data.owner.first_name} {data.owner.last_name}
                     </Flex>
                   </Flex>
                 </Td>
 
-                <Td>{humanNumber(payment.amount)}</Td>
-                
+                {/* Amount */}
+
+                {payment !== null ? (
+                  <Td>{humanNumber(payment.amount)}</Td>
+                ) : (
+                  <Td>{humanNumber(data.amount)}</Td>
+                )}
+
                 {/* Bid status */}
                 {data["current_status"] !== "" ? (
                   <Td color={"#008060"}>
@@ -102,16 +111,16 @@ export default function RenderTable(props) {
                 )}
 
                 {/* Payment status */}
-                {payment.status !== "" ? (
+                {payment !== null && payment.status !== "" ? (
                   <Td color={"#008060"}>
-                    {capitalizeFirstLetter(payment.status)}
+                    { capitalizeFirstLetter(payment.status)}
                   </Td>
                 ) : (
-                  <Td color={"#eed202"}>Pending</Td>
+                  <Td className="text-center">---</Td>
                 )}
 
                 {/* Proof of payment */}
-                {payment["proof_of_payment"]? (
+                {payment !== null ? (
                   <Td
                     style={{
                       cursor: "pointer",
@@ -123,10 +132,10 @@ export default function RenderTable(props) {
                     View payment
                   </Td>
                 ) : (
-                  <Td>-</Td>
+                  <Td className="text-center">---</Td>
                 )}
 
-                {payment.status === "approved" ? (
+                {payment !== null && payment.status === "approved" ? (
                   <Td className="payment-cta">
                     <button
                       disabled={true}

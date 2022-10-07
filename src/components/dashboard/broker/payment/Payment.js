@@ -6,7 +6,7 @@ import {
   paymentStateReducer,
 } from "../brokerState/payment.state";
 
-import { getBid } from "../../../../services/bid.service";
+import { getBid, getOfferApprovedBids } from "../../../../services/bid.service";
 import {
   getPayments,
   updatePayment,
@@ -24,7 +24,7 @@ import SubNavBar from "../layouts/SubNavBar";
 import DocumentHead from "../../../DocumentHead";
 import ApprovedPaymentModal from "../modals/approvePaymentModal";
 import ViewPaymentModal from "../modals/viewPaymentModal";
-import Pagination from "../pagination/Pagination";
+// import Pagination from "../pagination/Pagination";
 import bidRejected from "../../../../assets/images/bidRejected.png";
 
 const Payment = () => {
@@ -152,10 +152,8 @@ const Payment = () => {
     dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: true });
 
     (async function () {
-
       if (data) {
         try {
-
           const res = await updatePayment({
             id: data.payment.id,
             data: {
@@ -176,18 +174,17 @@ const Payment = () => {
       }
     })();
   }, [dispatch, state.notification.dataApproved]);
-  
 
   useEffect(() => {
     let componentIsMounted = true;
 
     (async function approvedBid() {
       try {
-        const request = await getBid(id);
+        const request = await getOfferApprovedBids(id);
 
         if (request.statusText === "OK") {
           if (componentIsMounted) {
-            // Filter approved bids and update state.
+            /* Filter approved bids and update state.
             const approvedBids = request.data.filter((bid, idx) => {
               if (bid["current_status"] === "approved") {
                 return bid;
@@ -195,13 +192,14 @@ const Payment = () => {
 
               return null;
             });
+            */
 
-            if (approvedBids.length > 0) {
-              dispatch({ type: "APPROVED_BIDS", payload: request.data });
-            }
+            dispatch({ type: "APPROVED_BIDS", payload: request.data });
 
             // Filter bids with payment and update payment state.
-            const bidsWithPayment = request.data.filter((bid, idx) => bid.payment !== null);
+            const bidsWithPayment = request.data.filter(
+              (bid, idx) => bid.payment !== null
+            );
 
             if (bidsWithPayment.length > 0) {
               dispatch({ type: "BIDS_PAYMENT", payload: bidsWithPayment });
@@ -241,7 +239,7 @@ const Payment = () => {
               type: "BID_PAYMENT",
               payload: response.data,
             });
-          } 
+          }
         }
       } catch (_) {
         // Do nothing
@@ -253,7 +251,7 @@ const Payment = () => {
   // Pagination logic
   const pageSize = 10;
   const currentTableData = useMemo(() => {
-   if (state.bidsPayment.length === 0) return [];
+    if (state.bidsPayment.length === 0) return [];
 
     if (state.bidsPayment.length > 0) {
       const firstPageIndex = (state.currentPage - 1) * pageSize;
@@ -357,7 +355,7 @@ const Payment = () => {
                   return (
                     <Table
                       state={state}
-                      tableData={state.bidsPayment}
+                      tableData={state.approvedBids}
                       filterAction={state.markedPaymentsViewFilter}
                       disableApproved={disableApproved}
                       handleCheckFunc={handleCheck}
