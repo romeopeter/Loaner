@@ -6,7 +6,7 @@ import {
   paymentStateReducer,
 } from "../brokerState/payment.state";
 
-import { getBid, getOfferApprovedBids } from "../../../../services/bid.service";
+import {  getOfferApprovedBids } from "../../../../services/bid.service";
 import {
   getPayments,
   updatePayment,
