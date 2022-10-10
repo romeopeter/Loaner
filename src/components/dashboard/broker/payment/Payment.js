@@ -145,8 +145,8 @@ const Payment = () => {
   // checbox action end
 
   // Handle status update approved
-  const updatedataApproved = useCallback(() => {
-    let data = state.notification.dataApproved;
+  const updatePaymentStatus = useCallback((paymentStatus) => {
+    let data = state.notification.data;
 
     // Update Notification state
     dispatch({ type: "SET_PAYMENT_NOTIFICATION", payload: true });
@@ -155,11 +155,11 @@ const Payment = () => {
       if (data) {
         try {
           const res = await updatePayment({
-            id: data.payment.id,
+            id: data.id,
             data: {
               amount: data.amount,
               bid: data.id,
-              status: "approved",
+              status: paymentStatus,
             },
           });
 
@@ -168,12 +168,13 @@ const Payment = () => {
             dispatch({ type: "SET_PAYMENT_REQUEST_SUCCESS", payload: true });
           }
         } catch (_) {
+
           // Update Notification state
           dispatch({ type: "SET_PAYMENT_NOTIFICATION_ERROR", payload: true });
         }
       }
     })();
-  }, [dispatch, state.notification.dataApproved]);
+  }, [dispatch, state.notification.data]);
 
   useEffect(() => {
     let componentIsMounted = true;
@@ -380,9 +381,9 @@ const Payment = () => {
 
             <ApprovedPaymentModal
               closeModal={closeModal}
-              state={state.modal}
+              modalState={state.modal}
               notification={state.notification}
-              updatedataApproved={updatedataApproved}
+              updatePaymentStatysFunc={updatePaymentStatus}
             />
 
             <ViewPaymentModal
