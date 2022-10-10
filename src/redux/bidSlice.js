@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
     getBid,
     createBid, 
-    getapprovedBids,
+    getOfferApprovedBids,
     getDeclinedBids,
     getAllOffersStatus
 } from "../services/bid.service.js";
@@ -48,7 +48,7 @@ export const getApprovedBidsAction = createAsyncThunk(
     "bid/getApprovedBidsAction",
     async (_, thunkAPI) => {
         const dispatch = thunkAPI.dispatch;
-        const res = await getapprovedBids();
+        const res = await getOfferApprovedBids();
 
         // Catch error
         if (res.status !== 200) {
