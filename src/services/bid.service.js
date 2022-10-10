@@ -16,12 +16,12 @@ const updateBids = (id) => {
   return axios.put(`/v1/payments/${id}/`).catch((error) => error);
 };
 
-const getapprovedBids = () => {
+const getAllApprovedBids = () => {
   return axios.get("/v1/bids/?status=approved").catch((err) => err);
 };
 
-const getapprovedBid = (id) => {
-  return axios.get(`/v1/bids/?loan_request=${id}&status=approved`);
+const getOfferApprovedBids = (id) => {
+  return axios.get(`/v1/bids/?loan_request_id=${id}&status=approved`);
 };
 
 const getDeclinedBids = () => {
@@ -46,8 +46,8 @@ export {
   getBid,
   createBid,
   updateBids,
-  getapprovedBid,
-  getapprovedBids,
+  getAllApprovedBids,
+  getOfferApprovedBids,
   getDeclinedBids,
   getAllOffersStatus,
   rejectManualListingBids,
