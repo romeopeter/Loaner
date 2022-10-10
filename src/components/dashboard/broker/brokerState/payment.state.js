@@ -14,13 +14,12 @@ const paymentStateInit = {
     modal: {
         modal: false, // ModalState
         paymentModal: false,
-        successState: undefined,
+        modalType: undefined,
         data: undefined
     },
     notification: {
         isLoading: undefined,
-        dataApproved: undefined,
-        dataRejected: undefined,
+        data: undefined,
         requestSuccess: false,
         error: false,
     },
@@ -137,16 +136,8 @@ function paymentStateReducer(state, action) {
                 modal: {
                     ...state.modal,
                     modal: true,
-                    successState: true,
+                    modalType: "approved",
                     paymentModal: false,
-                }
-            }
-        case "OPEN_NOTIFICATION_APPROVED_MODAL":
-            return {
-                ...state,
-                notification: {
-                    ...state.notification,
-                    dataApproved: action.payload
                 }
             }
         case "OPEN_REJECTED_MODAL":
@@ -155,8 +146,16 @@ function paymentStateReducer(state, action) {
                 modal: {
                     ...state.modal,
                     modal: true,
-                    successState: false,
+                    modalType: "rejected",
                     paymentModal: false,
+                }
+            }
+        case "OPEN_NOTIFICATION_APPROVED_MODAL":
+            return {
+                ...state,
+                notification: {
+                    ...state.notification,
+                    data: action.payload
                 }
             }
         case "OPEN_NOTIFICATION_REJECTED_MODAL":
@@ -164,7 +163,7 @@ function paymentStateReducer(state, action) {
                 ...state,
                 notification: {
                     ...state.notification,
-                    dataRejected: action.payload
+                    data: action.payload
                 }
             }
         case "CLOSE_MODAL":
