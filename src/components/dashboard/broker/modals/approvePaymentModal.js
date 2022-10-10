@@ -7,24 +7,26 @@ import { humanNumber } from "../../../../utils/HRN";
 
 const ApprovedPaymentModal = ({
   closeModal,
-  state,
+  modalState,
   notification,
-  updatedataApproved,
-  updatedataRejected,
+  updatePaymentStatysFunc,
 }) => {
-  const className = state.modal ? "open" : "";
-  const classSuccessState = state.successState ? "h1Approved" : "h1Rejected";
+  const className = modalState.modal ? "open" : "";
+  const classSuccessState = modalState.successState
+    ? "h1Approved"
+    : "h1Rejected";
 
   const approvedData = notification.dataApproved;
   const rejectedData = notification.dataRejected;
 
-  const approvePaymentFunc = () => {
-    if (notification.dataApproved) {
-      updatedataApproved();
-      return;
+  const updatePaymentReq = () => {
+    if (modalState.modalType === "approved") {
+      updatePaymentStatysFunc(modalState.modalType);
     }
 
-    updatedataRejected();
+    if (modalState.modalType === "rejected") {
+      updatePaymentStatysFunc(modalState.modalType);
+    }
   };
 
   return (
@@ -35,17 +37,17 @@ const ApprovedPaymentModal = ({
         {notification.isLoading === undefined ? (
           <div>
             <div className="modal-head">
-              {state.successState ? (
+              {modalState.modalType === "approved" ? (
                 <h2>Are you sure you want to approve this payment?</h2>
-              ) : (
+              ) : modalState.modalType === "rejected" ? (
                 <h2>Are you sure you want to reject this payment?</h2>
-              )}
+              ) : null}
               <button onClick={closeModal} className="close-button"></button>
             </div>
 
             <div style={{ marginTop: "20px" }}>
               <button
-                onClick={approvePaymentFunc}
+                onClick={updatePaymentReq}
                 style={{
                   background: "#e5e5e5",
                   width: "50px",
@@ -80,7 +82,7 @@ const ApprovedPaymentModal = ({
 
         {notification.requestSuccess ? (
           <div>
-            {state.successState ? (
+            {modalState.modalType === "approved" ? (
               <div>
                 <img alt="approved" className="img" src={bidApproved} />
                 <h1 className={`${classSuccessState}`}>Payment Approved</h1>
@@ -90,7 +92,7 @@ const ApprovedPaymentModal = ({
                   {humanNumber(approvedData.payment.amount)} Payment
                 </p>
               </div>
-            ) : (
+            ) : modalState.modalType === "rejected" ? (
               <div>
                 <img alt="rejected" className="img" src={bidRejected} />
                 <h1 className={`${classSuccessState}`}>Payment Rejected</h1>
@@ -100,7 +102,7 @@ const ApprovedPaymentModal = ({
                   {humanNumber(rejectedData.payment.amount)} Payment
                 </p>
               </div>
-            )}
+            ) : null}
 
             <button className="modal-button " onClick={closeModal}>
               Back to list
